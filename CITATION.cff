@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Eren
+    given-names: Maksim
+  - family-names: Solovyev
+    given-names: Nick
+  - family-names: Barron
+    given-names: Ryan
+  - family-names: Bhattarai
+    given-names: Manish
+  - family-names: Boureima
+    given-names: Ismael
+  - family-names: Skau
+    given-names: Erik
+  - family-names: Rasmussen
+    given-names: Kim
+  - family-names: Alexandrov
+    given-names: Boian
+title: "Tensor Extraction of Latent Features (T-ELF)"
+version: 0.0.1
+url: https://github.com/lanl/T-ELF
+doi: 
+date-released: 2023-10-15

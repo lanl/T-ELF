@@ -1,0 +1,17 @@
+numpy==1.22
+scipy==1.10.1
+matplotlib
+pathos
+psutil
+treelib
+tqdm
+gputil
+pytest
+scikit-learn==1.3.0
+sparse
+h5py
+pandas==2.0.3
+nltk
+joblib
+spacy
+mat73
