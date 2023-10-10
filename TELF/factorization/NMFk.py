@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-
+© 2022. Triad National Security, LLC. All rights reserved.
+This program was produced under U.S. Government contract 89233218CNA000001 for Los Alamos
+National Laboratory (LANL), which is operated by Triad National Security, LLC for the U.S.
+Department of Energy/National Nuclear Security Administration. All rights in the program are
+reserved by Triad National Security, LLC, and the U.S. Department of Energy/National Nuclear
+Security Administration. The Government is granted for itself and others acting on its behalf a
+nonexclusive, paid-up, irrevocable worldwide license in this material to reproduce, prepare
+derivative works, distribute copies to the public, perform publicly and display publicly, and to permit
+others to do so.
 """
 from .utilities.take_note import take_note, take_note_fmat, append_to_note
 from .utilities.plot_NMFk import plot_NMFk, plot_consensus_mat, plot_cophenetic_coeff
@@ -553,7 +561,7 @@ class NMFk:
 
         Parameters
         ----------
-        X : np.ndarray or Scipy.sparse.CSR matrix
+        X : ``np.ndarray`` or ``scipy.sparse._csr.csr_matrix`` matrix
             Input matrix to be factorized.
         Ks : list
             List of K values to factorize the input matrix.\n
@@ -566,7 +574,11 @@ class NMFk:
         Returns
         -------
         results : dict
-            Resulting dict can include all the latent factors, plotting data, predicted latent factors, time took for factorization, and predicted k value depending on the settings specified.
+            Resulting dict can include all the latent factors, plotting data, predicted latent factors, time took for factorization, and predicted k value depending on the settings specified.\n
+            * If ``get_plot_data=True``, results will include field for ``plot_data``.\n
+            * If ``predict_k=True``, results will include field for ``k_predict``. This is an intiger for the automatically estimated number of latent factors.\n
+            * If ``predict_k=True`` and ``collect_output=True``, results will include fields for ``W`` and ``H`` which are the latent factors in type of ``np.ndarray``.
+            * results will always include a field for ``time``, that gives the total compute time.
         """
 
         if X.dtype != np.dtype(np.float32):

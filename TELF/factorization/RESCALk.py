@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-
+© 2022. Triad National Security, LLC. All rights reserved.
+This program was produced under U.S. Government contract 89233218CNA000001 for Los Alamos
+National Laboratory (LANL), which is operated by Triad National Security, LLC for the U.S.
+Department of Energy/National Nuclear Security Administration. All rights in the program are
+reserved by Triad National Security, LLC, and the U.S. Department of Energy/National Nuclear
+Security Administration. The Government is granted for itself and others acting on its behalf a
+nonexclusive, paid-up, irrevocable worldwide license in this material to reproduce, prepare
+derivative works, distribute copies to the public, perform publicly and display publicly, and to permit
+others to do so.
 """
 
 from .decompositions.utilities.math_utils import relative_error, fro_norm, relative_error_rescal
@@ -40,7 +48,7 @@ except Exception:
     MPI = None
 
 
-def rescal_wrapper(
+def _rescal_wrapper(
         perturbation, rescal, rescal_params, init="nnsvd", X=None, k=None, epsilon=None, gpuid=0, use_gpu=True,
         calculate_error=True):
     """
@@ -161,44 +169,69 @@ class RESCALk:
             joblib_backend="multiprocessing",
     ):
         """
-
+        RECALk is a RESCAL module with the capability to do automatic model determination.
 
         Parameters
         ----------
-        n_perturbs : TYPE, optional
-            DESCRIPTION. The default is 20.
-        n_iters : TYPE, optional
-            DESCRIPTION. The default is 100.
-        epsilon : TYPE, optional
-            DESCRIPTION. The default is 0.015.
-        n_jobs : TYPE, optional
-            DESCRIPTION. The default is 1.
-        init : TYPE, optional
-            DESCRIPTION. The default is "nnsvd".
-        use_gpu : TYPE, optional
-            DESCRIPTION. The default is True.
-        save_path : TYPE, optional
-            DESCRIPTION. The default is ".".
-        save_output : TYPE, optional
-            DESCRIPTION. The default is True.
-        collect_output : TYPE, optional
-            DESCRIPTION. The default is False.
-        predict_k : TYPE, optional
-            DESCRIPTION. The default is True.
-        verbose : TYPE, optional
-            DESCRIPTION. The default is True.
-        transpose : TYPE, optional
-            DESCRIPTION. The default is False.
-        sill_thresh : TYPE, optional
-            DESCRIPTION. The default is 0.8.
-         : TYPE
-            DESCRIPTION.
+        n_perturbs : int, optional
+            Number of bootstrap operations, or random matrices generated around the original matrix. The default is 20.
+        n_iters : int, optional
+            Number of NMF iterations. The default is 100.
+        epsilon : float, optional
+            Error amount for the random matrices generated around the original matrix. The default is 0.015.
+        n_jobs : int, optional
+            Number of parallel jobs. Use -1 to use all available resources. The default is 1.
+        n_nodes : int, optional
+            Number of HPC nodes. The default is 1.
+        init : str, optional
+            Initilization of matrices for NMF procedure. The default is "nnsvd".\n
+            * ``init='nnsvd'`` will use NNSVD for initilization.\n
+            * ``init='random'`` will use random sampling for initilization.\n
+        use_gpu : bool, optional
+            If True, uses GPU for operations. The default is True.
+        save_path : str, optional
+            Location to save output. The default is "./".
+        save_output : bool, optional
+            If True, saves the resulting latent factors and plots. The default is True.
+        collect_output : bool, optional
+            If True, collectes the resulting latent factors to be returned from ``fit()`` operation. The default is False.
+        predict_k : bool, optional
+            If True, performs automatic prediction of the number of latent factors. The default is False.
 
-        Raises
-        ------
-        Exception
-            DESCRIPTION.
+            .. note::
 
+                Even when ``predict_k=False``, number of latent factors can be estimated using the figures saved in ``save_path``.
+
+        verbose : bool, optional
+            If True, shows progress in each k. The default is False.
+        rescal_verbose : bool, optional
+            If True, shows progress in each Rescal operation. The default is False.
+        elegant_verbose : bool, optional
+            If True, shows progress with details. The default is True.
+        transpose : bool, optional
+            If True, transposes the input matrix before factorization. The default is False.
+        sill_thresh : float, optional
+            Threshold for the Silhouette score when performing automatic prediction of the number of latent factors. The default is 0.8.
+        rescal_func : object, optional
+            If not None, and if ``nmf_method=func``, used for passing Rescal function. The default is None.
+        rescal_method : str, optional
+            What NMF to use. The default is "rescal_fro_mu".\n
+            * ``nmf_method='rescal_fro_mu'`` will use Rescal with Frobenious Norm.\n
+        rescal_obj_params : dict, optional
+            Parameters used by Rescal function. The default is {}.
+        pruned : bool, optional
+            When True, removes columns and rows from the input matrix that has only 0 values. The default is True.
+        calculate_error : bool, optional
+            When True, calculates the relative reconstruction error. The default is True.
+
+            .. warning::
+                If ``calculate_error=True``, it will result in longer processing time.
+
+        joblib_backend : str, optional
+            Backend used by Joblib for parallel computation. The default is "multiprocessing".
+        get_plot_data : bool, optional
+            When True, collectes the data used in plotting each intermidiate k factorization. The default is False.
+            
         Returns
         -------
         None.
@@ -319,29 +352,28 @@ class RESCALk:
 
     def fit(self, X, Ks, name="RESCALk", note=""):
         """
-
+        Factorize the input matrix ``X`` for the each given K value in ``Ks``.
 
         Parameters
         ----------
-        X : TYPE
-            DESCRIPTION.
-        Ks : TYPE
-            DESCRIPTION.
-        name : TYPE, optional
-            DESCRIPTION. The default is "NMFk".
-        note : TYPE, optional
-            DESCRIPTION. The default is "".
-
-        Raises
-        ------
-        Exception
-            DESCRIPTION.
-
+        X : ``np.ndarray`` or ``scipy.sparse._csr.csr_matrix`` matrix
+            Input matrix to be factorized.
+        Ks : list
+            List of K values to factorize the input matrix.\n
+            **Example:** ``Ks=range(1, 10, 1)``.
+        name : str, optional   
+            Name of the experiment. Default is "RESCALk".
+        note : str, optional
+            Note for the experiment used in logs. Default is "".
+        
         Returns
         -------
-        results : TYPE
-            DESCRIPTION.
-
+        results : dict
+            Resulting dict can include all the latent factors, plotting data, predicted latent factors, time took for factorization, and predicted k value depending on the settings specified.\n
+            * If ``get_plot_data=True``, results will include field for ``plot_data``.\n
+            * If ``predict_k=True``, results will include field for ``k_predict``. This is an intiger for the automatically estimated number of latent factors.\n
+            * If ``predict_k=True`` and ``collect_output=True``, results will include fields for ``W`` and ``H`` which are the latent factors in type of ``np.ndarray``.
+            * results will always include a field for ``time``, that gives the total compute time.
         """
 
         #
@@ -356,7 +388,7 @@ class RESCALk:
         if self.n_nodes > 1:
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
-            Ks = self.chunk_Ks(Ks, n_chunks=self.n_nodes)[rank]
+            Ks = self._chunk_Ks(Ks, n_chunks=self.n_nodes)[rank]
             if self.verbose:
                 print("Rank=", rank, "Host=", socket.gethostname(), "Ks=", Ks)
 
@@ -418,7 +450,7 @@ class RESCALk:
             if self.n_jobs == 1:
                 A_all, R_all, errors = [], [], []
                 for p in range(self.n_perturbs):
-                    w, h, e = rescal_wrapper(
+                    w, h, e = _rescal_wrapper(
                         p,
                         rescal=self.rescal,
                         rescal_params=self.rescal_params,
@@ -440,7 +472,7 @@ class RESCALk:
                 current_pert_results = Parallel(
                     n_jobs=self.n_jobs,
                     verbose=self.verbose,
-                    backend=self.joblib_backend)(delayed(rescal_wrapper)(
+                    backend=self.joblib_backend)(delayed(_rescal_wrapper)(
                         pert,
                         self.rescal,
                         self.rescal_params,
@@ -649,7 +681,7 @@ class RESCALk:
 
             return results
 
-    def chunk_Ks(self, Ks: list, n_chunks=2) -> list:
+    def _chunk_Ks(self, Ks: list, n_chunks=2) -> list:
         # correct n_chunks if needed
         if len(Ks) < n_chunks:
             n_chunks = len(Ks)

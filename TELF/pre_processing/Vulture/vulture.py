@@ -1,3 +1,17 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+© 2022. Triad National Security, LLC. All rights reserved.
+This program was produced under U.S. Government contract 89233218CNA000001 for Los Alamos
+National Laboratory (LANL), which is operated by Triad National Security, LLC for the U.S.
+Department of Energy/National Nuclear Security Administration. All rights in the program are
+reserved by Triad National Security, LLC, and the U.S. Department of Energy/National Nuclear
+Security Administration. The Government is granted for itself and others acting on its behalf a
+nonexclusive, paid-up, irrevocable worldwide license in this material to reproduce, prepare
+derivative works, distribute copies to the public, perform publicly and display publicly, and to permit
+others to do so.
+"""
+
 try:
     from mpi4py import MPI
 except:
@@ -97,7 +111,35 @@ class Vulture():
             acceptable ratio for ascii characters to total characters in the text. The second float 
             is the min acceptable ratio of stopwords in the text
         simple_clean_settings: dict, optional
-            Settings used in simple cleaning. See pre_process._organize_simple_clean_defaults for defaults.
+            Settings used in simple cleaning. See `pre_process._organize_simple_clean_defaults <https://github.com/lanl/T-ELF/blob/main/TELF/pre_processing/Vulture/pre_process.py#L356>`_ for defaults.
+            
+            .. note::
+
+                **Example Settings:**
+
+                .. code-block:: python
+
+                    simple_clean_settings= { 
+                        "remove_copyright_with_symbol": True,
+                        "remove_stop_phrases": False,
+                        "make_lower_case": True,
+                        "remove_trailing_dash": True,  # -foo-bar- -> foo-bar
+                        "make_hyphens_words": False,  # foo-bar -> foobar
+                        "remove_next_line": True,
+                        "remove_email": True,
+                        "remove_dash": False,
+                        "remove_between_[]": True,
+                        "remove_between_()": True,
+                        "remove_[]": False,
+                        "remove_()": False,
+                        "remove_\\": False,
+                        "remove_^": False,
+                        "remove_numbers": False,
+                        "remove_nonASCII": False,
+                        "remove_tags": True,  # remove HTML tags
+                        "remove_special_characters": True,  # option to specify these?
+                        "remove_stop_words": True,
+                    }
 
 
         Returns
@@ -212,18 +254,18 @@ class Vulture():
         if isinstance(stop_words, list) or isinstance(stop_words, np.ndarray):
             stop_words = dict(zip(stop_words, [1]*len(stop_words)))
             
-        save_path = self.get_parent_directory(filename)
+        save_path = self._get_parent_directory(filename)
         if self.lemmatize_slic:
             tokens = self._parallel_helper(documents, {}, self._tokenize_helper, as_list=True)
             before_clean_path = os.path.join(save_path,'before_any_cleaning-vocabulary.txt')
-            self.save_tokens( before_clean_path, tokens )
+            self._save_tokens( before_clean_path, tokens )
             
         # using more than one node, then get this nodes' chunk
         if self.n_nodes > 1:
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
             filename = f'{filename}_node-{rank}'
-            document_chunks = self.split_dict_chunks(input_dict=documents, chunks=self.n_nodes)
+            document_chunks = self._split_dict_chunks(input_dict=documents, chunks=self.n_nodes)
             documents = document_chunks[rank]
         else:
             comm = None
@@ -309,7 +351,7 @@ class Vulture():
             # get all tokens as a quasi_vocabulary
             quasi_vocabulary = list(self._parallel_helper(results, {}, self._tokenize_helper, as_list=True))
             before_slic_lemma = os.path.join(save_path,'before_slic_lemma-vocabulary.txt')
-            self.save_tokens( before_slic_lemma, quasi_vocabulary ) 
+            self._save_tokens( before_slic_lemma, quasi_vocabulary ) 
             
             if self. verbose:
                 first_ten_tokens = quasi_vocabulary[:10]
@@ -325,7 +367,7 @@ class Vulture():
             # tokenize, save to path
             tokens = self._parallel_helper(results, {}, self._tokenize_helper, as_list=True)
             after_clean_path = os.path.join(save_path,'after_slic_lemma-vocabulary.txt')
-            self.save_tokens( after_clean_path, tokens ) 
+            self._save_tokens( after_clean_path, tokens ) 
             
         if substitutions:
             results = self._parallel_helper(results, {'corrections':substitutions }, correct_text)
@@ -551,7 +593,7 @@ class Vulture():
             end_time = time.time()
             print("Done. Time=", str(end_time - start_time))
 
-    def split_dict_chunks(self, input_dict: dict, chunks: int) -> list:
+    def _split_dict_chunks(self, input_dict: dict, chunks: int) -> list:
         """
         Splits the given dictionary into list of multiple dictionaries.
 
@@ -611,7 +653,7 @@ class Vulture():
             n_chunks = self.n_jobs
 
         # split the documents into chunks
-        document_chunks = self.split_dict_chunks(documents, n_chunks)
+        document_chunks = self._split_dict_chunks(documents, n_chunks)
 
         # process each chunk of documents
         list_results = Parallel(n_jobs=self.n_jobs, verbose=self.verbose, backend=self.parallel_backend)(
@@ -847,7 +889,7 @@ class Vulture():
             
         return results #list(set(results))
     
-    def get_parent_directory(self, path):
+    def _get_parent_directory(self, path):
         """
         Returns parent dir unless path is a directory.
 
@@ -864,7 +906,7 @@ class Vulture():
             return path
         return os.path.dirname(path)
     
-    def save_tokens(self, save_path: str, tokens: list ):
+    def _save_tokens(self, save_path: str, tokens: list ):
         """
         Saves tokens
 

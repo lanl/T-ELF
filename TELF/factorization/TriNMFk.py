@@ -1,4 +1,14 @@
-
+"""
+© 2022. Triad National Security, LLC. All rights reserved.
+This program was produced under U.S. Government contract 89233218CNA000001 for Los Alamos
+National Laboratory (LANL), which is operated by Triad National Security, LLC for the U.S.
+Department of Energy/National Nuclear Security Administration. All rights in the program are
+reserved by Triad National Security, LLC, and the U.S. Department of Energy/National Nuclear
+Security Administration. The Government is granted for itself and others acting on its behalf a
+nonexclusive, paid-up, irrevocable worldwide license in this material to reproduce, prepare
+derivative works, distribute copies to the public, perform publicly and display publicly, and to permit
+others to do so.
+"""
 from .NMFk import NMFk
 from .decompositions.utilities.math_utils import relative_trinmf_error, prune, unprune
 from .decompositions.tri_nmf_fro_mu import trinmf as trinmf_fro_mu
@@ -20,7 +30,7 @@ except Exception:
     cp = None
     cupyx = None
 
-def nmf_wrapper(
+def _nmf_wrapper(
         init_num:int, 
         nmf, 
         nmf_params:dict, 
@@ -91,6 +101,46 @@ class TriNMFk():
                  transpose=False,
                  verbose=True,
                  ):
+        """
+        TriNMFk is a Non-negative Matrix Factorization module with the capability to do automatic model determination for both estimating the number of latent patterns (``Wk``) and clusters (``Hk``).
+
+        Parameters
+        ----------
+        experiment_name : str, optional
+            Name used for the experiment. Default is "TriNMFk".
+        nmfk_params : str, optional
+            Parameters for NMFk. See documentation for NMFk for the options.
+        nmf_verbose : bool, optional
+            If True, shows progress in each NMF operation. The default is False.
+        use_gpu : bool, optional
+            If True, uses GPU for operations. The default is True.
+        n_jobs : int, optional
+            Number of parallel jobs. Use -1 to use all available resources. The default is 1.
+        mask : ``np.ndarray``, optional
+            Numpy array that points out the locations in input matrix that should be masked during factorization. The default is None.
+        use_consensus_stopping : str, optional
+            When not 0, uses Consensus matrices criteria for early stopping of NMF factorization. The default is 0.
+        alpha : tupl, optional
+            Error rate used in bootstrap operation. Default is (0, 0).
+        n_iters : int, optional
+            Number of NMF iterations. The default is 100.
+        n_inits : int, optional
+            Number of matrix initilization for the bootstrap operation. The default is 10.
+        joblib_backend : str, optional
+            Backend used by Joblib for parallel computation. The default is "multiprocessing".
+        pruned : bool, optional
+            When True, removes columns and rows from the input matrix that has only 0 values. The default is True.
+        transpose : bool, optional
+            If True, transposes the input matrix before factorization. The default is False.
+        verbose : bool, optional
+            If True, shows progress in each k. The default is False.
+ 
+        Returns
+        -------
+        None.
+
+        """
+
         
         # object parameters
         self.experiment_name = experiment_name
@@ -137,6 +187,30 @@ class TriNMFk():
 
     
     def fit_nmfk(self, X, Ks, note=""):
+        """
+        Factorize the input matrix ``X`` for the each given K value in ``Ks``.
+
+        Parameters
+        ----------
+        X : ``np.ndarray`` or ``scipy.sparse._csr.csr_matrix`` matrix
+            Input matrix to be factorized.
+        Ks : list
+            List of K values to factorize the input matrix.\n
+            **Example:** ``Ks=range(1, 10, 1)``.
+        name : str, optional   
+            Name of the experiment. Default is "NMFk".
+        note : str, optional
+            Note for the experiment used in logs. Default is "".
+        
+        Returns
+        -------
+        results : dict
+            Resulting dict can include all the latent factors, plotting data, predicted latent factors, time took for factorization, and predicted k value depending on the settings specified in ``nmfk_params``.\n
+            * If ``get_plot_data=True``, results will include field for ``plot_data``.\n
+            * If ``predict_k=True``, results will include field for ``k_predict``. This is an intiger for the automatically estimated number of latent factors.\n
+            * If ``predict_k=True`` and ``collect_output=True``, results will include fields for ``W`` and ``H`` which are the latent factors in type of ``np.ndarray``.
+            * results will always include a field for ``time``, that gives the total compute time.
+        """
 
         # Do NMFk
         nmfk_results = self.nmfk.fit(X, Ks, self.experiment_name, note)
@@ -148,7 +222,22 @@ class TriNMFk():
         return nmfk_results
 
     def fit_tri_nmfk(self, X, k1k2:tuple):
+        """
+        Factorize the input matrix ``X``, after applying ``fit_nmfk()`` to select the ``Wk`` and ``Hk``, to factorize the given matrix with ``k1k2=(Wk, Hk)``.
 
+        Parameters
+        ----------
+        X : ``np.ndarray`` or ``scipy.sparse._csr.csr_matrix`` matrix
+            Input matrix to be factorized.
+        k1k2 : tuple
+            Tuple of ``Wk`` (number of latent patterns) and ``Hk`` (number of latent clusters), to factorize the matrix ``X`` to.
+            **Example:** ``Ks=range(4,3)``.
+
+        Returns
+        -------
+        results : dict
+            Resulting dict will include latent patterns ``W``, ``H``, and mixing matrix ``S`` along with the error from each ``n_inits``.
+        """
 
         
         if not self.nmfk_fit:
@@ -174,7 +263,7 @@ class TriNMFk():
         W_all, S_all, H_all, errors  = [], [], [], []
         if self.n_jobs == 1:
             for ninit in range(self.n_inits):
-                w, s, h, e = nmf_wrapper(
+                w, s, h, e = _nmf_wrapper(
                     init_num=ninit,
                     nmf=self.nmf,
                     nmf_params=self.nmf_params,
@@ -193,7 +282,7 @@ class TriNMFk():
             current_pert_results = Parallel(
                 n_jobs=self.n_jobs,
                 verbose=self.verbose,
-                backend=self.joblib_backend)(delayed(nmf_wrapper)(
+                backend=self.joblib_backend)(delayed(_nmf_wrapper)(
                     ninit,
                     self.nmf,
                     self.nmf_params,
