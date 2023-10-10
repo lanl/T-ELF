@@ -12,7 +12,12 @@ Tensor Extraction of Latent Features (T-ELF)
    :scale: 100 %
    :align: center
 
-**T-ELF** delivers a comprehensive suite of software solutions tailored for in-depth analysis of vast datasets, accurate and precise extraction of hidden patterns, harnessing the power of high-performance computing and cutting-edge GPU architectures. Our approach is underpinned by scalable and highly efficient algorithms.
+
+T-ELF offers an expansive range of tailored software solutions designed for in-depth analysis of extensive datasets. We excel in extracting hidden patterns with precision, leveraging the formidable capabilities of high-performance computing and cutting-edge GPU architectures. Our methodology is rooted in scalable, highly efficient algorithms.
+
+Within T-ELF's arsenal are non-negative matrix and tensor factorization solutions, equipped with automatic model determination (also known as the estimation of latent factors - rank). This ensures accurate data modeling and extraction of concealed patterns. Furthermore, our software suite encompasses cutting-edge data pre-processing and post-processing modules for tasks such as text mining, Natural Language Processing, as well as matrix and tensor analysis/building tools.
+
+T-ELF's versatility extends to a diverse array of disciplines, making it a potent AI and data analytics solution. It has found applications in Large-scale Text Mining, High Performance Computing, Computer Security, Applied Mathematics, Dynamic Networks and Ranking, Biology, Material Science, Medicine, Chemistry, Data Compression, Climate Studies, Relational Databases, Data Privacy, Economy, and Agriculture.
 
 Resources
 ========================================
@@ -104,8 +109,8 @@ Capabilities
 ========================================
 
 .. image:: ../Second_image_TensorNetworks.jpg
-   :width: 400px
-   :height: 450px
+   :width: 450px
+   :height: 400px
    :scale: 100 %
    :align: center
 
