@@ -156,7 +156,7 @@ year = {2023}
 ```
 
 ## Authors
-- [Maksim Ekin Eren](mailto:maksim@lanl.gov): Advanced Research in Cyber Systems, Los Alamos National Laboratory
+- [Maksim Ekin Eren](mailto:maksim@lanl.gov): Advanced Research in Cyber Systems, Los Alamos National Laboratory ([Website](https://www.maksimeren.com/))
 - [Nicholas Solovyev](mailto:nks@lanl.gov): Theoretical Division, Los Alamos National Laboratory
 - [Ryan Barron](mailto:barron@lanl.gov): Theoretical Division, Los Alamos National Laboratory
 - [Manish Bhattarai](mailto:ceodspspectrum@lanl.gov): Theoretical Division, Los Alamos National Laboratory
