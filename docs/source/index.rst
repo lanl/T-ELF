@@ -121,7 +121,10 @@ How to Cite T-ELF?
 ========================================
 
 **APA:**
-Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.1) [Computer software]. https://github.com/lanl/T-ELF
+
+.. code-block:: console
+
+   Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.1) [Computer software]. https://github.com/lanl/T-ELF
 
 **BibTeX:**
 
@@ -167,14 +170,15 @@ License
 This program is open source under the BSD-3 License.
 Redistribution and use in source and binary forms, with or without modification, are permitted
 provided that the following conditions are met:
+
 1. Redistributions of source code must retain the above copyright notice, this list of conditions and
 the following disclaimer.
  
-2.Redistributions in binary form must reproduce the above copyright notice, this list of conditions
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions
 and the following disclaimer in the documentation and/or other materials provided with the
 distribution.
  
-3.Neither the name of the copyright holder nor the names of its contributors may be used to endorse
+3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse
 or promote products derived from this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
