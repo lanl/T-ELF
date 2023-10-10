@@ -4,7 +4,7 @@
 
 [![Build Status](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main)](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main) [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg) [![Python Version](https://img.shields.io/badge/python-v3.8.5-blue)](https://img.shields.io/badge/python-v3.8.5-blue)
 
-</div>
+</div> 
 
 <p align="center">
   <img src="docs/tensorsrnd.png">
