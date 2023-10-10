@@ -80,6 +80,10 @@ conda install -c conda-forge mpi4py
 
 <div align="center", style="font-size: 50px">
 
+<p align="center">
+  <img src="docs/Second_image_TensorNetworks.jpg">
+</p>
+
 ### [:page_with_curl: Publications](Publications.md)
 
 </div>

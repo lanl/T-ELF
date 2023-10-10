@@ -103,6 +103,11 @@ Installation
 Capabilities
 ========================================
 
+.. image:: ../Second_image_TensorNetworks.jpg
+   :width: 400px
+   :height: 450px
+   :scale: 100 %
+   :align: center
 
 Please see our `publications <https://github.com/lanl/T-ELF/blob/main/Publications.md>`_ for the capabilities.
 
