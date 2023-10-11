@@ -28,7 +28,6 @@ from .pre_process import correct_text
 
 from .default_stop_words import default_stop_words
 from .default_stop_phrases import default_stop_phrases
-from .detect_language import get_language
 from .detect_nonenglish import is_english
 
 from joblib import Parallel, delayed
@@ -54,8 +53,6 @@ class Vulture():
                  lemmatize_spacy=False,
                  lemmatize_slic=False,
                  stem=False,
-                 detect_language=False,
-                 n_words_use_language=30,
                  remove_nonenglish=True,
                  remove_nonenglish_params=(0.9, 0.175),
                  parallel_backend="multiprocessing",
@@ -100,10 +97,6 @@ class Vulture():
             The default is Fasle.
         stem : bool, optional
             If True, performs stemming. The default is True.
-        detect_language : bool, optional
-            If True, performs language detection. The default is False.
-        n_words_use_language : int, optional
-            Number of words to use when detecting langauge. The default is 30.
         remove_nonenglish : bool, optional
             Use heuristic to remove foreign language papers
         remove_nonenglish_params : (float, float), optional
@@ -151,8 +144,8 @@ class Vulture():
         # input check
         assert type(n_jobs) == int, "n_jobs must be a type of integer!"
         assert n_nodes >= 1, "n_nodes must be 1 or greater value!"
-        assert clean_text or lemmatize or stem or detect_language, \
-            "At least one must be True for clean_text, lemmatize, stem, and detect_language!"
+        assert clean_text or lemmatize or stem, \
+            "At least one must be True for clean_text, lemmatize, stem!"
         if advance_clean and not clean_text:
             sys.exit(
                 "advance_clean was True but clean_text was False." +
@@ -163,7 +156,8 @@ class Vulture():
                 "lemmatize_spacy was True but advance_clean was False." +
                 "To use lemmatization with Spacy, set both lemmatize_spacy and advance_clean to True!" +
                 "If only want to do lemmatization but not advance cleaning, use lemmatize=True instead.")
-            
+        
+        ### Commented out to allow lemmatize_slic to work without using advance_clean
         #if lemmatize_slic and not advance_clean:
         #    sys.exit(
         #        "lemmatize_slic was True but advance_clean was False." +
@@ -194,8 +188,6 @@ class Vulture():
         self.lemmatize_spacy = lemmatize_spacy
         self.lemmatize_slic = lemmatize_slic
         self.stem = stem
-        self.detect_language = detect_language
-        self.n_words_use_language = n_words_use_language
         self.remove_nonenglish = remove_nonenglish
         self.remove_nonenglish_ar = ascii_ratio
         self.remove_nonenglish_su = stopwords_used
@@ -269,16 +261,7 @@ class Vulture():
             documents = document_chunks[rank]
         else:
             comm = None
-
-        # language detection
-        if self.detect_language:
-            if self.verbose:
-                print("Performing language detection.")
-            language_results = self._parallel_helper(
-                documents, {"n_words_use": self.n_words_use_language}, self._language_helper)
-
-            # save language detection results
-            pickle.dump(language_results, open(filename + "_language.p", "wb"))
+            
             
         if self.remove_nonenglish:
             if self.verbose:
@@ -576,15 +559,6 @@ class Vulture():
                               "min_unique_characters": self.min_unique_characters},
                     self._char_length_helper)
 
-            # perform language detection
-            if self.detect_language:
-                if self.verbose:
-                    print("Performing language detection.")
-                language_results = self._parallel_helper(
-                    results, {"n_words_use": self.n_words_use_language}, self._language_helper)
-                # save language detection results
-                pickle.dump(language_results, open(save_name + "_language.p", "wb"))
-
             # save pre-processing results
             pickle.dump(results, open(save_name + ".p", "wb"))
 
@@ -669,27 +643,6 @@ class Vulture():
 
         return dict(results)
 
-    def _language_helper(self, documents: dict, n_words_use: int) -> dict:
-        """
-        get language of the papers
-
-        Parameters
-        ----------
-        documents : dict
-            Dictionary of documents to clean. In this dictionary, keys are the unique document
-            identifiers, and values are the text to clean.
-
-        Returns
-        -------
-        dict
-            language of the papers, where keys are the document IDs and values are the language.
-
-        """
-        results = []
-        for docID, doc in documents.items():
-            results.append(get_language(document=doc, document_id=docID, n_words_use=n_words_use))
-
-        return results
     
     def _nonenglish_helper(self, documents: dict, ascii_ratio: float, stopwords_used: int) -> dict:
         """
@@ -703,18 +656,18 @@ class Vulture():
 
         Returns
         -------
-        dict
-            language of the papers, where keys are the document IDs and values are the language.
-
+        list of tuples
+            A list of (document id, bool) tuples where the bool is a determination of whether the 
+            given document is English or not.
         """
         results = []
         for docID, doc in documents.items():
             doc_is_english = is_english(doc, ascii_ratio, stopwords_used)
             if not doc_is_english:
                 results.append((docID, doc_is_english))
-            
         return results
 
+    
     def _stem_helper(self, documents: dict) -> dict:
         """
         stemming of the documents.
