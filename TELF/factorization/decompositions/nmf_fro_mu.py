@@ -220,4 +220,4 @@ def nmf(X, W, H,
     W = W / Wsum
 
     # print('Done NMF')
-    return (W, H)
+    return (W, H, {})

@@ -242,4 +242,4 @@ def nmf(X, W, H,
     H = H * Wsum.T
     W = W / Wsum
 
-    return (W, H)
+    return (W, H, {})

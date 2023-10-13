@@ -17,6 +17,7 @@ from .utilities.pvalue_analysis import pvalue_analysis
 from .utilities.organize_n_jobs import organize_n_jobs
 from .decompositions.nmf_kl_mu import nmf as nmf_kl_mu
 from .decompositions.nmf_fro_mu import nmf as nmf_fro_mu
+from .decompositions.nmf_recommender import nmf as nmf_recommender
 from .decompositions.nmf_fro_mu import H_update
 from .decompositions.utilities.nnsvd import nnsvd
 from .decompositions.utilities.resample import poisson, uniform_product
@@ -68,7 +69,7 @@ def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
                 Y = cp.array(Y)
 
             # do optimization on GPU
-            W_, H_ = nmf(X=Y, W=W, H=H, **nmf_params)
+            W_, H_, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
 
             # move solution from device to host
             W = cp.asnumpy(W_)
@@ -79,9 +80,9 @@ def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
             cp._default_memory_pool.free_all_blocks()
 
     else:
-        W, H = nmf(X=Y, W=W, H=H, **nmf_params)
+        W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
 
-    return W, H
+    return W, H, other_results
 
 def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
 
@@ -159,7 +160,7 @@ def _nmf_parallel_wrapper(
     for perturbation in range(n_perturbs):
         Y = __perturb_X(X, perturbation, epsilon, perturb_type)
         W, H = __init_WH(Y, k, mask, init_type)
-        W, H = __run_nmf(Y, W, H, nmf, nmf_params, use_gpu, gpuid)
+        W, H, other_results = __run_nmf(Y, W, H, nmf, nmf_params, use_gpu, gpuid)
 
         if calculate_error:
             error = relative_error(X, W, H)
@@ -241,7 +242,8 @@ def _nmf_parallel_wrapper(
             "errors": errors,
             "reordered_con_mat": reordered_con_mat,
             "H_all": H_all,
-            "cophenetic_coeff": coeff_k
+            "cophenetic_coeff": coeff_k,
+            "other_results": other_results
         }
         np.savez_compressed(
             save_path
@@ -308,6 +310,7 @@ def _nmf_parallel_wrapper(
     if collect_output:
         results_k["W"] = W
         results_k["H"] = H
+        results_k["other_results"] = other_results
 
     return results_k
 
@@ -343,7 +346,7 @@ class NMFk:
             mask=None,
             calculate_pac=False,
             get_plot_data=False,
-            simple_plot=True):
+            simple_plot=True,):
         """
         NMFk is a Non-negative Matrix Factorization module with the capability to do automatic model determination.
 
@@ -406,6 +409,7 @@ class NMFk:
             * ``nmf_method='nmf_fro_mu'`` will use NMF with Frobenious Norm.\n
             * ``nmf_method='nmf_kl_mu'`` will use NMF with Multiplicative Update rules with KL-Divergence.\n
             * ``nmf_method='func'`` will use the custom NMF function passed using the ``nmf_func`` parameter.\n
+            * ``nmf_method='nmf_recommender'`` will use the Recommender NMF method for collaborative filtering.\n
         nmf_obj_params : dict, optional
             Parameters used by NMF function. The default is {}.
         pruned : bool, optional
@@ -430,7 +434,6 @@ class NMFk:
             When True, collectes the data used in plotting each intermidiate k factorization. The default is False.
         simple_plot : bool, optional
             When True, creates a simple plot for each intermidiate k factorization which hides the statistics such as average and maximum Silhouette scores. The default is True.
-            
         Returns
         -------
         None.
@@ -521,7 +524,12 @@ class NMFk:
         #
         # Prepare NMF function
         #
-        avail_nmf_methods = ["nmf_fro_mu", "nmf_kl_mu", "func"]
+        avail_nmf_methods = [
+            "nmf_fro_mu", 
+            "nmf_kl_mu", 
+            "nmf_recommender", 
+            "func"
+        ]
         if self.nmf_method not in avail_nmf_methods:
             raise Exception("Invalid NMF method is selected. Choose from: " +
                             ",".join(avail_nmf_methods))
@@ -549,8 +557,24 @@ class NMFk:
             self.nmf_params = self.nmf_obj_params
             self.nmf = nmf_func
 
+        elif self.nmf_method == "nmf_recommender":
+            self.nmf_params = {
+                "niter": self.n_iters,
+                "use_gpu": self.use_gpu,
+                "nmf_verbose": self.nmf_verbose,
+            }
+            self.nmf = nmf_recommender
+
         else:
             raise Exception("Unknown NMF method or nmf_func was not passed")
+
+        #
+        # Additional NMF settings
+        #
+        if len(self.nmf_obj_params) > 0:
+            for key, value in self.nmf_obj_params.items():
+                if key not in self.nmf_params:
+                    self.nmf_params[key] = value
 
         if self.verbose:
             print('Performing NMF with ', self.nmf_method)

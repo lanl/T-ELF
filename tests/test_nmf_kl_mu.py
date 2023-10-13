@@ -44,7 +44,7 @@ def test_nmf_numpy():
     for dtype in [np.float32, np.float64]:
         for typ in [np.array, scipy.sparse.csc_matrix, scipy.sparse.csr_matrix]:
             X = typ(X0.astype(dtype))
-            W, H = nmf_kl_mu.nmf(X, uniform_product(
+            W, H, {} = nmf_kl_mu.nmf(X, uniform_product(
                 W0, 0.1), uniform_product(H0, 0.1), use_gpu=False)
             assert W.dtype == dtype
             assert H.dtype == dtype
