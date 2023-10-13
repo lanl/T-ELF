@@ -243,7 +243,7 @@ def _nmf_parallel_wrapper(
             "reordered_con_mat": reordered_con_mat,
             "H_all": H_all,
             "cophenetic_coeff": coeff_k,
-            "other_results": other_results
+            "other_results": **other_results
         }
         np.savez_compressed(
             save_path
@@ -838,6 +838,9 @@ class NMFk:
                 if self.collect_output:
                         results["W"] = combined_result["W"][combined_result["Ks"].index(k_predict)]
                         results["H"] = combined_result["H"][combined_result["Ks"].index(k_predict)]
+
+                        if self.nmf_method == "nmf_recommender":
+                            results["other_results"] = combined_result["other_results"][combined_result["Ks"].index(k_predict)]
 
             # final plot
             if self.save_output:
