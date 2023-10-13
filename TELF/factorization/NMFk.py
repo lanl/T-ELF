@@ -243,7 +243,7 @@ def _nmf_parallel_wrapper(
             "reordered_con_mat": reordered_con_mat,
             "H_all": H_all,
             "cophenetic_coeff": coeff_k,
-            "other_results": **other_results
+            "other_results": other_results
         }
         np.savez_compressed(
             save_path

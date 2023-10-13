@@ -133,4 +133,4 @@ def nmf(X, W, H,
             H = np.maximum(H.astype(dtype), eps)
             W = np.maximum(W.astype(dtype), eps)
 
-    return W, H, {"bi":bi, "bu":bu, "global_mean":global_mean}
+    return W, H, **{"bi":bi, "bu":bu, "global_mean":global_mean}
