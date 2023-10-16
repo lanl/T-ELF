@@ -44,6 +44,14 @@ def nmf(X, W, H,
     n_users = X.shape[0]
     n_items = X.shape[1]
 
+    # calculate the nnz users and ratings
+    if scipy.sparse.issparse(X):
+        n_ratings_users = X.getnnz(axis=1)
+        n_ratings_items = X.getnnz(axis=0)
+    else:
+        n_ratings_users = np.count_nonzero(X, axis=1)
+        n_ratings_items = np.count_nonzero(X, axis=0)
+
     # bias for users
     bu = np.zeros(n_users, dtype)
     # bias for items
@@ -98,35 +106,18 @@ def nmf(X, W, H,
                 bi[i] += lr_bi * (err - reg_bi * bi[i])
 
             # compute numerators and denominators
-            for f in range(k):
-                user_num[u, f] += H[f, i] * r
-                user_denom[u, f] += H[f, i] * est
-                item_num[i, f] += W[u, f] * r
-                item_denom[i, f] += W[u, f] * est
+            user_num[u, :] += H[:, i] * r
+            user_denom[u, :] += H[:, i] * est
+            item_num[i, :] += W[u, :] * r
+            item_denom[i, :] += W[u, :] * est
 
         # Update user factors
-        for u in range(n_users):
-
-            if scipy.sparse.issparse(X):
-                n_ratings = X[u].nnz
-            else:
-                n_ratings = len(X[u].nonzero()[0])
-
-            for f in range(k):
-                user_denom[u, f] += n_ratings * reg_pu * W[u, f]
-                W[u, f] *= user_num[u, f] / user_denom[u, f]
-
+        user_denom += n_ratings_users[:, np.newaxis] * reg_pu * W
+        W *= user_num / user_denom  
+        
         # Update item factors
-        for i in range(n_items):
-
-            if scipy.sparse.issparse(X):
-                n_ratings = X[:, i].nnz
-            else:
-                n_ratings = len(X[:, i].nonzero()[0])
-
-            for f in range(k):
-                item_denom[i, f] += n_ratings * reg_qi * H[f, i]
-                H[f, i] *= item_num[i, f] / item_denom[i, f]
+        item_denom += (n_ratings_items[np.newaxis, :] * reg_qi * H).T
+        H *= item_num.T / item_denom.T
 
         # preserve non-zero
         if (current_epoch + 1) % 10 == 0:
