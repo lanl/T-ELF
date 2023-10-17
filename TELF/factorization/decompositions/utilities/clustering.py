@@ -17,13 +17,13 @@ def custom_k_means(W_all, centroids=None, max_iters=100):
     """
     np = get_np(W_all)
     dtype = W_all.dtype
+
     (N, K, n_perts) = W_all.shape
     if centroids is None:
         centroids = W_all[:, :, 0]
     centroids = centroids / np.sqrt(np.sum(centroids ** 2, axis=0), dtype=dtype)
-
     W_all = W_all / np.sqrt(np.sum(W_all ** 2, axis=0), dtype=dtype)
-
+    
     iteration = 0
     while iteration < max_iters:
         

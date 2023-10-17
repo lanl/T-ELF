@@ -81,7 +81,6 @@ def nmf(X, W, H,
             global_mean = global_mean
 
     for current_epoch in tqdm(range(niter), disable=not nmf_verbose, total=niter):
-        
         # (re)initialize nums and denoms to zero
         user_num = np.zeros((n_users, k))
         user_denom = np.zeros((n_users, k))
@@ -94,10 +93,7 @@ def nmf(X, W, H,
             i = columns[idx]
 
             # compute current estimation and error
-            dot = 0
-            for f in range(k):
-                dot += H[f, i] * W[u, f]
-            est = global_mean + bu[u] + bi[i] + dot
+            est = global_mean + bu[u] + bi[i] + np.dot(W[u],H[:,i])
             err = r - est
 
             # update biases
@@ -113,15 +109,15 @@ def nmf(X, W, H,
 
         # Update user factors
         user_denom += n_ratings_users[:, np.newaxis] * reg_pu * W
-        W *= user_num / user_denom  
+        W *= np.divide(user_num, user_denom, where=user_denom!=0)
         
         # Update item factors
         item_denom += (n_ratings_items[np.newaxis, :] * reg_qi * H).T
-        H *= item_num.T / item_denom.T
+        H *= np.divide(item_num.T, item_denom.T, where=item_denom.T!=0)
 
         # preserve non-zero
         if (current_epoch + 1) % 10 == 0:
             H = np.maximum(H.astype(dtype), eps)
             W = np.maximum(W.astype(dtype), eps)
-
+    
     return W, H, {"bi":bi, "bu":bu, "global_mean":global_mean}

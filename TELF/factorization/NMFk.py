@@ -414,6 +414,10 @@ class NMFk:
             Parameters used by NMF function. The default is {}.
         pruned : bool, optional
             When True, removes columns and rows from the input matrix that has only 0 values. The default is True.
+
+            .. warning::
+                Pruning should not be used with ``nmf_method='nmf_recommender'``.
+
         calculate_error : bool, optional
             When True, calculates the relative reconstruction error. The default is True.
 
@@ -558,6 +562,10 @@ class NMFk:
             self.nmf = nmf_func
 
         elif self.nmf_method == "nmf_recommender":
+            if self.pruned:
+                warnings.warn(
+                    f'nmf_recommender method should not be used with pruning!')
+                
             self.nmf_params = {
                 "niter": self.n_iters,
                 "use_gpu": self.use_gpu,
