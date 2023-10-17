@@ -88,32 +88,41 @@ def nmf(X, W, H,
         item_denom = np.zeros((n_items, k))
 
         # Compute numerators and denominators for users and items factors
-        for idx, r in enumerate(entries):
-            u = rows[idx]
-            i = columns[idx]
+        estimations = global_mean + bu[:, np.newaxis] + bi + W@H
+        errors = entries - estimations[rows, columns]
 
-            # compute current estimation and error
-            est = global_mean + bu[u] + bi[i] + np.dot(W[u],H[:,i])
-            err = r - est
-
+        if not use_gpu:
             # update biases
-            if biased:
-                bu[u] += lr_bu * (err - reg_bu * bu[u])
-                bi[i] += lr_bi * (err - reg_bi * bi[i])
+            np.add.at(bu, rows, lr_bu * (errors - reg_bu * bu[rows]))
+            np.add.at(bi, columns, lr_bi * (errors - reg_bi * bi[columns]))
 
             # compute numerators and denominators
-            user_num[u, :] += H[:, i] * r
-            user_denom[u, :] += H[:, i] * est
-            item_num[i, :] += W[u, :] * r
-            item_denom[i, :] += W[u, :] * est
+            np.add.at(user_num, rows, (H[:, columns] * entries).T)
+            np.add.at(user_denom, rows, (H[:, columns] * estimations[rows, columns]).T)
+
+            np.add.at(item_num, columns, (W[rows].T * entries).T)
+            np.add.at(item_denom, columns, (W[rows].T * estimations[rows, columns]).T)
+
+        else:
+            # update biases
+            np.scatter_add(bu, rows, lr_bu * (errors - reg_bu * bu[rows]))
+            np.scatter_add(bi, columns, lr_bi * (errors - reg_bi * bi[columns]))
+
+            # compute numerators and denominators
+            np.scatter_add(user_num, rows, (H[:, columns] * entries).T)
+            np.scatter_add(user_denom, rows, (H[:, columns] * estimations[rows, columns]).T)
+
+            np.scatter_add(item_num, columns, (W[rows].T * entries).T)
+            np.scatter_add(item_denom, columns, (W[rows].T * estimations[rows, columns]).T)
 
         # Update user factors
         user_denom += n_ratings_users[:, np.newaxis] * reg_pu * W
         W *= np.divide(user_num, user_denom, where=user_denom!=0)
-        
+
         # Update item factors
         item_denom += (n_ratings_items[np.newaxis, :] * reg_qi * H).T
         H *= np.divide(item_num.T, item_denom.T, where=item_denom.T!=0)
+
 
         # preserve non-zero
         if (current_epoch + 1) % 10 == 0:
