@@ -117,11 +117,11 @@ def nmf(X, W, H,
 
         # Update user factors
         user_denom += n_ratings_users[:, np.newaxis] * reg_pu * W
-        W *= np.divide(user_num, user_denom + eps, where=(user_denom + eps) != 0)
+        W *= np.divide(user_num, user_denom + eps)
 
         # Update item factors
         item_denom += (n_ratings_items[np.newaxis, :] * reg_qi * H).T
-        H *= np.divide(item_num.T, item_denom.T + eps, where=(item_denom.T + eps) != 0)
+        H *= np.divide(item_num.T, item_denom.T + eps)
 
         # preserve non-zero
         if (current_epoch + 1) % 10 == 0:
