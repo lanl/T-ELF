@@ -414,6 +414,14 @@ class NMFk:
             * ``nmf_method='nmf_kl_mu'`` will use NMF with Multiplicative Update rules with KL-Divergence.\n
             * ``nmf_method='func'`` will use the custom NMF function passed using the ``nmf_func`` parameter.\n
             * ``nmf_method='nmf_recommender'`` will use the Recommender NMF method for collaborative filtering.\n
+
+            .. note::
+
+                When using ``nmf_method='nmf_recommender'``, RNMFk prediction method can be done using ``from TELF.factorization import RNMFk_predict``.\n
+                Here ``RNMFk_predict(W, H, global_mean, bu, bi, u, i)``, ``W`` and ``H`` are the latent factors, ``global_mean``, ``bu``, and ``bi`` are the biases returned from ``nmf_recommender`` method.\n
+                Finally, ``u`` and ``i`` are the indices to perform prediction on.
+                
+
         nmf_obj_params : dict, optional
             Parameters used by NMF function. The default is {}.
         pruned : bool, optional
