@@ -1,7 +1,6 @@
 from .utilities.generic_utils import get_np, get_scipy, update_opts
 from .utilities.math_utils import fro_norm
 from tqdm import tqdm
-import numpy as np
 
 def nmf(X, W, H, 
         niter=100,
@@ -117,12 +116,11 @@ def nmf(X, W, H,
 
         # Update user factors
         user_denom += n_ratings_users[:, np.newaxis] * reg_pu * W
-        W *= np.divide(user_num, user_denom, where=user_denom!=0)
+        W *= np.divide(user_num, user_denom + eps, where=(user_denom + eps) != 0)
 
         # Update item factors
         item_denom += (n_ratings_items[np.newaxis, :] * reg_qi * H).T
-        H *= np.divide(item_num.T, item_denom.T, where=item_denom.T!=0)
-
+        H *= np.divide(item_num.T, item_denom.T + eps, where=(item_denom.T + eps) != 0)
 
         # preserve non-zero
         if (current_epoch + 1) % 10 == 0:
