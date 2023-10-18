@@ -1,0 +1,956 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>TELF.factorization.decompositions.utilities package &#8212; TELF 0.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=dc820ae5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'TELF.factorization.decompositions.utilities';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TELF.factorization.utilities package" href="TELF.factorization.utilities.html" />
+    <link rel="prev" title="TELF.factorization.decompositions package" href="TELF.factorization.decompositions.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.1 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">TELF</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="TELF.html">TELF package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="TELF.factorization.html">TELF.factorization package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l4 current active"><a class="reference internal" href="TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.pre_processing.html">TELF.pre_processing package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/TELF.factorization.decompositions.utilities.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>TELF.factorization.decompositions.utilities package</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.bool_clustering">TELF.factorization.decompositions.utilities.bool_clustering module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.bool_clustering.custom_bool_clustering"><code class="docutils literal notranslate"><span class="pre">custom_bool_clustering()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.bool_noise">TELF.factorization.decompositions.utilities.bool_noise module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.bool_noise.add_Bool_noise"><code class="docutils literal notranslate"><span class="pre">add_Bool_noise()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.bool_noise.add_Bool_posneg_noise"><code class="docutils literal notranslate"><span class="pre">add_Bool_posneg_noise()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.clustering">TELF.factorization.decompositions.utilities.clustering module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.clustering.custom_k_means"><code class="docutils literal notranslate"><span class="pre">custom_k_means()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.clustering.silhouettes"><code class="docutils literal notranslate"><span class="pre">silhouettes()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.concensus_matrix">TELF.factorization.decompositions.utilities.concensus_matrix module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.concensus_matrix.compute_connectivity_mat"><code class="docutils literal notranslate"><span class="pre">compute_connectivity_mat()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.concensus_matrix.compute_consensus_matrix"><code class="docutils literal notranslate"><span class="pre">compute_consensus_matrix()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.concensus_matrix.reorder_con_mat"><code class="docutils literal notranslate"><span class="pre">reorder_con_mat()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.data_reshaping">TELF.factorization.decompositions.utilities.data_reshaping module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.data_reshaping.fold"><code class="docutils literal notranslate"><span class="pre">fold()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.data_reshaping.move_axis"><code class="docutils literal notranslate"><span class="pre">move_axis()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.data_reshaping.unfold"><code class="docutils literal notranslate"><span class="pre">unfold()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.generic_utils">TELF.factorization.decompositions.utilities.generic_utils module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.generic_utils.bary_proj"><code class="docutils literal notranslate"><span class="pre">bary_proj()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.generic_utils.get_cupyx"><code class="docutils literal notranslate"><span class="pre">get_cupyx()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.generic_utils.get_np"><code class="docutils literal notranslate"><span class="pre">get_np()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.generic_utils.get_scipy"><code class="docutils literal notranslate"><span class="pre">get_scipy()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.generic_utils.grid_eval"><code class="docutils literal notranslate"><span class="pre">grid_eval()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.generic_utils.update_opts"><code class="docutils literal notranslate"><span class="pre">update_opts()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.math_utils">TELF.factorization.decompositions.utilities.math_utils module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.bary_coords"><code class="docutils literal notranslate"><span class="pre">bary_coords()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.fro_norm"><code class="docutils literal notranslate"><span class="pre">fro_norm()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.get_pac"><code class="docutils literal notranslate"><span class="pre">get_pac()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.kl_divergence"><code class="docutils literal notranslate"><span class="pre">kl_divergence()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.masked_nmf"><code class="docutils literal notranslate"><span class="pre">masked_nmf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.nan_to_num"><code class="docutils literal notranslate"><span class="pre">nan_to_num()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.norm_X"><code class="docutils literal notranslate"><span class="pre">norm_X()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.nz_indices"><code class="docutils literal notranslate"><span class="pre">nz_indices()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.prune"><code class="docutils literal notranslate"><span class="pre">prune()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.relative_error"><code class="docutils literal notranslate"><span class="pre">relative_error()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.relative_error_rescal"><code class="docutils literal notranslate"><span class="pre">relative_error_rescal()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.relative_trinmf_error"><code class="docutils literal notranslate"><span class="pre">relative_trinmf_error()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.sparse_divide_product"><code class="docutils literal notranslate"><span class="pre">sparse_divide_product()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.sparse_dot_product"><code class="docutils literal notranslate"><span class="pre">sparse_dot_product()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.unprune"><code class="docutils literal notranslate"><span class="pre">unprune()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.nnsvd">TELF.factorization.decompositions.utilities.nnsvd module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.nnsvd.nnsvd"><code class="docutils literal notranslate"><span class="pre">nnsvd()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.resample">TELF.factorization.decompositions.utilities.resample module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.resample.poisson"><code class="docutils literal notranslate"><span class="pre">poisson()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.resample.uniform_product"><code class="docutils literal notranslate"><span class="pre">uniform_product()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.silhouettes">TELF.factorization.decompositions.utilities.silhouettes module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.silhouettes.custom_silhouettes"><code class="docutils literal notranslate"><span class="pre">custom_silhouettes()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities">Module contents</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="telf-factorization-decompositions-utilities-package">
+<h1>TELF.factorization.decompositions.utilities package<a class="headerlink" href="#telf-factorization-decompositions-utilities-package" title="Permalink to this heading">#</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="module-TELF.factorization.decompositions.utilities.bool_clustering">
+<span id="telf-factorization-decompositions-utilities-bool-clustering-module"></span><h2>TELF.factorization.decompositions.utilities.bool_clustering module<a class="headerlink" href="#module-TELF.factorization.decompositions.utilities.bool_clustering" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.bool_clustering.custom_bool_clustering">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.bool_clustering.</span></span><span class="sig-name descname"><span class="pre">custom_bool_clustering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">W_all</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hamming'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/bool_clustering.html#custom_bool_clustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.bool_clustering.custom_bool_clustering" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.utilities.bool_noise">
+<span id="telf-factorization-decompositions-utilities-bool-noise-module"></span><h2>TELF.factorization.decompositions.utilities.bool_noise module<a class="headerlink" href="#module-TELF.factorization.decompositions.utilities.bool_noise" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.bool_noise.add_Bool_noise">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.bool_noise.</span></span><span class="sig-name descname"><span class="pre">add_Bool_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noisepercent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/bool_noise.html#add_Bool_noise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.bool_noise.add_Bool_noise" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.bool_noise.add_Bool_posneg_noise">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.bool_noise.</span></span><span class="sig-name descname"><span class="pre">add_Bool_posneg_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noisepercent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/bool_noise.html#add_Bool_posneg_noise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.bool_noise.add_Bool_posneg_noise" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.utilities.clustering">
+<span id="telf-factorization-decompositions-utilities-clustering-module"></span><h2>TELF.factorization.decompositions.utilities.clustering module<a class="headerlink" href="#module-TELF.factorization.decompositions.utilities.clustering" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.clustering.custom_k_means">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.clustering.</span></span><span class="sig-name descname"><span class="pre">custom_k_means</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">W_all</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/clustering.html#custom_k_means"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.clustering.custom_k_means" title="Permalink to this definition">#</a></dt>
+<dd><p>Greedy algorithm to approximate a quadratic assignment problem to cluster vectors. Given p groups of k vectors, construct k clusters, each cluster containing a single vector from each of the p groups. This clustering approximation uses cos distances and mean centroids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>W_all</strong> (<em>ndarray</em>) – Order three tensor of shape m by k by p, where m is the ambient dimension of the vectors, k is the number of vectors in each group, and p is the number of groups of vectors.</p></li>
+<li><p><strong>centroids</strong> (<em>ndarray</em>) – The m by k initialization of the centroids of the clusters. None corresponds to using the first slice, W_all[:,:,0], as the initial centroids. Defaults to None.</p></li>
+<li><p><strong>max_iters</strong> (<em>int</em>) – The maximum number of iterations of the algorithm. If a stable point has been been reached in max_iters iterations, then a warning is given. Defaults to 100.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The m by k centroids of the clusters.
+W_all (ndarray): Clustered organization of the vectors. W_all[:,i,:] is all p, m dimensional vectors in the ith cluster.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>centroids (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.clustering.silhouettes">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.clustering.</span></span><span class="sig-name descname"><span class="pre">silhouettes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">W_all</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/clustering.html#silhouettes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.clustering.silhouettes" title="Permalink to this definition">#</a></dt>
+<dd><p>Computes the cosine distances silhouettes of a clustering of vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>W_all</strong> (<em>ndarray</em>) – Order three tensor of clustered vectors of shape m by k by p, where m is the ambient dimension of the vectors, k is the number of vectors in each group, and p is the number of groups of vectors.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The k by p array of silhouettes where sils[i,j] is the silhouette measure for the vector W_all[:,i,j].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sils (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.utilities.concensus_matrix">
+<span id="telf-factorization-decompositions-utilities-concensus-matrix-module"></span><h2>TELF.factorization.decompositions.utilities.concensus_matrix module<a class="headerlink" href="#module-TELF.factorization.decompositions.utilities.concensus_matrix" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.concensus_matrix.compute_connectivity_mat">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.concensus_matrix.</span></span><span class="sig-name descname"><span class="pre">compute_connectivity_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/concensus_matrix.html#compute_connectivity_mat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.concensus_matrix.compute_connectivity_mat" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.concensus_matrix.compute_consensus_matrix">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.concensus_matrix.</span></span><span class="sig-name descname"><span class="pre">compute_consensus_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H_all</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/concensus_matrix.html#compute_consensus_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.concensus_matrix.compute_consensus_matrix" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.concensus_matrix.reorder_con_mat">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.concensus_matrix.</span></span><span class="sig-name descname"><span class="pre">reorder_con_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'HC'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/concensus_matrix.html#reorder_con_mat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.concensus_matrix.reorder_con_mat" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.utilities.data_reshaping">
+<span id="telf-factorization-decompositions-utilities-data-reshaping-module"></span><h2>TELF.factorization.decompositions.utilities.data_reshaping module<a class="headerlink" href="#module-TELF.factorization.decompositions.utilities.data_reshaping" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.data_reshaping.fold">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.data_reshaping.</span></span><span class="sig-name descname"><span class="pre">fold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/data_reshaping.html#fold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.data_reshaping.fold" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a tensor from matrix.
+:param X: an unfolded array
+:type X: ndarray/sparse array
+:param axis: Dimension number to fold on.
+:type axis: int
+:param shape:
+:type shape: target tensor shape</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.data_reshaping.move_axis">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.data_reshaping.</span></span><span class="sig-name descname"><span class="pre">move_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/data_reshaping.html#move_axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.data_reshaping.move_axis" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a matricized tensor.
+:param X: A tensor as a Numpy/Sparse Array
+:type X: ndarray/sparse array
+:param axis: Dimension number to unfold on.
+:type axis: int</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.data_reshaping.unfold">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.data_reshaping.</span></span><span class="sig-name descname"><span class="pre">unfold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/data_reshaping.html#unfold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.data_reshaping.unfold" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a matricized tensor.
+:param X: A tensor as a Numpy/Sparse Array
+:type X: ndarray/sparse array
+:param axis: Dimension number to unfold on.
+:type axis: int</p>
+</dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.utilities.generic_utils">
+<span id="telf-factorization-decompositions-utilities-generic-utils-module"></span><h2>TELF.factorization.decompositions.utilities.generic_utils module<a class="headerlink" href="#module-TELF.factorization.decompositions.utilities.generic_utils" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.generic_utils.bary_proj">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.generic_utils.</span></span><span class="sig-name descname"><span class="pre">bary_proj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_vars</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/generic_utils.html#bary_proj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.generic_utils.bary_proj" title="Permalink to this definition">#</a></dt>
+<dd><p>Computes generalized Barycentric coordinates from an activation matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>num_vars</strong> (<em>int</em>) – Number of extreme rays in barycentric plot.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Angles of extreme points.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>theta (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.generic_utils.get_cupyx">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.generic_utils.</span></span><span class="sig-name descname"><span class="pre">get_cupyx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/generic_utils.html#get_cupyx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.generic_utils.get_cupyx" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.generic_utils.get_np">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.generic_utils.</span></span><span class="sig-name descname"><span class="pre">get_np</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/generic_utils.html#get_np"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.generic_utils.get_np" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.generic_utils.get_scipy">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.generic_utils.</span></span><span class="sig-name descname"><span class="pre">get_scipy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/generic_utils.html#get_scipy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.generic_utils.get_scipy" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.generic_utils.grid_eval">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.generic_utils.</span></span><span class="sig-name descname"><span class="pre">grid_eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_cpus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/generic_utils.html#grid_eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.generic_utils.grid_eval" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.generic_utils.update_opts">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.generic_utils.</span></span><span class="sig-name descname"><span class="pre">update_opts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/generic_utils.html#update_opts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.generic_utils.update_opts" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.utilities.math_utils">
+<span id="telf-factorization-decompositions-utilities-math-utils-module"></span><h2>TELF.factorization.decompositions.utilities.math_utils module<a class="headerlink" href="#module-TELF.factorization.decompositions.utilities.math_utils" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.bary_coords">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">bary_coords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#bary_coords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.bary_coords" title="Permalink to this definition">#</a></dt>
+<dd><p>Computes generalized Barycentric coordinates from an activation matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n activation matrix</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Generalized Barycentric x coordinate.
+y (ndarray): Generalized Barycentric y coordinate.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>x (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.fro_norm">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">fro_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#fro_norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.fro_norm" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.get_pac">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">get_pac</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#get_pac"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.get_pac" title="Permalink to this definition">#</a></dt>
+<dd><p>TODO: Duc to fix Pac so mathematically it is correct</p>
+<p>Removes zero rows and columns from a matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>C</strong> (<em>ndarray</em><em>, </em><em>dense matrix</em>) – 3D consensus matrix where dimensions are (num. of k, N, N)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>cdf</strong> – PAC calculation</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1d np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.kl_divergence">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">kl_divergence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#kl_divergence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.kl_divergence" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.masked_nmf">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">masked_nmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">itr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#masked_nmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.masked_nmf" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.nan_to_num">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">nan_to_num</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#nan_to_num"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.nan_to_num" title="Permalink to this definition">#</a></dt>
+<dd><p>Replaces nan in X with num</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.norm_X">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">norm_X</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#norm_X"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.norm_X" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.nz_indices">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">nz_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#nz_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.nz_indices" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.prune">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">prune</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#prune"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.prune" title="Permalink to this definition">#</a></dt>
+<dd><p>Removes zero rows and columns from a matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Matrix to prune</p></li>
+<li><p><strong>use_gpu</strong> (<em>Boolean</em>) – Flag for whether decomposition is being performed on GPU or not.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Y</strong> (<em>scipy.sparse._csr.csr_matrix</em>) – Pruned matrix</p></li>
+<li><p><strong>rows</strong> (<em>ndarray</em>) – Boolean array for all rows; True if non-zero row, else False</p></li>
+<li><p><strong>cols</strong> (<em>ndarray</em>) – Boolean array for all cols; True if non-zero col, else False</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.relative_error">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">relative_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normX</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#relative_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.relative_error" title="Permalink to this definition">#</a></dt>
+<dd><dl class="simple">
+<dt>input:</dt><dd><p>X (sparse array, ndarray): shape $m times n$ array or sparse array.
+W (ndarray): shape $m times k$ left factor of X.
+H (ndarray): shape $k times n$ right factor of X.
+normX, optional (double): Optional argument if you already know the norm of X.</p>
+</dd>
+<dt>output:</dt><dd><p>rel_err (double): the relative error $||X-WH||_F/||X||_F$.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.relative_error_rescal">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">relative_error_rescal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normX</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#relative_error_rescal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.relative_error_rescal" title="Permalink to this definition">#</a></dt>
+<dd><dl class="simple">
+<dt>input:</dt><dd><p>X (sparse array, ndarray): shape $m times n$ array or sparse array.
+W (ndarray): shape $m times k$ left factor of X.
+H (ndarray): shape $k times n$ right factor of X.
+normX, optional (double): Optional argument if you already know the norm of X.</p>
+</dd>
+<dt>output:</dt><dd><p>rel_err (double): the relative error $||X-WH||_F/||X||_F$.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.relative_trinmf_error">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">relative_trinmf_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#relative_trinmf_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.relative_trinmf_error" title="Permalink to this definition">#</a></dt>
+<dd><dl class="simple">
+<dt>input:</dt><dd><p>X (sparse array, ndarray): shape $m times n$ array or sparse array.
+W (ndarray): shape $m times kw$ left factor of X.
+S (ndarray): shape $kw times kk$ middle factor of X.
+H (ndarray): shape $kh times n$ right factor of X.</p>
+</dd>
+<dt>output:</dt><dd><p>rel_err (double): the relative error $||X-WSH||_F/||X||_F$.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.sparse_divide_product">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">sparse_divide_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#sparse_divide_product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.sparse_divide_product" title="Permalink to this definition">#</a></dt>
+<dd><p>Efficiently computes X/(A&#64;B).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.sparse_dot_product">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">sparse_dot_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#sparse_dot_product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.sparse_dot_product" title="Permalink to this definition">#</a></dt>
+<dd><p>Efficiently computes (A&#64;B).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.math_utils.unprune">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.math_utils.</span></span><span class="sig-name descname"><span class="pre">unprune</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/math_utils.html#unprune"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.math_utils.unprune" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.utilities.nnsvd">
+<span id="telf-factorization-decompositions-utilities-nnsvd-module"></span><h2>TELF.factorization.decompositions.utilities.nnsvd module<a class="headerlink" href="#module-TELF.factorization.decompositions.utilities.nnsvd" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.nnsvd.nnsvd">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.nnsvd.</span></span><span class="sig-name descname"><span class="pre">nnsvd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/nnsvd.html#nnsvd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.nnsvd.nnsvd" title="Permalink to this definition">#</a></dt>
+<dd><p>Nonnegative SVD algorithm for NMF initialization based off of Gillis et al. in <a class="reference external" href="https://arxiv.org/pdf/1807.04020.pdf">https://arxiv.org/pdf/1807.04020.pdf</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em>) – Nonnegative m by n matrix to approximate with nnsvd.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The desired rank of the nonnegative approximation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative m by k left factor of X.
+H (ndarray): Nonnegative k by n right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.utilities.resample">
+<span id="telf-factorization-decompositions-utilities-resample-module"></span><h2>TELF.factorization.decompositions.utilities.resample module<a class="headerlink" href="#module-TELF.factorization.decompositions.utilities.resample" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.resample.poisson">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.resample.</span></span><span class="sig-name descname"><span class="pre">poisson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/resample.html#poisson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.resample.poisson" title="Permalink to this definition">#</a></dt>
+<dd><p>Resamples each element of a matrix from a Poisson distribution with the mean set by that element. Y_{i,j} = Poisson(X_{i,j})</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Array of which to find a perturbation.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The perturbed matrix.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Y (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.resample.uniform_product">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.resample.</span></span><span class="sig-name descname"><span class="pre">uniform_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/resample.html#uniform_product"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.resample.uniform_product" title="Permalink to this definition">#</a></dt>
+<dd><p>Multiplies each element of X by a uniform random number in (1-epsilon, 1+epsilon).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Array of which to find a perturbation.</p></li>
+<li><p><strong>epsilon</strong> (<em>float</em>) – The perturbation amount.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The perturbed matrix.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Y (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.utilities.silhouettes">
+<span id="telf-factorization-decompositions-utilities-silhouettes-module"></span><h2>TELF.factorization.decompositions.utilities.silhouettes module<a class="headerlink" href="#module-TELF.factorization.decompositions.utilities.silhouettes" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.utilities.silhouettes.custom_silhouettes">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.utilities.silhouettes.</span></span><span class="sig-name descname"><span class="pre">custom_silhouettes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">W_all</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hamming'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/utilities/silhouettes.html#custom_silhouettes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.utilities.silhouettes.custom_silhouettes" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.utilities">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-TELF.factorization.decompositions.utilities" title="Permalink to this heading">#</a></h2>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="TELF.factorization.decompositions.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">TELF.factorization.decompositions package</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="TELF.factorization.utilities.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">TELF.factorization.utilities package</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.bool_clustering">TELF.factorization.decompositions.utilities.bool_clustering module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.bool_clustering.custom_bool_clustering"><code class="docutils literal notranslate"><span class="pre">custom_bool_clustering()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.bool_noise">TELF.factorization.decompositions.utilities.bool_noise module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.bool_noise.add_Bool_noise"><code class="docutils literal notranslate"><span class="pre">add_Bool_noise()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.bool_noise.add_Bool_posneg_noise"><code class="docutils literal notranslate"><span class="pre">add_Bool_posneg_noise()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.clustering">TELF.factorization.decompositions.utilities.clustering module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.clustering.custom_k_means"><code class="docutils literal notranslate"><span class="pre">custom_k_means()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.clustering.silhouettes"><code class="docutils literal notranslate"><span class="pre">silhouettes()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.concensus_matrix">TELF.factorization.decompositions.utilities.concensus_matrix module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.concensus_matrix.compute_connectivity_mat"><code class="docutils literal notranslate"><span class="pre">compute_connectivity_mat()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.concensus_matrix.compute_consensus_matrix"><code class="docutils literal notranslate"><span class="pre">compute_consensus_matrix()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.concensus_matrix.reorder_con_mat"><code class="docutils literal notranslate"><span class="pre">reorder_con_mat()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.data_reshaping">TELF.factorization.decompositions.utilities.data_reshaping module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.data_reshaping.fold"><code class="docutils literal notranslate"><span class="pre">fold()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.data_reshaping.move_axis"><code class="docutils literal notranslate"><span class="pre">move_axis()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.data_reshaping.unfold"><code class="docutils literal notranslate"><span class="pre">unfold()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.generic_utils">TELF.factorization.decompositions.utilities.generic_utils module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.generic_utils.bary_proj"><code class="docutils literal notranslate"><span class="pre">bary_proj()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.generic_utils.get_cupyx"><code class="docutils literal notranslate"><span class="pre">get_cupyx()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.generic_utils.get_np"><code class="docutils literal notranslate"><span class="pre">get_np()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.generic_utils.get_scipy"><code class="docutils literal notranslate"><span class="pre">get_scipy()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.generic_utils.grid_eval"><code class="docutils literal notranslate"><span class="pre">grid_eval()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.generic_utils.update_opts"><code class="docutils literal notranslate"><span class="pre">update_opts()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.math_utils">TELF.factorization.decompositions.utilities.math_utils module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.bary_coords"><code class="docutils literal notranslate"><span class="pre">bary_coords()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.fro_norm"><code class="docutils literal notranslate"><span class="pre">fro_norm()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.get_pac"><code class="docutils literal notranslate"><span class="pre">get_pac()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.kl_divergence"><code class="docutils literal notranslate"><span class="pre">kl_divergence()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.masked_nmf"><code class="docutils literal notranslate"><span class="pre">masked_nmf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.nan_to_num"><code class="docutils literal notranslate"><span class="pre">nan_to_num()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.norm_X"><code class="docutils literal notranslate"><span class="pre">norm_X()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.nz_indices"><code class="docutils literal notranslate"><span class="pre">nz_indices()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.prune"><code class="docutils literal notranslate"><span class="pre">prune()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.relative_error"><code class="docutils literal notranslate"><span class="pre">relative_error()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.relative_error_rescal"><code class="docutils literal notranslate"><span class="pre">relative_error_rescal()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.relative_trinmf_error"><code class="docutils literal notranslate"><span class="pre">relative_trinmf_error()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.sparse_divide_product"><code class="docutils literal notranslate"><span class="pre">sparse_divide_product()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.sparse_dot_product"><code class="docutils literal notranslate"><span class="pre">sparse_dot_product()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.math_utils.unprune"><code class="docutils literal notranslate"><span class="pre">unprune()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.nnsvd">TELF.factorization.decompositions.utilities.nnsvd module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.nnsvd.nnsvd"><code class="docutils literal notranslate"><span class="pre">nnsvd()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.resample">TELF.factorization.decompositions.utilities.resample module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.resample.poisson"><code class="docutils literal notranslate"><span class="pre">poisson()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.resample.uniform_product"><code class="docutils literal notranslate"><span class="pre">uniform_product()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities.silhouettes">TELF.factorization.decompositions.utilities.silhouettes module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.utilities.silhouettes.custom_silhouettes"><code class="docutils literal notranslate"><span class="pre">custom_silhouettes()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.utilities">Module contents</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
