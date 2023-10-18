@@ -1,6 +1,10 @@
 from .utilities.generic_utils import get_np, get_scipy, get_cupyx
 from tqdm import tqdm
 
+def RNMFk_predict(W, H, global_mean, bu, bi, u, i):
+    predict = lambda W, H, global_mean, bu, bi, u, i: global_mean + bu[u] + bi[i] + H[:, i]@W[u]
+    return predict(W, H, global_mean, bu, bi, u, i)
+
 def nmf(X, W, H, 
         niter=100,
         nmf_verbose=False,
