@@ -76,7 +76,7 @@ def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
             H = cp.asnumpy(H_)
 
             other_results = {}
-            for key, value in other_results.items():
+            for key, value in other_results_.items():
                 other_results[key] = cp.asnumpy(value)
 
             del Y, W_, H_, other_results_
