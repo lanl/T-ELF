@@ -1,5 +1,4 @@
-from .utilities.generic_utils import get_np, get_scipy, update_opts
-from .utilities.math_utils import fro_norm
+from .utilities.generic_utils import get_np, get_scipy
 from tqdm import tqdm
 
 def nmf(X, W, H, 
@@ -80,6 +79,7 @@ def nmf(X, W, H,
             global_mean = global_mean
 
     for current_epoch in tqdm(range(niter), disable=not nmf_verbose, total=niter):
+
         # (re)initialize nums and denoms to zero
         user_num = np.zeros((n_users, k))
         user_denom = np.zeros((n_users, k))
