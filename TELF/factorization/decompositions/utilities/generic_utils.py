@@ -80,9 +80,9 @@ def get_np(*args, **kwargs):
 
 def get_cupyx(use_gpu):
     if use_gpu and HAS_CUPY:
-        return cupyx
+        return cupyx, HAS_CUPY
     else:
-        return scipy
+        return scipy, HAS_CUPY
 
 def get_scipy(*args, **kwargs):
     if "use_gpu" in kwargs:

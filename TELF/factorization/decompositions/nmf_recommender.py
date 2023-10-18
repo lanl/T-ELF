@@ -19,7 +19,7 @@ def nmf(X, W, H,
 
     np = get_np(X, use_gpu=use_gpu)
     scipy = get_scipy(X, use_gpu=use_gpu)
-    cupyx = get_cupyx(use_gpu=use_gpu)
+    cupyx, HAS_CUPY = get_cupyx(use_gpu=use_gpu)
     dtype = X.dtype
 
     # correct type
@@ -91,7 +91,7 @@ def nmf(X, W, H,
         estimations = global_mean + bu[:, np.newaxis] + bi + W@H
         errors = entries - estimations[rows, columns]
 
-        if not use_gpu:
+        if not use_gpu or (not HAS_CUPY):
             # update biases
             np.add.at(bu, rows, lr_bu * (errors - reg_bu * bu[rows]))
             np.add.at(bi, columns, lr_bi * (errors - reg_bi * bi[columns]))
@@ -103,7 +103,7 @@ def nmf(X, W, H,
             np.add.at(item_num, columns, (W[rows].T * entries).T)
             np.add.at(item_denom, columns, (W[rows].T * estimations[rows, columns]).T)
 
-        else:
+        elif use_gpu and HAS_CUPY:
             # update biases
             cupyx.scatter_add(bu, rows, lr_bu * (errors - reg_bu * bu[rows]))
             cupyx.scatter_add(bi, columns, lr_bi * (errors - reg_bi * bi[columns]))
@@ -114,6 +114,9 @@ def nmf(X, W, H,
 
             cupyx.scatter_add(item_num, columns, (W[rows].T * entries).T)
             cupyx.scatter_add(item_denom, columns, (W[rows].T * estimations[rows, columns]).T)
+        
+        else:
+            raise Exception("Requested GPU but did not find Cupy!")
 
         # Update user factors
         user_denom += n_ratings_users[:, np.newaxis] * reg_pu * W
@@ -127,5 +130,5 @@ def nmf(X, W, H,
         if (current_epoch + 1) % 10 == 0:
             H = np.maximum(H.astype(dtype), eps)
             W = np.maximum(W.astype(dtype), eps)
-    
+
     return W, H, {"bi":bi, "bu":bu, "global_mean":global_mean}

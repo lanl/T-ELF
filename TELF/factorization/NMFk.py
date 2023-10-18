@@ -69,13 +69,17 @@ def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
                 Y = cp.array(Y)
 
             # do optimization on GPU
-            W_, H_, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
+            W_, H_, other_results_ = nmf(X=Y, W=W, H=H, **nmf_params)
 
             # move solution from device to host
             W = cp.asnumpy(W_)
             H = cp.asnumpy(H_)
 
-            del Y, W_, H_
+            other_results = {}
+            for key, value in other_results.items():
+                other_results[key] = cp.asnumpy(value)
+
+            del Y, W_, H_, other_results_
 
             cp._default_memory_pool.free_all_blocks()
 
@@ -537,6 +541,7 @@ class NMFk:
         if self.nmf_method not in avail_nmf_methods:
             raise Exception("Invalid NMF method is selected. Choose from: " +
                             ",".join(avail_nmf_methods))
+        
         if self.nmf_method == "nmf_fro_mu":
             self.nmf_params = {
                 "niter": self.n_iters,
