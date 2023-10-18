@@ -104,15 +104,15 @@ def nmf(X, W, H,
 
         else:
             # update biases
-            np.scatter_add(bu, rows, lr_bu * (errors - reg_bu * bu[rows]))
-            np.scatter_add(bi, columns, lr_bi * (errors - reg_bi * bi[columns]))
+            scipy.scatter_add(bu, rows, lr_bu * (errors - reg_bu * bu[rows]))
+            scipy.scatter_add(bi, columns, lr_bi * (errors - reg_bi * bi[columns]))
 
             # compute numerators and denominators
-            np.scatter_add(user_num, rows, (H[:, columns] * entries).T)
-            np.scatter_add(user_denom, rows, (H[:, columns] * estimations[rows, columns]).T)
+            scipy.scatter_add(user_num, rows, (H[:, columns] * entries).T)
+            scipy.scatter_add(user_denom, rows, (H[:, columns] * estimations[rows, columns]).T)
 
-            np.scatter_add(item_num, columns, (W[rows].T * entries).T)
-            np.scatter_add(item_denom, columns, (W[rows].T * estimations[rows, columns]).T)
+            scipy.scatter_add(item_num, columns, (W[rows].T * entries).T)
+            scipy.scatter_add(item_denom, columns, (W[rows].T * estimations[rows, columns]).T)
 
         # Update user factors
         user_denom += n_ratings_users[:, np.newaxis] * reg_pu * W
