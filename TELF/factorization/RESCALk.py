@@ -20,11 +20,11 @@ from .decompositions.utilities.resample import uniform_product
 from .decompositions.utilities.nnsvd import nnsvd
 from .decompositions.rescal_fro_mu import rescal as rescal
 from .utilities.plot_NMFk import plot_NMFk
-from .utilities.take_note import take_note
+from .utilities.take_note import take_note, take_note_fmat, append_to_note
 
 from joblib import Parallel, delayed
 import multiprocessing
-from datetime import datetime
+from datetime import datetime, timedelta
 import GPUtil
 import time
 import warnings
@@ -242,6 +242,20 @@ class RESCALk:
             if not os.path.isdir(save_path):
                 raise Exception("Directory in save_path parameter does not exist!")
 
+            append_to_note(["#" * 100], save_path)
+            append_to_note(["start_time= " + str(datetime.now()),],
+                            # "name=" + str(name),
+                            # "note=" + str(note)], 
+                           save_path)
+            append_to_note(["#" * 100], save_path)
+            append_to_note(["#" * 100], save_path)
+            
+            object_notes = vars(self).copy()
+            # del object_notes["total_exec_seconds"]
+            # del object_notes["nmf"]
+            take_note(object_notes, save_path)
+
+
         init_options = ["nnsvd", "random"]
         if init not in init_options:
             raise Exception("Invalid init. Choose from:" + str(", ".join(init_options)))
@@ -386,6 +400,7 @@ class RESCALk:
         # MPI
         #
         if self.n_nodes > 1:
+            all_Ks = Ks
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
             Ks = self._chunk_Ks(Ks, n_chunks=self.n_nodes)[rank]
@@ -402,6 +417,18 @@ class RESCALk:
             + str(self.epsilon)
             + "eps"
         )
+
+        
+        stats_header = {'k': 'k', 
+            'sils_min': 'Min. Silhouette', 
+            'sils_mean': 'Mean Silhouette'}
+        if self.calculate_error:
+            stats_header['err_mean'] = 'Mean Error'
+            stats_header['err_std'] = 'STD Error'
+        if self.predict_k:
+            stats_header['col_error'] = 'Mean Col. Error'
+        stats_header['time'] = 'Time Elapsed'
+
         save_path = os.path.join(self.save_path, self.experiment_name)
         if self.save_output and ((self.n_nodes == 1) or (self.n_nodes > 1 and rank == 0)):
             # if self.save_output:
@@ -409,17 +436,21 @@ class RESCALk:
                 os.mkdir(save_path)
             except Exception:
                 pass
-
+            
             notes = dict()
             notes["Ks"] = Ks
+            notes["data_type"] = type(X)
             notes["num_perturbations"] = self.n_perturbs
             notes["epsilon"] = self.epsilon
             notes["init"] = self.init
             notes["n_jobs"] = self.n_jobs
             notes["experiment_name"] = name
             notes["num_iterations"] = self.n_iters
-            notes["note"] = note
             take_note(notes, save_path)
+            append_to_note(["#" * 100], save_path)
+            take_note_fmat(save_path, **stats_header)
+
+        print('\nTEST\n')
 
         sils_min = []
         sils_mean = []
@@ -559,17 +590,17 @@ class RESCALk:
                     **save_data
                 )
 
-                plot_data = dict()
-                plot_data["Ks"] = Ks[:i + 1]
-                plot_data["sils_min"] = sils_min
-                plot_data["sils_mean"] = sils_mean
-                plot_data["sils_std"] = sils_std
-                plot_data["err_reg"] = err_reg
-                plot_data["err_mean"] = err_mean
-                plot_data["err_std"] = err_std
-                plot_NMFk(
-                    plot_data, k, self.experiment_name, save_path
-                )
+                plot_data = dict()         
+                plot_data["k"] =  Ks[i]
+                plot_data["sils_min"] = '{0:.3f}'.format(sils_min[i])
+                plot_data["sils_mean"] = '{0:.3f}'.format(sils_mean[i])
+                plot_data["err_mean"] = '{0:.3f}'.format(err_mean[i])
+                plot_data["err_std"] = '{0:.3f}'.format(err_std[i])
+                elapsed_time = time.time() - start_time
+                elapsed_time = timedelta(seconds=elapsed_time)
+                plot_data["time"] = str(elapsed_time).split('.')[0]
+                take_note_fmat(save_path, **plot_data)
+
 
             # collect output to be returned
             if self.collect_output:
@@ -648,6 +679,14 @@ class RESCALk:
 
             # final plot
             if self.save_output:
+                
+                append_to_note(["#" * 100], save_path)
+                append_to_note(["end_time= "+str(datetime.now())], save_path)
+                append_to_note(
+                    ["total_time= "+str(time.time() - start_time) + " (seconds)"], save_path)
+                append_to_note(["#" * 100], save_path)
+                
+                print(f'Final plot is generating from : {Ks}')
                 plot_data = dict()
                 plot_data["Ks"] = Ks
                 plot_data["sils_min"] = sils_min
@@ -657,7 +696,7 @@ class RESCALk:
                 plot_data["err_mean"] = err_mean
                 plot_data["err_std"] = err_std
                 plot_NMFk(
-                    plot_data, k_predict, self.experiment_name, save_path  # , plot_predict=self.predict_k
+                    plot_data, k_predict, self.experiment_name, save_path, plot_final=True  # , plot_predict=self.predict_k
                 )
 
             if self.get_plot_data:
