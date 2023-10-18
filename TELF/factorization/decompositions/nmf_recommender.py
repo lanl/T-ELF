@@ -1,4 +1,4 @@
-from .utilities.generic_utils import get_np, get_scipy
+from .utilities.generic_utils import get_np, get_scipy, get_cupyx
 from tqdm import tqdm
 
 def nmf(X, W, H, 
@@ -19,6 +19,7 @@ def nmf(X, W, H,
 
     np = get_np(X, use_gpu=use_gpu)
     scipy = get_scipy(X, use_gpu=use_gpu)
+    cupyx = get_cupyx(use_gpu=use_gpu)
     dtype = X.dtype
 
     # correct type
@@ -104,15 +105,15 @@ def nmf(X, W, H,
 
         else:
             # update biases
-            scipy.scatter_add(bu, rows, lr_bu * (errors - reg_bu * bu[rows]))
-            scipy.scatter_add(bi, columns, lr_bi * (errors - reg_bi * bi[columns]))
+            cupyx.scatter_add(bu, rows, lr_bu * (errors - reg_bu * bu[rows]))
+            cupyx.scatter_add(bi, columns, lr_bi * (errors - reg_bi * bi[columns]))
 
             # compute numerators and denominators
-            scipy.scatter_add(user_num, rows, (H[:, columns] * entries).T)
-            scipy.scatter_add(user_denom, rows, (H[:, columns] * estimations[rows, columns]).T)
+            cupyx.scatter_add(user_num, rows, (H[:, columns] * entries).T)
+            cupyx.scatter_add(user_denom, rows, (H[:, columns] * estimations[rows, columns]).T)
 
-            scipy.scatter_add(item_num, columns, (W[rows].T * entries).T)
-            scipy.scatter_add(item_denom, columns, (W[rows].T * estimations[rows, columns]).T)
+            cupyx.scatter_add(item_num, columns, (W[rows].T * entries).T)
+            cupyx.scatter_add(item_denom, columns, (W[rows].T * estimations[rows, columns]).T)
 
         # Update user factors
         user_denom += n_ratings_users[:, np.newaxis] * reg_pu * W
