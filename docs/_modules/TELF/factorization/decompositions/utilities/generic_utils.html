@@ -282,8 +282,9 @@ document.write(`
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
     <span class="kn">import</span> <span class="nn">cupyx</span>
+    <span class="kn">import</span> <span class="nn">cupyx.scipy.sparse.linalg</span>
     <span class="kn">import</span> <span class="nn">cupyx.scipy.linalg</span>
-
+    
     <span class="n">HAS_CUPY</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="n">HAS_CUPY</span> <span class="o">=</span> <span class="kc">False</span>

@@ -358,14 +358,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.thres_norm"><code class="docutils literal notranslate"><span class="pre">thres_norm()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.nmf_surprise">TELF.factorization.decompositions.nmf_surprise module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_surprise.SNMF"><code class="docutils literal notranslate"><span class="pre">SNMF</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_surprise.SNMF.fit"><code class="docutils literal notranslate"><span class="pre">SNMF.fit()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_surprise.SNMF.predict"><code class="docutils literal notranslate"><span class="pre">SNMF.predict()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#telf-factorization-decompositions-nmf-surprise-module">TELF.factorization.decompositions.nmf_surprise module</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.rescal_fro_mu">TELF.factorization.decompositions.rescal_fro_mu module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.rescal_fro_mu.A_update"><code class="docutils literal notranslate"><span class="pre">A_update()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.rescal_fro_mu.R_update"><code class="docutils literal notranslate"><span class="pre">R_update()</span></code></a></li>
@@ -1045,24 +1038,8 @@ H (ndarray): Nonnegative k by n right factor of X.</p>
 <dd></dd></dl>
 
 </section>
-<section id="module-TELF.factorization.decompositions.nmf_surprise">
-<span id="telf-factorization-decompositions-nmf-surprise-module"></span><h2>TELF.factorization.decompositions.nmf_surprise module<a class="headerlink" href="#module-TELF.factorization.decompositions.nmf_surprise" title="Permalink to this heading">#</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_surprise.SNMF">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_surprise.</span></span><span class="sig-name descname"><span class="pre">SNMF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">biased</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_pu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_qi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_bu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_bi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_bu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_bi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculate_global_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_surprise.html#SNMF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_surprise.SNMF" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_surprise.SNMF.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_surprise.html#SNMF.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_surprise.SNMF.fit" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_surprise.SNMF.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_surprise.html#SNMF.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_surprise.SNMF.predict" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<section id="telf-factorization-decompositions-nmf-surprise-module">
+<h2>TELF.factorization.decompositions.nmf_surprise module<a class="headerlink" href="#telf-factorization-decompositions-nmf-surprise-module" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="module-TELF.factorization.decompositions.rescal_fro_mu">
 <span id="telf-factorization-decompositions-rescal-fro-mu-module"></span><h2>TELF.factorization.decompositions.rescal_fro_mu module<a class="headerlink" href="#module-TELF.factorization.decompositions.rescal_fro_mu" title="Permalink to this heading">#</a></h2>
@@ -1363,14 +1340,7 @@ H (ndarray): Nonnegative kh by n right factor of X.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.thres_norm"><code class="docutils literal notranslate"><span class="pre">thres_norm()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.nmf_surprise">TELF.factorization.decompositions.nmf_surprise module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_surprise.SNMF"><code class="docutils literal notranslate"><span class="pre">SNMF</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_surprise.SNMF.fit"><code class="docutils literal notranslate"><span class="pre">SNMF.fit()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_surprise.SNMF.predict"><code class="docutils literal notranslate"><span class="pre">SNMF.predict()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#telf-factorization-decompositions-nmf-surprise-module">TELF.factorization.decompositions.nmf_surprise module</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.rescal_fro_mu">TELF.factorization.decompositions.rescal_fro_mu module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.rescal_fro_mu.A_update"><code class="docutils literal notranslate"><span class="pre">A_update()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.rescal_fro_mu.R_update"><code class="docutils literal notranslate"><span class="pre">R_update()</span></code></a></li>

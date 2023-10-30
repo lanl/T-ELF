@@ -271,7 +271,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 
-<div class="viewcode-block" id="custom_k_means"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.clustering.custom_k_means">[docs]</a><span class="k">def</span> <span class="nf">custom_k_means</span><span class="p">(</span><span class="n">W_all</span><span class="p">,</span> <span class="n">centroids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_iters</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<div class="viewcode-block" id="custom_k_means"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.clustering.custom_k_means">[docs]</a><span class="k">def</span> <span class="nf">custom_k_means</span><span class="p">(</span><span class="n">W_all</span><span class="p">,</span> <span class="n">centroids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_iters</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Greedy algorithm to approximate a quadratic assignment problem to cluster vectors. Given p groups of k vectors, construct k clusters, each cluster containing a single vector from each of the p groups. This clustering approximation uses cos distances and mean centroids.</span>
 
@@ -284,7 +284,7 @@ document.write(`
 <span class="sd">        centroids (ndarray): The m by k centroids of the clusters.</span>
 <span class="sd">        W_all (ndarray): Clustered organization of the vectors. W_all[:,i,:] is all p, m dimensional vectors in the ith cluster.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">W_all</span><span class="p">)</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">W_all</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
     <span class="n">dtype</span> <span class="o">=</span> <span class="n">W_all</span><span class="o">.</span><span class="n">dtype</span>
 
     <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">n_perts</span><span class="p">)</span> <span class="o">=</span> <span class="n">W_all</span><span class="o">.</span><span class="n">shape</span>
