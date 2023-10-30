@@ -17,6 +17,7 @@ from .utilities.pvalue_analysis import pvalue_analysis
 from .utilities.organize_n_jobs import organize_n_jobs
 from .decompositions.nmf_kl_mu import nmf as nmf_kl_mu
 from .decompositions.nmf_fro_mu import nmf as nmf_fro_mu
+from .decompositions.nmf_recommender import nmf as nmf_recommender
 from .decompositions.nmf_fro_mu import H_update
 from .decompositions.utilities.nnsvd import nnsvd
 from .decompositions.utilities.resample import poisson, uniform_product
@@ -51,37 +52,48 @@ except Exception:
     MPI = None
 
 
+def __put_X_gpu(X, gpuid:int):
+    with cp.cuda.Device(gpuid):
+        if scipy.sparse.issparse(X):
+            Y = cupyx.scipy.sparse.csr_matrix(
+                (cp.array(X.data), cp.array(X.indices), cp.array(X.indptr)),
+                shape=X.shape,
+                dtype=X.dtype,
+            )
+        else:
+            Y = cp.array(X)
+    return Y
+
+def __put_WH_gpu(W_, H_, gpuid:int):
+    with cp.cuda.Device(gpuid):
+        W = cp.array(W_)
+        H = cp.array(H_)
+        
+    return W, H
+
+def __put_WH_cpu(W_, H_):
+    W = cp.asnumpy(W_)
+    H = cp.asnumpy(H_)
+    return W, H
+
+def __put_other_results_cpu(other_results_):
+    other_results = {}
+    for key, value in other_results_.items():
+        other_results[key] = cp.asnumpy(value)
+    return other_results
+    
 def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
     if use_gpu:
-
         with cp.cuda.Device(gpuid):
-            # move data and initialization from host to device
-            W = cp.array(W)
-            H = cp.array(H)
-            if scipy.sparse.issparse(Y):
-                Y = cupyx.scipy.sparse.csr_matrix(
-                    (cp.array(Y.data), cp.array(Y.indices), cp.array(Y.indptr)),
-                    shape=Y.shape,
-                    dtype=Y.dtype,
-                )
-            else:
-                Y = cp.array(Y)
-
-            # do optimization on GPU
-            W_, H_ = nmf(X=Y, W=W, H=H, **nmf_params)
-
-            # move solution from device to host
-            W = cp.asnumpy(W_)
-            H = cp.asnumpy(H_)
-
-            del Y, W_, H_
-
-            cp._default_memory_pool.free_all_blocks()
+            W_, H_, other_results_ = nmf(X=Y, W=W, H=H, **nmf_params)
+            W, H = __put_WH_cpu(W_, H_)
+            other_results = __put_other_results_cpu(other_results_)
+            del W_, H_, other_results_
 
     else:
-        W, H = nmf(X=Y, W=W, H=H, **nmf_params)
+        W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
 
-    return W, H
+    return W, H, other_results
 
 def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
 
@@ -93,35 +105,38 @@ def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
 
     return Y
 
-def __init_WH(Y, k, mask, init_type:str):
+def __init_WH(Y, k, mask, init_type:str, use_gpu:bool, gpuid:int):
     if init_type == "nnsvd":
         if mask is not None:
             Y[mask] = 0
-        W, H = nnsvd(Y, k)
+            
+        if use_gpu:
+            with cp.cuda.Device(gpuid):
+                W, H = nnsvd(Y, k, use_gpu=use_gpu)
+        else:
+            W, H = nnsvd(Y, k, use_gpu=use_gpu)
+            
     elif init_type == "random":
         W, H = np.random.rand(Y.shape[0], k), np.random.rand(k, Y.shape[1])
+    
+        if use_gpu:
+            W, H = __put_WH_gpu(W, H, gpuid)
 
     return W, H
 
-def __H_regression(X, W, mask, use_gpu):
+def __H_regression(X, W, mask, use_gpu:bool, gpuid:int):
     if use_gpu:
-        if scipy.sparse.issparse(X):
-            Y = cupyx.scipy.sparse.csr_matrix(
-                (cp.array(X.data), cp.array(X.indices), cp.array(X.indptr)),
-                shape=X.shape,
-                dtype=X.dtype,
-            )
-        else:
-            Y = cp.array(X)
-
-        H_ = H_update(Y, cp.array(W), cp.random.rand(
-            W.shape[1], X.shape[1]), use_gpu=use_gpu, mask=mask)
-        H = cp.asnumpy(H_)
+        Y = __put_X_gpu(X, gpuid)
+        with cp.cuda.Device(gpuid):
+            H_ = H_update(Y, cp.array(W), cp.random.rand(
+                W.shape[1], Y.shape[1]), use_gpu=use_gpu, mask=mask)
+            H = cp.asnumpy(H_)
+            
         del Y, H_
         cp._default_memory_pool.free_all_blocks()
-
+        
     else:
-        H = H_update(X.copy(), W, np.random.rand(
+        H = H_update(X, W, np.random.rand(
             W.shape[1], X.shape[1]), use_gpu=use_gpu, mask=mask)
         
     return H
@@ -157,15 +172,24 @@ def _nmf_parallel_wrapper(
     #
     W_all, H_all, errors = [], [], []
     for perturbation in range(n_perturbs):
+        
         Y = __perturb_X(X, perturbation, epsilon, perturb_type)
-        W, H = __init_WH(Y, k, mask, init_type)
-        W, H = __run_nmf(Y, W, H, nmf, nmf_params, use_gpu, gpuid)
-
+        
+        if use_gpu:
+            Y = __put_X_gpu(Y, gpuid)
+        
+        W, H = __init_WH(Y, k, mask=mask, init_type=init_type, use_gpu=use_gpu, gpuid=gpuid)
+        W, H, other_results = __run_nmf(Y, W, H, nmf, nmf_params, use_gpu, gpuid)
+        
+        if use_gpu:
+            del Y
+            cp._default_memory_pool.free_all_blocks()
+            
         if calculate_error:
             error = relative_error(X, W, H)
         else:
             error = 0
-
+        
         W_all.append(W)
         H_all.append(H)
         errors.append(error)
@@ -179,8 +203,8 @@ def _nmf_parallel_wrapper(
 
     #
     # cluster the solutions
-    #
-    W, W_clust = custom_k_means(W_all)
+    #        
+    W, W_clust = custom_k_means(W_all, use_gpu=use_gpu)
     sils_all = silhouettes(W_clust)
 
     #
@@ -195,7 +219,10 @@ def _nmf_parallel_wrapper(
     #
     # Regress H
     #
-    H = __H_regression(X, W, mask, use_gpu)
+    H = __H_regression(X, W, mask, use_gpu, gpuid)
+    
+    if use_gpu:
+        cp._default_memory_pool.free_all_blocks()
 
     # 
     #  reconstruction error
@@ -241,7 +268,8 @@ def _nmf_parallel_wrapper(
             "errors": errors,
             "reordered_con_mat": reordered_con_mat,
             "H_all": H_all,
-            "cophenetic_coeff": coeff_k
+            "cophenetic_coeff": coeff_k,
+            "other_results": other_results
         }
         np.savez_compressed(
             save_path
@@ -308,6 +336,7 @@ def _nmf_parallel_wrapper(
     if collect_output:
         results_k["W"] = W
         results_k["H"] = H
+        results_k["other_results"] = other_results
 
     return results_k
 
@@ -343,7 +372,7 @@ class NMFk:
             mask=None,
             calculate_pac=False,
             get_plot_data=False,
-            simple_plot=True):
+            simple_plot=True,):
         """
         NMFk is a Non-negative Matrix Factorization module with the capability to do automatic model determination.
 
@@ -406,10 +435,23 @@ class NMFk:
             * ``nmf_method='nmf_fro_mu'`` will use NMF with Frobenious Norm.\n
             * ``nmf_method='nmf_kl_mu'`` will use NMF with Multiplicative Update rules with KL-Divergence.\n
             * ``nmf_method='func'`` will use the custom NMF function passed using the ``nmf_func`` parameter.\n
+            * ``nmf_method='nmf_recommender'`` will use the Recommender NMF method for collaborative filtering.\n
+
+            .. note::
+
+                When using ``nmf_method='nmf_recommender'``, RNMFk prediction method can be done using ``from TELF.factorization import RNMFk_predict``.\n
+                Here ``RNMFk_predict(W, H, global_mean, bu, bi, u, i)``, ``W`` and ``H`` are the latent factors, ``global_mean``, ``bu``, and ``bi`` are the biases returned from ``nmf_recommender`` method.\n
+                Finally, ``u`` and ``i`` are the indices to perform prediction on.
+                
+
         nmf_obj_params : dict, optional
             Parameters used by NMF function. The default is {}.
         pruned : bool, optional
             When True, removes columns and rows from the input matrix that has only 0 values. The default is True.
+
+            .. warning::
+                Pruning should not be used with ``nmf_method='nmf_recommender'``.
+
         calculate_error : bool, optional
             When True, calculates the relative reconstruction error. The default is True.
 
@@ -430,7 +472,6 @@ class NMFk:
             When True, collectes the data used in plotting each intermidiate k factorization. The default is False.
         simple_plot : bool, optional
             When True, creates a simple plot for each intermidiate k factorization which hides the statistics such as average and maximum Silhouette scores. The default is True.
-            
         Returns
         -------
         None.
@@ -521,10 +562,16 @@ class NMFk:
         #
         # Prepare NMF function
         #
-        avail_nmf_methods = ["nmf_fro_mu", "nmf_kl_mu", "func"]
+        avail_nmf_methods = [
+            "nmf_fro_mu", 
+            "nmf_kl_mu", 
+            "nmf_recommender", 
+            "func"
+        ]
         if self.nmf_method not in avail_nmf_methods:
             raise Exception("Invalid NMF method is selected. Choose from: " +
                             ",".join(avail_nmf_methods))
+        
         if self.nmf_method == "nmf_fro_mu":
             self.nmf_params = {
                 "niter": self.n_iters,
@@ -549,8 +596,28 @@ class NMFk:
             self.nmf_params = self.nmf_obj_params
             self.nmf = nmf_func
 
+        elif self.nmf_method == "nmf_recommender":
+            if self.pruned:
+                warnings.warn(
+                    f'nmf_recommender method should not be used with pruning!')
+                
+            self.nmf_params = {
+                "niter": self.n_iters,
+                "use_gpu": self.use_gpu,
+                "nmf_verbose": self.nmf_verbose,
+            }
+            self.nmf = nmf_recommender
+
         else:
             raise Exception("Unknown NMF method or nmf_func was not passed")
+
+        #
+        # Additional NMF settings
+        #
+        if len(self.nmf_obj_params) > 0:
+            for key, value in self.nmf_obj_params.items():
+                if key not in self.nmf_params:
+                    self.nmf_params[key] = value
 
         if self.verbose:
             print('Performing NMF with ', self.nmf_method)
@@ -814,6 +881,9 @@ class NMFk:
                 if self.collect_output:
                         results["W"] = combined_result["W"][combined_result["Ks"].index(k_predict)]
                         results["H"] = combined_result["H"][combined_result["Ks"].index(k_predict)]
+
+                        if self.nmf_method == "nmf_recommender":
+                            results["other_results"] = combined_result["other_results"][combined_result["Ks"].index(k_predict)]
 
             # final plot
             if self.save_output:

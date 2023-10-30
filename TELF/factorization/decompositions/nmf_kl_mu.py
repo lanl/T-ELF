@@ -128,7 +128,7 @@ def W_update(X, W, H, opts=None, nz_rows=None, nz_cols=None, use_gpu=True, mask=
             if scipy.sparse.issparse(X):
                 # W *= nan_to_num(sparse_divide_product(X, W, H, nz_rows, nz_cols), 1.0).dot(
                 #    Hnormalized
-                W *= ((sparse_divide_product(X, W, H, nz_rows, nz_cols)).dot(H.T)) / H_norm
+                W *= ((sparse_divide_product(X, W, H, nz_rows, nz_cols, use_gpu=use_gpu)).dot(H.T)) / H_norm
 
             else:
                 #W *= nan_to_num(X / (W @ H), 1.0) @ Hnormalized
@@ -242,4 +242,4 @@ def nmf(X, W, H,
     H = H * Wsum.T
     W = W / Wsum
 
-    return (W, H)
+    return (W, H, {})

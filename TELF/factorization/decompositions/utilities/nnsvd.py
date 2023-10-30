@@ -2,7 +2,7 @@ from .generic_utils import get_np, get_scipy
 from .math_utils import fro_norm
 
 
-def nnsvd(X, k):
+def nnsvd(X, k, use_gpu=False):
     """
     Nonnegative SVD algorithm for NMF initialization based off of Gillis et al. in https://arxiv.org/pdf/1807.04020.pdf.
 
@@ -14,8 +14,8 @@ def nnsvd(X, k):
         W (ndarray): Nonnegative m by k left factor of X.
         H (ndarray): Nonnegative k by n right factor of X.
     """
-    np = get_np(X, use_gpu=False)
-    scipy = get_scipy(X, use_gpu=False)
+    np = get_np(X, use_gpu=use_gpu)
+    scipy = get_scipy(X, use_gpu=use_gpu)
     dtype = X.dtype
     
     if np.issubdtype(dtype, np.integer):

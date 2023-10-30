@@ -13,8 +13,9 @@ import numpy as np
 try:
     import cupy as cp
     import cupyx
+    import cupyx.scipy.sparse.linalg
     import cupyx.scipy.linalg
-
+    
     HAS_CUPY = True
 except:
     HAS_CUPY = False
@@ -78,6 +79,11 @@ def get_np(*args, **kwargs):
 
     return xp
 
+def get_cupyx(use_gpu):
+    if use_gpu and HAS_CUPY:
+        return cupyx, HAS_CUPY
+    else:
+        return scipy, HAS_CUPY
 
 def get_scipy(*args, **kwargs):
     if "use_gpu" in kwargs:

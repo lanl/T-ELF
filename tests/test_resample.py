@@ -35,7 +35,7 @@ def test_uniform_product_cupy():
         A0 = cp.array([[1, 2], [3, 4]], dtype=dtype)
         for typ in [cp.array, cupyx.scipy.sparse.csc_matrix, cupyx.scipy.sparse.csr_matrix]:
             A = typ(A0)
-            B = uniform_product(A, .1)
+            B = uniform_product(A, .1, use_gpu=True)
             assert isinstance(B, type(A))
             assert A.dtype == B.dtype
 
@@ -47,6 +47,6 @@ def test_poisson_cupy():
         A0 = cp.array([[1, 2], [3, 4]], dtype=dtype)
         for typ in [cp.array, cupyx.scipy.sparse.csc_matrix, cupyx.scipy.sparse.csr_matrix]:
             A = typ(A0)
-            B = poisson(A)
+            B = poisson(A, use_gpu=True)
             assert isinstance(B, type(A))
             assert A.dtype == B.dtype
