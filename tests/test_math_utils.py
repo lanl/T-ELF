@@ -82,8 +82,8 @@ def test_unprune_cupy():
     cupyx = pytest.importorskip("cupyx")
     for dtype in [np.float32, np.float64]:
         A = cp.array([[1, 0, 0, 3], [0, 0, 0, 0], [1, 0, 2, 4]], dtype=dtype)
-        B, rows, cols = math_utils.prune(A)
-        Arecon = math_utils.unprune(math_utils.unprune(B, rows, 0), cols, 1)
+        B, rows, cols = math_utils.prune(A, use_gpu=True)
+        Arecon = math_utils.unprune(math_utils.unprune(B, rows, 0, use_gpu=True), cols, 1, use_gpu=True)
         assert np.allclose(A, Arecon)
         assert A.dtype == Arecon.dtype
         assert type(B) == type(A)
@@ -97,7 +97,7 @@ def test_fro_norm_cupy():
         norm0 = math_utils.fro_norm(A0)
         for typ in [cp.array, cupyx.scipy.sparse.csc_matrix, cupyx.scipy.sparse.csr_matrix]:
             A = typ(A0)
-            norm = math_utils.fro_norm(A)
+            norm = math_utils.fro_norm(A, use_gpu=True)
             assert cp.dtype(norm.dtype) == cp.dtype(dtype)
 
 
@@ -125,7 +125,7 @@ def test_sparse_divide_product_cupy():
         X0 = W0@H0
         for typ in [cupyx.scipy.sparse.csc_matrix, cupyx.scipy.sparse.csr_matrix]:
             X = typ(X0)
-            ans = math_utils.sparse_divide_product(X, W0, H0)
+            ans = math_utils.sparse_divide_product(X, W0, H0, use_gpu=True)
             assert type(ans) == type(X)
             if cupyx.scipy.sparse.issparse(ans):
                 assert cp.allclose(cp.array(ans.todense()),

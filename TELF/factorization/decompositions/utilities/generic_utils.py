@@ -14,6 +14,7 @@ try:
     import cupy as cp
     import cupyx
     import cupyx.scipy.sparse.linalg
+    import cupyx.scipy.linalg
     
     HAS_CUPY = True
 except:

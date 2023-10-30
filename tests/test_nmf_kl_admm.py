@@ -62,7 +62,7 @@ def test_H_update_cupy():
     for dtype in [np.float32, np.float64]:
         for typ in [cp.array, cupyx.scipy.sparse.csc_matrix, cupyx.scipy.sparse.csc_matrix]:
             X = typ(X0.astype(dtype))
-            H = nmf_kl_admm.H_update(X, W0, uniform_product(H0, 0.1), use_gpu=True)
+            H = nmf_kl_admm.H_update(X, W0, uniform_product(H0, 0.1, use_gpu=True), use_gpu=True)
             assert H.dtype == dtype
             assert cp.allclose(H, H0, rtol=1e-3, atol=1e-3)
 
@@ -78,7 +78,7 @@ def test_W_update_cupy():
     for dtype in [np.float32, np.float64]:
         for typ in [cp.array, cupyx.scipy.sparse.csc_matrix, cupyx.scipy.sparse.csc_matrix]:
             X = typ(X0.astype(dtype))
-            W = nmf_kl_admm.W_update(X, uniform_product(W0, 0.1), H0, use_gpu=True)
+            W = nmf_kl_admm.W_update(X, uniform_product(W0, 0.1, use_gpu=True), H0, use_gpu=True)
             assert W.dtype == dtype
             assert cp.allclose(W, W0, rtol=1e-3, atol=1e-3)
 
@@ -95,7 +95,7 @@ def test_nmf_cupy():
         for typ in [cp.array, cupyx.scipy.sparse.csc_matrix, cupyx.scipy.sparse.csr_matrix]:
             X = typ(X0.astype(dtype))
             W, H = nmf_kl_admm.nmf(X, uniform_product(
-                W0, 0.1), uniform_product(H0, 0.1), use_gpu=True)
+                W0, 0.1, use_gpu=True), uniform_product(H0, 0.1, use_gpu=True), use_gpu=True)
             assert W.dtype == dtype
             assert H.dtype == dtype
-            assert fro_norm(X-W@H)/fro_norm(X) < 1e-5
+            assert fro_norm(X-W@H, use_gpu=True)/fro_norm(X, use_gpu=True) < 1e-5
