@@ -2,7 +2,7 @@ from .generic_utils import get_np, get_scipy
 import warnings
 
 
-def custom_k_means(W_all, centroids=None, max_iters=100):
+def custom_k_means(W_all, centroids=None, max_iters=100, use_gpu=False):
     """
     Greedy algorithm to approximate a quadratic assignment problem to cluster vectors. Given p groups of k vectors, construct k clusters, each cluster containing a single vector from each of the p groups. This clustering approximation uses cos distances and mean centroids.
 
@@ -15,7 +15,7 @@ def custom_k_means(W_all, centroids=None, max_iters=100):
         centroids (ndarray): The m by k centroids of the clusters.
         W_all (ndarray): Clustered organization of the vectors. W_all[:,i,:] is all p, m dimensional vectors in the ith cluster.
     """
-    np = get_np(W_all)
+    np = get_np(W_all, use_gpu=use_gpu)
     dtype = W_all.dtype
 
     (N, K, n_perts) = W_all.shape

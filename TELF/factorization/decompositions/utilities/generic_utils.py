@@ -13,8 +13,8 @@ import numpy as np
 try:
     import cupy as cp
     import cupyx
-    import cupyx.scipy.linalg
-
+    import cupyx.scipy.sparse.linalg
+    
     HAS_CUPY = True
 except:
     HAS_CUPY = False

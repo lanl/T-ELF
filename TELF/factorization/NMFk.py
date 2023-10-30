@@ -52,36 +52,43 @@ except Exception:
     MPI = None
 
 
+def __put_X_gpu(X, gpuid:int):
+    with cp.cuda.Device(gpuid):
+        if scipy.sparse.issparse(X):
+            Y = cupyx.scipy.sparse.csr_matrix(
+                (cp.array(X.data), cp.array(X.indices), cp.array(X.indptr)),
+                shape=X.shape,
+                dtype=X.dtype,
+            )
+        else:
+            Y = cp.array(X)
+    return Y
+
+def __put_WH_gpu(W_, H_, gpuid:int):
+    with cp.cuda.Device(gpuid):
+        W = cp.array(W_)
+        H = cp.array(H_)
+        
+    return W, H
+
+def __put_WH_cpu(W_, H_):
+    W = cp.asnumpy(W_)
+    H = cp.asnumpy(H_)
+    return W, H
+
+def __put_other_results_cpu(other_results_):
+    other_results = {}
+    for key, value in other_results_.items():
+        other_results[key] = cp.asnumpy(value)
+    return other_results
+    
 def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
     if use_gpu:
-
         with cp.cuda.Device(gpuid):
-            # move data and initialization from host to device
-            W = cp.array(W)
-            H = cp.array(H)
-            if scipy.sparse.issparse(Y):
-                Y = cupyx.scipy.sparse.csr_matrix(
-                    (cp.array(Y.data), cp.array(Y.indices), cp.array(Y.indptr)),
-                    shape=Y.shape,
-                    dtype=Y.dtype,
-                )
-            else:
-                Y = cp.array(Y)
-
-            # do optimization on GPU
             W_, H_, other_results_ = nmf(X=Y, W=W, H=H, **nmf_params)
-
-            # move solution from device to host
-            W = cp.asnumpy(W_)
-            H = cp.asnumpy(H_)
-
-            other_results = {}
-            for key, value in other_results_.items():
-                other_results[key] = cp.asnumpy(value)
-
-            del Y, W_, H_, other_results_
-
-            cp._default_memory_pool.free_all_blocks()
+            W, H = __put_WH_cpu(W_, H_)
+            other_results = __put_other_results_cpu(other_results_)
+            del W_, H_, other_results_
 
     else:
         W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
@@ -98,35 +105,38 @@ def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
 
     return Y
 
-def __init_WH(Y, k, mask, init_type:str):
+def __init_WH(Y, k, mask, init_type:str, use_gpu:bool, gpuid:int):
     if init_type == "nnsvd":
         if mask is not None:
             Y[mask] = 0
-        W, H = nnsvd(Y, k)
+            
+        if use_gpu:
+            with cp.cuda.Device(gpuid):
+                W, H = nnsvd(Y, k, use_gpu=use_gpu)
+        else:
+            W, H = nnsvd(Y, k, use_gpu=use_gpu)
+            
     elif init_type == "random":
         W, H = np.random.rand(Y.shape[0], k), np.random.rand(k, Y.shape[1])
+    
+        if use_gpu:
+            W, H = __put_WH_gpu(W, H, gpuid)
 
     return W, H
 
-def __H_regression(X, W, mask, use_gpu):
+def __H_regression(X, W, mask, use_gpu:bool, gpuid:int):
     if use_gpu:
-        if scipy.sparse.issparse(X):
-            Y = cupyx.scipy.sparse.csr_matrix(
-                (cp.array(X.data), cp.array(X.indices), cp.array(X.indptr)),
-                shape=X.shape,
-                dtype=X.dtype,
-            )
-        else:
-            Y = cp.array(X)
-
-        H_ = H_update(Y, cp.array(W), cp.random.rand(
-            W.shape[1], X.shape[1]), use_gpu=use_gpu, mask=mask)
-        H = cp.asnumpy(H_)
+        Y = __put_X_gpu(X, gpuid)
+        with cp.cuda.Device(gpuid):
+            H_ = H_update(Y, cp.array(W), cp.random.rand(
+                W.shape[1], Y.shape[1]), use_gpu=use_gpu, mask=mask)
+            H = cp.asnumpy(H_)
+            
         del Y, H_
         cp._default_memory_pool.free_all_blocks()
-
+        
     else:
-        H = H_update(X.copy(), W, np.random.rand(
+        H = H_update(X, W, np.random.rand(
             W.shape[1], X.shape[1]), use_gpu=use_gpu, mask=mask)
         
     return H
@@ -162,15 +172,24 @@ def _nmf_parallel_wrapper(
     #
     W_all, H_all, errors = [], [], []
     for perturbation in range(n_perturbs):
+        
         Y = __perturb_X(X, perturbation, epsilon, perturb_type)
-        W, H = __init_WH(Y, k, mask, init_type)
+        
+        if use_gpu:
+            Y = __put_X_gpu(Y, gpuid)
+        
+        W, H = __init_WH(Y, k, mask=mask, init_type=init_type, use_gpu=use_gpu, gpuid=gpuid)
         W, H, other_results = __run_nmf(Y, W, H, nmf, nmf_params, use_gpu, gpuid)
-
+        
+        if use_gpu:
+            del Y
+            cp._default_memory_pool.free_all_blocks()
+            
         if calculate_error:
             error = relative_error(X, W, H)
         else:
             error = 0
-
+        
         W_all.append(W)
         H_all.append(H)
         errors.append(error)
@@ -184,8 +203,8 @@ def _nmf_parallel_wrapper(
 
     #
     # cluster the solutions
-    #
-    W, W_clust = custom_k_means(W_all)
+    #        
+    W, W_clust = custom_k_means(W_all, use_gpu=use_gpu)
     sils_all = silhouettes(W_clust)
 
     #
@@ -200,7 +219,10 @@ def _nmf_parallel_wrapper(
     #
     # Regress H
     #
-    H = __H_regression(X, W, mask, use_gpu)
+    H = __H_regression(X, W, mask, use_gpu, gpuid)
+    
+    if use_gpu:
+        cp._default_memory_pool.free_all_blocks()
 
     # 
     #  reconstruction error

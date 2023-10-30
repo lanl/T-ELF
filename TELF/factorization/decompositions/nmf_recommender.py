@@ -1,5 +1,6 @@
 from .utilities.generic_utils import get_np, get_scipy, get_cupyx
 from tqdm import tqdm
+from collections import Counter
 
 def RNMFk_predict(W, H, global_mean, bu, bi, u, i):
     predict = lambda W, H, global_mean, bu, bi, u, i: global_mean + bu[u] + bi[i] + H[:, i]@W[u]
@@ -46,11 +47,35 @@ def nmf(X, W, H,
     # number of users and items
     n_users = X.shape[0]
     n_items = X.shape[1]
-
+    
+    # nnz coords and entries
+    if use_gpu and HAS_CUPY and scipy.sparse.issparse(X):
+        rows, columns, entries = cupyx.scipy.sparse.find(X)
+    else:
+        rows, columns = X.nonzero()
+        if scipy.sparse.issparse(X):
+            entries = X.data
+        else:
+            entries = X[rows, columns]
+        
     # calculate the nnz users and ratings
     if scipy.sparse.issparse(X):
-        n_ratings_users = X.getnnz(axis=1)
-        n_ratings_items = X.getnnz(axis=0)
+        if use_gpu:
+            user_counts = Counter(rows.get())
+            item_counts = Counter(columns.get())
+            n_ratings_users = []
+            n_ratings_items = []
+            
+            for idx in range(X.shape[0]):
+                n_ratings_users.append(user_counts[idx])
+            for idx in range(X.shape[1]):
+                n_ratings_items.append(item_counts[idx])
+            
+            n_ratings_users = np.array(n_ratings_users)
+            n_ratings_items = np.array(n_ratings_items)
+        else:
+            n_ratings_users = X.getnnz(axis=1)
+            n_ratings_items = X.getnnz(axis=0)
     else:
         n_ratings_users = np.count_nonzero(X, axis=1)
         n_ratings_items = np.count_nonzero(X, axis=0)
@@ -63,13 +88,6 @@ def nmf(X, W, H,
     # k
     k = W.shape[1]
     assert k == H.shape[0]
-
-    # nnz coords and entries
-    rows, columns = X.nonzero()
-    if scipy.sparse.issparse(X):
-        entries = X.data
-    else:
-        entries = X[rows, columns]
 
     # use bias
     if not biased:
