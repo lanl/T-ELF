@@ -43,15 +43,18 @@ def compare_decompositions(path1, path2, rejection_threshold = .4, save_scores=T
 
     
     if 'csv' in path1 and 'csv' in path2: # Dissimilar vocabularies, read words
-        old = pd.read_csv(path1)
-        new = pd.read_csv(path2)
+        fewer_cols = pd.read_csv(path1)
+        more_cols = pd.read_csv(path2)
+        
+        if len(more_cols.columns) < len(fewer_cols.columns): # csv with more columns needs to be path2  
+            fewer_cols, more_cols = more_cols, fewer_cols
         
         slices = Parallel(n_jobs=-1)\
-            (delayed(compute_cost_parallel)(old[str(i)], new[str(j)]) \
-            for i in range(len(old.columns)) for j in range(len(new.columns))
+            (delayed(compute_cost_parallel)(fewer_cols[str(i)], more_cols[str(j)]) \
+            for i in range(len(fewer_cols.columns)) for j in range(len(more_cols.columns))
         )
         cost_matrix_unshaped = np.array(slices)
-        cost_matrix = cost_matrix_unshaped.reshape(len(old.columns), len(new.columns))
+        cost_matrix = cost_matrix_unshaped.reshape(len(fewer_cols.columns), len(more_cols.columns))
     
     elif 'npz' in path1 and 'npz' in path2: # Same vocabularies, read W
         npz1, npz2 = np.load(path1), np.load(path2)
@@ -94,3 +97,7 @@ def compare_decompositions(path1, path2, rejection_threshold = .4, save_scores=T
     df.loc[rejection_indicies, df.columns[1]] = 'No similarity'
     csv_file = 'similarities_scoring.csv'
     df.to_csv(csv_file, index=False)
+
+
+    plt.figure(figsize=(8,6))
+    sns.heatmap(df_reordered, annot=True, cmap='viridis_r', cbar_kws={'label': 'Value'})
