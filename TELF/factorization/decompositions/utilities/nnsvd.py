@@ -25,22 +25,15 @@ def nnsvd(X, k, use_gpu=False):
     else:
         raise Exception("Unknown data type!")
     
-    m, n = X.shape
-    if scipy.sparse.issparse(X):
-        # U, S, V = np.linalg.svd(X.todense(), full_matrices=False)
-        # U, S, V = U[:, :k], S[:k], V[:k, :].T
-        U, S, V = scipy.sparse.linalg.svds(X, k=k)
-        V = V.T
-        # #there is a bug in sparse svd
-        # #sometimes it returns some 0 singular values/singular vectors
-        # #if 0.0 in S, then revent to dense computation
-        # if 0.0 in S:
-        #     U,S,V = np.linalg.svd(np.array(X.todense()),full_matrices=False)
-        #     U,S,V = U[:,:k], S[:k], V[:k,:].T
-    else:
-        U, S, V = np.linalg.svd(X, full_matrices=False)
-        U, S, V = U[:, :k], S[:k], V[:k, :].T
-
+    #
+    # Truncated SVD
+    #
+    U, S, V = scipy.sparse.linalg.svds(X, k=k)
+    V = V.T
+    
+    #
+    # NN-SVD
+    #
     UP = np.where(U > 0, U, 0)
     UN = np.where(U < 0, -U, 0)
     VP = np.where(V > 0, V, 0)
