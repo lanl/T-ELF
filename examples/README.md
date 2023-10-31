@@ -1,0 +1,30 @@
+The examples directory contains notebooks and scripts to run the following packages:
+
+- Beaver  
+    - Vocabulary 
+    - documents_words 
+    - matrix-Authors-Words 
+    - matrix-Documents-Words 
+    - matrix-cooccurrence_sppmi 
+    - tensor-Authors-Words-Time 
+    - tensor-Citation 
+    - tensor-Coauthor 
+    - tensor-Cocitation 
+    - tensor-Documents-Words-Time 
+    - tensor-Participation 
+- NMFk 
+    - NMFk custom
+    - NMFk regular
+    - NMFk consensus
+    - NMFk swimmer
+    - NMFk with unfolding dense
+    - NMFk with unfolding, sparse.ipynb
+    - NMFk wtsi 
+- RESCALk
+    - RESCAL with Automatic Model Determination
+- TriNMFk 
+    - NMF with Automatic Model Determination for Clusters and Patterns
+- Vulture
+    - Single-node parallel document pre-processing
+    - Multi-node parallel document pre-processing  
+    - Distributed parallel document pre-processing
