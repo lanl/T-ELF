@@ -17,12 +17,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -32,11 +32,11 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=dc820ae5"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=8fa999b9"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -118,6 +118,7 @@
   
 
 <a class="navbar-brand logo" href="../../../index.html">
+  
   
   
   
@@ -289,11 +290,11 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.decompositions.utilities.nnsvd</span> <span class="kn">import</span> <span class="n">nnsvd</span>
 <span class="kn">from</span> <span class="nn">.decompositions.rescal_fro_mu</span> <span class="kn">import</span> <span class="n">rescal</span> <span class="k">as</span> <span class="n">rescal</span>
 <span class="kn">from</span> <span class="nn">.utilities.plot_NMFk</span> <span class="kn">import</span> <span class="n">plot_NMFk</span>
-<span class="kn">from</span> <span class="nn">.utilities.take_note</span> <span class="kn">import</span> <span class="n">take_note</span>
+<span class="kn">from</span> <span class="nn">.utilities.take_note</span> <span class="kn">import</span> <span class="n">take_note</span><span class="p">,</span> <span class="n">take_note_fmat</span><span class="p">,</span> <span class="n">append_to_note</span>
 
 <span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
 <span class="kn">import</span> <span class="nn">multiprocessing</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 <span class="kn">import</span> <span class="nn">GPUtil</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
@@ -511,6 +512,20 @@ document.write(`
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">save_path</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Directory in save_path parameter does not exist!&quot;</span><span class="p">)</span>
 
+            <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="n">save_path</span><span class="p">)</span>
+            <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;start_time= &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()),],</span>
+                            <span class="c1"># &quot;name=&quot; + str(name),</span>
+                            <span class="c1"># &quot;note=&quot; + str(note)], </span>
+                           <span class="n">save_path</span><span class="p">)</span>
+            <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="n">save_path</span><span class="p">)</span>
+            <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="n">save_path</span><span class="p">)</span>
+            
+            <span class="n">object_notes</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="c1"># del object_notes[&quot;total_exec_seconds&quot;]</span>
+            <span class="c1"># del object_notes[&quot;nmf&quot;]</span>
+            <span class="n">take_note</span><span class="p">(</span><span class="n">object_notes</span><span class="p">,</span> <span class="n">save_path</span><span class="p">)</span>
+
+
         <span class="n">init_options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nnsvd&quot;</span><span class="p">,</span> <span class="s2">&quot;random&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">init</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">init_options</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid init. Choose from:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">init_options</span><span class="p">)))</span>
@@ -655,6 +670,7 @@ document.write(`
         <span class="c1"># MPI</span>
         <span class="c1">#</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">all_Ks</span> <span class="o">=</span> <span class="n">Ks</span>
             <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
             <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
             <span class="n">Ks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chunk_Ks</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">n_chunks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">)[</span><span class="n">rank</span><span class="p">]</span>
@@ -671,6 +687,18 @@ document.write(`
             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span>
             <span class="o">+</span> <span class="s2">&quot;eps&quot;</span>
         <span class="p">)</span>
+
+        
+        <span class="n">stats_header</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;sils_min&#39;</span><span class="p">:</span> <span class="s1">&#39;Min. Silhouette&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;sils_mean&#39;</span><span class="p">:</span> <span class="s1">&#39;Mean Silhouette&#39;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_error</span><span class="p">:</span>
+            <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;err_mean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Mean Error&#39;</span>
+            <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;err_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;STD Error&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k</span><span class="p">:</span>
+            <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;col_error&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Mean Col. Error&#39;</span>
+        <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Time Elapsed&#39;</span>
+
         <span class="n">save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span> <span class="ow">and</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)):</span>
             <span class="c1"># if self.save_output:</span>
@@ -678,17 +706,21 @@ document.write(`
                 <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="k">pass</span>
-
+            
             <span class="n">notes</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
             <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;Ks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ks</span>
+            <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;data_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
             <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;num_perturbations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_perturbs</span>
             <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;epsilon&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span>
             <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span>
             <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;n_jobs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span>
             <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;experiment_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
             <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;num_iterations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iters</span>
-            <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;note&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">note</span>
             <span class="n">take_note</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="n">save_path</span><span class="p">)</span>
+            <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="n">save_path</span><span class="p">)</span>
+            <span class="n">take_note_fmat</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="o">**</span><span class="n">stats_header</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">TEST</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="n">sils_min</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">sils_mean</span> <span class="o">=</span> <span class="p">[]</span>
@@ -828,17 +860,17 @@ document.write(`
                     <span class="o">**</span><span class="n">save_data</span>
                 <span class="p">)</span>
 
-                <span class="n">plot_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;Ks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sils_min</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sils_mean</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_std&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sils_std</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;err_reg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">err_reg</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;err_mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">err_mean</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;err_std&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">err_std</span>
-                <span class="n">plot_NMFk</span><span class="p">(</span>
-                    <span class="n">plot_data</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="n">save_path</span>
-                <span class="p">)</span>
+                <span class="n">plot_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>         
+                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">Ks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_min</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_mean</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;err_mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err_mean</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;err_std&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err_std</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+                <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">elapsed_time</span><span class="p">)</span>
+                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">elapsed_time</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">take_note_fmat</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_data</span><span class="p">)</span>
+
 
             <span class="c1"># collect output to be returned</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_output</span><span class="p">:</span>
@@ -917,6 +949,14 @@ document.write(`
 
             <span class="c1"># final plot</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">:</span>
+                
+                <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="n">save_path</span><span class="p">)</span>
+                <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;end_time= &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())],</span> <span class="n">save_path</span><span class="p">)</span>
+                <span class="n">append_to_note</span><span class="p">(</span>
+                    <span class="p">[</span><span class="s2">&quot;total_time= &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; (seconds)&quot;</span><span class="p">],</span> <span class="n">save_path</span><span class="p">)</span>
+                <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="n">save_path</span><span class="p">)</span>
+                
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Final plot is generating from : </span><span class="si">{</span><span class="n">Ks</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
                 <span class="n">plot_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
                 <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;Ks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ks</span>
                 <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sils_min</span>
@@ -926,7 +966,7 @@ document.write(`
                 <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;err_mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">err_mean</span>
                 <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;err_std&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">err_std</span>
                 <span class="n">plot_NMFk</span><span class="p">(</span>
-                    <span class="n">plot_data</span><span class="p">,</span> <span class="n">k_predict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="n">save_path</span>  <span class="c1"># , plot_predict=self.predict_k</span>
+                    <span class="n">plot_data</span><span class="p">,</span> <span class="n">k_predict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="n">plot_final</span><span class="o">=</span><span class="kc">True</span>  <span class="c1"># , plot_predict=self.predict_k</span>
                 <span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_plot_data</span><span class="p">:</span>
@@ -1025,8 +1065,8 @@ By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Bour
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
   </footer>
