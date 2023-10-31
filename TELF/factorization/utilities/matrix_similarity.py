@@ -97,7 +97,3 @@ def compare_decompositions(path1, path2, rejection_threshold = .4, save_scores=T
     df.loc[rejection_indicies, df.columns[1]] = 'No similarity'
     csv_file = 'similarities_scoring.csv'
     df.to_csv(csv_file, index=False)
-
-
-    plt.figure(figsize=(8,6))
-    sns.heatmap(df_reordered, annot=True, cmap='viridis_r', cbar_kws={'label': 'Value'})
