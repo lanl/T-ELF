@@ -130,6 +130,46 @@ def __H_regression(X, W, mask, use_gpu:bool, gpuid:int):
         
     return H
 
+def _perturb_parallel_wrapper(
+    perturbation,
+    gpuid,
+    epsilon,
+    perturb_type,
+    X,
+    k,
+    mask,
+    use_gpu,
+    init_type,
+    nmf_params,
+    nmf,
+    calculate_error):
+
+    # Prepare
+    Y = __perturb_X(X, perturbation, epsilon, perturb_type)
+    W_init, H_init = __init_WH(Y, k, mask=mask, init_type=init_type)
+
+    # transfer to GPU
+    if use_gpu:
+        Y = __put_X_gpu(Y, gpuid)
+        W_init, H_init = __put_WH_gpu(W_init, H_init, gpuid)
+
+    W, H, other_results = __run_nmf(Y, W_init, H_init, nmf, nmf_params, use_gpu, gpuid)
+
+    # transfer to CPU
+    if use_gpu:
+        W, H = __put_WH_cpu(W, H)
+        other_results = __put_other_results_cpu(other_results)
+        cp._default_memory_pool.free_all_blocks()
+
+    # error calculation
+    if calculate_error:
+        error = relative_error(X, W, H)
+    else:
+        error = 0
+        
+    return W, H, error, other_results
+        
+
 def _nmf_parallel_wrapper(
         n_perturbs, 
         nmf, 
@@ -154,42 +194,62 @@ def _nmf_parallel_wrapper(
         experiment_name="",
         collect_output=False,
         logging_stats={},
-        start_time=time.time()):
+        start_time=time.time(),
+        n_jobs=1,
+        perturb_multiprocessing=False,
+        joblib_backend="multiprocessing",
+        perturb_verbose=False):
 
     #
     # run for each perturbations
     #
-    W_all, H_all, errors = [], [], []
-    for perturbation in range(n_perturbs):
-        
-        # Prepare
-        Y = __perturb_X(X, perturbation, epsilon, perturb_type)
-        W_init, H_init = __init_WH(Y, k, mask=mask, init_type=init_type)
-        
-        # transfer to GPU
-        if use_gpu:
-            Y = __put_X_gpu(Y, gpuid)
-            W_init, H_init = __put_WH_gpu(W_init, H_init, gpuid)
+    perturb_job_data = {
+        "epsilon":epsilon,
+        "perturb_type":perturb_type,
+        "X":X,
+        "use_gpu":use_gpu,
+        "nmf_params":nmf_params,
+        "nmf":nmf,
+        "calculate_error":calculate_error,
+        "k":k,
+        "mask":mask,
+        "init_type":init_type
+    }
+    
+    # single job or parallel over Ks
+    W_all, H_all, errors, other_results_all = [], [], [], []
+    if n_jobs == 1 or not perturb_multiprocessing:
+        for perturbation in tqdm(range(n_perturbs), disable=not perturb_verbose, total=n_perturbs):
+            W, H, error, other_results_curr = _perturb_parallel_wrapper(perturbation=perturbation, gpuid=gpuid, **perturb_job_data)
+            W_all.append(W)
+            H_all.append(H)
+            errors.append(error)
+            other_results_all.append(other_results_curr)
             
-        W, H, other_results = __run_nmf(Y, W_init, H_init, nmf, nmf_params, use_gpu, gpuid)
-        
-        # transfer to CPU
-        if use_gpu:
-            W, H = __put_WH_cpu(W, H)
-            other_results = __put_other_results_cpu(other_results)
-            cp._default_memory_pool.free_all_blocks()
-        
-        # error calculation
-        if calculate_error:
-            error = relative_error(X, W, H)
-        else:
-            error = 0
-        
-        # collect
-        W_all.append(W)
-        H_all.append(H)
-        errors.append(error)
-
+    # multiple jobs over perturbations
+    else:
+        all_perturbation_results = Parallel(
+            n_jobs=n_jobs,
+            verbose=perturb_verbose,
+            backend=joblib_backend)(delayed(_perturb_parallel_wrapper)(
+            gpuid=pidx % n_jobs, perturbation=perturbation, **perturb_job_data) for pidx, perturbation in enumerate(range(n_perturbs)))
+        for W, H, error, other_results_curr in all_perturbation_results:
+            W_all.append(W)
+            H_all.append(H)
+            errors.append(error)
+            other_results_all.append(other_results_curr)
+    
+    #
+    # Organize other results
+    #
+    other_results = {}
+    for other_results_curr in other_results_all:
+        for key, value in other_results_curr.items():
+            if key not in other_results:
+                other_results[key] = value
+            else:
+                other_results[key] = (other_results[key] + value) / 2
+    
     #
     # organize colutions from each perturbations
     #
@@ -353,8 +413,9 @@ class NMFk:
             collect_output=False,
             predict_k=False,
             predict_k_method="pvalue",
-            verbose=False,
+            verbose=True,
             nmf_verbose=False,
+            perturb_verbose=False,
             transpose=False,
             sill_thresh=0.8,
             nmf_func=None,
@@ -363,6 +424,7 @@ class NMFk:
             pruned=True,
             calculate_error=True,
             joblib_backend="multiprocessing",
+            perturb_multiprocessing=False,
             consensus_mat=False,
             use_consensus_stopping=0,
             mask=None,
@@ -417,9 +479,11 @@ class NMFk:
                 ``predict_k_method='pvalue'`` prediction will result in significantly longer processing time! ``predict_k_method='sill'``, on the other hand, will be much faster.
 
         verbose : bool, optional
-            If True, shows progress in each k. The default is False.
+            If True, shows progress in each k. The default is True.
         nmf_verbose : bool, optional
             If True, shows progress in each NMF operation. The default is False.
+        perturb_verbose : bool, optional
+            If True, it shows progress in each perturbation. The default is False.
         transpose : bool, optional
             If True, transposes the input matrix before factorization. The default is False.
         sill_thresh : float, optional
@@ -456,6 +520,9 @@ class NMFk:
 
         joblib_backend : str, optional
             Backend used by Joblib for parallel computation. The default is "multiprocessing".
+        perturb_multiprocessing : bool, optional
+            If ``perturb_multiprocessing=True``, it will make parallel computation over each perturbation. Default is ``perturb_multiprocessing=False``.\n
+            When ``perturb_multiprocessing=False``, which is default, parallelization is done over each K (rank).
         consensus_mat : bool, optional
             When True, computes the Consensus Matrices for each k. The default is False.
         use_consensus_stopping : str, optional
@@ -500,6 +567,7 @@ class NMFk:
         self.use_gpu = use_gpu
         self.verbose = verbose
         self.nmf_verbose = nmf_verbose
+        self.perturb_verbose = perturb_verbose
         self.transpose = transpose
         self.collect_output = collect_output
         self.sill_thresh = sill_thresh
@@ -519,6 +587,7 @@ class NMFk:
         self.calculate_pac = calculate_pac
         self.simple_plot = simple_plot
         self.get_plot_data = get_plot_data
+        self.perturb_multiprocessing = perturb_multiprocessing
 
         # warnings
         assert self.predict_k_method in ["pvalue", "sill"]
@@ -614,9 +683,10 @@ class NMFk:
             for key, value in self.nmf_obj_params.items():
                 if key not in self.nmf_params:
                     self.nmf_params[key] = value
-
+                    
         if self.verbose:
-            print('Performing NMF with ', self.nmf_method)
+            for key, value in vars(self).items():
+                print(f'{key}:', value)
 
     def fit(self, X, Ks, name="NMFk", note=""):
         """
@@ -669,10 +739,10 @@ class NMFk:
         else:
             comm = None
             rank = 0
-
+            
         #
-        # Setup
-        # 
+        # Organize save path
+        #
         self.experiment_name = (
             str(name)
             + "_"
@@ -685,8 +755,11 @@ class NMFk:
             + str(self.init)
             + "-init"
         )
-        save_path = os.path.join(self.save_path, self.experiment_name)
+        self.save_path_full = os.path.join(self.save_path, self.experiment_name)
 
+        #
+        # Setup
+        # 
         if self.n_jobs > len(Ks):
             self.n_jobs = len(Ks)
             
@@ -714,20 +787,20 @@ class NMFk:
 
         # start the file logging (only root node needs to do this step)
         if self.save_output and ((self.n_nodes == 1) or (self.n_nodes > 1 and rank == 0)):
-            if not Path(save_path).is_dir():
-                Path(save_path).mkdir(parents=True)
+            if not Path(self.save_path_full).is_dir():
+                Path(self.save_path_full).mkdir(parents=True)
 
-            append_to_note(["#" * 100], save_path)
+            append_to_note(["#" * 100], self.save_path_full)
             append_to_note(["start_time= " + str(datetime.now()),
                             "name=" + str(name),
-                            "note=" + str(note)], save_path)
+                            "note=" + str(note)], self.save_path_full)
 
-            append_to_note(["#" * 100], save_path)
+            append_to_note(["#" * 100], self.save_path_full)
             object_notes = vars(self).copy()
             del object_notes["total_exec_seconds"]
             del object_notes["nmf"]
-            take_note(object_notes, save_path)
-            append_to_note(["#" * 100], save_path)
+            take_note(object_notes, self.save_path_full)
+            append_to_note(["#" * 100], self.save_path_full)
 
             notes = {}
             notes["Ks"] = Ks
@@ -736,9 +809,9 @@ class NMFk:
             notes["num_nnz"] = len(X.nonzero()[0])
             notes["sparsity"] = len(X.nonzero()[0]) / np.prod(X.shape)
             notes["X_shape"] = X.shape
-            take_note(notes, save_path)
-            append_to_note(["#" * 100], save_path)
-            take_note_fmat(save_path, **stats_header)
+            take_note(notes, self.save_path_full)
+            append_to_note(["#" * 100], self.save_path_full)
+            take_note_fmat(self.save_path_full, **stats_header)
         
         if self.n_nodes > 1:
             comm.Barrier()
@@ -774,19 +847,25 @@ class NMFk:
             "perturb_rows":perturb_rows,
             "perturb_cols":perturb_cols,
             "save_output":self.save_output,
-            "save_path":save_path,
+            "save_path":self.save_path_full,
             "experiment_name":self.experiment_name,
             "collect_output":self.collect_output,
             "logging_stats":stats_header,
             "start_time":start_time,
-            
+            "n_jobs":self.n_jobs,
+            "perturb_multiprocessing":self.perturb_multiprocessing,
+            "joblib_backend":self.joblib_backend,
+            "perturb_verbose":self.perturb_verbose,
         }
-
-        if self.n_jobs == 1:
+        
+        # Single job or parallel over perturbations
+        if self.n_jobs == 1 or self.perturb_multiprocessing:
             all_k_results = []
             for k in tqdm(Ks, total=len(Ks), disable=not self.verbose):
                 k_result = _nmf_parallel_wrapper(gpuid=0, k=k, **job_data)
                 all_k_results.append(k_result)
+        
+        # multiprocessing over each K
         else:   
             all_k_results = Parallel(
                 n_jobs=self.n_jobs,
@@ -863,7 +942,7 @@ class NMFk:
 
                 # * save the plot
                 if self.save_output:
-                    con_fig_name = f'{save_path}/k_{Ks[0]}_{Ks[-1]}_cophenetic_coeff.png'
+                    con_fig_name = f'{self.save_path_full}/k_{Ks[0]}_{Ks[-1]}_cophenetic_coeff.png'
                     plot_cophenetic_coeff(Ks, combined_result["cophenetic_coeff"], con_fig_name)
 
                 if self.calculate_pac:
@@ -887,15 +966,15 @@ class NMFk:
                     combined_result, 
                     k_predict, 
                     self.experiment_name, 
-                    save_path, 
+                    self.save_path_full, 
                     plot_predict=self.predict_k,
                     plot_final=True,
                     simple_plot=self.simple_plot
                 )
-                append_to_note(["#" * 100], save_path)
-                append_to_note(["end_time= "+str(datetime.now())], save_path)
+                append_to_note(["#" * 100], self.save_path_full)
+                append_to_note(["end_time= "+str(datetime.now())], self.save_path_full)
                 append_to_note(
-                    ["total_time= "+str(time.time() - start_time) + " (seconds)"], save_path)
+                    ["total_time= "+str(time.time() - start_time) + " (seconds)"], self.save_path_full)
         
             
             if self.get_plot_data:
