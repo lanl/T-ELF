@@ -64,32 +64,29 @@ def __put_X_gpu(X, gpuid:int):
             Y = cp.array(X)
     return Y
 
-def __put_WH_gpu(W_, H_, gpuid:int):
+def __put_WH_gpu(W, H, gpuid:int):
     with cp.cuda.Device(gpuid):
-        W = cp.array(W_)
-        H = cp.array(H_)
+        W = cp.array(W)
+        H = cp.array(H)
         
     return W, H
 
-def __put_WH_cpu(W_, H_):
-    W = cp.asnumpy(W_)
-    H = cp.asnumpy(H_)
+def __put_WH_cpu(W, H):
+    W = cp.asnumpy(W)
+    H = cp.asnumpy(H)
     return W, H
 
-def __put_other_results_cpu(other_results_):
-    other_results = {}
-    for key, value in other_results_.items():
-        other_results[key] = cp.asnumpy(value)
-    return other_results
+def __put_other_results_cpu(other_results):
+    other_results_cpu = {}
+    for key, value in other_results.items():
+        other_results_cpu[key] = cp.asnumpy(value)
+    del other_results
+    return other_results_cpu
     
 def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
     if use_gpu:
         with cp.cuda.Device(gpuid):
-            W_, H_, other_results_ = nmf(X=Y, W=W, H=H, **nmf_params)
-            W, H = __put_WH_cpu(W_, H_)
-            other_results = __put_other_results_cpu(other_results_)
-            del W_, H_, other_results_
-
+            W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
     else:
         W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
 
@@ -105,23 +102,15 @@ def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
 
     return Y
 
-def __init_WH(Y, k, mask, init_type:str, use_gpu:bool, gpuid:int):
+def __init_WH(Y, k, mask, init_type:str):
     if init_type == "nnsvd":
         if mask is not None:
             Y[mask] = 0
-            
-        if use_gpu:
-            with cp.cuda.Device(gpuid):
-                W, H = nnsvd(Y, k, use_gpu=use_gpu)
-        else:
-            W, H = nnsvd(Y, k, use_gpu=use_gpu)
+        W, H = nnsvd(Y, k, use_gpu=False)
             
     elif init_type == "random":
         W, H = np.random.rand(Y.shape[0], k), np.random.rand(k, Y.shape[1])
-    
-        if use_gpu:
-            W, H = __put_WH_gpu(W, H, gpuid)
-
+        
     return W, H
 
 def __H_regression(X, W, mask, use_gpu:bool, gpuid:int):
@@ -173,23 +162,30 @@ def _nmf_parallel_wrapper(
     W_all, H_all, errors = [], [], []
     for perturbation in range(n_perturbs):
         
+        # Prepare
         Y = __perturb_X(X, perturbation, epsilon, perturb_type)
+        W_init, H_init = __init_WH(Y, k, mask=mask, init_type=init_type)
         
+        # transfer to GPU
         if use_gpu:
             Y = __put_X_gpu(Y, gpuid)
-        
-        W, H = __init_WH(Y, k, mask=mask, init_type=init_type, use_gpu=use_gpu, gpuid=gpuid)
-        W, H, other_results = __run_nmf(Y, W, H, nmf, nmf_params, use_gpu, gpuid)
-        
-        if use_gpu:
-            del Y
-            cp._default_memory_pool.free_all_blocks()
+            W_init, H_init = __put_WH_gpu(W_init, H_init, gpuid)
             
+        W, H, other_results = __run_nmf(Y, W_init, H_init, nmf, nmf_params, use_gpu, gpuid)
+        
+        # transfer to CPU
+        if use_gpu:
+            W, H = __put_WH_cpu(W, H)
+            other_results = __put_other_results_cpu(other_results)
+            cp._default_memory_pool.free_all_blocks()
+        
+        # error calculation
         if calculate_error:
             error = relative_error(X, W, H)
         else:
             error = 0
         
+        # collect
         W_all.append(W)
         H_all.append(H)
         errors.append(error)
