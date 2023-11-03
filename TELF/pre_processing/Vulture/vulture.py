@@ -19,12 +19,12 @@ from tqdm import tqdm
 import multiprocessing
 from joblib import Parallel, delayed, parallel_backend
 
-from Vulture.modules import SimpleCleaner
-from Vulture.modules import LemmatizeCleaner
-from Vulture.modules import SubstitutionCleaner
-from Vulture.modules import RemoveNonEnglishCleaner
-from Vulture.default_stop_words import STOP_WORDS
-from Vulture.default_stop_phrases import STOP_PHRASES
+from TELF.pre_processing.Vulture.modules import SimpleCleaner
+from TELF.pre_processing.Vulture.modules import LemmatizeCleaner
+from TELF.pre_processing.Vulture.modules import SubstitutionCleaner
+from TELF.pre_processing.Vulture.modules import RemoveNonEnglishCleaner
+from TELF.pre_processing.Vulture.default_stop_words import STOP_WORDS
+from TELF.pre_processing.Vulture.default_stop_phrases import STOP_PHRASES
 
 try:
     from mpi4py import MPI
@@ -152,7 +152,46 @@ class Vulture:
             self._save_documents(documents)
         else:
             return dict(clean_documents)
-
+        
+        
+    def clean_dataframe(self, df, columns, steps=None, substitutions=None,
+                        append_to_original_df=False, concat_cleaned_cols=False):
+        
+        if not df.index.is_unique:  # DataFrame must have unique indices for mapping
+            raise ValueError("DataFrame does not contain unique indices!")
+        if not all(col in df.columns for col in columns):  # make sure columns exist
+            raise ValueError("One or more columns are invalid!")
+        
+        # make a copy of the DataFrame to prevent changing original and fill nans with empty strings
+        if append_to_original_df:
+            df = df.copy()
+        else:
+            df = df[columns].copy()
+        df[columns] = df[columns].fillna('')
+    
+        # validate that all columns contain strings
+        if not all(df[col].apply(lambda x: isinstance(x, str)).all() for col in columns):
+            raise ValueError("One or more columns do not contain strings!")
+        
+        # prepare the document dictionaries
+        documents = None
+        if concat_cleaned_cols:
+            col_name = f'clean_{"_".join(columns)}'
+            documents = {col_name: df.apply(lambda x: '. '.join(filter(None, x[columns])), axis=1).to_dict()}
+        else:
+            documents = {f'clean_{col}': df[col].to_dict() for col in columns}
+            
+        # clean
+        clean_documents = {}
+        for col, docs in documents.items():
+            clean_docs = self.clean(docs, steps=steps, substitutions=substitutions)
+            clean_documents[col] = clean_docs
+            
+        # add the clean data back to the DataFrame
+        for col, clean_docs in clean_documents.items():
+            df[col] = df.index.map(clean_docs)
+        return df
+    
     
     def _mpi_init(self, documents):
         if self.rank == 0:
