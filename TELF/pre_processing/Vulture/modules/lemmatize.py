@@ -3,7 +3,7 @@ import nltk
 import spacy
 import warnings
 
-from Vulture.modules import VultureModuleBase
+from TELF.pre_processing.Vulture.modules import VultureModuleBase
 
 
 class LemmatizeCleaner(VultureModuleBase):

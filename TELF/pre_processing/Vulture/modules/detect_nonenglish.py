@@ -1,5 +1,5 @@
 import re
-from Vulture.modules import VultureModuleBase
+from TELF.pre_processing.Vulture.modules import VultureModuleBase
 
 
 class RemoveNonEnglishCleaner(VultureModuleBase):

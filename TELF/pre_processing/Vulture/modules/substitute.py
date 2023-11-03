@@ -3,8 +3,8 @@ import warnings
 import itertools
 import networkx as nx
 
-from Vulture.modules import VultureModuleBase
-from Vulture.modules import LemmatizeCleaner
+from TELF.pre_processing.Vulture.modules import VultureModuleBase
+from TELF.pre_processing.Vulture.modules import LemmatizeCleaner
 
 
 class SubstitutionCleaner(VultureModuleBase):

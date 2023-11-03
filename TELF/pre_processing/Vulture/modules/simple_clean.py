@@ -1,7 +1,7 @@
 import re
 import warnings
 import unicodedata
-from Vulture.modules import VultureModuleBase
+from TELF.pre_processing.Vulture.modules import VultureModuleBase
 
 
 class SimpleCleaner(VultureModuleBase):
