@@ -22,3 +22,4 @@ dependencies:
   - spacy
   - mat73
   - cupy
+  -networkx

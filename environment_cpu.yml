@@ -21,3 +21,4 @@ dependencies:
   - joblib
   - spacy
   - mat73
+  - networkx
