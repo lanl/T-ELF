@@ -86,19 +86,18 @@ def __put_other_results_cpu(other_results):
 def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
     if use_gpu:
         with cp.cuda.Device(gpuid):
-            W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
+            W, H, other_results = nmf(X=Y, W=W, H=H, use_gpu=use_gpu, **nmf_params)
     else:
-        W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
+        W, H, other_results = nmf(X=Y, W=W, H=H, use_gpu=use_gpu, **nmf_params)
 
     return W, H, other_results
 
 def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
 
-    np.random.seed(perturbation)
     if perturb_type == "uniform":
-        Y = uniform_product(X, epsilon)
+        Y = uniform_product(X, epsilon, random_state=perturbation)
     elif perturb_type == "poisson":
-        Y = poisson(X)
+        Y = poisson(X, random_state=perturbation)
 
     return Y
 
@@ -191,7 +190,6 @@ def _nmf_parallel_wrapper(
         perturb_cols=None,
         save_output=True,
         save_path="",
-        experiment_name="",
         collect_output=False,
         logging_stats={},
         start_time=time.time(),
@@ -260,7 +258,7 @@ def _nmf_parallel_wrapper(
     #
     # cluster the solutions
     #        
-    W, W_clust = custom_k_means(W_all, use_gpu=use_gpu)
+    W, W_clust = custom_k_means(W_all, use_gpu=False)
     sils_all = silhouettes(W_clust)
 
     #
@@ -441,7 +439,8 @@ class NMFk:
         n_iters : int, optional
             Number of NMF iterations. The default is 100.
         epsilon : float, optional
-            Error amount for the random matrices generated around the original matrix. The default is 0.015.
+            Error amount for the random matrices generated around the original matrix. The default is 0.015.\n
+            ``epsilon`` is used when ``perturb_type='uniform'``.
         perturb_type : str, optional
             Type of error sampling to perform for the bootstrap operation. The default is "uniform".\n
             * ``perturb_type='uniform'`` will use uniform distribution for sampling.\n
@@ -848,7 +847,6 @@ class NMFk:
             "perturb_cols":perturb_cols,
             "save_output":self.save_output,
             "save_path":self.save_path_full,
-            "experiment_name":self.experiment_name,
             "collect_output":self.collect_output,
             "logging_stats":stats_header,
             "start_time":start_time,
