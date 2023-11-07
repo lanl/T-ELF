@@ -86,9 +86,9 @@ def __put_other_results_cpu(other_results):
 def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
     if use_gpu:
         with cp.cuda.Device(gpuid):
-            W, H, other_results = nmf(X=Y, W=W, H=H, use_gpu=use_gpu, **nmf_params)
+            W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
     else:
-        W, H, other_results = nmf(X=Y, W=W, H=H, use_gpu=use_gpu, **nmf_params)
+        W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
 
     return W, H, other_results
 
@@ -712,6 +712,11 @@ class NMFk:
             * If ``predict_k=True`` and ``collect_output=True``, results will include fields for ``W`` and ``H`` which are the latent factors in type of ``np.ndarray``.
             * results will always include a field for ``time``, that gives the total compute time.
         """
+
+        #
+        # check X format
+        #
+        assert scipy.sparse._csr.csr_matrix == type(X) or np.ndarray == type(X), "X sould be np.ndarray or scipy.sparse._csr.csr_matrix"
 
         if X.dtype != np.dtype(np.float32):
             warnings.warn(

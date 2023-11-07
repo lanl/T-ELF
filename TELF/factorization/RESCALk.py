@@ -27,7 +27,6 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import sys
 import os
-import scipy.sparse
 from tqdm import tqdm
 import numpy as np
 import scipy.sparse
@@ -79,10 +78,10 @@ def __run_rescal(Y, A, rescal, rescal_params, use_gpu:bool, gpuid:int):
     if use_gpu:
         with cp.cuda.Device(gpuid):
             R = R_update(Y, A, [cp.random.rand(k, k) for _ in range(len(Y))])
-            A, R = rescal(X=Y, A=A, R=R, use_gpu=use_gpu, **rescal_params)
+            A, R = rescal(X=Y, A=A, R=R, **rescal_params)
     else:
         R = R_update(Y, A, [np.random.rand(k, k) for _ in range(len(Y))])
-        A, R = rescal(X=Y, A=A, R=R, use_gpu=use_gpu, **rescal_params)
+        A, R = rescal(X=Y, A=A, R=R, **rescal_params)
 
     return A, R
 
@@ -566,6 +565,17 @@ class RESCALk:
             * If ``get_plot_data=True``, results will include field for ``plot_data``.\n
             * results will always include a field for ``time``, that gives the total compute time.
         """
+
+        #
+        # check X format
+        #
+        assert type(X) == list, "X sould be list of np.ndarray or scipy.sparse._csr.csr_matrix"
+        # make sure csr or numpy array
+        expected_type = type(X[0])
+        assert expected_type == scipy.sparse._csr.csr_matrix or expected_type == np.ndarray, "X sould be list of np.ndarray or scipy.sparse._csr.csr_matrix"
+        # make sure all slices are expected type
+        for slice_idx, x in enumerate(X):
+            assert expected_type == type(x) or expected_type == type(x), f'X sould be list of all same type (np.ndarray or scipy.sparse._csr.csr_matrix). Matrix at slice index {slice_idx} did not match others.'
 
         if X[0].dtype != np.dtype(np.float32):
             warnings.warn(
