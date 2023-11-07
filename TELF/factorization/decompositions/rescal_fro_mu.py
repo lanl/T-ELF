@@ -27,8 +27,8 @@ def A_update(X, A, R, opts=None, use_gpu=True):
     Returns:
       A (ndarray): Nonnegative m by k factor in the decomposition.
     """
-    np = get_np(X, use_gpu=use_gpu)
-    scipy = get_scipy(X, use_gpu=use_gpu)
+    np = get_np(X[0], use_gpu=use_gpu)
+    scipy = get_scipy(X[0], use_gpu=use_gpu)
     dtype = X[0].dtype
 
     if np.issubdtype(dtype, np.integer):
@@ -42,6 +42,10 @@ def A_update(X, A, R, opts=None, use_gpu=True):
 
     A = np.maximum(A.astype(dtype), eps)
     R = [r.astype(dtype) for r in R]
+    
+    if scipy.sparse.issparse(X[0]):
+        for x in X:
+            x._has_canonical_format = True
 
     for i in range(opts["niter"]):
         ATA = A.T @ A
@@ -49,7 +53,12 @@ def A_update(X, A, R, opts=None, use_gpu=True):
         denom = np.zeros_like(R[0])
         for j, r in enumerate(R):
             if scipy.sparse.issparse(X[j]):
+                xjt = X[j].T
+                xjt._has_canonical_format = True
+                num += X[j].dot(A).dot(r.T) + xjt.dot(A).dot(r)
+            else:
                 num += X[j].dot(A).dot(r.T) + X[j].T.dot(A).dot(r)
+                
             denom += r.dot(ATA).dot(r.T) + (r.T).dot(ATA).dot(r)
         A *= num / (A @ denom+eps)
 
@@ -88,8 +97,8 @@ def R_update(X, A, R, opts=None, use_gpu=True):
     Returns:
       R (list of ndarray): List of nonnegative k by k factors in the decomposition.
     """
-    np = get_np(X, use_gpu=use_gpu)
-    scipy = get_scipy(X, use_gpu=use_gpu)
+    np = get_np(X[0], use_gpu=use_gpu)
+    scipy = get_scipy(X[0], use_gpu=use_gpu)
     dtype = X[0].dtype
 
     if np.issubdtype(dtype, np.integer):
@@ -155,8 +164,8 @@ def rescal(X, A, R,
 
       R (list of ndarray): List of nonnegative k by k factors in the decomposition.
     """
-    np = get_np(X, use_gpu=use_gpu)
-    scipy = get_scipy(X, use_gpu=use_gpu)
+    np = get_np(X[0], use_gpu=use_gpu)
+    scipy = get_scipy(X[0], use_gpu=use_gpu)
     dtype = X[0].dtype
     
     if np.issubdtype(dtype, np.integer):
