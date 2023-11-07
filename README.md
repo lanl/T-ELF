@@ -106,6 +106,7 @@ conda install -c conda-forge mpi4py
 |           RNMFk           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: | :heavy_check_mark: |                         Recommender NMFk                                         |   [Link](examples/RNMFk/RNMFk.ipynb)  |       :white_check_mark:       |
 |           BNMFk           |                    |                    |                    |                    |                     |                    |                           Boolean NMFk                                           |             |       :soon:       |
 |           HNMFk           |                    |                    |                    |                    |                     |                    |                         Hierarchical NMFk                                        |             |       :soon:       |
+|           SymNMFk         |                    |                    |                    |                    |                     |                    |                         NMFk with Symmetric Clustering                           |             |       :soon:       |
 |         SPLIT NMFk        |                    |                    |                    |                    |                     |                    |        Joint NMFk factorization of multiple data via SPLIT                       |             |       :soon:       |
 | SPLIT Transfer Classifier |                    |                    |                    |                    |                     |                    |      Supervised transfer learning method via SPLIT and NMFk                      |             |       :soon:       |
 |           CP-ALS          |                    |                    |                    |                    |                     |                    |    Alternating least squares algorithm for canonical polyadic decomposition      |             |       :soon:       |
@@ -116,8 +117,8 @@ conda install -c conda-forge mpi4py
 
 | **Method** | **Multiprocessing** |       **HPC**       |                           **Description**                          | **Example** | **Release Status** |
 |:----------:|:-------------------:|:-------------------:|:------------------------------------------------------------------:|:-----------:|:------------------:|
-|   Vulture  | :heavy_check_mark: | :heavy_check_mark: |         Advanced text processing tool for cleaning and NLP         |  [Link](examples/Vulture)  | :white_check_mark: |
-|   Beaver   | :heavy_check_mark: | :heavy_check_mark: |        Fast matrix and tensor building tool for text mining        |  [Link](examples/Beaver)  | :white_check_mark: |
+|   Vulture  | :heavy_check_mark:  | :heavy_check_mark:  |         Advanced text processing tool for cleaning and NLP         |  [Link](examples/Vulture)  | :white_check_mark: |
+|   Beaver   | :heavy_check_mark:  | :heavy_check_mark:  |        Fast matrix and tensor building tool for text mining        |  [Link](examples/Beaver)  | :white_check_mark: |
 |  iPenguin  |                     |                     |         Online Semantic Scholar information retrieval tool         |             |       :soon:       |
 |    Orca    |                     |                     | Duplicate author detector for text mining and information retrival |             |       :soon:       |
 |            |                     |                     |                                                                    |             |                    |
