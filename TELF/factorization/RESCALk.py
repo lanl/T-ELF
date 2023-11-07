@@ -72,15 +72,13 @@ def __put_R_cpu(R):
     R = [cp.asnumpy(h_) for h_ in R]
     return R
     
-def __run_rescal(Y, A, rescal, rescal_params, use_gpu:bool, gpuid:int):
-    # TODO CHECK THIS
-    k = A.shape[1]
+def __run_rescal(Y, A, R_random, rescal, rescal_params, use_gpu:bool, gpuid:int):
     if use_gpu:
         with cp.cuda.Device(gpuid):
-            R = R_update(Y, A, [cp.random.rand(k, k) for _ in range(len(Y))])
+            R = R_update(Y, A, R_random)
             A, R = rescal(X=Y, A=A, R=R, **rescal_params)
     else:
-        R = R_update(Y, A, [np.random.rand(k, k) for _ in range(len(Y))])
+        R = R_update(Y, A, R_random)
         A, R = rescal(X=Y, A=A, R=R, **rescal_params)
 
     return A, R
@@ -99,13 +97,9 @@ def __init_A(Y, k, init_type:str):
     # TODO CHECK THIS 
     if init_type == "nnsvd":
         if scipy.sparse.issparse(Y[0]):
-            t1 = scipy.sparse.hstack((Y))
-            t2 = scipy.sparse.hstack(([i.T for i in Y]))
-            Y_tmp = scipy.sparse.hstack((t1, t2))
+            Y_tmp = scipy.sparse.hstack((Y))
         else:
-            t1 = np.hstack((Y))
-            t2 = np.hstack(([i.T for i in Y]))
-            Y_tmp = np.hstack((t1, t2))
+            Y_tmp = np.hstack((Y))
 
         A, _ = nnsvd(Y_tmp, k, use_gpu=False)
             
@@ -114,24 +108,19 @@ def __init_A(Y, k, init_type:str):
         
     return A
 
-def __R_regression(X, A, use_gpu:bool, gpuid:int):
-    # TODO check this
-    k = A.shape[1]
-
+def __R_regression(X, A, R_random, use_gpu:bool, gpuid:int):
     if use_gpu:
         Y = __put_X_gpu(X, gpuid)
 
         with cp.cuda.Device(gpuid):
-            R_ = R_update(Y, cp.array(A), [cp.random.rand(k, k)
-                              for _ in range(len(X))], use_gpu=use_gpu)
+            R_ = R_update(Y, cp.array(A), R_random, use_gpu=use_gpu)
             R = __put_R_cpu(R_)
             
         del Y, R_
         cp._default_memory_pool.free_all_blocks()
         
     else:
-        R = R_update(X, A, [np.random.rand(k, k)
-                             for _ in range(len(X))], use_gpu=use_gpu)
+        R = R_update(X, A, R_random, use_gpu=use_gpu)
         
     return R
 
@@ -141,6 +130,7 @@ def _perturb_parallel_wrapper(
     epsilon,
     perturb_type,
     X,
+    R_random,
     k,
     use_gpu,
     init_type,
@@ -157,7 +147,7 @@ def _perturb_parallel_wrapper(
         Y = __put_X_gpu(Y, gpuid)
         A_init = __put_A_gpu(A_init, gpuid)
 
-    A, R = __run_rescal(Y, A_init, rescal, rescal_params, use_gpu, gpuid)
+    A, R = __run_rescal(Y, A_init, R_random, rescal, rescal_params, use_gpu, gpuid)
 
     # transfer to CPU
     if use_gpu:
@@ -197,6 +187,12 @@ def _rescal_parallel_wrapper(
         perturb_multiprocessing=False,
         joblib_backend="multiprocessing",
         perturb_verbose=False):
+    
+    # Prepare R random
+    if use_gpu:
+        R_random = [cp.random.rand(k, k) for _ in range(len(X))]
+    else:
+        R_random = [np.random.rand(k, k) for _ in range(len(X))]
 
     #
     # run for each perturbations
@@ -205,6 +201,7 @@ def _rescal_parallel_wrapper(
         "epsilon":epsilon,
         "perturb_type":perturb_type,
         "X":X,
+        "R_random":R_random,
         "use_gpu":use_gpu,
         "rescal_params":rescal_params,
         "rescal":rescal,
@@ -250,9 +247,11 @@ def _rescal_parallel_wrapper(
     #
     # Regress H
     #
-    H = __R_regression(X, A, use_gpu, gpuid)
+    H = __R_regression(X, A, R_random, use_gpu, gpuid)
     
     if use_gpu:
+        R_random = __put_R_cpu(R_random)
+        del R_random
         cp._default_memory_pool.free_all_blocks()
 
     # 
@@ -575,6 +574,8 @@ class RESCALk:
         assert expected_type == scipy.sparse._csr.csr_matrix or expected_type == np.ndarray, "X sould be list of np.ndarray or scipy.sparse._csr.csr_matrix"
         # make sure all slices are expected type
         for slice_idx, x in enumerate(X):
+            n,m = x.shape
+            assert n == m, "Dimension sizes in the slices of X should be same (i.e. each slice is symmetric matrix)."
             assert expected_type == type(x) or expected_type == type(x), f'X sould be list of all same type (np.ndarray or scipy.sparse._csr.csr_matrix). Matrix at slice index {slice_idx} did not match others.'
 
         if X[0].dtype != np.dtype(np.float32):
