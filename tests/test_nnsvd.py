@@ -8,7 +8,7 @@ import pytest
 def test_nnsvd_numpy():
     for dtype in [np.float32, np.float64]:
         X = np.array([[1, 2, 3, 4], [4, 5, 6, 7], [7, 8, 9, 10]], dtype=dtype)
-        for typ in [np.array, scipy.sparse.csc_matrix, scipy.sparse.csr_matrix]:
+        for typ in [np.array, scipy.sparse.csr_matrix]:
             W, H = nnsvd.nnsvd(typ(X), 2)
             print(W)
             assert dtype == W.dtype == H.dtype

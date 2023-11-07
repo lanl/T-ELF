@@ -52,7 +52,7 @@ except Exception:
 
 def __put_X_gpu(X, gpuid:int):
     with cp.cuda.Device(gpuid):
-        if scipy.sparse.issparse(X):
+        if scipy.sparse.issparse(X[0]):
             Y = [cupyx.scipy.sparse.csr_matrix((cp.array(X1.data), cp.array(X1.indices), cp.array(X1.indptr)),
                                                    shape=X1.shape, dtype=X1.dtype) for X1 in X]
         else:
@@ -72,13 +72,14 @@ def __put_R_cpu(R):
     R = [cp.asnumpy(h_) for h_ in R]
     return R
     
-def __run_rescal(Y, A, R_random, rescal, rescal_params, use_gpu:bool, gpuid:int):
+def __run_rescal(Y, A, rescal, rescal_params, use_gpu:bool, gpuid:int):
+    k = A.shape[1]
     if use_gpu:
         with cp.cuda.Device(gpuid):
-            R = R_update(Y, A, R_random)
+            R = R_update(Y, A, [cp.random.rand(k, k) for _ in range(len(Y))])
             A, R = rescal(X=Y, A=A, R=R, **rescal_params)
     else:
-        R = R_update(Y, A, R_random)
+        R = R_update(Y, A, [np.random.rand(k, k) for _ in range(len(Y))])
         A, R = rescal(X=Y, A=A, R=R, **rescal_params)
 
     return A, R
@@ -93,8 +94,6 @@ def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
     return Y
 
 def __init_A(Y, k, init_type:str):
-
-    # TODO CHECK THIS 
     if init_type == "nnsvd":
         if scipy.sparse.issparse(Y[0]):
             Y_tmp = scipy.sparse.hstack((Y))
@@ -108,19 +107,20 @@ def __init_A(Y, k, init_type:str):
         
     return A
 
-def __R_regression(X, A, R_random, use_gpu:bool, gpuid:int):
+def __R_regression(X, A, use_gpu:bool, gpuid:int):
+    k = A.shape[1]
     if use_gpu:
         Y = __put_X_gpu(X, gpuid)
 
         with cp.cuda.Device(gpuid):
-            R_ = R_update(Y, cp.array(A), R_random, use_gpu=use_gpu)
+            R_ = R_update(Y, cp.array(A), [cp.random.rand(k, k) for _ in range(len(Y))], use_gpu=use_gpu)
             R = __put_R_cpu(R_)
             
         del Y, R_
         cp._default_memory_pool.free_all_blocks()
         
     else:
-        R = R_update(X, A, R_random, use_gpu=use_gpu)
+        R = R_update(X, A, [np.random.rand(k, k) for _ in range(len(X))], use_gpu=use_gpu)
         
     return R
 
@@ -130,7 +130,6 @@ def _perturb_parallel_wrapper(
     epsilon,
     perturb_type,
     X,
-    R_random,
     k,
     use_gpu,
     init_type,
@@ -147,7 +146,7 @@ def _perturb_parallel_wrapper(
         Y = __put_X_gpu(Y, gpuid)
         A_init = __put_A_gpu(A_init, gpuid)
 
-    A, R = __run_rescal(Y, A_init, R_random, rescal, rescal_params, use_gpu, gpuid)
+    A, R = __run_rescal(Y, A_init, rescal, rescal_params, use_gpu, gpuid)
 
     # transfer to CPU
     if use_gpu:
@@ -187,12 +186,6 @@ def _rescal_parallel_wrapper(
         perturb_multiprocessing=False,
         joblib_backend="multiprocessing",
         perturb_verbose=False):
-    
-    # Prepare R random
-    if use_gpu:
-        R_random = [cp.random.rand(k, k) for _ in range(len(X))]
-    else:
-        R_random = [np.random.rand(k, k) for _ in range(len(X))]
 
     #
     # run for each perturbations
@@ -201,7 +194,6 @@ def _rescal_parallel_wrapper(
         "epsilon":epsilon,
         "perturb_type":perturb_type,
         "X":X,
-        "R_random":R_random,
         "use_gpu":use_gpu,
         "rescal_params":rescal_params,
         "rescal":rescal,
@@ -247,11 +239,9 @@ def _rescal_parallel_wrapper(
     #
     # Regress H
     #
-    H = __R_regression(X, A, R_random, use_gpu, gpuid)
+    H = __R_regression(X, A, use_gpu, gpuid)
     
     if use_gpu:
-        R_random = __put_R_cpu(R_random)
-        del R_random
         cp._default_memory_pool.free_all_blocks()
 
     # 
@@ -351,12 +341,11 @@ class RESCALk:
             verbose=True,
             rescal_verbose=False,
             perturb_verbose=False,
-            sill_thresh=0.8,
             rescal_func=None,
             rescal_method="rescal_fro_mu",
             rescal_obj_params={},
-            pruned=True,
-            calculate_error=True,
+            pruned=False,
+            calculate_error=False,
             joblib_backend="multiprocessing",
             perturb_multiprocessing=False,
             get_plot_data=False,
@@ -398,8 +387,6 @@ class RESCALk:
             If True, shows progress in each RESCAL operation. The default is False.
         perturb_verbose : bool, optional
             If True, it shows progress in each perturbation. The default is False.
-        sill_thresh : float, optional
-            Threshold for the Silhouette score when performing automatic prediction of the number of latent factors. The default is 0.8.
         rescal_func : object, optional
             If not None, and if ``rescal_method=func``, used for passing RESCAL function. The default is None.
         rescal_method : str, optional
@@ -409,13 +396,13 @@ class RESCALk:
         rescal_obj_params : dict, optional
             Parameters used by RESCAL function. The default is {}.
         pruned : bool, optional
-            When True, removes columns and rows from the input matrix that has only 0 values. The default is True.
+            When True, removes columns and rows from the input matrix that has only 0 values. The default is False.
 
             .. warning::
                 Pruning is not implemented for RESCALk yet.
 
         calculate_error : bool, optional
-            When True, calculates the relative reconstruction error. The default is True.
+            When True, calculates the relative reconstruction error. The default is False.
 
             .. warning::
                 If ``calculate_error=True``, it will result in longer processing time.
@@ -462,7 +449,6 @@ class RESCALk:
         self.verbose = verbose
         self.rescal_verbose = rescal_verbose
         self.perturb_verbose = perturb_verbose
-        self.sill_thresh = sill_thresh
         self.n_jobs = n_jobs
         self.n_nodes = n_nodes
         self.rescal = None
@@ -674,8 +660,8 @@ class RESCALk:
         # Prune
         #
         if self.pruned:
+            perturb_rows, perturb_cols = None, None
             #X, perturb_rows, perturb_cols = prune(X, use_gpu=self.use_gpu)
-            pass
         else:
             perturb_rows, perturb_cols = None, None
 

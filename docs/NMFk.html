@@ -424,7 +424,9 @@ others to do so.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_perturbs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of bootstrap operations, or random matrices generated around the original matrix. The default is 20.</p></li>
 <li><p><strong>n_iters</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of NMF iterations. The default is 100.</p></li>
-<li><p><strong>epsilon</strong> (<em>float</em><em>, </em><em>optional</em>) – Error amount for the random matrices generated around the original matrix. The default is 0.015.</p></li>
+<li><p><strong>epsilon</strong> (<em>float</em><em>, </em><em>optional</em>) – <p>Error amount for the random matrices generated around the original matrix. The default is 0.015.</p>
+<p><code class="docutils literal notranslate"><span class="pre">epsilon</span></code> is used when <code class="docutils literal notranslate"><span class="pre">perturb_type='uniform'</span></code>.</p>
+</p></li>
 <li><p><strong>perturb_type</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Type of error sampling to perform for the bootstrap operation. The default is “uniform”.</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">perturb_type='uniform'</span></code> will use uniform distribution for sampling.</p></li>

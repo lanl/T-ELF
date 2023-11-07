@@ -79,7 +79,6 @@ def W_update(X, W, H, opts=None, use_gpu=True, mask=None):
         for i in range(opts["niter"]):
 
             if scipy.sparse.issparse(X):
-                X = X.tocsr()
                 X._has_canonical_format = True
                 XHT = X.dot(H.T)
             else:
@@ -101,7 +100,6 @@ def W_update(X, W, H, opts=None, use_gpu=True, mask=None):
             # bug in setting has_canonical_format flag in cupy
             # https://github.com/cupy/cupy/issues/2365
             # issue is closed, but still not fixed.
-            X = X.tocsr()
             X._has_canonical_format = True
             XHT = X.dot(H.T)
         else:
@@ -173,13 +171,7 @@ def nmf(X, W, H,
 
     W = np.maximum(W.astype(dtype), eps)
     H = np.maximum(H.astype(dtype), eps)
-
-    if scipy.sparse.issparse(X):
-        Xcsc = X.T.T.tocsc()
-        Xcsr = X.T.T.tocsr()
-    else:
-        pass
-
+    
     if use_consensus_stopping > 0:
         conmatold = 0
         conmat = 0
@@ -187,12 +179,8 @@ def nmf(X, W, H,
 
     for i in tqdm(range(niter), disable=nmf_verbose == False):
 
-        if scipy.sparse.issparse(X):
-            H = H_update(Xcsc, W, H, H_opts, use_gpu=use_gpu)
-            W = W_update(Xcsr, W, H, W_opts, use_gpu=use_gpu)
-        else:
-            H = H_update(X, W, H, H_opts, use_gpu=use_gpu)
-            W = W_update(X, W, H, W_opts, use_gpu=use_gpu)
+        H = H_update(X, W, H, H_opts, use_gpu=use_gpu)
+        W = W_update(X, W, H, W_opts, use_gpu=use_gpu)
 
         if i % 10 == 0:
             H = np.maximum(H.astype(dtype), eps)
@@ -218,6 +206,4 @@ def nmf(X, W, H,
     Wsum = np.sum(W, 0, keepdims=True)
     H = H * Wsum.T
     W = W / Wsum
-
-    # print('Done NMF')
     return (W, H, {})

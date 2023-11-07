@@ -273,7 +273,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.generic_utils</span> <span class="kn">import</span> <span class="n">get_np</span><span class="p">,</span> <span class="n">get_scipy</span>
 
 
-<div class="viewcode-block" id="uniform_product"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.resample.uniform_product">[docs]</a><span class="k">def</span> <span class="nf">uniform_product</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="uniform_product"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.resample.uniform_product">[docs]</a><span class="k">def</span> <span class="nf">uniform_product</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Multiplies each element of X by a uniform random number in (1-epsilon, 1+epsilon).</span>
 
@@ -286,6 +286,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
     <span class="n">scipy</span> <span class="o">=</span> <span class="n">get_scipy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">Y</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">data</span> <span class="o">*</span> <span class="p">(</span>
@@ -296,7 +297,7 @@ document.write(`
     <span class="k">return</span> <span class="n">Y</span></div>
 
 
-<div class="viewcode-block" id="poisson"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.resample.poisson">[docs]</a><span class="k">def</span> <span class="nf">poisson</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="poisson"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.resample.poisson">[docs]</a><span class="k">def</span> <span class="nf">poisson</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Resamples each element of a matrix from a Poisson distribution with the mean set by that element. Y_{i,j} = Poisson(X_{i,j})</span>
 
@@ -308,6 +309,7 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
     <span class="n">scipy</span> <span class="o">=</span> <span class="n">get_scipy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">X</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>

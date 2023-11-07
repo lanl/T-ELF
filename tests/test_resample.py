@@ -24,10 +24,6 @@ def test_poisson_numpy():
             assert isinstance(B, type(A))
             assert A.dtype == B.dtype
 
-# @pytest.mark.skipif(sys.version_info < (3,3),
-#                     reason="requires python3.3")
-
-
 def test_uniform_product_cupy():
     cp = pytest.importorskip("cupy")
     cupyx = pytest.importorskip("cupyx")
