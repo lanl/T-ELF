@@ -547,7 +547,7 @@ class RESCALk:
 
         Parameters
         ----------
-        X : list of ``np.ndarray`` or list of ``scipy.sparse._csr.csr_matrix`` matrix
+        X : list of symmetric ``np.ndarray`` or list of symmetric ``scipy.sparse._csr.csr_matrix`` matrix
             Input matrix to be factorized.
         Ks : list
             List of K values to factorize the input matrix.\n
