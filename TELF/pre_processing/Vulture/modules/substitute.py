@@ -67,6 +67,7 @@ class SubstitutionCleaner(VultureModuleBase):
             Tuple of document id and substituted text
         """
         doc_id, doc_text = document
+        
         if self.lower:  # TODO: test removing this conditional
             doc_text = doc_text.lower()
         for term, target in self.substitution_map.items():
@@ -287,11 +288,11 @@ class SubstitutionCleaner(VultureModuleBase):
             is_valid = self._validate_substitutions(substitution_map)
             if is_valid:
                 if self.lower:
-                    substitution_map = self._lower_substitutions(substitution_map)
+                    substitution_map.update(self._lower_substitutions(substitution_map))
                 if self.lemmatize:
-                    substitution_map = self._lemmatize_substitutions(substitution_map)
+                    substitution_map.update(self._lemmatize_substitutions(substitution_map))
                 if self.permute:
-                    substitution_map = self._permute_substitutions(substitution_map)
+                    substitution_map.update(self._permute_substitutions(substitution_map))
                 self._substitution_map = dict(sorted(substitution_map.items(), \
                                                      key=lambda x: len(x[0].split()), \
                                                      reverse=True))
