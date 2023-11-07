@@ -15,6 +15,7 @@ import sys
 import uuid
 import pickle
 import pathlib
+import warnings
 from tqdm import tqdm
 import multiprocessing
 from joblib import Parallel, delayed, parallel_backend
@@ -71,7 +72,6 @@ class Vulture:
     """
     PARALLEL_BACKEND_OPTIONS = {'loky', 'multiprocessing', 'threading'}
     DEFAULT_PIPELINE = [
-        RemoveNonEnglishCleaner(ascii_ratio=0.9, stopwords_ratio=0.2),
         SimpleCleaner(stop_words = STOP_WORDS,
                       stop_phrases = STOP_PHRASES,
                       order = [
@@ -149,7 +149,7 @@ class Vulture:
         
         # save the clean results or return them
         if self.save_path is not None:
-            self._save_documents(documents)
+            self._save_documents(dict(clean_documents))
         else:
             return dict(clean_documents)
         
@@ -383,6 +383,8 @@ class Vulture:
         
         if not save_path.parent.exists():
             raise ValueError(f'The `save_path` directory "{save_path.parent}" does not exist!')
+        if save_path.is_dir():
+            raise ValueError(f'The `save_path` "{save_path}" is a directory!')
         if save_path.exists():
             warnings.warn(f'The file "{save_path}" already exists and will be overwritten!')
         self._save_path = save_path
