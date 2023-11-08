@@ -22,7 +22,7 @@ from .decompositions.utilities.clustering import custom_k_means, silhouettes
 from .decompositions.utilities.math_utils import relative_error_rescal
 
 
-from joblib import Parallel, delayed
+import concurrent.futures
 from datetime import datetime, timedelta
 from collections import defaultdict
 import sys
@@ -33,7 +33,6 @@ import scipy.sparse
 import warnings
 import time
 import socket
-import multiprocessing
 from pathlib import Path
 
 
@@ -184,7 +183,6 @@ def _rescal_parallel_wrapper(
         start_time=time.time(),
         n_jobs=1,
         perturb_multiprocessing=False,
-        joblib_backend="multiprocessing",
         perturb_verbose=False):
 
     #
@@ -213,11 +211,9 @@ def _rescal_parallel_wrapper(
             
     # multiple jobs over perturbations
     else:
-        all_perturbation_results = Parallel(
-            n_jobs=n_jobs,
-            verbose=perturb_verbose,
-            backend=joblib_backend)(delayed(_perturb_parallel_wrapper)(
-            gpuid=pidx % n_jobs, perturbation=perturbation, **perturb_job_data) for pidx, perturbation in enumerate(range(n_perturbs)))
+        executor = concurrent.futures.ThreadPoolExecutor(max_workers=n_jobs)
+        futures = [executor.submit(_perturb_parallel_wrapper, gpuid=pidx % n_jobs, perturbation=perturbation, **perturb_job_data) for pidx, perturbation in enumerate(range(n_perturbs))]
+        all_perturbation_results = [future.result() for future in concurrent.futures.as_completed(futures)]
         for A, R, error in all_perturbation_results:
             A_all.append(A)
             R_all.append(A)
@@ -346,7 +342,6 @@ class RESCALk:
             rescal_obj_params={},
             pruned=False,
             calculate_error=False,
-            joblib_backend="multiprocessing",
             perturb_multiprocessing=False,
             get_plot_data=False,
             simple_plot=True,):
@@ -407,8 +402,6 @@ class RESCALk:
             .. warning::
                 If ``calculate_error=True``, it will result in longer processing time.
 
-        joblib_backend : str, optional
-            Backend used by Joblib for parallel computation. The default is "multiprocessing".
         perturb_multiprocessing : bool, optional
             If ``perturb_multiprocessing=True``, it will make parallel computation over each perturbation. Default is ``perturb_multiprocessing=False``.\n
             When ``perturb_multiprocessing=False``, which is default, parallelization is done over each K (rank).
@@ -456,7 +449,6 @@ class RESCALk:
         self.rescal_obj_params = rescal_obj_params
         self.pruned = pruned
         self.calculate_error = calculate_error
-        self.joblib_backend = joblib_backend
         self.simple_plot = simple_plot
         self.get_plot_data = get_plot_data
         self.perturb_multiprocessing = perturb_multiprocessing
@@ -478,10 +470,6 @@ class RESCALk:
 
         # organize n_jobs
         self.n_jobs, self.use_gpu = organize_n_jobs(use_gpu, n_jobs)
-        if self.use_gpu:
-            # multiprocessing on GPU
-            if self.n_jobs < 0 or self.n_jobs > 1:
-                multiprocessing.set_start_method('spawn', force=True)
 
         #
         # Save information from the solution
@@ -560,8 +548,6 @@ class RESCALk:
         assert expected_type == scipy.sparse._csr.csr_matrix or expected_type == np.ndarray, "X sould be list of np.ndarray or scipy.sparse._csr.csr_matrix"
         # make sure all slices are expected type
         for slice_idx, x in enumerate(X):
-            n,m = x.shape
-            assert n == m, "Dimension sizes in the slices of X should be same (i.e. each slice is symmetric matrix)."
             assert expected_type == type(x) or expected_type == type(x), f'X sould be list of all same type (np.ndarray or scipy.sparse._csr.csr_matrix). Matrix at slice index {slice_idx} did not match others.'
 
         if X[0].dtype != np.dtype(np.float32):
@@ -689,7 +675,6 @@ class RESCALk:
             "start_time":start_time,
             "n_jobs":self.n_jobs,
             "perturb_multiprocessing":self.perturb_multiprocessing,
-            "joblib_backend":self.joblib_backend,
             "perturb_verbose":self.perturb_verbose,
         }
         
@@ -701,12 +686,10 @@ class RESCALk:
                 all_k_results.append(k_result)
         
         # multiprocessing over each K
-        else:   
-            all_k_results = Parallel(
-                n_jobs=self.n_jobs,
-                verbose=self.verbose,
-                backend=self.joblib_backend)(delayed(_rescal_parallel_wrapper)(
-                    gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks))
+        else:
+            executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.n_jobs)
+            futures = [executor.submit(_rescal_parallel_wrapper, gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks)]
+            all_k_results = [future.result() for future in concurrent.futures.as_completed(futures)]
 
         #
         # Collect results if multi-node
