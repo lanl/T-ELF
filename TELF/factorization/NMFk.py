@@ -24,7 +24,6 @@ from .decompositions.utilities.resample import poisson, uniform_product
 from .decompositions.utilities.clustering import custom_k_means, silhouettes
 from .decompositions.utilities.math_utils import prune, unprune, relative_error, get_pac
 from .decompositions.utilities.concensus_matrix import compute_consensus_matrix, reorder_con_mat
-from joblib import Parallel, delayed
 from datetime import datetime, timedelta
 from collections import defaultdict
 import sys
@@ -35,9 +34,8 @@ import numpy as np
 import warnings
 import time
 import socket
-import multiprocessing
 from pathlib import Path
-
+import concurrent.futures
 
 try:
     import cupy as cp
@@ -195,7 +193,6 @@ def _nmf_parallel_wrapper(
         start_time=time.time(),
         n_jobs=1,
         perturb_multiprocessing=False,
-        joblib_backend="multiprocessing",
         perturb_verbose=False):
 
     #
@@ -226,11 +223,10 @@ def _nmf_parallel_wrapper(
             
     # multiple jobs over perturbations
     else:
-        all_perturbation_results = Parallel(
-            n_jobs=n_jobs,
-            verbose=perturb_verbose,
-            backend=joblib_backend)(delayed(_perturb_parallel_wrapper)(
-            gpuid=pidx % n_jobs, perturbation=perturbation, **perturb_job_data) for pidx, perturbation in enumerate(range(n_perturbs)))
+        executor = concurrent.futures.ThreadPoolExecutor(max_workers=n_jobs)
+        futures = [executor.submit(_perturb_parallel_wrapper, gpuid=pidx % n_jobs, perturbation=perturbation, **perturb_job_data) for pidx, perturbation in enumerate(range(n_perturbs))]
+        all_perturbation_results = [future.result() for future in concurrent.futures.as_completed(futures)]
+
         for W, H, error, other_results_curr in all_perturbation_results:
             W_all.append(W)
             H_all.append(H)
@@ -421,7 +417,6 @@ class NMFk:
             nmf_obj_params={},
             pruned=True,
             calculate_error=True,
-            joblib_backend="multiprocessing",
             perturb_multiprocessing=False,
             consensus_mat=False,
             use_consensus_stopping=0,
@@ -517,8 +512,6 @@ class NMFk:
             .. warning::
                 If ``calculate_error=True``, it will result in longer processing time.
 
-        joblib_backend : str, optional
-            Backend used by Joblib for parallel computation. The default is "multiprocessing".
         perturb_multiprocessing : bool, optional
             If ``perturb_multiprocessing=True``, it will make parallel computation over each perturbation. Default is ``perturb_multiprocessing=False``.\n
             When ``perturb_multiprocessing=False``, which is default, parallelization is done over each K (rank).
@@ -579,7 +572,6 @@ class NMFk:
         self.nmf_obj_params = nmf_obj_params
         self.pruned = pruned
         self.calculate_error = calculate_error
-        self.joblib_backend = joblib_backend
         self.consensus_mat = consensus_mat
         self.use_consensus_stopping = use_consensus_stopping
         self.mask = mask
@@ -612,10 +604,6 @@ class NMFk:
 
         # organize n_jobs
         self.n_jobs, self.use_gpu = organize_n_jobs(use_gpu, n_jobs)
-        if self.use_gpu:
-            # multiprocessing on GPU
-            if self.n_jobs < 0 or self.n_jobs > 1:
-                multiprocessing.set_start_method('spawn', force=True)
 
         #
         # Save information from the solution
@@ -857,7 +845,6 @@ class NMFk:
             "start_time":start_time,
             "n_jobs":self.n_jobs,
             "perturb_multiprocessing":self.perturb_multiprocessing,
-            "joblib_backend":self.joblib_backend,
             "perturb_verbose":self.perturb_verbose,
         }
         
@@ -870,11 +857,9 @@ class NMFk:
         
         # multiprocessing over each K
         else:   
-            all_k_results = Parallel(
-                n_jobs=self.n_jobs,
-                verbose=self.verbose,
-                backend=self.joblib_backend)(delayed(_nmf_parallel_wrapper)(
-                    gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks))
+            executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.n_jobs)
+            futures = [executor.submit(_nmf_parallel_wrapper, gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks)]
+            all_k_results = [future.result() for future in concurrent.futures.as_completed(futures)]
 
         #
         # Collect results if multi-node
