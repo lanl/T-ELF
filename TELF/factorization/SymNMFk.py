@@ -20,7 +20,6 @@ from .decompositions.utilities.resample import poisson, uniform_product
 from .decompositions.utilities.math_utils import prune, unprune, get_pac
 from .decompositions.utilities.concensus_matrix import compute_connectivity_mat, compute_consensus_matrix, reorder_con_mat
 from .decompositions.utilities.similarity_matrix import build_similarity_matrix, get_connectivity_matrix, dist2, scale_dist3
-from joblib import Parallel, delayed
 from datetime import datetime, timedelta
 from collections import defaultdict
 import sys
@@ -31,8 +30,8 @@ import numpy as np
 import warnings
 import time
 import socket
-import multiprocessing
 from pathlib import Path
+import concurrent.futures
 
 from scipy.spatial.distance import pdist, squareform
 
@@ -244,7 +243,6 @@ class SymNMFk:
             graph_type="full",
             similarity_type="gaussian",
             nearest_neighbors=7,
-            joblib_backend="multiprocessing",
             use_consensus_stopping=False,
             calculate_pac=True,
             mask=None,
@@ -284,7 +282,6 @@ class SymNMFk:
         self.graph_type=graph_type
         self.similarity_type=similarity_type
         self.nearest_neighbors=nearest_neighbors
-        self.joblib_backend = joblib_backend
         self.consensus_mat = True
         self.use_consensus_stopping = use_consensus_stopping
         self.mask = mask
@@ -306,10 +303,6 @@ class SymNMFk:
 
         # organize n_jobs
         self.n_jobs, self.use_gpu = organize_n_jobs(use_gpu, n_jobs)
-        if self.use_gpu:
-            # multiprocessing on GPU
-            if self.n_jobs < 0 or self.n_jobs > 1:
-                multiprocessing.set_start_method('spawn', force=True)
 
         #
         # Save information from the solution
@@ -460,11 +453,9 @@ class SymNMFk:
                 k_result = symnmf_parallel_wrapper(gpuid=0, k=k, **job_data)
                 all_k_results.append(k_result)
         else:
-            all_k_results = Parallel(
-                n_jobs=self.n_jobs,
-                verbose=self.verbose,
-                backend=self.joblib_backend)(delayed(symnmf_parallel_wrapper)(
-                    gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks))
+            executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.n_jobs)
+            futures = [executor.submit(symnmf_parallel_wrapper, gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks)]
+            all_k_results = [future.result() for future in concurrent.futures.as_completed(futures)]
 
         #
         # Collect results if multi-node
