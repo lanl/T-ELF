@@ -36,9 +36,9 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=8fa999b9"></script>
+    <script src="../../../../_static/documentation_options.js?v=e645c8fa"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/factorization/decompositions/nmf_fro_mu';</script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -274,7 +274,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.utilities.concensus_matrix</span> <span class="kn">import</span> <span class="n">compute_connectivity_mat</span>
 
 
-<div class="viewcode-block" id="H_update"><a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_mu.H_update">[docs]</a><span class="k">def</span> <span class="nf">H_update</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="H_update">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_mu.H_update">[docs]</a>
+<span class="k">def</span> <span class="nf">H_update</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Multiplicative update algorithm for the right factor, :math:`H`, in a nonnegative optimization with Frobenius norm loss function.</span>
 
@@ -303,7 +305,10 @@ document.write(`
     <span class="k">return</span> <span class="n">W_update</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="n">opts</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span><span class="o">.</span><span class="n">T</span></div>
 
 
-<div class="viewcode-block" id="W_update"><a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_mu.W_update">[docs]</a><span class="k">def</span> <span class="nf">W_update</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="W_update">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_mu.W_update">[docs]</a>
+<span class="k">def</span> <span class="nf">W_update</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Multiplicative update algorithm for the left factor, :math:`W`, in a nonnegative optimization with Frobenius norm loss function.</span>
 
@@ -386,7 +391,10 @@ document.write(`
     <span class="k">return</span> <span class="n">W</span></div>
 
 
-<div class="viewcode-block" id="nmf"><a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_mu.nmf">[docs]</a><span class="k">def</span> <span class="nf">nmf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span>
+
+<div class="viewcode-block" id="nmf">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_mu.nmf">[docs]</a>
+<span class="k">def</span> <span class="nf">nmf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span>
         <span class="n">niter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hist</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">W_opts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span> <span class="n">H_opts</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
         <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -477,6 +485,7 @@ document.write(`
     <span class="n">H</span> <span class="o">=</span> <span class="n">H</span> <span class="o">*</span> <span class="n">Wsum</span><span class="o">.</span><span class="n">T</span>
     <span class="n">W</span> <span class="o">=</span> <span class="n">W</span> <span class="o">/</span> <span class="n">Wsum</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="p">{})</span></div>
+
 </pre></div>
 
                 </article>

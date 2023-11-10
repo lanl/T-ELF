@@ -36,9 +36,9 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=8fa999b9"></script>
+    <script src="../../../../_static/documentation_options.js?v=e645c8fa"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/factorization/utilities/take_note';</script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -278,7 +278,9 @@ document.write(`
 <span class="n">FILE_DELIMITER</span> <span class="o">=</span> <span class="s1">&#39;*&#39;</span> <span class="o">*</span> <span class="mi">100</span>  <span class="c1"># line of 100 asterisks</span>
 
 
-<div class="viewcode-block" id="format_note"><a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.format_note">[docs]</a><span class="k">def</span> <span class="nf">format_note</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
+<div class="viewcode-block" id="format_note">
+<a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.format_note">[docs]</a>
+<span class="k">def</span> <span class="nf">format_note</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Formats the values from kwargs dictionary into a single string. The first element in kwargs</span>
 <span class="sd">    is left aligned while the rest are right aligned. Each element is spaced according to the </span>
@@ -305,9 +307,12 @@ document.write(`
     <span class="k">else</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;[tELF]: Empty dictionary passed to format_note()&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span></div>
+
         
     
-<div class="viewcode-block" id="take_note"><a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.take_note">[docs]</a><span class="k">def</span> <span class="nf">take_note</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="take_note">
+<a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.take_note">[docs]</a>
+<span class="k">def</span> <span class="nf">take_note</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes key-value pairs from a dictionary into a log file in the format &#39;key = value&#39;. Each string</span>
 <span class="sd">    is separated with a newline character</span>
@@ -334,7 +339,10 @@ document.write(`
             <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="append_to_note"><a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.append_to_note">[docs]</a><span class="k">def</span> <span class="nf">append_to_note</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="append_to_note">
+<a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.append_to_note">[docs]</a>
+<span class="k">def</span> <span class="nf">append_to_note</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes string from a list of strings called notes into a log file. Each string is separated </span>
 <span class="sd">    with a newline character</span>
@@ -361,7 +369,10 @@ document.write(`
             <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">note</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="take_note_fmat"><a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.take_note_fmat">[docs]</a><span class="k">def</span> <span class="nf">take_note_fmat</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">,</span> <span class="n">sort_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="take_note_fmat">
+<a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.take_note_fmat">[docs]</a>
+<span class="k">def</span> <span class="nf">take_note_fmat</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">,</span> <span class="n">sort_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Records some stats into the log file in a formatted manner. These stats are the values stored</span>
 <span class="sd">    in the kwargs dictionary. The keys signify the type of stat being recorded and the value is </span>
@@ -423,6 +434,7 @@ document.write(`
             
         <span class="n">fh_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">fh_out</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">))</span></div>
+
         
 </pre></div>
 

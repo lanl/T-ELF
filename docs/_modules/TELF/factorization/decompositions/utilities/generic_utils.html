@@ -36,9 +36,9 @@
 <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js?v=8fa999b9"></script>
+    <script src="../../../../../_static/documentation_options.js?v=e645c8fa"></script>
     <script src="../../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/factorization/decompositions/utilities/generic_utils';</script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
@@ -298,7 +298,9 @@ document.write(`
 <span class="n">mp</span> <span class="o">=</span> <span class="n">pathos</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">mp</span>
 
 
-<div class="viewcode-block" id="grid_eval"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.grid_eval">[docs]</a><span class="k">def</span> <span class="nf">grid_eval</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">num_cpus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="grid_eval">
+<a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.grid_eval">[docs]</a>
+<span class="k">def</span> <span class="nf">grid_eval</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">num_cpus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">kwargs_starmap_wrap</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -332,7 +334,10 @@ document.write(`
     <span class="k">return</span> <span class="n">out</span></div>
 
 
-<div class="viewcode-block" id="get_np"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_np">[docs]</a><span class="k">def</span> <span class="nf">get_np</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_np">
+<a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_np">[docs]</a>
+<span class="k">def</span> <span class="nf">get_np</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">if</span> <span class="s2">&quot;use_gpu&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
         <span class="n">use_gpu</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;use_gpu&quot;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;use_gpu&quot;</span><span class="p">]</span>
@@ -349,13 +354,19 @@ document.write(`
 
     <span class="k">return</span> <span class="n">xp</span></div>
 
-<div class="viewcode-block" id="get_cupyx"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_cupyx">[docs]</a><span class="k">def</span> <span class="nf">get_cupyx</span><span class="p">(</span><span class="n">use_gpu</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_cupyx">
+<a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_cupyx">[docs]</a>
+<span class="k">def</span> <span class="nf">get_cupyx</span><span class="p">(</span><span class="n">use_gpu</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">use_gpu</span> <span class="ow">and</span> <span class="n">HAS_CUPY</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">cupyx</span><span class="p">,</span> <span class="n">HAS_CUPY</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">scipy</span><span class="p">,</span> <span class="n">HAS_CUPY</span></div>
 
-<div class="viewcode-block" id="get_scipy"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_scipy">[docs]</a><span class="k">def</span> <span class="nf">get_scipy</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_scipy">
+<a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_scipy">[docs]</a>
+<span class="k">def</span> <span class="nf">get_scipy</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">if</span> <span class="s2">&quot;use_gpu&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
         <span class="n">use_gpu</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;use_gpu&quot;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;use_gpu&quot;</span><span class="p">]</span>
@@ -374,7 +385,10 @@ document.write(`
     <span class="k">return</span> <span class="n">xpy</span></div>
 
 
-<div class="viewcode-block" id="update_opts"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.update_opts">[docs]</a><span class="k">def</span> <span class="nf">update_opts</span><span class="p">(</span><span class="n">defaults</span><span class="p">,</span> <span class="n">custom</span><span class="p">):</span>
+
+<div class="viewcode-block" id="update_opts">
+<a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.update_opts">[docs]</a>
+<span class="k">def</span> <span class="nf">update_opts</span><span class="p">(</span><span class="n">defaults</span><span class="p">,</span> <span class="n">custom</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">custom</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">custom</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">custom</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -388,7 +402,10 @@ document.write(`
     <span class="k">return</span> <span class="n">custom</span></div>
 
 
-<div class="viewcode-block" id="bary_proj"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.bary_proj">[docs]</a><span class="k">def</span> <span class="nf">bary_proj</span><span class="p">(</span><span class="n">num_vars</span><span class="p">):</span>
+
+<div class="viewcode-block" id="bary_proj">
+<a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.bary_proj">[docs]</a>
+<span class="k">def</span> <span class="nf">bary_proj</span><span class="p">(</span><span class="n">num_vars</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes generalized Barycentric coordinates from an activation matrix.</span>
 
@@ -458,6 +475,7 @@ document.write(`
 
     <span class="n">register_projection</span><span class="p">(</span><span class="n">BaryAxes</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">proj_name</span></div>
+
 </pre></div>
 
                 </article>

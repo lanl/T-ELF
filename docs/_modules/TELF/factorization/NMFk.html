@@ -36,9 +36,9 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=8fa999b9"></script>
+    <script src="../../../_static/documentation_options.js?v=e645c8fa"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/factorization/NMFk';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -294,7 +294,6 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.decompositions.utilities.clustering</span> <span class="kn">import</span> <span class="n">custom_k_means</span><span class="p">,</span> <span class="n">silhouettes</span>
 <span class="kn">from</span> <span class="nn">.decompositions.utilities.math_utils</span> <span class="kn">import</span> <span class="n">prune</span><span class="p">,</span> <span class="n">unprune</span><span class="p">,</span> <span class="n">relative_error</span><span class="p">,</span> <span class="n">get_pac</span>
 <span class="kn">from</span> <span class="nn">.decompositions.utilities.concensus_matrix</span> <span class="kn">import</span> <span class="n">compute_consensus_matrix</span><span class="p">,</span> <span class="n">reorder_con_mat</span>
-<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -305,9 +304,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">socket</span>
-<span class="kn">import</span> <span class="nn">multiprocessing</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-
+<span class="kn">import</span> <span class="nn">concurrent.futures</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
@@ -465,7 +463,6 @@ document.write(`
         <span class="n">start_time</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
         <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">perturb_multiprocessing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">joblib_backend</span><span class="o">=</span><span class="s2">&quot;multiprocessing&quot;</span><span class="p">,</span>
         <span class="n">perturb_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
     <span class="c1">#</span>
@@ -496,11 +493,10 @@ document.write(`
             
     <span class="c1"># multiple jobs over perturbations</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">all_perturbation_results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span>
-            <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span>
-            <span class="n">verbose</span><span class="o">=</span><span class="n">perturb_verbose</span><span class="p">,</span>
-            <span class="n">backend</span><span class="o">=</span><span class="n">joblib_backend</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">_perturb_parallel_wrapper</span><span class="p">)(</span>
-            <span class="n">gpuid</span><span class="o">=</span><span class="n">pidx</span> <span class="o">%</span> <span class="n">n_jobs</span><span class="p">,</span> <span class="n">perturbation</span><span class="o">=</span><span class="n">perturbation</span><span class="p">,</span> <span class="o">**</span><span class="n">perturb_job_data</span><span class="p">)</span> <span class="k">for</span> <span class="n">pidx</span><span class="p">,</span> <span class="n">perturbation</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_perturbs</span><span class="p">)))</span>
+        <span class="n">executor</span> <span class="o">=</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)</span>
+        <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">_perturb_parallel_wrapper</span><span class="p">,</span> <span class="n">gpuid</span><span class="o">=</span><span class="n">pidx</span> <span class="o">%</span> <span class="n">n_jobs</span><span class="p">,</span> <span class="n">perturbation</span><span class="o">=</span><span class="n">perturbation</span><span class="p">,</span> <span class="o">**</span><span class="n">perturb_job_data</span><span class="p">)</span> <span class="k">for</span> <span class="n">pidx</span><span class="p">,</span> <span class="n">perturbation</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_perturbs</span><span class="p">))]</span>
+        <span class="n">all_perturbation_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">)]</span>
+
         <span class="k">for</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">other_results_curr</span> <span class="ow">in</span> <span class="n">all_perturbation_results</span><span class="p">:</span>
             <span class="n">W_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
             <span class="n">H_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
@@ -665,7 +661,9 @@ document.write(`
     <span class="k">return</span> <span class="n">results_k</span>
 
 
-<div class="viewcode-block" id="NMFk"><a class="viewcode-back" href="../../../TELF.factorization.html#TELF.factorization.NMFk.NMFk">[docs]</a><span class="k">class</span> <span class="nc">NMFk</span><span class="p">:</span>
+<div class="viewcode-block" id="NMFk">
+<a class="viewcode-back" href="../../../TELF.factorization.html#TELF.factorization.NMFk.NMFk">[docs]</a>
+<span class="k">class</span> <span class="nc">NMFk</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">n_perturbs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
@@ -691,7 +689,6 @@ document.write(`
             <span class="n">nmf_obj_params</span><span class="o">=</span><span class="p">{},</span>
             <span class="n">pruned</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">calculate_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">joblib_backend</span><span class="o">=</span><span class="s2">&quot;multiprocessing&quot;</span><span class="p">,</span>
             <span class="n">perturb_multiprocessing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">consensus_mat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">use_consensus_stopping</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -787,8 +784,6 @@ document.write(`
 <span class="sd">            .. warning::</span>
 <span class="sd">                If ``calculate_error=True``, it will result in longer processing time.</span>
 
-<span class="sd">        joblib_backend : str, optional</span>
-<span class="sd">            Backend used by Joblib for parallel computation. The default is &quot;multiprocessing&quot;.</span>
 <span class="sd">        perturb_multiprocessing : bool, optional</span>
 <span class="sd">            If ``perturb_multiprocessing=True``, it will make parallel computation over each perturbation. Default is ``perturb_multiprocessing=False``.\n</span>
 <span class="sd">            When ``perturb_multiprocessing=False``, which is default, parallelization is done over each K (rank).</span>
@@ -849,7 +844,6 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">nmf_obj_params</span> <span class="o">=</span> <span class="n">nmf_obj_params</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pruned</span> <span class="o">=</span> <span class="n">pruned</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calculate_error</span> <span class="o">=</span> <span class="n">calculate_error</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">joblib_backend</span> <span class="o">=</span> <span class="n">joblib_backend</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">consensus_mat</span> <span class="o">=</span> <span class="n">consensus_mat</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_consensus_stopping</span> <span class="o">=</span> <span class="n">use_consensus_stopping</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span>
@@ -882,10 +876,6 @@ document.write(`
 
         <span class="c1"># organize n_jobs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="n">organize_n_jobs</span><span class="p">(</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">:</span>
-            <span class="c1"># multiprocessing on GPU</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">multiprocessing</span><span class="o">.</span><span class="n">set_start_method</span><span class="p">(</span><span class="s1">&#39;spawn&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1">#</span>
         <span class="c1"># Save information from the solution</span>
@@ -957,7 +947,9 @@ document.write(`
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">:&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-<div class="viewcode-block" id="NMFk.fit"><a class="viewcode-back" href="../../../TELF.factorization.html#TELF.factorization.NMFk.NMFk.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Ks</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;NMFk&quot;</span><span class="p">,</span> <span class="n">note</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="NMFk.fit">
+<a class="viewcode-back" href="../../../TELF.factorization.html#TELF.factorization.NMFk.NMFk.fit">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Ks</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;NMFk&quot;</span><span class="p">,</span> <span class="n">note</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Factorize the input matrix ``X`` for the each given K value in ``Ks``.</span>
 
@@ -1127,7 +1119,6 @@ document.write(`
             <span class="s2">&quot;start_time&quot;</span><span class="p">:</span><span class="n">start_time</span><span class="p">,</span>
             <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span>
             <span class="s2">&quot;perturb_multiprocessing&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">perturb_multiprocessing</span><span class="p">,</span>
-            <span class="s2">&quot;joblib_backend&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">joblib_backend</span><span class="p">,</span>
             <span class="s2">&quot;perturb_verbose&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">perturb_verbose</span><span class="p">,</span>
         <span class="p">}</span>
         
@@ -1140,11 +1131,9 @@ document.write(`
         
         <span class="c1"># multiprocessing over each K</span>
         <span class="k">else</span><span class="p">:</span>   
-            <span class="n">all_k_results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span>
-                <span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span>
-                <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
-                <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">joblib_backend</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">_nmf_parallel_wrapper</span><span class="p">)(</span>
-                    <span class="n">gpuid</span><span class="o">=</span><span class="n">kidx</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="o">**</span><span class="n">job_data</span><span class="p">)</span> <span class="k">for</span> <span class="n">kidx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Ks</span><span class="p">))</span>
+            <span class="n">executor</span> <span class="o">=</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">)</span>
+            <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">_nmf_parallel_wrapper</span><span class="p">,</span> <span class="n">gpuid</span><span class="o">=</span><span class="n">kidx</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="o">**</span><span class="n">job_data</span><span class="p">)</span> <span class="k">for</span> <span class="n">kidx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Ks</span><span class="p">)]</span>
+            <span class="n">all_k_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">)]</span>
 
         <span class="c1">#</span>
         <span class="c1"># Collect results if multi-node</span>
@@ -1255,6 +1244,7 @@ document.write(`
                 
             <span class="k">return</span> <span class="n">results</span></div>
 
+
     <span class="k">def</span> <span class="nf">__chunk_Ks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Ks</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">n_chunks</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
         <span class="c1"># correct n_chunks if needed</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">n_chunks</span><span class="p">:</span>
@@ -1269,6 +1259,7 @@ document.write(`
             <span class="n">chunks</span><span class="p">[</span><span class="n">chunk_idx</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">chunks</span></div>
+
 </pre></div>
 
                 </article>
