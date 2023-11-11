@@ -12,29 +12,30 @@ derivative works, distribute copies to the public, perform publicly and display 
 others to do so.
 """
 from .utilities.take_note import take_note, take_note_fmat, append_to_note
-from .utilities.plot_NMFk import plot_NMFk
+from .utilities.plot_NMFk import plot_NMFk, plot_consensus_mat, plot_cophenetic_coeff
+from .utilities.pvalue_analysis import pvalue_analysis
 from .utilities.organize_n_jobs import organize_n_jobs
-from .decompositions.rescal_fro_mu import rescal as rescal_fro_mu
-from .decompositions.rescal_fro_mu import R_update
+from .decompositions.nmf_kl_mu import nmf as nmf_kl_mu
+from .decompositions.nmf_fro_mu import nmf as nmf_fro_mu
+from .decompositions.nmf_recommender import nmf as nmf_recommender
+from .decompositions.nmf_fro_mu import H_update
 from .decompositions.utilities.nnsvd import nnsvd
 from .decompositions.utilities.resample import poisson, uniform_product
 from .decompositions.utilities.clustering import custom_k_means, silhouettes
-from .decompositions.utilities.math_utils import relative_error_rescal
-
-
-import concurrent.futures
+from .decompositions.utilities.math_utils import prune, unprune, relative_error, get_pac
+from .decompositions.utilities.concensus_matrix import compute_consensus_matrix, reorder_con_mat
 from datetime import datetime, timedelta
 from collections import defaultdict
 import sys
 import os
+import scipy.sparse
 from tqdm import tqdm
 import numpy as np
-import scipy.sparse
 import warnings
 import time
 import socket
 from pathlib import Path
-
+import concurrent.futures
 
 try:
     import cupy as cp
@@ -51,77 +52,80 @@ except Exception:
 
 def __put_X_gpu(X, gpuid:int):
     with cp.cuda.Device(gpuid):
-        if scipy.sparse.issparse(X[0]):
-            Y = [cupyx.scipy.sparse.csr_matrix((cp.array(X1.data), cp.array(X1.indices), cp.array(X1.indptr)),
-                                                   shape=X1.shape, dtype=X1.dtype) for X1 in X]
+        if scipy.sparse.issparse(X):
+            Y = cupyx.scipy.sparse.csr_matrix(
+                (cp.array(X.data), cp.array(X.indices), cp.array(X.indptr)),
+                shape=X.shape,
+                dtype=X.dtype,
+            )
         else:
-            Y = [cp.array(X1) for X1 in X]
+            Y = cp.array(X)
     return Y
 
-def __put_A_gpu(A, gpuid:int):
+def __put_WH_gpu(W, H, gpuid:int):
     with cp.cuda.Device(gpuid):
-        A = cp.array(A)
-    return A
+        W = cp.array(W)
+        H = cp.array(H)
+        
+    return W, H
 
-def __put_A_cpu(A):
-    A = cp.asnumpy(A)
-    return A
+def __put_WH_cpu(W, H):
+    W = cp.asnumpy(W)
+    H = cp.asnumpy(H)
+    return W, H
 
-def __put_R_cpu(R):
-    R = [cp.asnumpy(h_) for h_ in R]
-    return R
+def __put_other_results_cpu(other_results):
+    other_results_cpu = {}
+    for key, value in other_results.items():
+        other_results_cpu[key] = cp.asnumpy(value)
+    del other_results
+    return other_results_cpu
     
-def __run_rescal(Y, A, rescal, rescal_params, use_gpu:bool, gpuid:int):
-    k = A.shape[1]
+def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
     if use_gpu:
         with cp.cuda.Device(gpuid):
-            R = R_update(Y, A, [cp.random.rand(k, k) for _ in range(len(Y))])
-            A, R = rescal(X=Y, A=A, R=R, **rescal_params)
+            W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
     else:
-        R = R_update(Y, A, [np.random.rand(k, k) for _ in range(len(Y))])
-        A, R = rescal(X=Y, A=A, R=R, **rescal_params)
+        W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
 
-    return A, R
+    return W, H, other_results
 
 def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
 
     if perturb_type == "uniform":
-        Y = [uniform_product(X_, epsilon, random_state=perturbation) for X_ in X]
+        Y = uniform_product(X, epsilon, random_state=perturbation)
     elif perturb_type == "poisson":
-        Y = [poisson(X_, random_state=perturbation) for X_ in X]
+        Y = poisson(X, random_state=perturbation)
 
     return Y
 
-def __init_A(Y, k, init_type:str):
+def __init_WH(Y, k, mask, init_type:str):
     if init_type == "nnsvd":
-        if scipy.sparse.issparse(Y[0]):
-            Y_tmp = scipy.sparse.hstack((Y))
-        else:
-            Y_tmp = np.hstack((Y))
-
-        A, _ = nnsvd(Y_tmp, k, use_gpu=False)
+        if mask is not None:
+            Y[mask] = 0
+        W, H = nnsvd(Y, k, use_gpu=False)
             
     elif init_type == "random":
-        A = np.random.rand(Y[0].shape[0], k)
+        W, H = np.random.rand(Y.shape[0], k), np.random.rand(k, Y.shape[1])
         
-    return A
+    return W, H
 
-def __R_regression(X, A, use_gpu:bool, gpuid:int):
-    k = A.shape[1]
+def __H_regression(X, W, mask, use_gpu:bool, gpuid:int):
     if use_gpu:
         Y = __put_X_gpu(X, gpuid)
-
         with cp.cuda.Device(gpuid):
-            R_ = R_update(Y, cp.array(A), [cp.random.rand(k, k) for _ in range(len(Y))], use_gpu=use_gpu)
-            R = __put_R_cpu(R_)
+            H_ = H_update(Y, cp.array(W), cp.random.rand(
+                W.shape[1], Y.shape[1]), use_gpu=use_gpu, mask=mask)
+            H = cp.asnumpy(H_)
             
-        del Y, R_
+        del Y, H_
         cp._default_memory_pool.free_all_blocks()
         
     else:
-        R = R_update(X, A, [np.random.rand(k, k) for _ in range(len(X))], use_gpu=use_gpu)
+        H = H_update(X, W, np.random.rand(
+            W.shape[1], X.shape[1]), use_gpu=use_gpu, mask=mask)
         
-    return R
+    return H
 
 def _perturb_parallel_wrapper(
     perturbation,
@@ -130,42 +134,43 @@ def _perturb_parallel_wrapper(
     perturb_type,
     X,
     k,
+    mask,
     use_gpu,
     init_type,
-    rescal_params,
-    rescal,
+    nmf_params,
+    nmf,
     calculate_error):
 
     # Prepare
     Y = __perturb_X(X, perturbation, epsilon, perturb_type)
-    A_init = __init_A(Y, k, init_type=init_type)
+    W_init, H_init = __init_WH(Y, k, mask=mask, init_type=init_type)
 
     # transfer to GPU
     if use_gpu:
         Y = __put_X_gpu(Y, gpuid)
-        A_init = __put_A_gpu(A_init, gpuid)
+        W_init, H_init = __put_WH_gpu(W_init, H_init, gpuid)
 
-    A, R = __run_rescal(Y, A_init, rescal, rescal_params, use_gpu, gpuid)
+    W, H, other_results = __run_nmf(Y, W_init, H_init, nmf, nmf_params, use_gpu, gpuid)
 
     # transfer to CPU
     if use_gpu:
-        A = __put_A_cpu(A)
-        R = __put_R_cpu(R)
+        W, H = __put_WH_cpu(W, H)
+        other_results = __put_other_results_cpu(other_results)
         cp._default_memory_pool.free_all_blocks()
 
     # error calculation
     if calculate_error:
-        error = relative_error_rescal(X, A, R)
+        error = relative_error(X, W, H)
     else:
         error = 0
         
-    return A, R, error
+    return W, H, error, other_results
         
 
-def _rescal_parallel_wrapper(
+def _nmf_parallel_wrapper(
         n_perturbs, 
-        rescal, 
-        rescal_params,
+        nmf, 
+        nmf_params,
         init_type="nnsvd", 
         X=None, 
         k=None,
@@ -174,11 +179,16 @@ def _rescal_parallel_wrapper(
         use_gpu=True,
         perturb_type="uniform", 
         calculate_error=True, 
+        mask=None, 
+        consensus_mat=False,
+        predict_k=False,
+        predict_k_method="sill",
         pruned=True,
         perturb_rows=None,
         perturb_cols=None,
         save_output=True,
         save_path="",
+        collect_output=False,
         logging_stats={},
         start_time=time.time(),
         n_jobs=1,
@@ -193,49 +203,73 @@ def _rescal_parallel_wrapper(
         "perturb_type":perturb_type,
         "X":X,
         "use_gpu":use_gpu,
-        "rescal_params":rescal_params,
-        "rescal":rescal,
+        "nmf_params":nmf_params,
+        "nmf":nmf,
         "calculate_error":calculate_error,
         "k":k,
+        "mask":mask,
         "init_type":init_type
     }
     
     # single job or parallel over Ks
-    A_all, R_all, errors = [], [], []
+    W_all, H_all, errors, other_results_all = [], [], [], []
     if n_jobs == 1 or not perturb_multiprocessing:
         for perturbation in tqdm(range(n_perturbs), disable=not perturb_verbose, total=n_perturbs):
-            A, R, error = _perturb_parallel_wrapper(perturbation=perturbation, gpuid=gpuid, **perturb_job_data)
-            A_all.append(A)
-            R_all.append(R)
+            W, H, error, other_results_curr = _perturb_parallel_wrapper(perturbation=perturbation, gpuid=gpuid, **perturb_job_data)
+            W_all.append(W)
+            H_all.append(H)
             errors.append(error)
+            other_results_all.append(other_results_curr)
             
     # multiple jobs over perturbations
     else:
         executor = concurrent.futures.ThreadPoolExecutor(max_workers=n_jobs)
         futures = [executor.submit(_perturb_parallel_wrapper, gpuid=pidx % n_jobs, perturbation=perturbation, **perturb_job_data) for pidx, perturbation in enumerate(range(n_perturbs))]
-        all_perturbation_results = [future.result() for future in concurrent.futures.as_completed(futures)]
-        for A, R, error in all_perturbation_results:
-            A_all.append(A)
-            R_all.append(A)
+        all_perturbation_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), disable=not perturb_verbose, total=n_perturbs)]
+
+        for W, H, error, other_results_curr in all_perturbation_results:
+            W_all.append(W)
+            H_all.append(H)
             errors.append(error)
+            other_results_all.append(other_results_curr)
+    
+    #
+    # Organize other results
+    #
+    other_results = {}
+    for other_results_curr in other_results_all:
+        for key, value in other_results_curr.items():
+            if key not in other_results:
+                other_results[key] = value
+            else:
+                other_results[key] = (other_results[key] + value) / 2
     
     #
     # organize colutions from each perturbations
     #
-    A_all = np.array(A_all).transpose((1, 2, 0))
-    R_all = np.array(R_all)
+    W_all = np.array(W_all).transpose((1, 2, 0))
+    H_all = np.array(H_all).transpose((1, 2, 0))
     errors = np.array(errors)
 
     #
     # cluster the solutions
     #        
-    A, A_clust = custom_k_means(A_all, use_gpu=False)
-    sils_all = silhouettes(A_clust)
+    W, W_clust = custom_k_means(W_all, use_gpu=False)
+    sils_all = silhouettes(W_clust)
+
+    #
+    # concensus matrix
+    #
+    coeff_k = 0
+    reordered_con_mat = None
+    if consensus_mat:
+        con_mat_k = compute_consensus_matrix(H_all)
+        reordered_con_mat, coeff_k = reorder_con_mat(con_mat_k, k)
 
     #
     # Regress H
     #
-    H = __R_regression(X, A, use_gpu, gpuid)
+    H = __H_regression(X, W, mask, use_gpu, gpuid)
     
     if use_gpu:
         cp._default_memory_pool.free_all_blocks()
@@ -244,33 +278,52 @@ def _rescal_parallel_wrapper(
     #  reconstruction error
     #
     if calculate_error:
-        error_reg = relative_error_rescal(X, A, R)
+        if mask is not None:
+            Xhat = W@H
+            X[mask] = Xhat[mask]
+        error_reg = relative_error(X, W, H)
     else:
         error_reg = 0
+
+    #
+    # calculate columnwise error to predict k
+    #
+    curr_col_err =  list()
+    if predict_k and predict_k_method == "pvalue":
+        for q in range(0, X.shape[1]):
+            curr_col_err.append(
+                relative_error(X[:, q].reshape(-1, 1), W, H[:, q].reshape(-1, 1))
+            )
 
     #
     # unprune
     #
     if pruned:
-        pass
-        #W = unprune(W, perturb_rows, 0)
-        #H = unprune(H, perturb_cols, 1)
+        W = unprune(W, perturb_rows, 0)
+        H = unprune(H, perturb_cols, 1)
 
     #
     # save output factors and the plot
     #
     if save_output:
+        if consensus_mat:
+            con_fig_name = f'{save_path}/k_{k}_con_mat.png'
+            plot_consensus_mat(reordered_con_mat, con_fig_name)
         
         save_data = {
-            "A": A,
-            "R": R,
+            "W": W,
+            "H": H,
             "sils_all": sils_all,
             "error_reg": error_reg,
             "errors": errors,
+            "reordered_con_mat": reordered_con_mat,
+            "H_all": H_all,
+            "cophenetic_coeff": coeff_k,
+            "other_results": other_results
         }
         np.savez_compressed(
             save_path
-            + "/AR"
+            + "/WH"
             + "_k="
             + str(k)
             + ".npz",
@@ -295,6 +348,15 @@ def _rescal_parallel_wrapper(
             elif key == 'err_std':
                 err_std = np.std(errors)
                 plot_data["err_std"] = '{0:.3f}'.format(err_std)
+            ### Commenting out PAC calculation because it is invalid when calculated at a single iteration
+            ### Need to add a solution for adding PAC calculation after experiment has concluded
+            # elif key == 'pac': 
+            #     consensus_tensor = np.array([reordered_con_mat])
+            #     pac = get_pac(consensus_tensor, use_gpu=use_gpu)[0]
+            #     plot_data["pac"] = '{0:.3f}'.format(pac)
+            elif key == 'col_error':
+                mean_col_err = np.mean(curr_col_err)
+                plot_data["col_err"] = '{0:.3f}'.format(mean_col_err)
             elif key == 'time':
                 elapsed_time = time.time() - start_time
                 elapsed_time = timedelta(seconds=elapsed_time)
@@ -316,12 +378,20 @@ def _rescal_parallel_wrapper(
         "sils_mean":np.mean(np.mean(sils_all, 1)),
         "sils_std":np.std(np.mean(sils_all, 1)),
         "sils_all":sils_all,
+        "cophenetic_coeff":coeff_k,
+        "reordered_con_mat":reordered_con_mat,
+        "col_err":curr_col_err,
     }
+
+    if collect_output:
+        results_k["W"] = W
+        results_k["H"] = H
+        results_k["other_results"] = other_results
 
     return results_k
 
 
-class RESCALk:
+class NMFk:
     def __init__(
             self,
             n_perturbs=20,
@@ -334,26 +404,35 @@ class RESCALk:
             use_gpu=True,
             save_path="./",
             save_output=True,
+            collect_output=False,
+            predict_k=False,
+            predict_k_method="pvalue",
             verbose=True,
-            rescal_verbose=False,
+            nmf_verbose=False,
             perturb_verbose=False,
-            rescal_func=None,
-            rescal_method="rescal_fro_mu",
-            rescal_obj_params={},
-            pruned=False,
-            calculate_error=False,
+            transpose=False,
+            sill_thresh=0.8,
+            nmf_func=None,
+            nmf_method="nmf_fro_mu",
+            nmf_obj_params={},
+            pruned=True,
+            calculate_error=True,
             perturb_multiprocessing=False,
+            consensus_mat=False,
+            use_consensus_stopping=0,
+            mask=None,
+            calculate_pac=False,
             get_plot_data=False,
             simple_plot=True,):
         """
-        RESCALk is a RESCAL module with the capability to do automatic model determination.
+        NMFk is a Non-negative Matrix Factorization module with the capability to do automatic model determination.
 
         Parameters
         ----------
         n_perturbs : int, optional
             Number of bootstrap operations, or random matrices generated around the original matrix. The default is 20.
         n_iters : int, optional
-            Number of RESCAL iterations. The default is 100.
+            Number of NMF iterations. The default is 100.
         epsilon : float, optional
             Error amount for the random matrices generated around the original matrix. The default is 0.015.\n
             ``epsilon`` is used when ``perturb_type='uniform'``.
@@ -366,7 +445,7 @@ class RESCALk:
         n_nodes : int, optional
             Number of HPC nodes. The default is 1.
         init : str, optional
-            Initilization of matrices for RESCAL procedure. The default is "nnsvd".\n
+            Initilization of matrices for NMF procedure. The default is "nnsvd".\n
             * ``init='nnsvd'`` will use NNSVD for initilization.\n
             * ``init='random'`` will use random sampling for initilization.\n
         use_gpu : bool, optional
@@ -375,29 +454,60 @@ class RESCALk:
             Location to save output. The default is "./".
         save_output : bool, optional
             If True, saves the resulting latent factors and plots. The default is True.
+        collect_output : bool, optional
+            If True, collectes the resulting latent factors to be returned from ``fit()`` operation. The default is False.
+        predict_k : bool, optional
+            If True, performs automatic prediction of the number of latent factors. The default is False.
+
+            .. note::
+
+                Even when ``predict_k=False``, number of latent factors can be estimated using the figures saved in ``save_path``.
+
+        predict_k_method : str, optional
+            Method to use when performing automatic k prediction. Default is "pvalue".\n
+            * ``predict_k_method='pvalue'`` will use L-Statistics with column-wise error for automatically estimating the number of latent factors.\n
+            * ``predict_k_method='sill'`` will use Silhouette score for estimating the number of latent factors.
+
+            .. warning::
+
+                ``predict_k_method='pvalue'`` prediction will result in significantly longer processing time! ``predict_k_method='sill'``, on the other hand, will be much faster.
 
         verbose : bool, optional
             If True, shows progress in each k. The default is True.
-        rescal_verbose : bool, optional
-            If True, shows progress in each RESCAL operation. The default is False.
+        nmf_verbose : bool, optional
+            If True, shows progress in each NMF operation. The default is False.
         perturb_verbose : bool, optional
             If True, it shows progress in each perturbation. The default is False.
-        rescal_func : object, optional
-            If not None, and if ``rescal_method=func``, used for passing RESCAL function. The default is None.
-        rescal_method : str, optional
-            What RESCAL to use. The default is "rescal_fro_mu".\n
-            * ``rescal_method='rescal_fro_mu'`` will use RESCAL with Frobenious Norm.\n                
+        transpose : bool, optional
+            If True, transposes the input matrix before factorization. The default is False.
+        sill_thresh : float, optional
+            Threshold for the Silhouette score when performing automatic prediction of the number of latent factors. The default is 0.8.
+        nmf_func : object, optional
+            If not None, and if ``nmf_method=func``, used for passing NMF function. The default is None.
+        nmf_method : str, optional
+            What NMF to use. The default is "nmf_fro_mu".\n
+            * ``nmf_method='nmf_fro_mu'`` will use NMF with Frobenious Norm.\n
+            * ``nmf_method='nmf_kl_mu'`` will use NMF with Multiplicative Update rules with KL-Divergence.\n
+            * ``nmf_method='func'`` will use the custom NMF function passed using the ``nmf_func`` parameter.\n
+            * ``nmf_method='nmf_recommender'`` will use the Recommender NMF method for collaborative filtering.\n
 
-        rescal_obj_params : dict, optional
-            Parameters used by RESCAL function. The default is {}.
+            .. note::
+
+                When using ``nmf_method='nmf_recommender'``, RNMFk prediction method can be done using ``from TELF.factorization import RNMFk_predict``.\n
+                Here ``RNMFk_predict(W, H, global_mean, bu, bi, u, i)``, ``W`` and ``H`` are the latent factors, ``global_mean``, ``bu``, and ``bi`` are the biases returned from ``nmf_recommender`` method.\n
+                Finally, ``u`` and ``i`` are the indices to perform prediction on.
+                
+
+        nmf_obj_params : dict, optional
+            Parameters used by NMF function. The default is {}.
         pruned : bool, optional
-            When True, removes columns and rows from the input matrix that has only 0 values. The default is False.
+            When True, removes columns and rows from the input matrix that has only 0 values. The default is True.
 
             .. warning::
-                Pruning is not implemented for RESCALk yet.
+                Pruning should not be used with ``nmf_method='nmf_recommender'``.
 
         calculate_error : bool, optional
-            When True, calculates the relative reconstruction error. The default is False.
+            When True, calculates the relative reconstruction error. The default is True.
 
             .. warning::
                 If ``calculate_error=True``, it will result in longer processing time.
@@ -405,6 +515,14 @@ class RESCALk:
         perturb_multiprocessing : bool, optional
             If ``perturb_multiprocessing=True``, it will make parallel computation over each perturbation. Default is ``perturb_multiprocessing=False``.\n
             When ``perturb_multiprocessing=False``, which is default, parallelization is done over each K (rank).
+        consensus_mat : bool, optional
+            When True, computes the Consensus Matrices for each k. The default is False.
+        use_consensus_stopping : str, optional
+            When not 0, uses Consensus matrices criteria for early stopping of NMF factorization. The default is 0.
+        mask : ``np.ndarray``, optional
+            Numpy array that points out the locations in input matrix that should be masked during factorization. The default is None.
+        calculate_pac : bool, optional
+            When True, calculates the PAC score for H matrix stability. The default is False.
         get_plot_data : bool, optional
             When True, collectes the data used in plotting each intermidiate k factorization. The default is False.
         simple_plot : bool, optional
@@ -440,25 +558,41 @@ class RESCALk:
         self.save_output = save_output
         self.use_gpu = use_gpu
         self.verbose = verbose
-        self.rescal_verbose = rescal_verbose
+        self.nmf_verbose = nmf_verbose
         self.perturb_verbose = perturb_verbose
+        self.transpose = transpose
+        self.collect_output = collect_output
+        self.sill_thresh = sill_thresh
+        self.predict_k = predict_k
+        self.predict_k_method = predict_k_method
         self.n_jobs = n_jobs
         self.n_nodes = n_nodes
-        self.rescal = None
-        self.rescal_method = rescal_method
-        self.rescal_obj_params = rescal_obj_params
+        self.nmf = None
+        self.nmf_method = nmf_method
+        self.nmf_obj_params = nmf_obj_params
         self.pruned = pruned
         self.calculate_error = calculate_error
+        self.consensus_mat = consensus_mat
+        self.use_consensus_stopping = use_consensus_stopping
+        self.mask = mask
+        self.calculate_pac = calculate_pac
         self.simple_plot = simple_plot
         self.get_plot_data = get_plot_data
         self.perturb_multiprocessing = perturb_multiprocessing
 
-        if self.pruned:
-            warnings.warn("Pruning for RESCAL is not implemented yet!")
+        # warnings
+        assert self.predict_k_method in ["pvalue", "sill"]
+        if self.calculate_pac and not self.consensus_mat:
+            self.consensus_mat = True
+            warnings.warn("consensus_mat was False when calculate_pac was True! consensus_mat changed to True.")
 
         if self.calculate_error:
             warnings.warn(
                 "calculate_error is True! Error calculation can make the runtime longer and take up more memory space!")
+
+        if self.predict_k and self.predict_k_method == "pvalue":
+            warnings.warn(
+                "predict_k is True with pvalue method! Predicting k can make the runtime significantly longer. Consider using predict_k_method='sill'.")
 
         # Check the number of perturbations is correct
         if self.n_perturbs < 2:
@@ -478,56 +612,82 @@ class RESCALk:
         self.experiment_name = ""
 
         #
-        # Prepare RESCAL function
+        # Prepare NMF function
         #
-        avail_rescal_methods = [
-            "rescal_fro_mu", 
+        avail_nmf_methods = [
+            "nmf_fro_mu", 
+            "nmf_kl_mu", 
+            "nmf_recommender", 
             "func"
         ]
-        if self.rescal_method not in avail_rescal_methods:
-            raise Exception("Invalid RESCAL method is selected. Choose from: " +
-                            ",".join(avail_rescal_methods))
+        if self.nmf_method not in avail_nmf_methods:
+            raise Exception("Invalid NMF method is selected. Choose from: " +
+                            ",".join(avail_nmf_methods))
         
-        if self.rescal_method == "rescal_fro_mu":
-            self.rescal_params = {
+        if self.nmf_method == "nmf_fro_mu":
+            self.nmf_params = {
                 "niter": self.n_iters,
                 "use_gpu": self.use_gpu,
-                "rescal_verbose": self.rescal_verbose,
+                "nmf_verbose": self.nmf_verbose,
+                "mask": self.mask,
+                "use_consensus_stopping": self.use_consensus_stopping
             }
-            self.rescal = rescal_fro_mu
+            self.nmf = nmf_fro_mu
 
-        elif self.rescal_method == "func" or rescal_func is not None:
-            self.rescal_params = self.rescal_obj_params
-            self.rescal = rescal_func
+        elif self.nmf_method == "nmf_kl_mu":
+            self.nmf_params = {
+                "niter": self.n_iters,
+                "use_gpu": self.use_gpu,
+                "nmf_verbose": self.nmf_verbose,
+                "mask": self.mask,
+                "use_consensus_stopping": self.use_consensus_stopping
+            }
+            self.nmf = nmf_kl_mu
+
+        elif self.nmf_method == "func" or nmf_func is not None:
+            self.nmf_params = self.nmf_obj_params
+            self.nmf = nmf_func
+
+        elif self.nmf_method == "nmf_recommender":
+            if self.pruned:
+                warnings.warn(
+                    f'nmf_recommender method should not be used with pruning!')
+                
+            self.nmf_params = {
+                "niter": self.n_iters,
+                "use_gpu": self.use_gpu,
+                "nmf_verbose": self.nmf_verbose,
+            }
+            self.nmf = nmf_recommender
 
         else:
-            raise Exception("Unknown RESCAL method or rescal_func was not passed")
+            raise Exception("Unknown NMF method or nmf_func was not passed")
 
         #
-        # Additional RESCAL settings
+        # Additional NMF settings
         #
-        if len(self.rescal_obj_params) > 0:
-            for key, value in self.rescal_obj_params.items():
-                if key not in self.rescal_params:
-                    self.rescal_params[key] = value
+        if len(self.nmf_obj_params) > 0:
+            for key, value in self.nmf_obj_params.items():
+                if key not in self.nmf_params:
+                    self.nmf_params[key] = value
                     
         if self.verbose:
             for key, value in vars(self).items():
                 print(f'{key}:', value)
 
-    def fit(self, X, Ks, name="RESCALk", note=""):
+    def fit(self, X, Ks, name="NMFk", note=""):
         """
         Factorize the input matrix ``X`` for the each given K value in ``Ks``.
 
         Parameters
         ----------
-        X : list of symmetric ``np.ndarray`` or list of symmetric ``scipy.sparse._csr.csr_matrix`` matrix
+        X : ``np.ndarray`` or ``scipy.sparse._csr.csr_matrix`` matrix
             Input matrix to be factorized.
         Ks : list
             List of K values to factorize the input matrix.\n
             **Example:** ``Ks=range(1, 10, 1)``.
         name : str, optional   
-            Name of the experiment. Default is "RESCALk".
+            Name of the experiment. Default is "NMFk".
         note : str, optional
             Note for the experiment used in logs. Default is "".
         
@@ -536,21 +696,17 @@ class RESCALk:
         results : dict
             Resulting dict can include all the latent factors, plotting data, predicted latent factors, time took for factorization, and predicted k value depending on the settings specified.\n
             * If ``get_plot_data=True``, results will include field for ``plot_data``.\n
+            * If ``predict_k=True``, results will include field for ``k_predict``. This is an intiger for the automatically estimated number of latent factors.\n
+            * If ``predict_k=True`` and ``collect_output=True``, results will include fields for ``W`` and ``H`` which are the latent factors in type of ``np.ndarray``.
             * results will always include a field for ``time``, that gives the total compute time.
         """
 
         #
         # check X format
         #
-        assert type(X) == list, "X sould be list of np.ndarray or scipy.sparse._csr.csr_matrix"
-        # make sure csr or numpy array
-        expected_type = type(X[0])
-        assert expected_type == scipy.sparse._csr.csr_matrix or expected_type == np.ndarray, "X sould be list of np.ndarray or scipy.sparse._csr.csr_matrix"
-        # make sure all slices are expected type
-        for slice_idx, x in enumerate(X):
-            assert expected_type == type(x) or expected_type == type(x), f'X sould be list of all same type (np.ndarray or scipy.sparse._csr.csr_matrix). Matrix at slice index {slice_idx} did not match others.'
+        assert scipy.sparse._csr.csr_matrix == type(X) or np.ndarray == type(X), "X sould be np.ndarray or scipy.sparse._csr.csr_matrix"
 
-        if X[0].dtype != np.dtype(np.float32):
+        if X.dtype != np.dtype(np.float32):
             warnings.warn(
                 f'X is data type {X.dtype}. Whic is not float32. Higher precision will result in significantly longer runtime!')
 
@@ -560,7 +716,7 @@ class RESCALk:
         if len(Ks) == 0:
             raise Exception("Ks range is 0!")
 
-        if max(Ks) >= min(X[0].shape):
+        if max(Ks) >= min(X.shape):
             raise Exception("Maximum rank k to try in Ks should be k<min(X.shape)")
 
         #
@@ -598,15 +754,27 @@ class RESCALk:
         # 
         if self.n_jobs > len(Ks):
             self.n_jobs = len(Ks)
+            
+        if self.transpose:
+            if isinstance(X, np.ndarray):
+                X = X.T
+            elif scipy.sparse.issparse(X):
+                X = X.T.asformat("csr")
+            else:
+                raise Exception("I do not know how to transpose type " + str(type(X)))
 
         # init the stats header 
-        # this will setup the logging for all configurations of rescalk
+        # this will setup the logging for all configurations of nmfk
         stats_header = {'k': 'k', 
                         'sils_min': 'Min. Silhouette', 
                         'sils_mean': 'Mean Silhouette'}
         if self.calculate_error:
             stats_header['err_mean'] = 'Mean Error'
             stats_header['err_std'] = 'STD Error'
+        if self.predict_k:
+            stats_header['col_error'] = 'Mean Col. Error'
+        if self.calculate_pac:
+            stats_header['pac'] = 'PAC'
         stats_header['time'] = 'Time Elapsed'
 
         # start the file logging (only root node needs to do this step)
@@ -622,19 +790,17 @@ class RESCALk:
             append_to_note(["#" * 100], self.save_path_full)
             object_notes = vars(self).copy()
             del object_notes["total_exec_seconds"]
-            del object_notes["rescal"]
+            del object_notes["nmf"]
             take_note(object_notes, self.save_path_full)
             append_to_note(["#" * 100], self.save_path_full)
 
             notes = {}
             notes["Ks"] = Ks
             notes["data_type"] = type(X)
-            notes["num_perturbations"] = self.n_perturbs
-            notes["epsilon"] = self.epsilon
-            notes["init"] = self.init
-            notes["n_jobs"] = self.n_jobs
-            notes["experiment_name"] = name
-            notes["num_iterations"] = self.n_iters
+            notes["num_elements"] = np.prod(X.shape)
+            notes["num_nnz"] = len(X.nonzero()[0])
+            notes["sparsity"] = len(X.nonzero()[0]) / np.prod(X.shape)
+            notes["X_shape"] = X.shape
             take_note(notes, self.save_path_full)
             append_to_note(["#" * 100], self.save_path_full)
             take_note_fmat(self.save_path_full, **stats_header)
@@ -646,31 +812,35 @@ class RESCALk:
         # Prune
         #
         if self.pruned:
-            perturb_rows, perturb_cols = None, None
-            #X, perturb_rows, perturb_cols = prune(X, use_gpu=self.use_gpu)
+            X, perturb_rows, perturb_cols = prune(X, use_gpu=self.use_gpu)
         else:
             perturb_rows, perturb_cols = None, None
 
         #
-        # Begin RESCALk
+        # Begin NMFk
         #
         start_time = time.time()
 
         job_data = {
             "n_perturbs":self.n_perturbs,
-            "rescal":self.rescal,
-            "rescal_params":self.rescal_params,
+            "nmf":self.nmf,
+            "nmf_params":self.nmf_params,
             "init_type":self.init,
             "X":X,
             "epsilon":self.epsilon,
             "use_gpu":self.use_gpu,
             "perturb_type":self.perturb_type,
             "calculate_error":self.calculate_error,
+            "mask":self.mask,
+            "consensus_mat":self.consensus_mat,
+            "predict_k":self.predict_k,
+            "predict_k_method":self.predict_k_method,
             "pruned":self.pruned,
             "perturb_rows":perturb_rows,
             "perturb_cols":perturb_cols,
             "save_output":self.save_output,
             "save_path":self.save_path_full,
+            "collect_output":self.collect_output,
             "logging_stats":stats_header,
             "start_time":start_time,
             "n_jobs":self.n_jobs,
@@ -682,14 +852,14 @@ class RESCALk:
         if self.n_jobs == 1 or self.perturb_multiprocessing:
             all_k_results = []
             for k in tqdm(Ks, total=len(Ks), disable=not self.verbose):
-                k_result = _rescal_parallel_wrapper(gpuid=0, k=k, **job_data)
+                k_result = _nmf_parallel_wrapper(gpuid=0, k=k, **job_data)
                 all_k_results.append(k_result)
         
         # multiprocessing over each K
-        else:
+        else:   
             executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.n_jobs)
-            futures = [executor.submit(_rescal_parallel_wrapper, gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks)]
-            all_k_results = [future.result() for future in concurrent.futures.as_completed(futures)]
+            futures = [executor.submit(_nmf_parallel_wrapper, gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks)]
+            all_k_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), total=len(Ks), disable=not self.verbose)]
 
         #
         # Collect results if multi-node
@@ -741,14 +911,51 @@ class RESCALk:
             total_exec_seconds = time.time() - start_time
             results["time"] = total_exec_seconds
 
+            # predict k for W
+            if self.predict_k:
+                if self.predict_k_method == "pvalue":
+                    k_predict = pvalue_analysis(
+                        combined_result["col_err"], Ks, combined_result["sils_min"], SILL_thr=self.sill_thresh
+                    )[0]
+                elif self.predict_k_method == "sill":
+                    k_predict = Ks[np.max(np.argwhere(
+                        np.array(combined_result["sils_min"]) >= self.sill_thresh).flatten())]
+            else:
+                k_predict = 0
+                
+            
+            # * plot cophenetic coefficients
+            combined_result["pac"] = []
+            if self.consensus_mat:
+
+                # * save the plot
+                if self.save_output:
+                    con_fig_name = f'{self.save_path_full}/k_{Ks[0]}_{Ks[-1]}_cophenetic_coeff.png'
+                    plot_cophenetic_coeff(Ks, combined_result["cophenetic_coeff"], con_fig_name)
+
+                if self.calculate_pac:
+                    consensus_tensor = np.array(combined_result["reordered_con_mat"])
+                    combined_result["pac"] = np.array(get_pac(consensus_tensor, use_gpu=self.use_gpu))
+
+            # save k prediction
+            if self.predict_k:
+                results["k_predict"] = k_predict
+
+                if self.collect_output:
+                        results["W"] = combined_result["W"][combined_result["Ks"].index(k_predict)]
+                        results["H"] = combined_result["H"][combined_result["Ks"].index(k_predict)]
+
+                        if self.nmf_method == "nmf_recommender":
+                            results["other_results"] = combined_result["other_results"][combined_result["Ks"].index(k_predict)]
+
             # final plot
             if self.save_output:
                 plot_NMFk(
                     combined_result, 
-                    0, 
+                    k_predict, 
                     self.experiment_name, 
                     self.save_path_full, 
-                    plot_predict=False,
+                    plot_predict=self.predict_k,
                     plot_final=True,
                     simple_plot=self.simple_plot
                 )

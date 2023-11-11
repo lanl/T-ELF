@@ -225,7 +225,7 @@ def _nmf_parallel_wrapper(
     else:
         executor = concurrent.futures.ThreadPoolExecutor(max_workers=n_jobs)
         futures = [executor.submit(_perturb_parallel_wrapper, gpuid=pidx % n_jobs, perturbation=perturbation, **perturb_job_data) for pidx, perturbation in enumerate(range(n_perturbs))]
-        all_perturbation_results = [future.result() for future in concurrent.futures.as_completed(futures)]
+        all_perturbation_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), disable=not perturb_verbose, total=n_perturbs)]
 
         for W, H, error, other_results_curr in all_perturbation_results:
             W_all.append(W)
@@ -859,7 +859,7 @@ class NMFk:
         else:   
             executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.n_jobs)
             futures = [executor.submit(_nmf_parallel_wrapper, gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks)]
-            all_k_results = [future.result() for future in concurrent.futures.as_completed(futures)]
+            all_k_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), total=len(Ks), disable=not self.verbose)]
 
         #
         # Collect results if multi-node
