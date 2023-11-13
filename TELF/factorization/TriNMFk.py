@@ -263,7 +263,7 @@ class TriNMFk():
         
         W_all, S_all, H_all, errors  = [], [], [], []
         if self.n_jobs == 1:
-            for ninit in range(self.n_inits):
+            for ninit in tqdm(range(self.n_inits), disable=not self.verbose, total=self.n_inits):
                 w, s, h, e = _nmf_wrapper(init_num=ninit, gpuid=0, **job_data)
                 W_all.append(w)
                 S_all.append(s)
@@ -273,9 +273,9 @@ class TriNMFk():
         else:
             executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.n_jobs)
             futures = [executor.submit(_nmf_wrapper, init_num=ninit, gpuid=ninit % self.n_jobs, **job_data) for ninit in range(self.n_inits)]
-            all_k_results = [future.result() for future in concurrent.futures.as_completed(futures)]
+            all_k_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), disable=not self.verbose, total=self.n_inits)]
             
-            for w, s, h, e, in current_pert_results:
+            for w, s, h, e, in all_k_results:
                 W_all.append(w)
                 S_all.append(s)
                 H_all.append(h)
