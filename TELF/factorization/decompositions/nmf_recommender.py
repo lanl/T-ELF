@@ -60,8 +60,7 @@ def nmf(X, W, H,
             else:
                 entries = X[rows, columns]
     else:
-        indices = np.argwhere(KNOWN_MASK)
-        rows, columns = indices[:,0], indices[:,1]
+        rows, columns = KNOWN_MASK
         rows, columns = np.array(rows), np.array(columns)
 
         if scipy.sparse.issparse(X):
