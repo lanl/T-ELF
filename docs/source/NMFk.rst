@@ -40,7 +40,6 @@ Now we can factorize the given matrix:
        "sill_thresh":0.9,
        "pruned":True,
        'nmf_method':'nmf_kl_mu',
-       "joblib_backend":"multiprocessing",
        "calculate_error":True,
        "predict_k":True,
        "use_consensus_stopping":0,

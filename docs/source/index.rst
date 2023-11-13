@@ -36,7 +36,7 @@ Installation
 
    git clone https://github.com/lanl/T-ELF.git
    cd T-ELF
-   conda create --name TELF python=3.8.5
+   conda create --name TELF python=3.11
    source activate TELF # or conda activate TELF
    python setup.py install
 

@@ -14,9 +14,8 @@ from .decompositions.utilities.math_utils import relative_trinmf_error, prune, u
 from .decompositions.tri_nmf_fro_mu import trinmf as trinmf_fro_mu
 from .utilities.organize_n_jobs import organize_n_jobs
 
+import concurrent.futures
 from tqdm import tqdm
-from joblib import Parallel, delayed
-import multiprocessing
 import numpy as np
 import warnings
 import scipy.sparse
@@ -96,7 +95,6 @@ class TriNMFk():
                  alpha=(0,0),
                  n_iters=100,
                  n_inits=10,
-                 joblib_backend="multiprocessing",
                  pruned=True,
                  transpose=False,
                  verbose=True,
@@ -126,8 +124,6 @@ class TriNMFk():
             Number of NMF iterations. The default is 100.
         n_inits : int, optional
             Number of matrix initilization for the bootstrap operation. The default is 10.
-        joblib_backend : str, optional
-            Backend used by Joblib for parallel computation. The default is "multiprocessing".
         pruned : bool, optional
             When True, removes columns and rows from the input matrix that has only 0 values. The default is True.
         transpose : bool, optional
@@ -153,7 +149,6 @@ class TriNMFk():
         self.n_iters = n_iters
         self.n_inits = n_inits
         self.nmfk_fit = False
-        self.joblib_backend = joblib_backend
         self.pruned = pruned
         self.transpose = transpose
         self.save_path = "",
@@ -161,9 +156,6 @@ class TriNMFk():
 
         # organize n_jobs
         n_jobs, self.use_gpu = organize_n_jobs(use_gpu, n_jobs)
-        if self.use_gpu:
-            if n_jobs < 0 or n_jobs > 1:
-                multiprocessing.set_start_method('spawn', force=True)
 
         if n_jobs > self.n_inits:
             n_jobs = self.n_inits
@@ -259,41 +251,31 @@ class TriNMFk():
             X, rows, cols = prune(X, use_gpu=self.use_gpu)
         else:
             rows, cols = None, None
+
+        job_data = {
+            "nmf":self.nmf,
+            "nmf_params":self.nmf_params,
+            "k1k2":k1k2,
+            "use_gpu":self.use_gpu,
+            "X":X,
+            "mask":self.mask
+        }
         
         W_all, S_all, H_all, errors  = [], [], [], []
         if self.n_jobs == 1:
-            for ninit in range(self.n_inits):
-                w, s, h, e = _nmf_wrapper(
-                    init_num=ninit,
-                    nmf=self.nmf,
-                    nmf_params=self.nmf_params,
-                    k1k2=k1k2,
-                    gpuid=0,
-                    use_gpu=self.use_gpu,
-                    X=X,
-                    mask=self.mask
-                )
+            for ninit in tqdm(range(self.n_inits), disable=not self.verbose, total=self.n_inits):
+                w, s, h, e = _nmf_wrapper(init_num=ninit, gpuid=0, **job_data)
                 W_all.append(w)
                 S_all.append(s)
                 H_all.append(h)
                 errors.append(e)
 
         else:
-            current_pert_results = Parallel(
-                n_jobs=self.n_jobs,
-                verbose=self.verbose,
-                backend=self.joblib_backend)(delayed(_nmf_wrapper)(
-                    ninit,
-                    self.nmf,
-                    self.nmf_params,
-                    k1k2,
-                    ninit % self.n_jobs,
-                    self.use_gpu,
-                    X,
-                    self.mask
-                    ) for ninit in range(self.n_inits))
+            executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.n_jobs)
+            futures = [executor.submit(_nmf_wrapper, init_num=ninit, gpuid=ninit % self.n_jobs, **job_data) for ninit in range(self.n_inits)]
+            all_k_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), disable=not self.verbose, total=self.n_inits)]
             
-            for w, s, h, e, in current_pert_results:
+            for w, s, h, e, in all_k_results:
                 W_all.append(w)
                 S_all.append(s)
                 H_all.append(h)

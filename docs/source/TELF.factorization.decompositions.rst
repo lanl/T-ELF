@@ -52,14 +52,6 @@ TELF.factorization.decompositions.nmf\_mc\_fro\_mu module
    :undoc-members:
    :show-inheritance:
 
-TELF.factorization.decompositions.nmf\_surprise module
-------------------------------------------------------
-
-.. automodule:: TELF.factorization.decompositions.nmf_surprise
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 TELF.factorization.decompositions.rescal\_fro\_mu module
 --------------------------------------------------------
 
