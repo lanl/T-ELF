@@ -11,6 +11,22 @@ nonexclusive, paid-up, irrevocable worldwide license in this material to reprodu
 derivative works, distribute copies to the public, perform publicly and display publicly, and to permit
 others to do so.
 """
+import os
+import sys
+import time
+import socket
+import warnings
+import numpy as np
+import scipy.sparse
+from tqdm import tqdm
+import multiprocessing
+from pathlib import Path
+import concurrent.futures
+from collections import defaultdict
+from joblib import Parallel, delayed
+from datetime import datetime, timedelta
+from scipy.spatial.distance import pdist, squareform
+
 from .utilities.take_note import take_note, take_note_fmat, append_to_note
 from .utilities.plot_NMFk import plot_SymNMFk, plot_consensus_mat, plot_cophenetic_coeff
 from .utilities.organize_n_jobs import organize_n_jobs
@@ -20,22 +36,6 @@ from .decompositions.utilities.resample import poisson, uniform_product
 from .decompositions.utilities.math_utils import prune, unprune, get_pac
 from .decompositions.utilities.concensus_matrix import compute_connectivity_mat, compute_consensus_matrix, reorder_con_mat
 from .decompositions.utilities.similarity_matrix import build_similarity_matrix, get_connectivity_matrix, dist2, scale_dist3
-from joblib import Parallel, delayed
-from datetime import datetime, timedelta
-from collections import defaultdict
-import sys
-import os
-import scipy.sparse
-from tqdm import tqdm
-import numpy as np
-import warnings
-import time
-import socket
-import multiprocessing
-from pathlib import Path
-
-from scipy.spatial.distance import pdist, squareform
-
 
 try:
     import cupy as cp
@@ -50,39 +50,34 @@ except Exception:
     MPI = None
 
 
-def run_symnmf(Y, W, nmf, nmf_params, use_gpu:bool, gpuid:int):
+def __put_X_gpu(X, gpuid:int):
+    with cp.cuda.Device(gpuid):
+        if scipy.sparse.issparse(X):
+            Y = cupyx.scipy.sparse.csr_matrix(
+                (cp.array(X.data), cp.array(X.indices), cp.array(X.indptr)),
+                shape=X.shape,
+                dtype=X.dtype,
+            )
+        else:
+            Y = cp.array(X)
+    return Y
+
+def __put_W_gpu(W, gpuid:int):
+    with cp.cuda.Device(gpuid):
+        W = cp.array(W)
+    return W
+
+
+def __run_symnmf(Y, W, nmf, nmf_params, use_gpu:bool, gpuid:int):
     if use_gpu:
         with cp.cuda.Device(gpuid):
-            # move data and initialization from host to device
-            W = cp.array(W)
-            if scipy.sparse.issparse(Y):
-                Y = cupyx.scipy.sparse.csr_matrix(
-                    (cp.array(Y.data), cp.array(Y.indices), cp.array(Y.indptr)),
-                    shape=Y.shape,
-                    dtype=Y.dtype,
-                )
-            else:
-                Y = cp.array(Y)
-
-            # do optimization on GPU
-            W_, obj_ = nmf(A=Y, W=W, **nmf_params)
-
-            # move solution from device to host
-            W = cp.asnumpy(W_)
-            obj = cp.asnumpy(obj_)
-            
-            # cleanup
-            del Y, W_
-            cp._default_memory_pool.free_all_blocks()
-
+            W, obj = nmf(Y, W=W, **nmf_params)
     else:
-        W, obj = nmf(A=Y, W=W, **nmf_params)
+        W, obj = nmf(Y, W=W, **nmf_params)
     return W, obj
 
 
-def perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
-
-    np.random.seed(perturbation)
+def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
     if perturb_type == "uniform":
         Y = uniform_product(X, epsilon)
     elif perturb_type == "poisson":
@@ -90,18 +85,64 @@ def perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
     return Y
 
 
-def init_W(Y, k, mask, init_type:str, seed=42):
+def __init_W(Y, k, mask, init_type:str):
+    # REMOVED SEEDING
     if init_type == "nnsvd":
         if mask is not None:
             Y[mask] = 0
-        W, _ = nnsvd(Y, k)
+        W, _ = nnsvd(Y, k, use_gpu=False)
     elif init_type == "random":
-        np.random.seed(seed)
         W = 2 * np.sqrt(np.mean(Y) / k) * np.random.rand(Y.shape[0], k)
     return W
 
 
-def symnmf_parallel_wrapper(
+def _perturb_parallel_wrapper(
+    perturbation,
+    gpuid,
+    epsilon,
+    perturb_type,
+    graph_type,
+    similarity_type,
+    nearest_neighbors,
+    X,
+    k,
+    mask,
+    use_gpu,
+    init_type,
+    nmf_params,
+    nmf):
+
+    # Perturb X
+    Xq = __perturb_X(X, perturbation, epsilon, perturb_type)
+
+    # Compute the similarity matrix
+    if graph_type == 'full' and similarity_type == 'gaussian':
+        Dq = dist2(Xq, Xq)
+        Aq = scale_dist3(Dq, nearest_neighbors)
+    else:
+        raise ValueError('Unknown graph_type and/or similarity_type')
+
+    # Initialize W
+    Wq = __init_W(Aq, k, mask=mask, init_type=init_type)
+    
+    
+    # transfer to GPU
+    if use_gpu:
+        Aq = __put_X_gpu(Aq, gpuid)
+        Wq = __put_W_gpu(Wq, gpuid)
+
+    Wq, obj = __run_symnmf(Aq, Wq, nmf, nmf_params, use_gpu, gpuid)
+    
+    # transfer to CPU
+    if use_gpu:
+        Wq =  cp.asnumpy(Wq)
+        obj = cp.asnumpy(obj)
+        cp._default_memory_pool.free_all_blocks()
+    
+    return Wq, obj
+
+
+def _symnmf_parallel_wrapper(
         n_perturbs, 
         nmf, 
         nmf_params,
@@ -109,7 +150,7 @@ def symnmf_parallel_wrapper(
         k=None,
         epsilon=None, 
         gpuid=0, 
-        use_gpu=False,
+        use_gpu=True,
         perturb_type="uniform",
         init_type="random",
         graph_type="full",
@@ -122,7 +163,10 @@ def symnmf_parallel_wrapper(
         experiment_name="",
         collect_output=False,
         logging_stats={},
-        start_time=time.time()):
+        start_time=time.time(),
+        n_jobs=1,
+        perturb_multiprocessing=False,
+        perturb_verbose=False):
 
     assert graph_type in {'full'}, 'Supported graph types are ["full"]'
     assert similarity_type in {'gaussian'}, 'Supported similarity metrics are ["gaussian"]'
@@ -130,32 +174,50 @@ def symnmf_parallel_wrapper(
     #
     # run for each perturbations
     #
-    all_W, all_obj = [], []
+    perturb_job_data = {
+        "epsilon":epsilon,
+        "perturb_type":perturb_type,
+        "graph_type": graph_type,
+        "similarity_type": similarity_type,
+        "nearest_neighbors": nearest_neighbors,
+        "X":X,
+        "k":k,
+        "mask":mask,
+        "use_gpu":use_gpu,
+        "init_type":init_type,
+        "nmf_params":nmf_params,
+        "nmf":nmf,
+    }
+    
+    W_all, obj_all = [], []
     connectivity_matrices = []
-    for q in range(n_perturbs):
-        Xq = perturb_X(X, q, epsilon, perturb_type)
-        
-        if graph_type == 'full' and similarity_type == 'gaussian':
-            Dq = dist2(Xq, Xq, use_gpu=use_gpu)
-            Aq = scale_dist3(Dq, 7, use_gpu=use_gpu)
-        else:
-            raise ValueError('Unknown graph_type and/or similarity_type')
+    
+    # single job or parallel over Ks
+    if n_jobs == 1 or not perturb_multiprocessing:
+        for perturbation in tqdm(range(n_perturbs), disable=not perturb_verbose, total=n_perturbs):
+            W, obj = _perturb_parallel_wrapper(perturbation=perturbation, gpuid=gpuid, **perturb_job_data)
+            W_all.append(W)
+            obj_all.append(obj)
+            B = get_connectivity_matrix(np.argmax(W, 1))
+            connectivity_matrices.append(B)
+            
+    # multiple jobs over perturbations
+    else:
+        executor = concurrent.futures.ThreadPoolExecutor(max_workers=n_jobs)
+        futures = [executor.submit(_perturb_parallel_wrapper, gpuid=pidx % n_jobs, perturbation=perturbation, **perturb_job_data) for pidx, perturbation in enumerate(range(n_perturbs))]
+        all_perturbation_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), disable=not perturb_verbose, total=n_perturbs)]
 
-        Wq = init_W(Aq, k, mask, init_type, seed=q)        
-        Wq, obj = run_symnmf(Aq, Wq, nmf, nmf_params, use_gpu, gpuid)
-        
-        IDq = np.argmax(Wq, 1)
-        Bq = get_connectivity_matrix(IDq)
-        
-        all_W.append(Wq)
-        all_obj.append(obj)
-        connectivity_matrices.append(Bq)
+        for W, obj in all_perturbation_results:
+            W_all.append(W)
+            obj_all.append(obj)
+            B = get_connectivity_matrix(np.argmax(W, 1))
+            connectivity_matrices.append(B)
     
     #
     # organize solutions from each perturbations
     #
-    all_obj = np.array(all_obj)
-    avg_W = np.mean(np.stack(all_W, axis=0), axis=0)
+    obj_all = np.array(obj_all)
+    avg_W = np.mean(np.stack(W_all, axis=0), axis=0)
     
     #
     # get the consensus matrix
@@ -177,7 +239,7 @@ def symnmf_parallel_wrapper(
         
         save_data = {
             "avg_W": avg_W,
-            "avg_obj": np.mean(all_obj),
+            "avg_obj": np.mean(obj_all),
             "reordered_con_mat": reordered_con_mat,
             "cophenetic_coeff": coeff_k
         }
@@ -195,10 +257,10 @@ def symnmf_parallel_wrapper(
             if key == 'k':
                 plot_data["k"] = k
             elif key == 'err_mean':
-                err_mean = np.mean(all_obj)
+                err_mean = np.mean(obj_all)
                 plot_data["err_mean"] = '{0:.3f}'.format(err_mean)
             elif key == 'err_std':
-                err_std = np.std(all_obj)
+                err_std = np.std(obj_all)
                 plot_data["err_std"] = '{0:.3f}'.format(err_std)
             elif key == 'time':
                 elapsed_time = time.time() - start_time
@@ -215,8 +277,8 @@ def symnmf_parallel_wrapper(
     results_k = {
         "Ks":k,
         "W":avg_W,
-        "err_mean":np.mean(all_obj),
-        "err_std":np.std(all_obj),
+        "err_mean":np.mean(obj_all),
+        "err_std":np.std(obj_all),
         "cophenetic_coeff":coeff_k,
         "reordered_con_mat":reordered_con_mat
     }
@@ -238,6 +300,7 @@ class SymNMFk:
             collect_output=False,
             verbose=False,
             nmf_verbose=False,
+            perturb_verbose = False,
             transpose=False,
             nmf_method="newton",
             nmf_obj_params={},
@@ -246,6 +309,7 @@ class SymNMFk:
             nearest_neighbors=7,
             joblib_backend="multiprocessing",
             use_consensus_stopping=False,
+            perturb_multiprocessing=False,
             calculate_pac=True,
             mask=None,
             get_plot_data=False):
@@ -274,6 +338,7 @@ class SymNMFk:
         self.use_gpu = use_gpu
         self.verbose = verbose
         self.nmf_verbose = nmf_verbose
+        self.perturb_verbose = perturb_verbose
         self.transpose = transpose
         self.collect_output = collect_output
         self.n_jobs = n_jobs
@@ -290,6 +355,7 @@ class SymNMFk:
         self.mask = mask
         self.calculate_pac = calculate_pac
         self.get_plot_data = get_plot_data
+        self.perturb_multiprocessing = perturb_multiprocessing
 
         # warnings
         if self.calculate_pac and not self.consensus_mat:
@@ -429,7 +495,7 @@ class SymNMFk:
             comm.Barrier()
 
         #
-        # Begin NMFk
+        # Begin SymNMFk
         #
         start_time = time.time()
 
@@ -452,20 +518,25 @@ class SymNMFk:
             "graph_type": self.graph_type,
             "similarity_type": self.similarity_type,
             "nearest_neighbors": self.nearest_neighbors,
+            "n_jobs":self.n_jobs,
+            "perturb_multiprocessing":self.perturb_multiprocessing,
+            "perturb_verbose":self.perturb_verbose,
         }
 
-        if self.n_jobs == 1:
+        
+        # Single job or parallel over perturbations
+        if self.n_jobs == 1 or self.perturb_multiprocessing:
             all_k_results = []
             for k in tqdm(Ks, total=len(Ks), disable=not self.verbose):
-                k_result = symnmf_parallel_wrapper(gpuid=0, k=k, **job_data)
+                k_result = _symnmf_parallel_wrapper(gpuid=0, k=k, **job_data)
                 all_k_results.append(k_result)
-        else:
-            all_k_results = Parallel(
-                n_jobs=self.n_jobs,
-                verbose=self.verbose,
-                backend=self.joblib_backend)(delayed(symnmf_parallel_wrapper)(
-                    gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks))
-
+        
+        # multiprocessing over each K
+        else:   
+            executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.n_jobs)
+            futures = [executor.submit(_symnmf_parallel_wrapper, gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks)]
+            all_k_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), total=len(Ks), disable=not self.verbose)]
+        
         #
         # Collect results if multi-node
         #
