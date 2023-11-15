@@ -20,4 +20,4 @@ echo $CONDA_DEFAULT_ENV
 
 #Run the code here
 export n_jobs=$SLURM_CPUS_PER_TASK
-mpirun -n 2 python distributed-multiprocessing-cooccurance.py 2 $n_jobs
+mpirun -n 2 python distributed-multiprocessing-cooccurrence.py 2 $n_jobs
