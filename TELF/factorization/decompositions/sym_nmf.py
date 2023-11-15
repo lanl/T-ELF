@@ -72,8 +72,12 @@ def chol(A, use_gpu=False):
         R[i, i] = np.sqrt(s)
         
         if i < n - 1:
-            for j in range(i + 1, n):
-                R[i, j] = (A[i, j] - np.dot(R[:i, i], R[:i, j])) / R[i, i]
+			# COMMENTING OUT FOR LOOP FOR VECTORIZED SOLUTION
+            # for j in range(i + 1, n):
+            #     R[i, j] = (A[i, j] - np.dot(R[:i, i], R[:i, j])) / R[i, i]
+            Rii_inv = 1 / R[i, i]  # compute inverse
+            dot_products = np.dot(R[:i, i], R[:i, i+1:n])
+            R[i, i+1:n] = (A[i, i+1:n] - dot_products) * Rii_inv
     
     if flag == 0:
         return R, 0
@@ -232,15 +236,20 @@ def compute_newton_step(T, W, gradW, projnorm_idx, projnorm_idx_prev, R, p, n_jo
                 return gradW[:, k]
             else:
                 return step_part
-            
-    if n_jobs == 1:
-        for k in range(Ks):
-            step[:, k] = compute_newton_step_helper(k)
-    else:
-        results = Parallel(n_jobs=n_jobs)(delayed(compute_newton_step_helper)(k) for k in range(Ks))
-        for k, result in enumerate(results):
-            step[:, k] = result
+
+    # DISABLING PARALLELIZATION ON Ks FOR TESTING
+    for k in range(Ks):
+        step[:, k] = compute_newton_step_helper(k)   
     return step
+	
+    # if n_jobs == 1:
+    #     for k in range(Ks):
+    #         step[:, k] = compute_newton_step_helper(k)
+    # else:
+    #     results = Parallel(n_jobs=n_jobs)(delayed(compute_newton_step_helper)(k) for k in range(Ks))
+    #     for k, result in enumerate(results):
+    #         step[:, k] = result
+    # return step
 
 
 def armijo_update(A, W, gradW, step, sigma, beta, obj=None, use_gpu=False):
