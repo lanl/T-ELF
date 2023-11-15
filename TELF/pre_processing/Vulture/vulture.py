@@ -11,6 +11,7 @@ nonexclusive, paid-up, irrevocable worldwide license in this material to reprodu
 derivative works, distribute copies to the public, perform publicly and display publicly, and to permit
 others to do so.
 """
+import os
 import sys
 import uuid
 import pickle
@@ -104,7 +105,6 @@ class Vulture:
         self.n_nodes = n_nodes
         self.parallel_backend = parallel_backend
         self.cache = cache
-        self.unique_id = str(uuid.uuid4())  # generate a unique ID for vulture instance
         self.save_path = None
         self.verbose = verbose
         
@@ -117,6 +117,15 @@ class Vulture:
             self.comm = self.mpi.COMM_WORLD
             self.rank = self.comm.Get_rank()
             self.size = self.comm.Get_size()
+
+		# generate unique ID only on the root process
+        if self.rank == 0:
+            self.unique_id = str(uuid.uuid4())
+        else:
+            self.unique_id = None
+
+        # broadcast unique_id from root process to all other processes
+        self.unique_id = self.comm.bcast(self.unique_id, root=0)
         
         
     def clean(self, documents, steps=None, substitutions=None, save_path=None):
