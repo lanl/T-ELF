@@ -12,7 +12,5 @@ from .Beaver.vectorize import count
 
 # Vulture
 from .Vulture.vulture import Vulture
-from .Vulture.pre_process import *
-from .Vulture.default_stop_words import default_stop_words
-from .Vulture.default_stop_phrases import default_stop_phrases
-from .Vulture.detect_language import get_language
+from .Vulture.default_stop_words import STOP_WORDS
+from .Vulture.default_stop_phrases import STOP_PHRASES

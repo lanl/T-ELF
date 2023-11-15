@@ -19,5 +19,6 @@ dependencies:
   - pandas
   - nltk
   - joblib
+  - networkx
   - spacy==3.7.2
   - mat73
