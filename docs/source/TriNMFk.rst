@@ -68,7 +68,6 @@ Initilize the model:
        "alpha":(0,0),
        "n_iters":100,
        "n_inits":10,
-       "joblib_backend":"multiprocessing",
        "pruned":False,
        "transpose":False,
        "verbose":True

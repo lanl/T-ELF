@@ -2,7 +2,7 @@
 
 <div align="center", style="font-size: 50px">
 
-[![Build Status](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main)](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main) [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg) [![Python Version](https://img.shields.io/badge/python-v3.8.5-blue)](https://img.shields.io/badge/python-v3.8.5-blue)
+[![Build Status](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main)](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main) [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg) [![Python Version](https://img.shields.io/badge/python-v3.11-blue)](https://img.shields.io/badge/python-v3.8.5-blue)
 
 </div> 
 
@@ -30,7 +30,7 @@ T-ELF's versatility extends to a diverse array of disciplines, making it a poten
 ```shell
 git clone https://github.com/lanl/T-ELF.git
 cd T-ELF
-conda create --name TELF python=3.8.5
+conda create --name TELF python=3.11
 source activate TELF # or conda activate TELF
 python setup.py install
 ```
@@ -102,10 +102,11 @@ conda install -c conda-forge mpi4py
 |            NMFk           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: | :heavy_check_mark: |              NMF with Automatic Model Determination                              |   [Link](examples/NMFk/NMFk.ipynb)  | :white_check_mark: |
 |        Custom NMFk        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: | :heavy_check_mark: |                Use Custom NMF Functions with NMFk                                |   [Link](examples/NMFk/Custom_NMF_NMFk.ipynb)  | :white_check_mark: |
 |          TriNMFk          | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: |                    | NMF with Automatic Model Determination for Clusters and Patterns                 |   [Link](examples/TriNMFk/TriNMFk.ipynb)  | :white_check_mark: |
-|          RESCALk          | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: |                    |             RESCAL with Automatic Model Determination                            |   [Link](examples/RESCALk/RESCALk.ipynb)  | :white_check_mark: |
+|          RESCALk          | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: | :heavy_check_mark: |             RESCAL with Automatic Model Determination                            |   [Link](examples/RESCALk/RESCALk.ipynb)  | :white_check_mark: |
 |           RNMFk           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: | :heavy_check_mark: |                         Recommender NMFk                                         |   [Link](examples/RNMFk/RNMFk.ipynb)  |       :white_check_mark:       |
 |           BNMFk           |                    |                    |                    |                    |                     |                    |                           Boolean NMFk                                           |             |       :soon:       |
 |           HNMFk           |                    |                    |                    |                    |                     |                    |                         Hierarchical NMFk                                        |             |       :soon:       |
+|           SymNMFk         |                    |                    |                    |                    |                     |                    |                         NMFk with Symmetric Clustering                           |             |       :soon:       |
 |         SPLIT NMFk        |                    |                    |                    |                    |                     |                    |        Joint NMFk factorization of multiple data via SPLIT                       |             |       :soon:       |
 | SPLIT Transfer Classifier |                    |                    |                    |                    |                     |                    |      Supervised transfer learning method via SPLIT and NMFk                      |             |       :soon:       |
 |           CP-ALS          |                    |                    |                    |                    |                     |                    |    Alternating least squares algorithm for canonical polyadic decomposition      |             |       :soon:       |
@@ -116,8 +117,8 @@ conda install -c conda-forge mpi4py
 
 | **Method** | **Multiprocessing** |       **HPC**       |                           **Description**                          | **Example** | **Release Status** |
 |:----------:|:-------------------:|:-------------------:|:------------------------------------------------------------------:|:-----------:|:------------------:|
-|   Vulture  | :heavy_check_mark: | :heavy_check_mark: |         Advanced text processing tool for cleaning and NLP         |  [Link](examples/Vulture)  | :white_check_mark: |
-|   Beaver   | :heavy_check_mark: | :heavy_check_mark: |        Fast matrix and tensor building tool for text mining        |  [Link](examples/Beaver)  | :white_check_mark: |
+|   Vulture  | :heavy_check_mark:  | :heavy_check_mark:  |         Advanced text processing tool for cleaning and NLP         |  [Link](examples/Vulture)  | :white_check_mark: |
+|   Beaver   | :heavy_check_mark:  | :heavy_check_mark:  |        Fast matrix and tensor building tool for text mining        |  [Link](examples/Beaver)  | :white_check_mark: |
 |  iPenguin  |                     |                     |         Online Semantic Scholar information retrieval tool         |             |       :soon:       |
 |    Orca    |                     |                     | Duplicate author detector for text mining and information retrival |             |       :soon:       |
 |            |                     |                     |                                                                    |             |                    |

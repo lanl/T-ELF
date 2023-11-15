@@ -89,15 +89,12 @@ def W_update(X, W, H, opts=None, nz_rows=None, nz_cols=None, use_gpu=True, mask=
         
     W = np.maximum(W.astype(dtype), eps)
     H = H.astype(dtype)
-
-    #Hnormalized = (H / np.maximum(np.sum(H, 1, keepdims=True), eps)).T
     H_norm = np.sum(H, axis=1, keepdims=True).T + eps
     
     if mask is not None:
         for i in range(opts["niter"]):
 
             if scipy.sparse.issparse(X):
-                X = X.tocsr()
                 X._has_canonical_format = True
                 XHT = X.dot(H.T)
             else:
@@ -119,19 +116,15 @@ def W_update(X, W, H, opts=None, nz_rows=None, nz_cols=None, use_gpu=True, mask=
             # bug in setting has_canonical_format flag in cupy
             # https://github.com/cupy/cupy/issues/2365
             # issue is closed, but still not fixed.
-            X = X.tocsr()
             X._has_canonical_format = True
 
         else:
             pass
         for i in range(opts["niter"]):
             if scipy.sparse.issparse(X):
-                # W *= nan_to_num(sparse_divide_product(X, W, H, nz_rows, nz_cols), 1.0).dot(
-                #    Hnormalized
                 W *= ((sparse_divide_product(X, W, H, nz_rows, nz_cols, use_gpu=use_gpu)).dot(H.T)) / H_norm
 
             else:
-                #W *= nan_to_num(X / (W @ H), 1.0) @ Hnormalized
                 W *= ((X / (W @ H + eps)) @ H.T) / H_norm
             if (i + 1) % 10 == 0:
                 W = np.maximum(W, eps)
@@ -198,11 +191,9 @@ def nmf(X, W, H,
     H = np.maximum(H.astype(dtype), eps)
 
     if scipy.sparse.issparse(X):
-        Xcsr = X.tocsr()
-        Xcsc = X.tocsc()
         H_args, W_args = {}, {}
-        H_args["nz_rows"], H_args["nz_cols"] = nz_indices(Xcsc, use_gpu=use_gpu)
-        W_args["nz_rows"], W_args["nz_cols"] = nz_indices(Xcsr, use_gpu=use_gpu)
+        H_args["nz_rows"], H_args["nz_cols"] = nz_indices(X, use_gpu=use_gpu)
+        W_args["nz_rows"], W_args["nz_cols"] = nz_indices(X, use_gpu=use_gpu)
     else:
         pass
 
@@ -212,12 +203,8 @@ def nmf(X, W, H,
         inc = 0
 
     for i in tqdm(range(niter), disable=nmf_verbose == False):
-        if scipy.sparse.issparse(X):
-            H = H_update(Xcsc, W, H, H_opts, **H_args)
-            W = W_update(Xcsr, W, H, W_opts, **W_args)
-        else:
-            H = H_update(X, W, H, H_opts)
-            W = W_update(X, W, H, W_opts)
+        H = H_update(X, W, H, H_opts, use_gpu=use_gpu)
+        W = W_update(X, W, H, W_opts, use_gpu=use_gpu)
         if i % 10 == 0:
             H = np.maximum(H.astype(dtype), eps)
             W = np.maximum(W.astype(dtype), eps)
