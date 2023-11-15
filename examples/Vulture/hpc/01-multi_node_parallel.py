@@ -35,6 +35,7 @@ def main(n_jobs, n_nodes, verbose):
         "n_jobs": n_jobs,
         "n_nodes": n_nodes,
         "verbose": verbose,
+		"cache": RESULTS_DIR,
     }
     vulture = Vulture(**settings)
     vulture.clean(documents, save_path=os.path.join(RESULTS_DIR, RESULTS_FILE))
