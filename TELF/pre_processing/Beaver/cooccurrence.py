@@ -227,7 +227,7 @@ def co_occurrence(documents, vocabulary, window_size=20, verbose=True, sentences
         
         # prepare COO data for communication
         tensor_data_comm = []
-        for key, value in tqdm(matrix_dict.items(), disable=not verbose, total=len(coords)):
+        for key, value in tqdm(matrix_dict.items(), disable=not verbose, total=len(matrix_dict)):
             curr_cords = [float(key[0]), float(key[1])]
             tensor_data_comm.extend(curr_cords)
             tensor_data_comm.append(float(value))
