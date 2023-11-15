@@ -5,12 +5,13 @@ import os
 import sys
 import pickle
 import pathlib
+import argparse
 
 from TELF.pre_processing import Vulture
 
 
 DATA_FILE = 'documents.p'
-DATA_DIR = os.path.join('..', '..', 'data')
+DATA_DIR = os.path.join('..', '..', '..', 'data')
 DATA_DIR = pathlib.Path(DATA_DIR).resolve()
 
 RESULTS_FILE = 'clean_documents.p'
@@ -20,9 +21,13 @@ RESULTS_DIR = pathlib.Path(RESULTS_DIR).resolve()
 
 def main(n_jobs, n_nodes, verbose):
 
-    #
+	# create the output directory if needed
+    try:
+        os.mkdir(RESULTS_DIR)
+    except FileExistsError:
+        pass
+	
     # load data
-    #
     documents = pickle.load(open(os.path.join(DATA_DIR, DATA_FILE), 'rb'))
 
     # clean
