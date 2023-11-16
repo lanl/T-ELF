@@ -41,7 +41,7 @@ vulture:
 
 beaver:
     settings:
-        min_df: 50
+        min_df: 0.05
         max_df: 0.75
     vocabulary: null
 
@@ -51,18 +51,18 @@ nmfk:
         n_iters: 2000
         epsilon: 0.025
         init: "nnsvd" 
-        use_gpu: True
-        predict_k: False
-        predict_k_method: "sill" 
+        use_gpu: False
+        predict_k: True
+        predict_k_method: "sill"
         nmf_verbose: False
         transpose: False
-        sill_thresh: 0.6 
+        sill_thresh: 0.6
         pruned: True
-        nmf_method': "nmf_fro_mu" 
-        joblib_backend': "multiprocessing" 
+        nmf_method: "nmf_fro_mu" # nmf_fro_mu, nmf_recommender
         calculate_error: True
+        predict_k: False
         consensus_mat: True
-        use_consensus_stopping: 0 
+        use_consensus_stopping: 0
         calculate_pac: True
         perturb_type: "uniform"
         perturb_multiprocessing: False
