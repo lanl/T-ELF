@@ -1,0 +1,73 @@
+---
+paths:
+    output: "results"
+
+vulture:
+    steps:
+        - type: RemoveNonEnglishCleaner
+          init_args:
+              ascii_ratio: 0.9
+              stopwords_ratio: 0.25
+        - type: SimpleCleaner
+          init_args:
+              # You can either define stop words / stop phrases here through YAML list notation
+              # or provide string argument which will serve as the path to these arguments
+              # or leave null to use default stop words /  stop phrases
+              stop_words: null
+              stop_phrases: null
+              order:
+                  - "standardize_hyphens"
+                  - "isolate_frozen"
+                  - "remove_copyright_statement"
+                  - "remove_stop_phrases"
+                  - "make_lower_case"
+                  - "remove_formulas"
+                  - "normalize"
+                  - "remove_next_line"
+                  - "remove_email"
+                  - "remove_()"
+                  - "remove_[]"
+                  - "remove_special_characters"
+                  - "remove_nonASCII_boundary"
+                  - "remove_nonASCII"
+                  - "remove_tags"
+                  - "remove_stop_words"
+                  - "remove_standalone_numbers"
+                  - "remove_extra_whitespace"
+                  - "min_characters"
+        - type: LemmatizeCleaner
+          init_args:
+              library: "spacy"  # "spacy" or "nltk"
+
+beaver:
+    settings:
+        min_df: 50
+        max_df: 0.75
+    vocabulary: null
+
+nmfk:
+    settings:
+        n_perturbs: 128
+        n_iters: 2000
+        epsilon: 0.025
+        init: "nnsvd" 
+        use_gpu: True
+        predict_k: False
+        predict_k_method: "sill" 
+        nmf_verbose: False
+        transpose: False
+        sill_thresh: 0.6 
+        pruned: True
+        nmf_method': "nmf_fro_mu" 
+        joblib_backend': "multiprocessing" 
+        calculate_error: True
+        consensus_mat: True
+        use_consensus_stopping: 0 
+        calculate_pac: True
+        perturb_type: "uniform"
+        perturb_multiprocessing: False
+        perturb_verbose: False
+    ks:
+        start: 1
+        stop: 30
+        step: 2
