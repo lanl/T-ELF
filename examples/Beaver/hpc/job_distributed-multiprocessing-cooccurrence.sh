@@ -5,8 +5,7 @@
 
 #SBATCH --time=00:30:00
 #SBATCH --nodes=2
-#SBATCH -p shared-gpu
-#SBATCH -C gpu_count:8
+#SBATCH -p general
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=32
 
@@ -21,4 +20,4 @@ echo $CONDA_DEFAULT_ENV
 
 #Run the code here
 export n_jobs=$SLURM_CPUS_PER_TASK
-mpirun -n 2 python distributed-multiprocessing-cooccurance.py 2 $n_jobs
+mpirun -n 2 python distributed-multiprocessing-cooccurrence.py 2 $n_jobs
