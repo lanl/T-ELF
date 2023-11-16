@@ -125,7 +125,8 @@ class Vulture:
             self.unique_id = None
 
         # broadcast unique_id from root process to all other processes
-        self.unique_id = self.comm.bcast(self.unique_id, root=0)
+        if self.comm is not None:
+            self.unique_id = self.comm.bcast(self.unique_id, root=0)
         
         
     def clean(self, documents, steps=None, substitutions=None, save_path=None):
