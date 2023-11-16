@@ -25,7 +25,8 @@ from tqdm import tqdm
 import scipy.sparse as ss
 
 # load locally defined utility functions
-from utils import load_config, load_list, check_path, find_param_combinations
+from utils import load_config, load_list, check_path
+from utils import process_terms, remove_duplicates, find_param_combinations
 
 # load TELF particulars
 from TELF.factorization import NMFk
@@ -83,12 +84,6 @@ def init_vulture_steps(settings):
     
     
 def main(file_path, cols, n_nodes, n_jobs, verbose):
-    
-    print(f'{file_path=}')
-    print(f'{cols=}')
-    print(f'{n_jobs=}')
-    print(f'{n_nodes=}')
-    
     config = load_config(CONFIG_PATH)
     
     # get settings from config 
@@ -119,14 +114,22 @@ def main(file_path, cols, n_nodes, n_jobs, verbose):
     if not set(cols).issubset(df.columns):
         raise ValueError('One or more specified columns was not found in the DataFrame!')
     
+    # prepare SME terms (if being used)
+    terms = config['paths']['terms']
+    substitution_map = None
+    highlighting_map = None
+    if terms is not None:
+        substitution_map, highlighting_map = process_terms(terms)
+    
     # clean with Vulture
     clean_cols_name = f'clean_{"_".join(cols)}'
     vulture = Vulture(n_jobs=n_jobs, verbose=verbose, parallel_backend='multiprocessing')
     df = vulture.clean_dataframe(df, 
                                  steps = vulture_steps,
-                                 columns=cols, 
-                                 append_to_original_df=True, 
-                                 concat_cleaned_cols=True,
+                                 columns = cols, 
+                                 append_to_original_df = True, 
+                                 concat_cleaned_cols = True,
+                                 substitutions = substitution_map
                                 )
     df.to_csv(os.path.join(beaver_dir, f'clean_{file_name}.csv'), index=False)
         
@@ -159,6 +162,13 @@ def main(file_path, cols, n_nodes, n_jobs, verbose):
         "verbose":verbose,
         "save_path":beaver_dir,
     }
+    if highlighting_map is not None:
+        settings['highlighting'] = list(highlighting_map.keys())
+        settings['weights'] = list(highlighting_map.values())
+        beaver_vocabulary = settings['highlighting'] + beaver_vocabulary
+        beaver_vocabulary = remove_duplicates(beaver_vocabulary)
+    
+    # create the documents words matrix
     beaver.documents_words(**settings)
     
     # get matrix
