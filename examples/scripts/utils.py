@@ -124,6 +124,71 @@ def load_list(path, lower=False):
         warnings.warn(f'Could not find file at "{path}".', RuntimeWarning)
         return []
 
+    
+def process_terms(file_path):
+    """
+    Processes a CSV file and creates two dictionaries based on the first three columns.
+    This function is intended to be used for loading and processing a terms CSV file
+    where the columns are term to be substituted, replacement term, higlighting weight.
+
+    Parameters:
+    -----------
+    file_path: str
+        The file path to the CSV file.
+
+    Returns:
+    --------
+    tuple:
+        A tuple containing two dictionaries:
+        - The first dictionary maps keys from column 1 to values from column 2.
+        - The second dictionary maps keys from column 2 to values from column 3.
+
+    Raises:
+    -------
+    FileNotFoundError:
+        If the CSV file is not found at the specified path.
+    """
+    substitution_map = {}
+    highlighting_map = {}
+
+    try:
+        with open(file_path, mode='r', newline='', encoding='utf-8') as fh:
+            reader = csv.reader(fh)
+            for row in reader:
+                if len(row) >= 3:  # Ensure there are at least 3 columns
+                    substitution_map[row[0]] = row[1]
+                    highlighting_map[row[1]] = row[2]
+    except FileNotFoundError:
+        raise FileNotFoundError(f'File not found: "{file_path}"!')
+    return substitution_map, highlighting_map
+
+
+def remove_duplicates(l):
+    """
+    Remove duplicate elements from a list and return a new list with unique elements.
+
+    Parameters:
+    -----------
+    l: list
+        The list from which duplicate elements are to be removed.
+
+    Returns:
+    --------
+    list: 
+        A new list containing only the unique elements from the original list.
+
+    Example:
+    --------
+    >>> remove_duplicates([1, 2, 2, 3, 3, 3, 4])
+    [1, 2, 3, 4]
+    """
+    seen, output = set(), []
+    for x in l:
+        if x not in seen:
+            seen.add(x)
+            output.append(x)
+    return output
+
 
 def all_combinations(d):
     """
