@@ -13,7 +13,6 @@ import re
 import ast
 import sys
 import shutil
-import sparse
 import pickle
 import pathlib
 import warnings
@@ -42,7 +41,7 @@ from TELF.pre_processing.Vulture.default_stop_words import STOP_WORDS
 from TELF.pre_processing.Vulture.default_stop_phrases import STOP_PHRASES
 
 # constants
-CONFIG_PATH = 'input/config.yaml'
+CONFIG_PATH = 'input/config.json'
 VULTURE_MAP = {
     'SimpleCleaner': SimpleCleaner,
     'LemmatizeCleaner': LemmatizeCleaner,
@@ -96,6 +95,7 @@ def main(file_path, cols, n_nodes, n_jobs, verbose):
     
     beaver_settings = config['beaver']['settings']
     beaver_vocabulary = config['beaver']['vocabulary']
+    matrix_is_dense = config['beaver']['dense']
     if beaver_vocabulary is not None:
         beaver_vocabulary = load_list(beaver_vocabulary)
         
@@ -173,14 +173,14 @@ def main(file_path, cols, n_nodes, n_jobs, verbose):
     
     # get matrix
     X = ss.load_npz(os.path.join(beaver_dir, 'documents_words.npz'))
-    X = X.T  # words need to be rows, documents cols
+    if matrix_is_dense:
+        X = X.toarray()  # convert to dense numpy array
 
-    # convert to dense numpy array
-    X = X.toarray()
-    X = X.astype("float32")
-
+    # words need to be rows, documents cols
+    X = X.T  
+    
     X_shape = X.shape
-    print(f'[tELF Script]: X={X_shape}')
+    print(f'[TELF]: X={X_shape}')
 
     # decompose X
     dynamic_settings, all_params = find_param_combinations(nmfk_settings)
@@ -200,10 +200,10 @@ def main(file_path, cols, n_nodes, n_jobs, verbose):
         model = NMFk(**params)
 
         if X_shape[0] in nmfk_ks:
-            warnings.warn(f'[tELF Script]: You have selected too large of an upper k-limit.\nSetting limit to {X_shape[0]}', RuntimeWarning)
+            warnings.warn(f'[TELF]: You have selected too large of an upper k-limit.\nSetting limit to {X_shape[0]}', RuntimeWarning)
             ks = range(ks.start, X_shape[0], ks.step)
         if X_shape[1] in nmfk_ks:
-            warnings.warn(f'[tELF Script]: Matrix of shape {X_shape} is too small to decompose!', RuntimeWarning)
+            warnings.warn(f'[TELF]: Matrix of shape {X_shape} is too small to decompose!', RuntimeWarning)
             continue
         results = model.fit(X, nmfk_ks, file_name, note)
     
