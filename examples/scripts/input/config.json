@@ -1,0 +1,87 @@
+{
+    "paths": {
+        "output": "results",
+        "terms": null
+    },
+    "vulture": {
+        "steps": [
+            {
+                "type": "RemoveNonEnglishCleaner",
+                "init_args": {
+                    "ascii_ratio": 0.9,
+                    "stopwords_ratio": 0.25
+                }
+            },
+            {
+                "type": "SimpleCleaner",
+                "init_args": {
+                    "stop_words": null,
+                    "stop_phrases": null,
+                    "order": [
+                        "standardize_hyphens",
+                        "isolate_frozen",
+                        "remove_copyright_statement",
+                        "remove_stop_phrases",
+                        "make_lower_case",
+                        "remove_formulas",
+                        "normalize",
+                        "remove_next_line",
+                        "remove_email",
+                        "remove_()",
+                        "remove_[]",
+                        "remove_special_characters",
+                        "remove_nonASCII_boundary",
+                        "remove_nonASCII",
+                        "remove_tags",
+                        "remove_stop_words",
+                        "remove_standalone_numbers",
+                        "remove_extra_whitespace",
+                        "min_characters"
+                    ]
+                }
+            },
+            {
+                "type": "LemmatizeCleaner",
+                "init_args": {
+                    "library": "spacy"
+                }
+            }
+        ]
+    },
+    "beaver": {
+        "settings": {
+            "min_df": 0.05,
+            "max_df": 0.75
+        },
+        "dense": true,
+        "vocabulary": null
+    },
+    "nmfk": {
+        "settings": {
+            "n_perturbs": 128,
+            "n_iters": 2000,
+            "epsilon": 0.025,
+            "init": "nnsvd",
+            "use_gpu": false,
+            "predict_k": false,
+            "predict_k_method": "sill",
+            "nmf_verbose": false,
+            "transpose": false,
+            "sill_thresh": 0.6,
+            "pruned": true,
+            "nmf_method": "nmf_fro_mu",
+            "calculate_error": true,
+            "consensus_mat": true,
+            "use_consensus_stopping": 0,
+            "calculate_pac": true,
+            "perturb_type": "uniform",
+            "perturb_multiprocessing": false,
+            "perturb_verbose": false
+        },
+        "ks": {
+            "start": 1,
+            "stop": 30,
+            "step": 2
+        }
+    }
+}

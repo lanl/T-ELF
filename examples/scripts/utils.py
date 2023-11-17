@@ -1,37 +1,34 @@
 import os
 import re
 import sys
-import yaml
+import json
 import pathlib
 import itertools
 
 
 def load_config(path):
     """
-    Load a configuration file using the YAML format.
-
-    This function reads the provided YAML configuration file and returns its contents
-    as a dictionary. The PyYAML library is used to safely parse the file.
+    Load a configuration file using the JSON format and returns its contents as a dictionary.
 
     Parameters:
     -----------
     path: str
-        The file path to the YAML configuration file.
+        The file path to the JSON configuration file.
 
     Returns:
     --------
     dict: 
-        Parsed configuration data from the YAML file.
+        Parsed configuration data from the JSON file.
 
     Raises:
     -------
-    YAMLError: 
-        If there's an issue parsing the YAML.
+    JSONDecodeError: 
+        If there's an issue parsing the JSON.
     FileNotFoundError: 
         If the provided file path does not exist.
     """
     with open(path, 'r') as fh:
-        config = yaml.safe_load(fh)
+        config = json.load(fh)
     return config
 
 
