@@ -36,6 +36,7 @@ import time
 import socket
 from pathlib import Path
 import concurrent.futures
+from threading import Lock
 
 try:
     import cupy as cp
@@ -193,7 +194,8 @@ def _nmf_parallel_wrapper(
         start_time=time.time(),
         n_jobs=1,
         perturb_multiprocessing=False,
-        perturb_verbose=False):
+        perturb_verbose=False,
+        lock=None):
 
     #
     # run for each perturbations
@@ -364,7 +366,7 @@ def _nmf_parallel_wrapper(
             else:
                 warnings.warn(f'[tELF]: Encountered unknown logging metric "{key}"', RuntimeWarning)
                 plot_data[key] = 'N/A'
-        take_note_fmat(save_path, **plot_data)
+        take_note_fmat(save_path, lock=lock, **plot_data)
 
     #
     # collect results
@@ -604,6 +606,9 @@ class NMFk:
 
         # organize n_jobs
         self.n_jobs, self.use_gpu = organize_n_jobs(use_gpu, n_jobs)
+        
+        # create a shared lock
+        self.lock = Lock()
 
         #
         # Save information from the solution
@@ -782,17 +787,17 @@ class NMFk:
             if not Path(self.save_path_full).is_dir():
                 Path(self.save_path_full).mkdir(parents=True)
 
-            append_to_note(["#" * 100], self.save_path_full)
+            append_to_note(["#" * 100], self.save_path_full, lock=self.lock)
             append_to_note(["start_time= " + str(datetime.now()),
                             "name=" + str(name),
-                            "note=" + str(note)], self.save_path_full)
+                            "note=" + str(note)], self.save_path_full, lock=self.lock)
 
-            append_to_note(["#" * 100], self.save_path_full)
+            append_to_note(["#" * 100], self.save_path_full, lock=self.lock)
             object_notes = vars(self).copy()
             del object_notes["total_exec_seconds"]
             del object_notes["nmf"]
-            take_note(object_notes, self.save_path_full)
-            append_to_note(["#" * 100], self.save_path_full)
+            take_note(object_notes, self.save_path_full, lock=self.lock)
+            append_to_note(["#" * 100], self.save_path_full, lock=self.lock)
 
             notes = {}
             notes["Ks"] = Ks
@@ -801,9 +806,9 @@ class NMFk:
             notes["num_nnz"] = len(X.nonzero()[0])
             notes["sparsity"] = len(X.nonzero()[0]) / np.prod(X.shape)
             notes["X_shape"] = X.shape
-            take_note(notes, self.save_path_full)
-            append_to_note(["#" * 100], self.save_path_full)
-            take_note_fmat(self.save_path_full, **stats_header)
+            take_note(notes, self.save_path_full, lock=self.lock)
+            append_to_note(["#" * 100], self.save_path_full, lock=self.lock)
+            take_note_fmat(self.save_path_full, lock=self.lock, **stats_header)
         
         if self.n_nodes > 1:
             comm.Barrier()
@@ -846,6 +851,7 @@ class NMFk:
             "n_jobs":self.n_jobs,
             "perturb_multiprocessing":self.perturb_multiprocessing,
             "perturb_verbose":self.perturb_verbose,
+            "lock":self.lock
         }
         
         # Single job or parallel over perturbations
@@ -959,10 +965,10 @@ class NMFk:
                     plot_final=True,
                     simple_plot=self.simple_plot
                 )
-                append_to_note(["#" * 100], self.save_path_full)
-                append_to_note(["end_time= "+str(datetime.now())], self.save_path_full)
+                append_to_note(["#" * 100], self.save_path_full, lock=self.lock)
+                append_to_note(["end_time= "+str(datetime.now())], self.save_path_full, lock=self.lock)
                 append_to_note(
-                    ["total_time= "+str(time.time() - start_time) + " (seconds)"], self.save_path_full)
+                    ["total_time= "+str(time.time() - start_time) + " (seconds)"], self.save_path_full, lock=self.lock)
         
             
             if self.get_plot_data:
