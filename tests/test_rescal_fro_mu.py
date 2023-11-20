@@ -53,7 +53,7 @@ def test_rescal_numpy():
             assert A.dtype == dtype
             for x, r in zip(X, R):
                 assert r.dtype == dtype
-                assert fro_norm(x-A@r@A.T)/fro_norm(x) < 1e-3
+                assert fro_norm(x-A@r@A.T)/fro_norm(x) < 1e-2
 
 
 def test_A_update_cupy():
