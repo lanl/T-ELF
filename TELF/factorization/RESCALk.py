@@ -23,6 +23,7 @@ from .decompositions.utilities.math_utils import relative_error_rescal
 
 
 import concurrent.futures
+from threading import Lock
 from datetime import datetime, timedelta
 from collections import defaultdict
 import sys
@@ -183,7 +184,9 @@ def _rescal_parallel_wrapper(
         start_time=time.time(),
         n_jobs=1,
         perturb_multiprocessing=False,
-        perturb_verbose=False):
+        perturb_verbose=False,
+        lock=None,
+        note_name="experiment"):
 
     #
     # run for each perturbations
@@ -302,7 +305,7 @@ def _rescal_parallel_wrapper(
             else:
                 warnings.warn(f'[tELF]: Encountered unknown logging metric "{key}"', RuntimeWarning)
                 plot_data[key] = 'N/A'
-        take_note_fmat(save_path, **plot_data)
+        take_note_fmat(save_path, lock=lock, name=note_name, **plot_data)
 
     #
     # collect results
@@ -470,6 +473,9 @@ class RESCALk:
 
         # organize n_jobs
         self.n_jobs, self.use_gpu = organize_n_jobs(use_gpu, n_jobs)
+        
+        # create a shared lock
+        self.lock = Lock()
 
         #
         # Save information from the solution
@@ -570,9 +576,11 @@ class RESCALk:
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
             Ks = self.__chunk_Ks(Ks, n_chunks=self.n_nodes)[rank]
+            note_name = f'{rank}_experiment'
             if self.verbose:
                 print("Rank=", rank, "Host=", socket.gethostname(), "Ks=", Ks)
         else:
+            note_name = f'experiment'
             comm = None
             rank = 0
             
@@ -614,17 +622,17 @@ class RESCALk:
             if not Path(self.save_path_full).is_dir():
                 Path(self.save_path_full).mkdir(parents=True)
 
-            append_to_note(["#" * 100], self.save_path_full)
+            append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
             append_to_note(["start_time= " + str(datetime.now()),
                             "name=" + str(name),
-                            "note=" + str(note)], self.save_path_full)
+                            "note=" + str(note)], self.save_path_full, name=note_name, lock=self.lock)
 
-            append_to_note(["#" * 100], self.save_path_full)
+            append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
             object_notes = vars(self).copy()
             del object_notes["total_exec_seconds"]
             del object_notes["rescal"]
-            take_note(object_notes, self.save_path_full)
-            append_to_note(["#" * 100], self.save_path_full)
+            take_note(object_notes, self.save_path_full, name=note_name, lock=self.lock)
+            append_to_note(["#" * 100], self.save_path_full, lock=self.lock)
 
             notes = {}
             notes["Ks"] = Ks
@@ -635,9 +643,9 @@ class RESCALk:
             notes["n_jobs"] = self.n_jobs
             notes["experiment_name"] = name
             notes["num_iterations"] = self.n_iters
-            take_note(notes, self.save_path_full)
-            append_to_note(["#" * 100], self.save_path_full)
-            take_note_fmat(self.save_path_full, **stats_header)
+            take_note(notes, self.save_path_full, name=note_name, lock=self.lock)
+            append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
+            take_note_fmat(self.save_path_full, lock=self.lock, name=note_name, **stats_header)
         
         if self.n_nodes > 1:
             comm.Barrier()
@@ -676,6 +684,8 @@ class RESCALk:
             "n_jobs":self.n_jobs,
             "perturb_multiprocessing":self.perturb_multiprocessing,
             "perturb_verbose":self.perturb_verbose,
+            "lock":self.lock,
+            "note_name":note_name
         }
         
         # Single job or parallel over perturbations
@@ -752,10 +762,10 @@ class RESCALk:
                     plot_final=True,
                     simple_plot=self.simple_plot
                 )
-                append_to_note(["#" * 100], self.save_path_full)
-                append_to_note(["end_time= "+str(datetime.now())], self.save_path_full)
+                append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
+                append_to_note(["end_time= "+str(datetime.now())], self.save_path_full, name=note_name, lock=self.lock)
                 append_to_note(
-                    ["total_time= "+str(time.time() - start_time) + " (seconds)"], self.save_path_full)
+                    ["total_time= "+str(time.time() - start_time) + " (seconds)"], self.save_path_full, name=note_name, lock=self.lock)
         
             
             if self.get_plot_data:
