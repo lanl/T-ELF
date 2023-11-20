@@ -114,7 +114,7 @@ Capabilities
    :scale: 100 %
    :align: center
 
-Please see our `publications <https://github.com/lanl/T-ELF/blob/main/Publications.md>`_ for the capabilities.
+Please see our `publications <https://smart-tensors.lanl.gov/publications/>`_ for the capabilities.
 
 
 How to Cite T-ELF?

@@ -10,17 +10,13 @@ First let's load the example dataset (example dataset can be found `here <https:
 
 .. code-block:: python
 
-   import pickle 
+    import pickle 
 
-   documents = pickle.load(open("../../data/documents.p", "rb"))
-
-Next let's load the stop words (example stop words can be found `here <https://github.com/lanl/T-ELF/tree/main/data>`_):
-
-.. code-block:: python
-
-   file = open("../../data/stop_words.txt", "r")
-   stop_words = file.read().split("\n")
-   file.close()
+    DATA_DIR = os.path.join('..', '..', 'data')
+    DATA_DIR = pathlib.Path(DATA_DIR).resolve()
+    DATA_FILE = 'documents.p'
+    documents = pickle.load(open(os.path.join(DATA_DIR, DATA_FILE), 'rb'))
+    
 
 Now we can perform pre-processing:
 
@@ -28,7 +24,6 @@ Now we can perform pre-processing:
     
     # import libraries
     import os
-    import pickle
     import pathlib
     import pandas as pd
 
@@ -42,11 +37,6 @@ Now we can perform pre-processing:
     from TELF.pre_processing.Vulture.default_stop_words import STOP_WORDS
     from TELF.pre_processing.Vulture.default_stop_phrases import STOP_PHRASES
     
-    # load dataset
-    DATA_DIR = os.path.join('..', '..', 'data')
-    DATA_DIR = pathlib.Path(DATA_DIR).resolve()
-    DATA_FILE = 'documents.p'
-    documents = pickle.load(open(os.path.join(DATA_DIR, DATA_FILE), 'rb'))
     
     # output directory
     RESULTS_DIR = 'results'

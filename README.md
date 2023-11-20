@@ -18,7 +18,7 @@ T-ELF's versatility extends to a diverse array of disciplines, making it a poten
 
 <div align="center", style="font-size: 50px">
 
-### [:information_source: Documentation](https://lanl.github.io/telf/) &emsp; [:orange_book: Examples](examples/) &emsp; [:page_with_curl: Publications](Publications.md) &emsp; [:link: Website](https://smart-tensors.LANL.gov)
+### [:information_source: Documentation](https://lanl.github.io/telf/) &emsp; [:orange_book: Examples](examples/) &emsp; [:page_with_curl: Publications](https://smart-tensors.lanl.gov/publications/) &emsp; [:link: Website](https://smart-tensors.LANL.gov)
 
 </div>
 
@@ -88,7 +88,7 @@ conda install -c conda-forge mpi4py
   <img src="docs/Second_image_TensorNetworks.jpg">
 </p>
 
-### [:page_with_curl: Publications](Publications.md)
+### [:page_with_curl: Publications](https://smart-tensors.lanl.gov/publications/)
 
 </div>
 
@@ -143,7 +143,7 @@ If you use T-ELF please cite.
 
 **APA:**
 ```latex
-Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.1) [Computer software]. https://github.com/lanl/T-ELF
+Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.2) [Computer software]. https://github.com/lanl/T-ELF
 ```
 
 **BibTeX:**
@@ -153,7 +153,7 @@ author = {Eren, Maksim and Solovyev, Nick and Barron, Ryan and Bhattarai, Manish
 month = oct,
 title = {{Tensor Extraction of Latent Features (T-ELF)}},
 url = {https://github.com/lanl/T-ELF},
-version = {0.0.1},
+version = {0.0.2},
 year = {2023}
 }
 ```
