@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF.pre_processing.Vulture: Advanced text pre-processing and cleaning tool for NLP and text-mining &#8212; TELF 0.0.1 documentation</title>
+    <title>TELF.pre_processing.Vulture: Advanced text pre-processing and cleaning tool for NLP and text-mining &#8212; TELF 0.0.2 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="_static/documentation_options.js?v=f131489c"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -127,7 +127,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.1 documentation</p>
+    <p class="title logo__title">TELF 0.0.2 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -368,69 +368,75 @@ document.write(`
 </pre></div>
 </div>
 <p>Now we can perform pre-processing:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">TELF.pre_processing</span> <span class="kn">import</span> <span class="n">Vulture</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import libraries</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1"># number of parallel jobs</span>
-    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-    <span class="c1"># number of nodes</span>
-    <span class="s2">&quot;n_nodes&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
-    <span class="c1"># verbosity level</span>
-    <span class="s2">&quot;verbose&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
-    <span class="c1"># minimum number of characters in tokens</span>
-    <span class="s2">&quot;min_characters&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>
-    <span class="c1"># minimum number of unique characters in tokens</span>
-    <span class="s2">&quot;min_unique_characters&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>
-    <span class="c1"># Lemmatize the tokens</span>
-    <span class="s2">&quot;lemmatize&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># Lemmatize document using Spacy, performed during advance pre-processing</span>
-    <span class="s2">&quot;lemmatize_spacy&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># nltk stems and substitution</span>
-    <span class="s1">&#39;lemmatize_slic&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># Stemming of the tokens</span>
-    <span class="s2">&quot;stem&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span>
-    <span class="c1"># Perform text cleaning</span>
-    <span class="s2">&quot;clean_text&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># If True, advance text cleaning, otherwise simple only</span>
-    <span class="s2">&quot;advance_clean&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># Allowed postags for Spacy, used if advance_clean=True</span>
-    <span class="s2">&quot;allowed_postags&quot;</span><span class="p">:[</span><span class="s1">&#39;NOUN&#39;</span><span class="p">,</span> <span class="s1">&#39;ADJ&#39;</span><span class="p">,</span> <span class="s1">&#39;VERB&#39;</span><span class="p">,</span> <span class="s1">&#39;ADV&#39;</span><span class="p">,</span> <span class="s2">&quot;PROPN&quot;</span><span class="p">],</span>
-    <span class="c1"># Spacy NLP model, used if advance_clean=True</span>
-    <span class="s2">&quot;spacy_model&quot;</span><span class="p">:</span><span class="s2">&quot;en_core_web_lg&quot;</span><span class="p">,</span>
-    <span class="c1"># If True, detects language</span>
-    <span class="s2">&quot;detect_language&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># Number of words to use when detecting language, used if detect_language=True</span>
-    <span class="s2">&quot;n_words_use_language&quot;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span>
-    <span class="c1"># backend to use</span>
-    <span class="s2">&quot;parallel_backend&quot;</span><span class="p">:</span><span class="s2">&quot;loky&quot;</span><span class="p">,</span>
-    <span class="c1"># Settings for simple cleaning</span>
-    <span class="s2">&quot;simple_clean_settings&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;remove_copyright_with_symbol&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_stop_phrases&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;make_lower_case&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_trailing_dash&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># -foo-bar- -&gt; foo-bar</span>
-                               <span class="s2">&quot;make_hyphens_words&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># foo-bar -&gt; foobar</span>
-                               <span class="s2">&quot;remove_next_line&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_email&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_dash&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_between_[]&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_between_()&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_[]&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_()&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_^&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_numbers&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_nonASCII&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_tags&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># remove HTML tags</span>
-                               <span class="s2">&quot;remove_special_characters&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># option to specify these?</span>
-                               <span class="s2">&quot;remove_stop_words&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                            <span class="p">},</span>
-<span class="p">}</span>
-<span class="n">vulture</span> <span class="o">=</span> <span class="n">Vulture</span><span class="p">(</span><span class="o">**</span><span class="n">settings</span><span class="p">)</span>
-<span class="n">substitutions</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;pair&#39;</span><span class="p">:</span><span class="s1">&#39;pair_modded&#39;</span><span class="p">,</span><span class="s1">&#39;theory&#39;</span><span class="p">:</span><span class="s1">&#39;moddified_theories&#39;</span><span class="p">,}</span>
-<span class="n">vulture</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">stop_words</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;results/clean_example&quot;</span><span class="p">,</span> <span class="n">substitutions</span><span class="o">=</span><span class="n">substitutions</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing</span> <span class="kn">import</span> <span class="n">Vulture</span>
+
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.modules</span> <span class="kn">import</span> <span class="n">SimpleCleaner</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.modules</span> <span class="kn">import</span> <span class="n">LemmatizeCleaner</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.modules</span> <span class="kn">import</span> <span class="n">SubstitutionCleaner</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.modules</span> <span class="kn">import</span> <span class="n">RemoveNonEnglishCleaner</span>
+
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.default_stop_words</span> <span class="kn">import</span> <span class="n">STOP_WORDS</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.default_stop_phrases</span> <span class="kn">import</span> <span class="n">STOP_PHRASES</span>
+
+<span class="c1"># load dataset</span>
+<span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">DATA_FILE</span> <span class="o">=</span> <span class="s1">&#39;documents.p&#39;</span>
+<span class="n">documents</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">DATA_FILE</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+
+<span class="c1"># output directory</span>
+<span class="n">RESULTS_DIR</span> <span class="o">=</span> <span class="s1">&#39;results&#39;</span>
+<span class="n">RESULTS_DIR</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">RESULTS_DIR</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">RESULTS_FILE</span> <span class="o">=</span> <span class="s1">&#39;clean_documents.p&#39;</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">RESULTS_DIR</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="c1"># create a cleaning pipeline</span>
+<span class="n">vulture</span> <span class="o">=</span> <span class="n">Vulture</span><span class="p">(</span><span class="n">n_jobs</span>  <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+              <span class="n">verbose</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1"># Disable == 0, Verbose &gt;= 1</span>
+             <span class="p">)</span>
+
+<span class="n">steps</span> <span class="o">=</span> <span class="p">[</span>
+<span class="n">RemoveNonEnglishCleaner</span><span class="p">(</span><span class="n">ascii_ratio</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">stopwords_ratio</span><span class="o">=</span><span class="mf">0.25</span><span class="p">),</span>
+<span class="n">SimpleCleaner</span><span class="p">(</span><span class="n">stop_words</span> <span class="o">=</span> <span class="n">STOP_WORDS</span><span class="p">,</span>
+                  <span class="n">stop_phrases</span> <span class="o">=</span> <span class="n">STOP_PHRASES</span><span class="p">,</span>
+                  <span class="n">order</span> <span class="o">=</span> <span class="p">[</span>
+                      <span class="s1">&#39;standardize_hyphens&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;isolate_frozen&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_copyright_statement&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_stop_phrases&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;make_lower_case&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_formulas&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;normalize&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_next_line&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_email&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_()&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_[]&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_special_characters&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_nonASCII_boundary&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_nonASCII&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_tags&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_stop_words&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_standalone_numbers&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_extra_whitespace&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;min_characters&#39;</span><span class="p">,</span>
+                  <span class="p">]</span>
+                 <span class="p">),</span>
+    <span class="n">LemmatizeCleaner</span><span class="p">(</span><span class="s1">&#39;spacy&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="c1"># clean</span>
+<span class="n">cleaned_documents</span> <span class="o">=</span> <span class="n">vulture</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Results will be saved under <code class="docutils literal notranslate"><span class="pre">results/clean_example</span></code>.</p>
 </section>
 <section id="available-functions">
 <h1>Available Functions<a class="headerlink" href="#available-functions" title="Link to this heading">#</a></h1>
@@ -440,6 +446,9 @@ document.write(`
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean" title="TELF.pre_processing.Vulture.vulture.Vulture.clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vulture.clean</span></code></a>(documents[, steps, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe" title="TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vulture.clean_dataframe</span></code></a>(df, columns[, ...])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>

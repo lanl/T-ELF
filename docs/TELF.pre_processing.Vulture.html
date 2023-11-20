@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF.pre_processing.Vulture package &#8212; TELF 0.0.1 documentation</title>
+    <title>TELF.pre_processing.Vulture package &#8212; TELF 0.0.2 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="_static/documentation_options.js?v=f131489c"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -127,7 +127,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.1 documentation</p>
+    <p class="title logo__title">TELF 0.0.2 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -318,18 +318,6 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.default_stop_phrases">TELF.pre_processing.Vulture.default_stop_phrases module</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.default_stop_words">TELF.pre_processing.Vulture.default_stop_words module</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.detect_language">TELF.pre_processing.Vulture.detect_language module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.detect_language.get_language"><code class="docutils literal notranslate"><span class="pre">get_language()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.detect_nonenglish">TELF.pre_processing.Vulture.detect_nonenglish module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.detect_nonenglish.ascii_detect"><code class="docutils literal notranslate"><span class="pre">ascii_detect()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.detect_nonenglish.is_english"><code class="docutils literal notranslate"><span class="pre">is_english()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.detect_nonenglish.simple_tokenize"><code class="docutils literal notranslate"><span class="pre">simple_tokenize()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.pre_process">TELF.pre_processing.Vulture.pre_process module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.advance_document_clean"><code class="docutils literal notranslate"><span class="pre">advance_document_clean()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.build_stem_map"><code class="docutils literal notranslate"><span class="pre">build_stem_map()</span></code></a></li>
@@ -393,98 +381,6 @@ document.write(`
 </section>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
-</section>
-<section id="module-TELF.pre_processing.Vulture.default_stop_phrases">
-<span id="telf-pre-processing-vulture-default-stop-phrases-module"></span><h2>TELF.pre_processing.Vulture.default_stop_phrases module<a class="headerlink" href="#module-TELF.pre_processing.Vulture.default_stop_phrases" title="Link to this heading">#</a></h2>
-<p>Created on Tue Jul 26 08:35:20 2022</p>
-<p>&#64;author: maksim, nick</p>
-</section>
-<section id="module-TELF.pre_processing.Vulture.default_stop_words">
-<span id="telf-pre-processing-vulture-default-stop-words-module"></span><h2>TELF.pre_processing.Vulture.default_stop_words module<a class="headerlink" href="#module-TELF.pre_processing.Vulture.default_stop_words" title="Link to this heading">#</a></h2>
-<p>Created on Tue Jul 26 08:32:15 2022</p>
-<p>&#64;author: maksim</p>
-</section>
-<section id="module-TELF.pre_processing.Vulture.detect_language">
-<span id="telf-pre-processing-vulture-detect-language-module"></span><h2>TELF.pre_processing.Vulture.detect_language module<a class="headerlink" href="#module-TELF.pre_processing.Vulture.detect_language" title="Link to this heading">#</a></h2>
-<p>Created on Wed Jun 22 10:13:30 2022</p>
-<p>&#64;author: maksim</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.detect_language.get_language">
-<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.detect_language.</span></span><span class="sig-name descname"><span class="pre">get_language</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_words_use</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/detect_language.html#get_language"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.detect_language.get_language" title="Link to this definition">#</a></dt>
-<dd><p>This method is currently disabled.
-Performs language detection on the given documents</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>documents</strong> (<em>dict</em>) – Dictionary of documents to clean. In this dictionary, keys are the unique document
-identifiers, and values are the text to clean.</p></li>
-<li><p><strong>n_words_use</strong> (<em>int</em>) – Number of tokens to use when detecting langauge.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>languages</strong> – List of tuples with document ID and language pairs.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-<section id="module-TELF.pre_processing.Vulture.detect_nonenglish">
-<span id="telf-pre-processing-vulture-detect-nonenglish-module"></span><h2>TELF.pre_processing.Vulture.detect_nonenglish module<a class="headerlink" href="#module-TELF.pre_processing.Vulture.detect_nonenglish" title="Link to this heading">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.detect_nonenglish.ascii_detect">
-<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.detect_nonenglish.</span></span><span class="sig-name descname"><span class="pre">ascii_detect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/detect_nonenglish.html#ascii_detect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.detect_nonenglish.ascii_detect" title="Link to this definition">#</a></dt>
-<dd><p>Find the total number of ASCII characters in the dataset</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – String for which to find the number of ascii characters</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>ascii_count</strong> (<em>int</em>) – Number of ascii characters in text</p></li>
-<li><p><strong>total_count</strong> (<em>int</em>) – Total number of characters in text (excluding whitespace)</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.detect_nonenglish.is_english">
-<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.detect_nonenglish.</span></span><span class="sig-name descname"><span class="pre">is_english</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascii_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopwords_used</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/detect_nonenglish.html#is_english"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.detect_nonenglish.is_english" title="Link to this definition">#</a></dt>
-<dd><p>Performs language detection on the given documents</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>document</strong> (<em>str</em>) – The document text for which to check if english</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>is_english</strong> – Is the document English (according to this heuristic)</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.detect_nonenglish.simple_tokenize">
-<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.detect_nonenglish.</span></span><span class="sig-name descname"><span class="pre">simple_tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/detect_nonenglish.html#simple_tokenize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.detect_nonenglish.simple_tokenize" title="Link to this definition">#</a></dt>
-<dd><p>Tokenize text without doing any serious pre-processing.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – String that needs to be tokenized</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>tokens</strong> – The list of tokens from text</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list(str)</p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 <section id="module-TELF.pre_processing.Vulture.pre_process">
 <span id="telf-pre-processing-vulture-pre-process-module"></span><h2>TELF.pre_processing.Vulture.pre_process module<a class="headerlink" href="#module-TELF.pre_processing.Vulture.pre_process" title="Link to this heading">#</a></h2>
@@ -849,18 +745,6 @@ It is designed to be simple and fast.</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.default_stop_phrases">TELF.pre_processing.Vulture.default_stop_phrases module</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.default_stop_words">TELF.pre_processing.Vulture.default_stop_words module</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.detect_language">TELF.pre_processing.Vulture.detect_language module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.detect_language.get_language"><code class="docutils literal notranslate"><span class="pre">get_language()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.detect_nonenglish">TELF.pre_processing.Vulture.detect_nonenglish module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.detect_nonenglish.ascii_detect"><code class="docutils literal notranslate"><span class="pre">ascii_detect()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.detect_nonenglish.is_english"><code class="docutils literal notranslate"><span class="pre">is_english()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.detect_nonenglish.simple_tokenize"><code class="docutils literal notranslate"><span class="pre">simple_tokenize()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.pre_process">TELF.pre_processing.Vulture.pre_process module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.advance_document_clean"><code class="docutils literal notranslate"><span class="pre">advance_document_clean()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.build_stem_map"><code class="docutils literal notranslate"><span class="pre">build_stem_map()</span></code></a></li>

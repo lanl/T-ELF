@@ -25,69 +25,74 @@ Next let's load the stop words (example stop words can be found `here <https://g
 Now we can perform pre-processing:
 
 .. code-block:: python
+    
+    # import libraries
+    import os
+    import pickle
+    import pathlib
+    import pandas as pd
 
-   from TELF.pre_processing import Vulture
+    from TELF.pre_processing import Vulture
 
-   settings = {
-       # number of parallel jobs
-       "n_jobs":-1, 
-       # number of nodes
-       "n_nodes":1, 
-       # verbosity level
-       "verbose":1,
-       # minimum number of characters in tokens
-       "min_characters":2,
-       # minimum number of unique characters in tokens
-       "min_unique_characters":2,
-       # Lemmatize the tokens
-       "lemmatize":True,
-       # Lemmatize document using Spacy, performed during advance pre-processing
-       "lemmatize_spacy":True,
-       # nltk stems and substitution
-       'lemmatize_slic':True,
-       # Stemming of the tokens
-       "stem":False,
-       # Perform text cleaning
-       "clean_text":True,
-       # If True, advance text cleaning, otherwise simple only
-       "advance_clean":True,
-       # Allowed postags for Spacy, used if advance_clean=True
-       "allowed_postags":['NOUN', 'ADJ', 'VERB', 'ADV', "PROPN"],
-       # Spacy NLP model, used if advance_clean=True
-       "spacy_model":"en_core_web_lg",
-       # If True, detects language
-       "detect_language":True,
-       # Number of words to use when detecting language, used if detect_language=True
-       "n_words_use_language":10,
-       # backend to use
-       "parallel_backend":"loky",
-       # Settings for simple cleaning
-       "simple_clean_settings": { "remove_copyright_with_symbol": True,
-                                  "remove_stop_phrases": False,
-                                  "make_lower_case": True,
-                                  "remove_trailing_dash": True,  # -foo-bar- -> foo-bar
-                                  "make_hyphens_words": False,  # foo-bar -> foobar
-                                  "remove_next_line": True,
-                                  "remove_email": True,
-                                  "remove_dash": False,
-                                  "remove_between_[]": True,
-                                  "remove_between_()": True,
-                                  "remove_[]": False,
-                                  "remove_()": False,
-                                  "remove_\\": False,
-                                  "remove_^": False,
-                                  "remove_numbers": False,
-                                  "remove_nonASCII": False,
-                                  "remove_tags": True,  # remove HTML tags
-                                  "remove_special_characters": True,  # option to specify these?
-                                  "remove_stop_words": True,
-                               },
-   }
-   vulture = Vulture(**settings)
-   substitutions = {'pair':'pair_modded','theory':'moddified_theories',}
-   vulture.clean(documents, stop_words, filename="results/clean_example", substitutions=substitutions)
+    from TELF.pre_processing.Vulture.modules import SimpleCleaner
+    from TELF.pre_processing.Vulture.modules import LemmatizeCleaner
+    from TELF.pre_processing.Vulture.modules import SubstitutionCleaner
+    from TELF.pre_processing.Vulture.modules import RemoveNonEnglishCleaner
 
-Results will be saved under ``results/clean_example``.
+    from TELF.pre_processing.Vulture.default_stop_words import STOP_WORDS
+    from TELF.pre_processing.Vulture.default_stop_phrases import STOP_PHRASES
+    
+    # load dataset
+    DATA_DIR = os.path.join('..', '..', 'data')
+    DATA_DIR = pathlib.Path(DATA_DIR).resolve()
+    DATA_FILE = 'documents.p'
+    documents = pickle.load(open(os.path.join(DATA_DIR, DATA_FILE), 'rb'))
+    
+    # output directory
+    RESULTS_DIR = 'results'
+    RESULTS_DIR = pathlib.Path(RESULTS_DIR).resolve()
+    RESULTS_FILE = 'clean_documents.p'
+    try:
+        os.mkdir(RESULTS_DIR)
+    except FileExistsError:
+        pass
+        
+    # create a cleaning pipeline
+    vulture = Vulture(n_jobs  = 1, 
+                  verbose = 10,  # Disable == 0, Verbose >= 1
+                 )
+                 
+    steps = [
+    RemoveNonEnglishCleaner(ascii_ratio=0.9, stopwords_ratio=0.25),
+    SimpleCleaner(stop_words = STOP_WORDS,
+                      stop_phrases = STOP_PHRASES,
+                      order = [
+                          'standardize_hyphens',
+                          'isolate_frozen',
+                          'remove_copyright_statement',
+                          'remove_stop_phrases',
+                          'make_lower_case',
+                          'remove_formulas',
+                          'normalize',
+                          'remove_next_line',
+                          'remove_email',
+                          'remove_()',
+                          'remove_[]',
+                          'remove_special_characters',
+                          'remove_nonASCII_boundary',
+                          'remove_nonASCII',
+                          'remove_tags',
+                          'remove_stop_words',
+                          'remove_standalone_numbers',
+                          'remove_extra_whitespace',
+                          'min_characters',
+                      ]
+                     ),
+        LemmatizeCleaner('spacy'),
+    ]
+    
+    # clean
+    cleaned_documents = vulture.clean(documents, steps=steps)
 
 Available Functions
 ---------------------
@@ -97,8 +102,7 @@ Available Functions
 .. autosummary::
    Vulture.__init__
    Vulture.clean
-   Vulture.dataframe_clean
-   Vulture.distributed_clean
+   Vulture.clean_dataframe
    
 
 Module Contents
