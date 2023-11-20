@@ -281,630 +281,262 @@ document.write(`
 <span class="sd">derivative works, distribute copies to the public, perform publicly and display publicly, and to permit</span>
 <span class="sd">others to do so.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span><span class="p">,</span> <span class="n">parallel_backend</span>
+
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.modules</span> <span class="kn">import</span> <span class="n">SimpleCleaner</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.modules</span> <span class="kn">import</span> <span class="n">LemmatizeCleaner</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.modules</span> <span class="kn">import</span> <span class="n">SubstitutionCleaner</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.modules</span> <span class="kn">import</span> <span class="n">RemoveNonEnglishCleaner</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.default_stop_words</span> <span class="kn">import</span> <span class="n">STOP_WORDS</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.default_stop_phrases</span> <span class="kn">import</span> <span class="n">STOP_PHRASES</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="n">MPI</span> <span class="o">=</span> <span class="kc">None</span>
 
-<span class="kn">from</span> <span class="nn">.pre_process</span> <span class="kn">import</span> <span class="n">simple_document_clean</span>
-<span class="kn">from</span> <span class="nn">.pre_process</span> <span class="kn">import</span> <span class="n">check_character_lengths</span>
-<span class="kn">from</span> <span class="nn">.pre_process</span> <span class="kn">import</span> <span class="n">_organize_simple_clean_defaults</span>
-<span class="kn">from</span> <span class="nn">.pre_process</span> <span class="kn">import</span> <span class="n">advance_document_clean</span>
-<span class="kn">from</span> <span class="nn">.pre_process</span> <span class="kn">import</span> <span class="n">lemmatize_document</span>
-<span class="kn">from</span> <span class="nn">.pre_process</span> <span class="kn">import</span> <span class="n">stem_document</span>
-<span class="kn">from</span> <span class="nn">.pre_process</span> <span class="kn">import</span> <span class="n">build_vocab_stem_subs</span>
-<span class="kn">from</span> <span class="nn">.pre_process</span> <span class="kn">import</span> <span class="n">correct_text</span>
 
-<span class="kn">from</span> <span class="nn">.default_stop_words</span> <span class="kn">import</span> <span class="n">default_stop_words</span>
-<span class="kn">from</span> <span class="nn">.default_stop_phrases</span> <span class="kn">import</span> <span class="n">default_stop_phrases</span>
-<span class="kn">from</span> <span class="nn">.detect_language</span> <span class="kn">import</span> <span class="n">get_language</span>
-<span class="kn">from</span> <span class="nn">.detect_nonenglish</span> <span class="kn">import</span> <span class="n">is_english</span>
+<div class="viewcode-block" id="chunk_tuple_list">
+<a class="viewcode-back" href="../../../../Vulture.html#TELF.pre_processing.Vulture.vulture.chunk_tuple_list">[docs]</a>
+<span class="k">def</span> <span class="nf">chunk_tuple_list</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">n_chunks</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Splits the given list of (key, value) tuples into sub-lists.</span>
 
-<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
-<span class="kn">import</span>  <span class="nn">multiprocessing</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">pickle</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">spacy</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">ast</span><span class="o">,</span> \
-        <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span><span class="p">,</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
- 
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    l: list of tuple</span>
+<span class="sd">        List of (key, value) tuples to split.</span>
+<span class="sd">    n_chunks: int</span>
+<span class="sd">        How many sets of sub-lists to create.</span>
+
+<span class="sd">    Yields</span>
+<span class="sd">    ------</span>
+<span class="sd">    list</span>
+<span class="sd">        Sub-list containing (key, value) tuples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n_chunks</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="c1"># determine the chunk size and the remainder</span>
+    <span class="n">chunk_size</span><span class="p">,</span> <span class="n">remainder</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">),</span> <span class="n">n_chunks</span><span class="p">)</span>
+    
+    <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_chunks</span><span class="p">):</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">chunk_size</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">remainder</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">l</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">end</span></div>
+
 
 
 <div class="viewcode-block" id="Vulture">
 <a class="viewcode-back" href="../../../../Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture">[docs]</a>
-<span class="k">class</span> <span class="nc">Vulture</span><span class="p">():</span>
+<span class="k">class</span> <span class="nc">Vulture</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vulture is a parallel, multi-node parallel, and distributed parallel document</span>
+<span class="sd">    pre-processing tool.</span>
+<span class="sd">    It is designed to be simple and fast.</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
-                 <span class="n">n_nodes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                 <span class="n">verbose</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                 <span class="n">min_characters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                 <span class="n">min_unique_characters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                 <span class="n">clean_text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">advance_clean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">allowed_postags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NOUN&#39;</span><span class="p">,</span> <span class="s1">&#39;ADJ&#39;</span><span class="p">,</span> <span class="s1">&#39;VERB&#39;</span><span class="p">,</span> <span class="s1">&#39;ADV&#39;</span><span class="p">,</span> <span class="s2">&quot;PROPN&quot;</span><span class="p">],</span>
-                 <span class="n">spacy_model</span><span class="o">=</span><span class="s2">&quot;en_core_web_lg&quot;</span><span class="p">,</span>
-                 <span class="n">lemmatize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">lemmatize_spacy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">lemmatize_slic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">stem</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">detect_language</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">n_words_use_language</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-                 <span class="n">remove_nonenglish</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">remove_nonenglish_params</span><span class="o">=</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.175</span><span class="p">),</span>
-                 <span class="n">parallel_backend</span><span class="o">=</span><span class="s2">&quot;multiprocessing&quot;</span><span class="p">,</span>
-                 <span class="n">simple_clean_settings</span><span class="o">=</span><span class="p">{}</span>
-                 <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Vulture is a parallel, multi-node parallel, and distributed parallel document</span>
-<span class="sd">        pre-processing tool.</span>
-<span class="sd">        It is designed to be simple and fast.</span>
-
-<span class="sd">        Vultures are natures&#39; cleaners!</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        n_jobs : int, optional</span>
-<span class="sd">            Number of parallel processes. The default is -1.</span>
-<span class="sd">        n_nodes : int, optional</span>
-<span class="sd">            Number of nodes. The default is 1.</span>
-<span class="sd">        verbose : int, optional</span>
-<span class="sd">            Verbosity level. The default is 10.</span>
-<span class="sd">        min_characters : int, optional</span>
-<span class="sd">            Minimum number of characters a token should have. The default is 2.</span>
-<span class="sd">        min_unique_characters : int, optional</span>
-<span class="sd">            Minimum number of unique characters a token should have.. The default is 2.</span>
-<span class="sd">        clean_text : bool, optional</span>
-<span class="sd">            If True, perform cleaning. The default is True.</span>
-<span class="sd">        advance_clean : bool, optional</span>
-<span class="sd">            If True, and clean_text is also True, then performs advance cleaning. The default is False.</span>
-<span class="sd">        allowed_postags : list, optional</span>
-<span class="sd">            List of allowed postags for Spacy. The default is [&#39;NOUN&#39;, &#39;ADJ&#39;, &#39;VERB&#39;, &#39;ADV&#39;, &quot;PROPN&quot;].</span>
-<span class="sd">        spacy_model : string, optional</span>
-<span class="sd">            Spacy model to load. The default is &quot;en_core_web_lg&quot;.</span>
-<span class="sd">        lemmatize : bool, optional</span>
-<span class="sd">            If True, performs lemmatization. Uses WordNet lemmatization. The default is True.</span>
-<span class="sd">        lemmatize_spacy : bool, optional</span>
-<span class="sd">            If True, performs lemmatization on the Spacy model during advance pre-processing. </span>
-<span class="sd">            advance_clean must be true to use this.</span>
-<span class="sd">            The default is False.</span>
-<span class="sd">        lemmatize_slic : bool, optional</span>
-<span class="sd">            If True, performs lemmatization on the nltk model during advance pre-processing. </span>
-<span class="sd">            advance_clean must be true to use this.</span>
-<span class="sd">            The default is Fasle.</span>
-<span class="sd">        stem : bool, optional</span>
-<span class="sd">            If True, performs stemming. The default is True.</span>
-<span class="sd">        detect_language : bool, optional</span>
-<span class="sd">            If True, performs language detection. The default is False.</span>
-<span class="sd">        n_words_use_language : int, optional</span>
-<span class="sd">            Number of words to use when detecting langauge. The default is 30.</span>
-<span class="sd">        remove_nonenglish : bool, optional</span>
-<span class="sd">            Use heuristic to remove foreign language papers</span>
-<span class="sd">        remove_nonenglish_params : (float, float), optional</span>
-<span class="sd">            A tuple of floats that control the heuristic. The first entry in the tuple is the minimum </span>
-<span class="sd">            acceptable ratio for ascii characters to total characters in the text. The second float </span>
-<span class="sd">            is the min acceptable ratio of stopwords in the text</span>
-<span class="sd">        simple_clean_settings: dict, optional</span>
-<span class="sd">            Settings used in simple cleaning. See `pre_process._organize_simple_clean_defaults &lt;https://github.com/lanl/T-ELF/blob/main/TELF/pre_processing/Vulture/pre_process.py#L356&gt;`_ for defaults.</span>
-<span class="sd">            </span>
-<span class="sd">            .. note::</span>
-
-<span class="sd">                **Example Settings:**</span>
-
-<span class="sd">                .. code-block:: python</span>
-
-<span class="sd">                    simple_clean_settings= { </span>
-<span class="sd">                        &quot;remove_copyright_with_symbol&quot;: True,</span>
-<span class="sd">                        &quot;remove_stop_phrases&quot;: False,</span>
-<span class="sd">                        &quot;make_lower_case&quot;: True,</span>
-<span class="sd">                        &quot;remove_trailing_dash&quot;: True,  # -foo-bar- -&gt; foo-bar</span>
-<span class="sd">                        &quot;make_hyphens_words&quot;: False,  # foo-bar -&gt; foobar</span>
-<span class="sd">                        &quot;remove_next_line&quot;: True,</span>
-<span class="sd">                        &quot;remove_email&quot;: True,</span>
-<span class="sd">                        &quot;remove_dash&quot;: False,</span>
-<span class="sd">                        &quot;remove_between_[]&quot;: True,</span>
-<span class="sd">                        &quot;remove_between_()&quot;: True,</span>
-<span class="sd">                        &quot;remove_[]&quot;: False,</span>
-<span class="sd">                        &quot;remove_()&quot;: False,</span>
-<span class="sd">                        &quot;remove_\\&quot;: False,</span>
-<span class="sd">                        &quot;remove_^&quot;: False,</span>
-<span class="sd">                        &quot;remove_numbers&quot;: False,</span>
-<span class="sd">                        &quot;remove_nonASCII&quot;: False,</span>
-<span class="sd">                        &quot;remove_tags&quot;: True,  # remove HTML tags</span>
-<span class="sd">                        &quot;remove_special_characters&quot;: True,  # option to specify these?</span>
-<span class="sd">                        &quot;remove_stop_words&quot;: True,</span>
-<span class="sd">                    }</span>
-
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># input check</span>
-        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;n_jobs must be a type of integer!&quot;</span>
-        <span class="k">assert</span> <span class="n">n_nodes</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;n_nodes must be 1 or greater value!&quot;</span>
-        <span class="k">assert</span> <span class="n">clean_text</span> <span class="ow">or</span> <span class="n">lemmatize</span> <span class="ow">or</span> <span class="n">stem</span> <span class="ow">or</span> <span class="n">detect_language</span><span class="p">,</span> \
-            <span class="s2">&quot;At least one must be True for clean_text, lemmatize, stem, and detect_language!&quot;</span>
-        <span class="k">if</span> <span class="n">advance_clean</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">clean_text</span><span class="p">:</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span>
-                <span class="s2">&quot;advance_clean was True but clean_text was False.&quot;</span> <span class="o">+</span>
-                <span class="s2">&quot;To use advance cleaning, set both clean_text and advance_clean to True!&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">lemmatize_spacy</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">advance_clean</span><span class="p">:</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span>
-                <span class="s2">&quot;lemmatize_spacy was True but advance_clean was False.&quot;</span> <span class="o">+</span>
-                <span class="s2">&quot;To use lemmatization with Spacy, set both lemmatize_spacy and advance_clean to True!&quot;</span> <span class="o">+</span>
-                <span class="s2">&quot;If only want to do lemmatization but not advance cleaning, use lemmatize=True instead.&quot;</span><span class="p">)</span>
-            
-        <span class="c1">#if lemmatize_slic and not advance_clean:</span>
-        <span class="c1">#    sys.exit(</span>
-        <span class="c1">#        &quot;lemmatize_slic was True but advance_clean was False.&quot; +</span>
-        <span class="c1">#        &quot;To use lemmatization with nltk, set both lemmatize_slic and advance_clean to True!&quot; +</span>
-        <span class="c1">#        &quot;If only want to do lemmatization but not advance cleaning, use lemmatize=True instead.&quot;)</span>
-
-        <span class="k">if</span> <span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">MPI</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;Attempted to use n_nodes&gt;1 but MPI is not available!&quot;</span><span class="p">)</span>
-
-        <span class="c1"># if allowed postags is list make it a hashmap</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">allowed_postags</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">allowed_postags</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="n">allowed_postags</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">allowed_postags</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">allowed_postags</span><span class="p">)))</span>
-
-        <span class="n">ascii_ratio</span><span class="p">,</span> <span class="n">stopwords_used</span> <span class="o">=</span> <span class="n">remove_nonenglish_params</span>
-        <span class="k">assert</span> <span class="n">ascii_ratio</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">ascii_ratio</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;ASCII ratio must be on [0, 1]&#39;</span>
-        <span class="k">assert</span> <span class="n">stopwords_used</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">stopwords_used</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;ASCII ratio must be on [0, 100]&#39;</span>
-            
+<span class="sd">    Vultures are natures&#39; cleaners!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">PARALLEL_BACKEND_OPTIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;loky&#39;</span><span class="p">,</span> <span class="s1">&#39;multiprocessing&#39;</span><span class="p">,</span> <span class="s1">&#39;threading&#39;</span><span class="p">}</span>
+    <span class="n">DEFAULT_PIPELINE</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">SimpleCleaner</span><span class="p">(</span><span class="n">stop_words</span> <span class="o">=</span> <span class="n">STOP_WORDS</span><span class="p">,</span>
+                      <span class="n">stop_phrases</span> <span class="o">=</span> <span class="n">STOP_PHRASES</span><span class="p">,</span>
+                      <span class="n">order</span> <span class="o">=</span> <span class="p">[</span>
+                          <span class="s1">&#39;standardize_hyphens&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;isolate_frozen&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_copyright_statement&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_stop_phrases&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;make_lower_case&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_formulas&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;normalize&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_next_line&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_email&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_()&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_[]&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_special_characters&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_nonASCII_boundary&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_nonASCII&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_tags&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_stop_words&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_standalone_numbers&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_extra_whitespace&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;min_characters&#39;</span><span class="p">,</span>
+                      <span class="p">]</span>
+                     <span class="p">),</span>
+    <span class="p">]</span>
+    
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">n_jobs</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_nodes</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">parallel_backend</span> <span class="o">=</span> <span class="s2">&quot;multiprocessing&quot;</span><span class="p">,</span> <span class="n">cache</span> <span class="o">=</span> <span class="s1">&#39;/tmp&#39;</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">=</span> <span class="n">n_nodes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">min_characters</span> <span class="o">=</span> <span class="n">min_characters</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">min_unique_characters</span> <span class="o">=</span> <span class="n">min_unique_characters</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">clean_text</span> <span class="o">=</span> <span class="n">clean_text</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">advance_clean</span> <span class="o">=</span> <span class="n">advance_clean</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">allowed_postags</span> <span class="o">=</span> <span class="n">allowed_postags</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spacy_model</span> <span class="o">=</span> <span class="n">spacy_model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lemmatize</span> <span class="o">=</span> <span class="n">lemmatize</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lemmatize_spacy</span> <span class="o">=</span> <span class="n">lemmatize_spacy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lemmatize_slic</span> <span class="o">=</span> <span class="n">lemmatize_slic</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stem</span> <span class="o">=</span> <span class="n">stem</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">detect_language</span> <span class="o">=</span> <span class="n">detect_language</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_words_use_language</span> <span class="o">=</span> <span class="n">n_words_use_language</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">remove_nonenglish</span> <span class="o">=</span> <span class="n">remove_nonenglish</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">remove_nonenglish_ar</span> <span class="o">=</span> <span class="n">ascii_ratio</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">remove_nonenglish_su</span> <span class="o">=</span> <span class="n">stopwords_used</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span> <span class="o">=</span> <span class="n">parallel_backend</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">simple_clean_settings</span> <span class="o">=</span> <span class="n">_organize_simple_clean_defaults</span><span class="p">(</span><span class="n">simple_clean_settings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">cache</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        
+        <span class="c1"># init multi-node (MPI) attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_mpi</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mpi</span> <span class="o">=</span> <span class="n">MPI</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mpi</span><span class="o">.</span><span class="n">COMM_WORLD</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Get_size</span><span class="p">()</span>
 
+		<span class="c1"># generate unique ID only on the root process</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unique_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unique_id</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># broadcast unique_id from root process to all other processes</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unique_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">bcast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unique_id</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        
+        
 <div class="viewcode-block" id="Vulture.clean">
 <a class="viewcode-back" href="../../../../Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.clean">[docs]</a>
-    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-              <span class="n">documents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-              <span class="n">stop_words</span><span class="o">=</span><span class="p">{},</span>
-              <span class="n">stop_phrases</span><span class="o">=</span><span class="p">[],</span>
-              <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;cleaned_documents&quot;</span><span class="p">,</span>
-              <span class="n">substitutions</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="p">{},</span>
-             <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Performs single-node parallel pre-processing, or multi-node parallel pre-processing.</span>
-<span class="sd">        Entire corpus is given at once, and each node will work on certain segment of the documents</span>
-<span class="sd">        when using multi-node parallel pre-processing.</span>
-
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        documents : dict</span>
-<span class="sd">            Dictionary of documents to clean. In this dictionary, keys are the unique document</span>
-<span class="sd">            identifiers, and values are the text to clean.</span>
-<span class="sd">        stop_words : dict (recommended), or list</span>
-<span class="sd">            Hashmap (dict) of stopwords. O(1) lookup.</span>
-<span class="sd">            List of stopwords. O(n) lookup. Default is {}.</span>
-<span class="sd">        stop_phrases: list, optional</span>
-<span class="sd">            List of phrases to be removed.</span>
-<span class="sd">        filename : string, optional</span>
-<span class="sd">            Pattern and path when saving the results. The default is &quot;cleaned_documents&quot;.</span>
-<span class="sd">        substitutions : dict </span>
-<span class="sd">            src_word as keys, destination words as values. Keys should not be in values, and v.v.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span>
-            <span class="n">documents</span><span class="p">)</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">,</span> <span class="s2">&quot;Required format: documents= {&#39;id1&#39;:&#39;text&#39;, &#39;id2&#39;:&#39;text&#39;, ...}.&quot;</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-        <span class="c1"># if no stop-words given, use the default</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stop_words</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">stop_words</span> <span class="o">=</span> <span class="n">default_stop_words</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-        <span class="c1"># if no stop-phrases given, use the default</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stop_phrases</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">stop_phrases</span> <span class="o">=</span> <span class="n">default_stop_phrases</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-        <span class="c1"># if stop words is a list, make it a Hashmap</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stop_words</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stop_words</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="n">stop_words</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">stop_words</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">stop_words</span><span class="p">)))</span>
-            
-        <span class="n">save_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_parent_directory</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lemmatize_slic</span><span class="p">:</span>
-            <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tokenize_helper</span><span class="p">,</span> <span class="n">as_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">before_clean_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span><span class="s1">&#39;before_any_cleaning-vocabulary.txt&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_save_tokens</span><span class="p">(</span> <span class="n">before_clean_path</span><span class="p">,</span> <span class="n">tokens</span> <span class="p">)</span>
-            
-        <span class="c1"># using more than one node, then get this nodes&#39; chunk</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
-            <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">_node-</span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1">&#39;</span>
-            <span class="n">document_chunks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_dict_chunks</span><span class="p">(</span><span class="n">input_dict</span><span class="o">=</span><span class="n">documents</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">)</span>
-            <span class="n">documents</span> <span class="o">=</span> <span class="n">document_chunks</span><span class="p">[</span><span class="n">rank</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">comm</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="c1"># language detection</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect_language</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing language detection.&quot;</span><span class="p">)</span>
-            <span class="n">language_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span>
-                <span class="n">documents</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;n_words_use&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_words_use_language</span><span class="p">},</span> <span class="bp">self</span><span class="o">.</span><span class="n">_language_helper</span><span class="p">)</span>
-
-            <span class="c1"># save language detection results</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">language_results</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;_language.p&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
-            
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_nonenglish</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Removing non-english documents through heuristic.&quot;</span><span class="p">)</span>   
-            <span class="n">non_english_docs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span>
-                <span class="n">documents</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;ascii_ratio&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_nonenglish_ar</span><span class="p">,</span> 
-                            <span class="s2">&quot;stopwords_used&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_nonenglish_su</span><span class="p">},</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nonenglish_helper</span><span class="p">)</span>
-            
-            <span class="n">documents</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">documents</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">non_english_docs</span><span class="p">}</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">non_english_docs</span><span class="p">)</span><span class="si">}</span><span class="s2"> non-english documents.&quot;</span><span class="p">)</span>   
-            
-        <span class="c1"># parallel clean</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">clean_text</span><span class="p">:</span>
-
-            <span class="c1"># simple clean</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing simple-preprocess.&quot;</span><span class="p">)</span>
-
-            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span>
-                <span class="n">documents</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;stop_words&quot;</span><span class="p">:</span> <span class="n">stop_words</span><span class="p">,</span>
-                            <span class="s2">&quot;stop_phrases&quot;</span><span class="p">:</span> <span class="n">stop_phrases</span><span class="p">,</span>
-                            <span class="s2">&quot;clean_settings&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">simple_clean_settings</span>
-                            <span class="p">},</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_clean_helper</span><span class="p">)</span>
-
-            <span class="c1"># advance clean</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">advance_clean</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
- 
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lemmatize_spacy</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing advance pre-process with Spacy lemmatization.&quot;</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing advance pre-process.&quot;</span><span class="p">)</span>
-
-                <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span>
-                    <span class="n">results</span><span class="p">,</span> <span class="p">{</span>
-                        <span class="s2">&quot;allowed_postags&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">allowed_postags</span><span class="p">,</span>
-                        <span class="s2">&quot;lemmatize&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lemmatize_spacy</span>
-                    <span class="p">},</span> <span class="bp">self</span><span class="o">.</span><span class="n">_advance_clean_helper</span><span class="p">)</span>
-  
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="n">documents</span>
-
-        <span class="c1"># parallel lematization, stemming</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing lemattization.&quot;</span><span class="p">)</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lemmatize_helper</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stem</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing stemming.&quot;</span><span class="p">)</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stem_helper</span><span class="p">)</span>
-
-        <span class="c1"># check the character lengths</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">simple_clean_settings</span><span class="p">[</span><span class="s2">&quot;check_char_length&quot;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing character length checks.&quot;</span><span class="p">)</span>
-
-            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span>
-                <span class="n">results</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;min_characters&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_characters</span><span class="p">,</span>
-                          <span class="s2">&quot;min_unique_characters&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_unique_characters</span><span class="p">},</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_char_length_helper</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">documents</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">substitutions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">=</span> <span class="n">save_path</span>
+        <span class="k">if</span> <span class="n">steps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">steps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_PIPELINE</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">substitutions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">substitutions</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> <span class="s1">&#39;`substitutions` must be a dict!&#39;</span>
+            <span class="n">initial_sub</span> <span class="o">=</span> <span class="n">SubstitutionCleaner</span><span class="p">(</span><span class="n">substitutions</span><span class="p">,</span> <span class="n">permute</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lemmatize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">final_sub</span> <span class="o">=</span> <span class="n">SubstitutionCleaner</span><span class="p">(</span><span class="n">substitutions</span><span class="p">,</span> <span class="n">permute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lemmatize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">steps</span> <span class="o">=</span> <span class="p">[</span><span class="n">initial_sub</span><span class="p">]</span> <span class="o">+</span> <span class="n">steps</span> <span class="o">+</span> <span class="p">[</span><span class="n">final_sub</span><span class="p">]</span>
+    
+        <span class="c1"># transform documents into list of tuples</span>
+        <span class="n">clean_documents</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">documents</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Vulture]: Cleaning </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">clean_documents</span><span class="p">)</span><span class="si">}</span><span class="s1"> documents&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
         
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lemmatize_slic</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing advance pre-process with Slic lemmatization (nltk stems).&quot;</span><span class="p">)</span>
-            
-            <span class="c1"># get all tokens as a quasi_vocabulary</span>
-            <span class="n">quasi_vocabulary</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tokenize_helper</span><span class="p">,</span> <span class="n">as_list</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-            <span class="n">before_slic_lemma</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span><span class="s1">&#39;before_slic_lemma-vocabulary.txt&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_save_tokens</span><span class="p">(</span> <span class="n">before_slic_lemma</span><span class="p">,</span> <span class="n">quasi_vocabulary</span> <span class="p">)</span> 
-            
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="n">first_ten_tokens</span> <span class="o">=</span> <span class="n">quasi_vocabulary</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
-                <span class="n">token_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">quasi_vocabulary</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Token length: </span><span class="si">{</span><span class="n">token_length</span><span class="si">}</span><span class="s1">, First ten tokens before slic lemma: </span><span class="si">{</span><span class="n">first_ten_tokens</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-                
-            <span class="n">subs_stemmed</span> <span class="o">=</span> <span class="n">build_vocab_stem_subs</span><span class="p">(</span><span class="n">quasi_vocabulary</span><span class="p">)</span> <span class="c1"># suffixes in future, when unification occurs.</span>
-            <span class="n">df_stem_map</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">subs_stemmed</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
-            <span class="n">df_stem_map</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span><span class="s1">&#39;vocabulary_stem_map.csv&#39;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>   
-
-            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;corrections&#39;</span><span class="p">:</span><span class="n">subs_stemmed</span> <span class="p">},</span> <span class="n">correct_text</span><span class="p">)</span>
+        <span class="c1"># prepare for MPI by chunking data and saving chunks (assuming DFS)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_mpi</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpi_init</span><span class="p">(</span><span class="n">clean_documents</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Barrier</span><span class="p">()</span>
+            <span class="n">clean_documents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mpi_load_chunk_from_disk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span> <span class="n">is_clean</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         
-            <span class="c1"># tokenize, save to path</span>
-            <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tokenize_helper</span><span class="p">,</span> <span class="n">as_list</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">after_clean_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span><span class="s1">&#39;after_slic_lemma-vocabulary.txt&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_save_tokens</span><span class="p">(</span> <span class="n">after_clean_path</span><span class="p">,</span> <span class="n">tokens</span> <span class="p">)</span> 
-            
-        <span class="k">if</span> <span class="n">substitutions</span><span class="p">:</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;corrections&#39;</span><span class="p">:</span><span class="n">substitutions</span> <span class="p">},</span> <span class="n">correct_text</span><span class="p">)</span>
-
-        <span class="c1"># save pre-processing results</span>
-        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot;.p&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
-
-        <span class="c1"># show the time</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done. Time=&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">))</span></div>
-
-
-<div class="viewcode-block" id="Vulture.dataframe_clean">
-<a class="viewcode-back" href="../../../../Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.dataframe_clean">[docs]</a>
-    <span class="k">def</span> <span class="nf">dataframe_clean</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">append_to_original_df</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">concat_cleaned_cols</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">stop_words</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="p">[],</span> <span class="n">stop_phrases</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="p">[],</span> <span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Wrapper function for Vulture text cleaning. Cleans the text from a chosen DataFrame columms and applies</span>
-<span class="sd">        cleaning. Then formats the cleaned data and returns as a new DataFrame.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        data : pd.DataFrame</span>
-<span class="sd">            The DataFrame containing text to be cleaned</span>
-<span class="sd">        columns : list</span>
-<span class="sd">            The name of the text column that needs to be cleaned</span>
-<span class="sd">        append_to_original_df: bool, optional</span>
-<span class="sd">            If the cleaned columns of the dataframe should be appended on the columns of the original dataframe</span>
-<span class="sd">        concat_cleaned_cols:bool, optional</span>
-<span class="sd">            If the cleaned columns of the dataframe should be concatenated together into a single common column</span>
-<span class="sd">        stop_words : list, optional</span>
-<span class="sd">            Words that will be removed during cleaning</span>
-<span class="sd">        stop_phrases: list, optional</span>
-<span class="sd">            Phrases to be removed.</span>
-<span class="sd">        data_path : str, optional</span>
-<span class="sd">            Vulture outputs the cleaned text as pickle files. This argument specifies the path</span>
-<span class="sd">            at which they are saved. These pickle files are later loaded and converted to a DataFrame.</span>
-<span class="sd">        overwrite : bool, optional</span>
-<span class="sd">            Flag that controls if results should be overwritten. If true, cleaning will be performed</span>
-<span class="sd">            regardless of existence of previous data. Default is True.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        pd.DataFrame</span>
-<span class="sd">            if not concateneated, DataFrame containing the cleaned results</span>
-<span class="sd">            if concateneated, original DataFrame with appended columns containing the cleaned results</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">):</span>
-            <span class="n">missing_cols</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: the following columns are missing from the dataframe: </span><span class="si">{</span><span class="n">missing_cols</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
+        <span class="c1"># perform cleaning </span>
+        <span class="n">clean_documents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clean_helper</span><span class="p">(</span><span class="n">clean_documents</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_mpi</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mpi_save_chunk_to_disk</span><span class="p">(</span><span class="n">clean_documents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span> <span class="n">is_clean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">Barrier</span><span class="p">()</span>
+            <span class="n">clean_documents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mpi_combine</span><span class="p">()</span>
         
-        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="n">concat_cleaned_cols</span> <span class="p">:</span>
-            <span class="n">concatenated_columns</span> <span class="o">=</span> <span class="s1">&#39;cleaned_&#39;</span> <span class="o">+</span>  <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
-            <span class="n">selected_columns_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span>
-            <span class="n">concated_string_rows</span> <span class="o">=</span> <span class="n">selected_columns_data</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            
-            <span class="k">if</span> <span class="n">overwrite</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">concatenated_columns</span><span class="si">}</span><span class="s1">.p&#39;</span><span class="p">)):</span>
-                <span class="n">documents</span> <span class="o">=</span> <span class="p">{</span><span class="n">idx</span><span class="p">:</span> <span class="n">text</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">concated_string_rows</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="p">}</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">stop_words</span><span class="p">,</span> <span class="n">stop_phrases</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">concatenated_columns</span><span class="p">))</span>
-            
-                <span class="n">clean_documents</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">concatenated_columns</span><span class="si">}</span><span class="s1">.p&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
-                <span class="n">df</span><span class="p">[</span><span class="n">concatenated_columns</span><span class="p">]</span> <span class="o">=</span> <span class="n">clean_documents</span>
-
+        <span class="c1"># save the clean results or return them</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_save_documents</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">clean_documents</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
-                <span class="n">clean_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;clean_</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">clean_documents</span><span class="p">)</span></div>
 
-                <span class="k">if</span> <span class="n">overwrite</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">clean_col</span><span class="si">}</span><span class="s1">.p&#39;</span><span class="p">)):</span>
-                    <span class="n">zipped_data</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
-                    <span class="n">documents</span> <span class="o">=</span> <span class="p">{</span><span class="n">idx</span><span class="p">:</span> <span class="n">text</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">zipped_data</span> <span class="p">}</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">stop_words</span><span class="p">,</span> <span class="n">stop_phrases</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">clean_col</span><span class="p">))</span>
-            
-                <span class="n">clean_documents</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">clean_col</span><span class="si">}</span><span class="s1">.p&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
-                <span class="n">df</span><span class="p">[</span><span class="n">clean_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">clean_documents</span>
-
+        
+        
+<div class="viewcode-block" id="Vulture.clean_dataframe">
+<a class="viewcode-back" href="../../../../Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe">[docs]</a>
+    <span class="k">def</span> <span class="nf">clean_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">substitutions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">append_to_original_df</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">concat_cleaned_cols</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">is_unique</span><span class="p">:</span>  <span class="c1"># DataFrame must have unique indices for mapping</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;DataFrame does not contain unique indices!&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">):</span>  <span class="c1"># make sure columns exist</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;One or more columns are invalid!&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># make a copy of the DataFrame to prevent changing original and fill nans with empty strings</span>
         <span class="k">if</span> <span class="n">append_to_original_df</span><span class="p">:</span>
-            <span class="n">common_cols</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-            <span class="n">new_cols</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-
-            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="n">new_cols</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">common_cols</span><span class="p">])</span>
-
-            <span class="k">return</span> <span class="n">data</span>
-
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    
+        <span class="c1"># validate that all columns contain strings</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;One or more columns do not contain strings!&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># prepare the document dictionaries</span>
+        <span class="n">documents</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">concat_cleaned_cols</span><span class="p">:</span>
+            <span class="n">col_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;clean_</span><span class="si">{</span><span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">documents</span> <span class="o">=</span> <span class="p">{</span><span class="n">col_name</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;. &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">columns</span><span class="p">])),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">documents</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s1">&#39;clean_</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">}</span>
+            
+        <span class="c1"># clean</span>
+        <span class="n">clean_documents</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">docs</span> <span class="ow">in</span> <span class="n">documents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">clean_docs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">docs</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">substitutions</span><span class="o">=</span><span class="n">substitutions</span><span class="p">)</span>
+            <span class="n">clean_documents</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">clean_docs</span>
+            
+        <span class="c1"># add the clean data back to the DataFrame</span>
+        <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">clean_docs</span> <span class="ow">in</span> <span class="n">clean_documents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">clean_docs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">df</span></div>
 
-
-<div class="viewcode-block" id="Vulture.distributed_clean">
-<a class="viewcode-back" href="../../../../Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.distributed_clean">[docs]</a>
-    <span class="k">def</span> <span class="nf">distributed_clean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                          <span class="n">files</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
-                          <span class="n">stop_words</span><span class="o">=</span><span class="p">{},</span>
-                          <span class="n">stop_phrases</span><span class="o">=</span><span class="p">[],</span>
-                          <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;cleaned_documents&quot;</span><span class="p">,</span>
-                          <span class="n">file_loader</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Each n node loads a segment of the set of files, and performs parallel pre-processing on</span>
-<span class="sd">        the documents from the loaded files.</span>
-
-<span class="sd">        Use this approach when the corpus cannot fit in the memmory at once.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        files : list</span>
-<span class="sd">            List if strings for locations to the files.</span>
-<span class="sd">        stop_words : dict (recommended), or list</span>
-<span class="sd">            Hashmap (dict) of stopwords. O(1) lookup.</span>
-<span class="sd">            List of stopwords. O(n) lookup. Default is {}.</span>
-<span class="sd">        stop_phrases: list, optional</span>
-<span class="sd">            List of phrases to be removed.</span>
-<span class="sd">        filename : string, optional</span>
-<span class="sd">            Pattern and path when saving the results. The default is &quot;cleaned_documents&quot;.</span>
-<span class="sd">        file_loader : function, optional</span>
-<span class="sd">            Custom function for loading the files. The default is None.</span>
-<span class="sd">            It should take in string path to the file, and return dictionary</span>
-<span class="sd">            where the keys are the unique document IDs and values are the text.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;n_nodes must be greater than 1!&quot;</span>
-        <span class="n">files_chunks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">)</span>
-        <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
-        <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">_node-</span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1">&#39;</span>
-        <span class="n">node_files</span> <span class="o">=</span> <span class="n">files_chunks</span><span class="p">[</span><span class="n">rank</span><span class="p">]</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-        <span class="c1"># if no stop-words given, use the default</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stop_words</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">stop_words</span> <span class="o">=</span> <span class="n">default_stop_words</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-        <span class="c1"># if no stop-phrases given, use the default</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stop_phrases</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">stop_phrases</span> <span class="o">=</span> <span class="n">default_stop_phrases</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-        <span class="c1"># if stop words is a list, make it a Hashmap</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stop_words</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stop_words</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="n">stop_words</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">stop_words</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">stop_words</span><span class="p">)))</span>
-
-        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">node_files</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">node_files</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
-
-            <span class="c1"># name of the file for saving</span>
-            <span class="n">save_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">_file-</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">&#39;</span>
-
-            <span class="c1"># use custom function to load the file</span>
-            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">file_loader</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">file_loader</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-                <span class="n">documents</span> <span class="o">=</span> <span class="n">file_loader</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-
-            <span class="c1"># default load from Pickle</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">documents</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span>
-
-            <span class="c1"># check the type of the document</span>
-            <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span>
-                <span class="n">documents</span><span class="p">)</span> <span class="o">==</span> <span class="nb">dict</span><span class="p">,</span> <span class="s2">&quot;Required format: documents= {&#39;id1&#39;:&#39;text&#39;, &#39;id2&#39;:&#39;text&#39;, ...}.&quot;</span>
-
-            <span class="c1"># parallel clean</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">clean_text</span><span class="p">:</span>
-
-                <span class="c1"># simple clean</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing simple-preprocess.&quot;</span><span class="p">)</span>
-                <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span>
-                    <span class="n">documents</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;stop_words&quot;</span><span class="p">:</span> <span class="n">stop_words</span><span class="p">,</span>
-                                <span class="s2">&quot;stop_phrases&quot;</span><span class="p">:</span> <span class="n">stop_phrases</span><span class="p">,</span>
-                                <span class="s2">&quot;clean_settings&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">simple_clean_settings</span><span class="p">},</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_clean_helper</span><span class="p">)</span>
-
-                <span class="c1"># advance clean</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">advance_clean</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lemmatize_spacy</span><span class="p">:</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing advance pre-process with Spacy lemmatization.&quot;</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing advance pre-process.&quot;</span><span class="p">)</span>
-
-                    <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span>
-                        <span class="n">results</span><span class="p">,</span> <span class="p">{</span>
-                            <span class="s2">&quot;allowed_postags&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">allowed_postags</span><span class="p">,</span>
-                            <span class="s2">&quot;lemmatize&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lemmatize_spacy</span>
-                        <span class="p">},</span> <span class="bp">self</span><span class="o">.</span><span class="n">_advance_clean_helper</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">results</span> <span class="o">=</span> <span class="n">documents</span>
-
-            <span class="c1"># parallel lematization, stemming</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing lemattization.&quot;</span><span class="p">)</span>
-                <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lemmatize_helper</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stem</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing stemming.&quot;</span><span class="p">)</span>
-                <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="p">{},</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stem_helper</span><span class="p">)</span>
-
-            <span class="c1"># check the character lengths</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">simple_clean_settings</span><span class="p">[</span><span class="s2">&quot;check_char_length&quot;</span><span class="p">]:</span>
-
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span> <span class="n">verbose</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing character length checks.&quot;</span><span class="p">)</span>
-
-                <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span>
-                    <span class="n">results</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;min_characters&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_characters</span><span class="p">,</span>
-                              <span class="s2">&quot;min_unique_characters&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_unique_characters</span><span class="p">},</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_char_length_helper</span><span class="p">)</span>
-
-            <span class="c1"># perform language detection</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect_language</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing language detection.&quot;</span><span class="p">)</span>
-                <span class="n">language_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span>
-                    <span class="n">results</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;n_words_use&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_words_use_language</span><span class="p">},</span> <span class="bp">self</span><span class="o">.</span><span class="n">_language_helper</span><span class="p">)</span>
-                <span class="c1"># save language detection results</span>
-                <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">language_results</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_name</span> <span class="o">+</span> <span class="s2">&quot;_language.p&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
-
-            <span class="c1"># save pre-processing results</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_name</span> <span class="o">+</span> <span class="s2">&quot;.p&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
-
-        <span class="c1"># show the time</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done. Time=&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">))</span></div>
-
-
-    <span class="k">def</span> <span class="nf">_split_dict_chunks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">chunks</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Splits the given dictionary into list of multiple dictionaries.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        input_dict : dict</span>
-<span class="sd">            Dictionary to split.</span>
-<span class="sd">        chunks : int</span>
-<span class="sd">            How many sets of dictionaries to create.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        list</span>
-<span class="sd">            List of dictionaries.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">return_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">chunks</span><span class="p">)]</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">input_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">return_list</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
-            <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="n">chunks</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">return</span> <span class="n">return_list</span>
-
     
     
-    <span class="k">def</span> <span class="nf">_parallel_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">documents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">as_list</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_mpi_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">documents</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chunk_tuple_list</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">))</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mpi_save_chunk_to_disk</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">is_clean</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    
+    <span class="k">def</span> <span class="nf">_mpi_get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">is_clean</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">is_clean</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;vulture_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">unique_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1">_clean.p&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;vulture_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">unique_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1">.p&#39;</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_mpi_save_chunk_to_disk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">is_clean</span><span class="p">):</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mpi_get_name</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">is_clean</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span> <span class="n">fn</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fh</span><span class="p">)</span>
+
+                
+    <span class="k">def</span> <span class="nf">_mpi_load_chunk_from_disk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">is_clean</span><span class="p">):</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mpi_get_name</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">is_clean</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span> <span class="n">fn</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+        
+
+    <span class="k">def</span> <span class="nf">_mpi_combine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">clean_documents</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">rank</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">):</span>
+            <span class="n">clean_documents</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mpi_load_chunk_from_disk</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">is_clean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">clean_documents</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_save_documents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">documents</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">fh</span><span class="p">)</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_clean_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clean_documents</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
+        <span class="n">frozen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">cleaner</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">steps</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Vulture]: Running </span><span class="si">{</span><span class="n">cleaner</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> module&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="n">frozen</span> <span class="o">|=</span> <span class="n">cleaner</span><span class="o">.</span><span class="n">frozen</span>
+                <span class="n">cleaner</span><span class="o">.</span><span class="n">frozen</span> <span class="o">=</span> <span class="n">frozen</span>
+                <span class="n">clean_documents</span> <span class="o">=</span> <span class="p">[</span><span class="n">cleaner</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">clean_documents</span><span class="p">,</span> 
+                                   <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">clean_documents</span><span class="p">),</span> <span class="n">disable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">clean_documents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_helper</span><span class="p">(</span><span class="n">clean_documents</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">clean_documents</span> 
+        
+        
+    <span class="k">def</span> <span class="nf">_parallel_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">documents</span><span class="p">,</span> <span class="n">cleaners</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Helper function to run processing of given documents in parallel</span>
 
@@ -925,298 +557,142 @@ document.write(`
 <span class="sd">            processed docuements, where keys are the document IDs and values are the text.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Manager</span><span class="p">()</span> <span class="k">as</span> <span class="n">manager</span><span class="p">:</span>
+            
+            <span class="c1"># split the documents into chunks</span>
+            <span class="n">total_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+            <span class="n">n_jobs</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">total_length</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">)</span>
+            <span class="n">shared_documents</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+            <span class="n">chunk_size</span> <span class="o">=</span> <span class="n">total_length</span> <span class="o">//</span> <span class="n">n_jobs</span>
+        
+            <span class="c1"># run processing in parallel with persitent processes</span>
+            <span class="k">with</span> <span class="n">parallel_backend</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">):</span>
+                <span class="n">frozen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">cleaner</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">cleaners</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Vulture]: Running </span><span class="si">{</span><span class="n">cleaner</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> module&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                    <span class="n">frozen</span> <span class="o">|=</span> <span class="n">cleaner</span><span class="o">.</span><span class="n">frozen</span>
+                    <span class="n">cleaner</span><span class="o">.</span><span class="n">frozen</span> <span class="o">=</span> <span class="n">frozen</span>
+                    <span class="n">Parallel</span><span class="p">()(</span>
+                        <span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parallel_worker</span><span class="p">)(</span><span class="n">shared_documents</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">chunk_size</span><span class="p">,</span> <span class="n">total_length</span><span class="p">),</span> <span class="n">cleaner</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">total_length</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">)</span>
+                    <span class="p">)</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">shared_documents</span><span class="p">)</span>
+        
+        
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_parallel_worker</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">chunk_start</span><span class="p">,</span> <span class="n">chunk_end</span><span class="p">,</span> <span class="n">cleaner</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">chunk_start</span><span class="p">,</span> <span class="n">chunk_end</span><span class="p">):</span>
+            <span class="n">documents</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">cleaner</span><span class="p">(</span><span class="n">documents</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        
+<div class="viewcode-block" id="Vulture.use_mpi">
+<a class="viewcode-back" href="../../../../Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.use_mpi">[docs]</a>
+    <span class="k">def</span> <span class="nf">use_mpi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span></div>
 
-        <span class="c1"># adjust for negative number of job requests</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">n_chunks</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
-            <span class="n">n_chunks</span> <span class="o">-=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    
+    <span class="c1">### GETTERS / SETTERS</span>
+    
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_nodes</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parallel_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_backend</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">save_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_path</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">verbose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span>
+    
+    <span class="nd">@n_jobs</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">n_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;n_jobs must be an int!&#39;</span><span class="p">)</span>
+
+        <span class="n">cpu_count</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+        <span class="n">limit</span> <span class="o">=</span> <span class="n">cpu_count</span> <span class="o">+</span> <span class="n">n_jobs</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">limit</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">cpu_count</span> <span class="o">&lt;</span> <span class="n">limit</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;n_jobs must take a value on [-</span><span class="si">{</span><span class="n">cpu_count</span><span class="si">}</span><span class="s1">, -1] or [1, </span><span class="si">{</span><span class="n">cpu_count</span><span class="si">}</span><span class="s1">]!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_jobs</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span> <span class="o">=</span> <span class="n">cpu_count</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">n_chunks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
 
-        <span class="c1"># split the documents into chunks</span>
-        <span class="n">document_chunks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_dict_chunks</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">n_chunks</span><span class="p">)</span>
-
-        <span class="c1"># process each chunk of documents</span>
-        <span class="n">list_results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">)(</span>
-            <span class="n">delayed</span><span class="p">(</span><span class="n">function</span><span class="p">)(</span><span class="n">documents</span><span class="o">=</span><span class="n">chunk</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span> <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">document_chunks</span><span class="p">)</span>
-
-        <span class="c1"># flatten the results</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">job_result</span> <span class="ow">in</span> <span class="n">list_results</span><span class="p">:</span>
-            <span class="n">results</span> <span class="o">+=</span> <span class="n">job_result</span>
+    <span class="nd">@n_nodes</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">n_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_nodes</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;n_nodes must be an int!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">n_nodes</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;n_nodes must be greater than 0!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">n_nodes</span> <span class="ow">and</span> <span class="n">MPI</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;Multiple nodes requested but MPI is not available&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_nodes</span> <span class="o">=</span> <span class="n">n_nodes</span>
         
-        <span class="k">if</span> <span class="n">as_list</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">results</span>
+    <span class="nd">@parallel_backend</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">parallel_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parallel_backend</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parallel_backend</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;parallel_backend must be an str!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parallel_backend</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARALLEL_BACKEND_OPTIONS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">parallel_backend</span><span class="si">}</span><span class="s1"> is not a valid parallel_backend option!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_backend</span> <span class="o">=</span> <span class="n">parallel_backend</span>
 
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+    <span class="nd">@cache</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cache</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;`cache` must either be a str or a pathlib.Path object!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">cache</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">cache</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_language_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">documents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">n_words_use</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        get language of the papers</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cache</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cache</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to create cache directory &quot;</span><span class="si">{</span><span class="n">cache</span><span class="si">}</span><span class="s1">&quot;: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="n">cache</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        documents : dict</span>
-<span class="sd">            Dictionary of documents to clean. In this dictionary, keys are the unique document</span>
-<span class="sd">            identifiers, and values are the text to clean.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        dict</span>
-<span class="sd">            language of the papers, where keys are the document IDs and values are the language.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">docID</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_language</span><span class="p">(</span><span class="n">document</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span> <span class="n">document_id</span><span class="o">=</span><span class="n">docID</span><span class="p">,</span> <span class="n">n_words_use</span><span class="o">=</span><span class="n">n_words_use</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">results</span>
-    
-    <span class="k">def</span> <span class="nf">_nonenglish_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">documents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">ascii_ratio</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">stopwords_used</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        remove non-english documents</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        documents : dict</span>
-<span class="sd">            Dictionary of documents to clean. In this dictionary, keys are the unique document</span>
-<span class="sd">            identifiers, and values are the text to clean.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        dict</span>
-<span class="sd">            language of the papers, where keys are the document IDs and values are the language.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">docID</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">doc_is_english</span> <span class="o">=</span> <span class="n">is_english</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">ascii_ratio</span><span class="p">,</span> <span class="n">stopwords_used</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">doc_is_english</span><span class="p">:</span>
-                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">docID</span><span class="p">,</span> <span class="n">doc_is_english</span><span class="p">))</span>
-            
-        <span class="k">return</span> <span class="n">results</span>
-
-    <span class="k">def</span> <span class="nf">_stem_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">documents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        stemming of the documents.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        documents : dict</span>
-<span class="sd">            Dictionary of documents to clean. In this dictionary, keys are the unique document</span>
-<span class="sd">            identifiers, and values are the text to clean.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        dict</span>
-<span class="sd">            stemmed documents, where keys are the document IDs and values are the text..</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">docID</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stem_document</span><span class="p">(</span><span class="n">document</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span> <span class="n">document_id</span><span class="o">=</span><span class="n">docID</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">results</span>
-
-    <span class="k">def</span> <span class="nf">_lemmatize_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">documents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        lemmatization of the documents.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        documents : dict</span>
-<span class="sd">            Dictionary of documents to clean. In this dictionary, keys are the unique document</span>
-<span class="sd">            identifiers, and values are the text to clean.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        dict</span>
-<span class="sd">            lemmatized documents, where keys are the document IDs and values are the text..</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">docID</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lemmatize_document</span><span class="p">(</span><span class="n">document</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span> <span class="n">document_id</span><span class="o">=</span><span class="n">docID</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">results</span>
-    
-
-    <span class="k">def</span> <span class="nf">_clean_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                      <span class="n">documents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-                      <span class="n">stop_words</span><span class="p">,</span>
-                      <span class="n">stop_phrases</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
-                      <span class="n">clean_settings</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        cleaning of the documents.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        documents : dict</span>
-<span class="sd">            Dictionary of documents to clean. In this dictionary, keys are the unique document</span>
-<span class="sd">            identifiers, and values are the text to clean.</span>
-<span class="sd">        stop_words : dict (recommended), or list</span>
-<span class="sd">            Hashmap (dict) of stopwords. O(1) lookup.</span>
-<span class="sd">            List of stopwords. O(n) lookup. Default is {}.</span>
-<span class="sd">        stop_phrases: list, optional</span>
-<span class="sd">            List of phrases to be removed.</span>
-<span class="sd">        clean_settings: dict, optional</span>
-<span class="sd">            Settings used in simple cleaning. See _organize_simple_clean_defaults for defaults.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        dict</span>
-<span class="sd">            cleaned documents, where keys are the document IDs and values are the text.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">docID</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">simple_document_clean</span><span class="p">(</span>
-                <span class="n">document</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span>
-                <span class="n">document_id</span><span class="o">=</span><span class="n">docID</span><span class="p">,</span>
-                <span class="n">stop_words</span><span class="o">=</span><span class="n">stop_words</span><span class="p">,</span>
-                <span class="n">stop_phrases</span><span class="o">=</span><span class="n">stop_phrases</span><span class="p">,</span>
-                <span class="n">clean_settings</span><span class="o">=</span><span class="n">clean_settings</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">results</span>
-
-    <span class="k">def</span> <span class="nf">_char_length_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                            <span class="n">documents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-                            <span class="n">min_characters</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                            <span class="n">min_unique_characters</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        checking of character lengths</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        documents : dict</span>
-<span class="sd">            Dictionary of documents to clean. In this dictionary, keys are the unique document</span>
-<span class="sd">            identifiers, and values are the text to clean.</span>
-<span class="sd">        min_characters : int, optional</span>
-<span class="sd">            Minimum number of characters a token should have. The default is 2.</span>
-<span class="sd">        min_unique_characters : int, optional</span>
-<span class="sd">            Minimum number of unique characters a token should have. The default is 2.</span>
-<span class="sd">        clean_settings: dict, optional</span>
-<span class="sd">            Settings used in simple cleaning. See _organize_simple_clean_defaults for defaults.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        dict</span>
-<span class="sd">            cleaned documents, where keys are the document IDs and values are the text.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">docID</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">check_character_lengths</span><span class="p">(</span>
-                <span class="n">document</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span>
-                <span class="n">document_id</span><span class="o">=</span><span class="n">docID</span><span class="p">,</span>
-                <span class="n">min_characters</span><span class="o">=</span><span class="n">min_characters</span><span class="p">,</span>
-                <span class="n">min_unique_characters</span><span class="o">=</span><span class="n">min_unique_characters</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">results</span>
-
-    <span class="k">def</span> <span class="nf">_advance_clean_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                              <span class="n">documents</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
-                              <span class="n">allowed_postags</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
-                              <span class="n">lemmatize</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Advance cleaning of the documents.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        documents : dict</span>
-<span class="sd">            Dictionary of documents to clean. In this dictionary, keys are the unique document</span>
-<span class="sd">            identifiers, and values are the text to clean.</span>
-<span class="sd">        allowed_postags : list, optional</span>
-<span class="sd">            The list of allowed Postags. The default is [&#39;NOUN&#39;, &#39;ADJ&#39;, &#39;VERB&#39;, &#39;ADV&#39;, &quot;PROPN&quot;].</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        dict</span>
-<span class="sd">            cleaned documents, where keys are the document IDs and values are the text.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spacy_model</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">docID</span><span class="p">,</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">advance_document_clean</span><span class="p">(</span>
-                <span class="n">document</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span>
-                <span class="n">document_id</span><span class="o">=</span><span class="n">docID</span><span class="p">,</span>
-                <span class="n">allowed_postags</span><span class="o">=</span><span class="n">allowed_postags</span><span class="p">,</span>
-                <span class="n">nlp</span><span class="o">=</span><span class="n">nlp</span><span class="p">,</span>
-                <span class="n">lemmatize</span><span class="o">=</span><span class="n">lemmatize</span>
-            <span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">results</span>
-    
-    <span class="k">def</span> <span class="nf">_tokenize_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">documents</span><span class="p">:</span> <span class="nb">dict</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        tokenize documents</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        documents : dict</span>
-<span class="sd">            Dictionary of documents to clean. In this dictionary, keys are the unique document</span>
-<span class="sd">            identifiers, and values are the text to clean.</span>
-<span class="sd">         </span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        list</span>
-<span class="sd">            tokens in the documentss</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span>  <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
-            
-        <span class="k">return</span> <span class="n">results</span> <span class="c1">#list(set(results))</span>
-    
-    <span class="k">def</span> <span class="nf">_get_parent_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns parent dir unless path is a directory.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        path : str</span>
-<span class="sd">            can be a file or a dir</span>
-<span class="sd">         </span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        itself or parent dir</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">path</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-    
-    <span class="k">def</span> <span class="nf">_save_tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tokens</span><span class="p">:</span> <span class="nb">list</span> <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Saves tokens</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        save_path : str</span>
-<span class="sd">            Location to save tokens, includes dir path and file</span>
-<span class="sd">        tokens : list</span>
-<span class="sd">            List of tokens in corpus to save</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">directories</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span> 
+    <span class="nd">@save_path</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">save_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">save_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_save_path</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;`cache` must either be a str or a pathlib.Path object!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">save_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span>
         
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directories</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">directories</span><span class="si">}</span><span class="s2"> doesn&#39;t exist, creating...&quot;</span><span class="p">)</span>
-                
-        <span class="k">except</span> <span class="p">(</span><span class="ne">FileExistsError</span><span class="p">,</span> <span class="ne">FileNotFoundError</span><span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Directories &#39;</span><span class="si">{</span><span class="n">directories</span><span class="si">}</span><span class="s2">&#39; already exists.&quot;</span><span class="p">)</span>
-
-        <span class="c1"># save tokens</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">token_file</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">:</span>
-                <span class="n">token_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>  </div>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">save_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The `save_path` directory &quot;</span><span class="si">{</span><span class="n">save_path</span><span class="o">.</span><span class="n">parent</span><span class="si">}</span><span class="s1">&quot; does not exist!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">save_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The `save_path` &quot;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">&quot; is a directory!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">save_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The file &quot;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">&quot; already exists and will be overwritten!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_save_path</span> <span class="o">=</span> <span class="n">save_path</span>
+        
+    <span class="nd">@verbose</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">verbose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>  <span class="c1"># convert False to 0, True to 1</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Integer values for verbose must be non-negative!&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;verbose should be of type bool or int!&quot;</span><span class="p">)</span></div>
 
 </pre></div>
 
