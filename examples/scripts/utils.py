@@ -1,5 +1,6 @@
 import os
 import re
+import csv
 import sys
 import json
 import pathlib
@@ -154,7 +155,7 @@ def process_terms(file_path):
             for row in reader:
                 if len(row) >= 3:  # Ensure there are at least 3 columns
                     substitution_map[row[0]] = row[1]
-                    highlighting_map[row[1]] = row[2]
+                    highlighting_map[row[1]] = int(row[2])
     except FileNotFoundError:
         raise FileNotFoundError(f'File not found: "{file_path}"!')
     return substitution_map, highlighting_map
