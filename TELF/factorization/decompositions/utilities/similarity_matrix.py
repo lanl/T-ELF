@@ -195,18 +195,13 @@ def get_connectivity_matrix(IDq, use_gpu=False):
         Binary connectivity matrix of shape  m x m
     """
     np = get_np(IDq, use_gpu=use_gpu)
-    
-    m = len(IDq)
-    Bq = np.zeros((m,m), int) 
-
-    for i in range(m):
-        for j in range(m):
-            Bq[i][j] = (IDq[i] == IDq[j])
-    return Bq
+    IDq_tile = np.tile(IDq, (len(IDq), 1))
+    Bq = IDq_tile.T == IDq
+    return Bq.astype("int32")
 
 
 def dist2(X, C, use_gpu=False):
-    """
+    """ 
     Calculates squared distance between two sets of points.
 
     Parameters:

@@ -36,7 +36,7 @@ from .decompositions.utilities.nnsvd import nnsvd
 from .decompositions.utilities.resample import poisson, uniform_product
 from .decompositions.utilities.math_utils import prune, unprune, get_pac
 from .decompositions.utilities.concensus_matrix import compute_connectivity_mat, compute_consensus_matrix, reorder_con_mat
-from .decompositions.utilities.similarity_matrix import build_similarity_matrix, get_connectivity_matrix, dist2, scale_dist3
+from .decompositions.utilities.similarity_matrix import get_connectivity_matrix, dist2, scale_dist3
 
 
 try:
