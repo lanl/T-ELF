@@ -69,8 +69,13 @@ class RemoveNonEnglishCleaner(VultureModuleBase):
 
         tokens = self._simple_tokenize(doc_text)
         num_stopwords = sum(1 for t in tokens if t in self.COMMON_STOPWORDS)
-        if num_stopwords / len(tokens) < self.stopwords_ratio:
+        
+        try:
+            if num_stopwords / len(tokens) < self.stopwords_ratio:
+                return (doc_id, '')
+        except ZeroDivisionError:
             return (doc_id, '')
+        
         return document
     
     
