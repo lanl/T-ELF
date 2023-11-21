@@ -319,11 +319,6 @@ class SymNMFk:
             pac_thresh=0,
             get_plot_data=False):
 
-        # check the save path
-        if save_output:
-            if not Path(save_path).is_dir():
-                Path(save_path).mkdir(parents=True)
-
         if n_nodes > 1 and MPI is None:
             sys.exit("Attempted to use n_nodes>1 but MPI is not available!")
 
@@ -473,8 +468,11 @@ class SymNMFk:
         
         # start the file logging (only root node needs to do this step)
         if self.save_output and ((self.n_nodes == 1) or (self.n_nodes > 1 and rank == 0)):
-            if not Path(save_path).is_dir():
-                Path(save_path).mkdir(parents=True)
+            try:
+                if not Path(save_path).is_dir():
+                    Path(save_path).mkdir(parents=True)
+            except Exception as e:
+                print(e)
                 
         if self.n_nodes > 1:
             comm.Barrier()

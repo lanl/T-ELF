@@ -418,12 +418,6 @@ class RESCALk:
 
         """
 
-
-        # check the save path
-        if save_output:
-            if not Path(save_path).is_dir():
-                Path(save_path).mkdir(parents=True)
-
         init_options = ["nnsvd", "random"]
         if init not in init_options:
             raise Exception("Invalid init. Choose from:" + str(", ".join(init_options)))
@@ -619,8 +613,11 @@ class RESCALk:
 
         # start the file logging (only root node needs to do this step)
         if self.save_output and ((self.n_nodes == 1) or (self.n_nodes > 1 and rank == 0)):
-            if not Path(self.save_path_full).is_dir():
-                Path(self.save_path_full).mkdir(parents=True)
+            try:
+                if not Path(self.save_path_full).is_dir():
+                    Path(self.save_path_full).mkdir(parents=True)
+            except Exception as e:
+                print(e)
                 
         if self.n_nodes > 1:
             comm.Barrier()
