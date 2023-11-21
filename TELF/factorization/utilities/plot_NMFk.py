@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import time
 
 def plot_SymNMFk(data, name, path, plot_final=False):
     pac = False
@@ -260,6 +260,17 @@ def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False,
 
 
 def plot_consensus_mat(C, figname):
+    
+    dtype = C.dtype
+    if np.issubdtype(dtype, np.integer):
+        eps = np.finfo(float).eps
+    elif np.issubdtype(dtype, np.floating):
+        eps = np.finfo(dtype).eps
+    else:
+        raise Exception("Unknown data type!")
+        
+    C = np.maximum(C.astype(dtype), eps)
+    
     plt.figure()
     plt.imshow(C)
     plt.colorbar()
