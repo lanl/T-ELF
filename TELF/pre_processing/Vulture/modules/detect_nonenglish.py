@@ -61,7 +61,10 @@ class RemoveNonEnglishCleaner(VultureModuleBase):
         """
         doc_id, doc_text = document
         ascii_count, total_count = self._ascii_detect(doc_text)
-        if ascii_count / total_count < self.ascii_ratio:
+        try:
+            if ascii_count / total_count < self.ascii_ratio:
+                return (doc_id, '')
+        except ZeroDivisionError:
             return (doc_id, '')
 
         tokens = self._simple_tokenize(doc_text)
