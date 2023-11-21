@@ -1,7 +1,13 @@
 {
+    "input": {
+        "text": [
+            "title",
+            "abstract"
+        ]
+    },
     "paths": {
         "output": "results",
-        "terms": null
+        "terms": "/vast/home/nks/Downloads/release/test/haleu/terms.csv"
     },
     "vulture": {
         "steps": [
@@ -62,7 +68,7 @@
             "n_iters": 2000,
             "epsilon": 0.025,
             "init": "nnsvd",
-            "use_gpu": false,
+            "use_gpu": true,
             "predict_k": false,
             "predict_k_method": "sill",
             "nmf_verbose": false,
@@ -80,8 +86,8 @@
         },
         "ks": {
             "start": 1,
-            "stop": 30,
-            "step": 2
+            "stop": 40,
+            "step": 1
         }
     }
 }
