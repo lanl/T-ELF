@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.pre_processing.Beaver.beaver &#8212; TELF 0.0.1 documentation</title>
+    <title>TELF.pre_processing.Beaver.beaver &#8212; TELF 0.0.2 documentation</title>
   
   
   
@@ -36,9 +36,9 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=8fa999b9"></script>
+    <script src="../../../../_static/documentation_options.js?v=f131489c"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/pre_processing/Beaver/beaver';</script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.1 documentation</p>
+    <p class="title logo__title">TELF 0.0.2 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -310,7 +310,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
 
-<div class="viewcode-block" id="Beaver"><a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver">[docs]</a><span class="k">class</span> <span class="nc">Beaver</span><span class="p">():</span>
+<div class="viewcode-block" id="Beaver">
+<a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver">[docs]</a>
+<span class="k">class</span> <span class="nc">Beaver</span><span class="p">():</span>
 
     <span class="n">SUPPORTED_OUTPUT_FORMATS</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;scipy&#39;</span><span class="p">,</span>   <span class="c1"># spicy.sparse.csr </span>
@@ -338,7 +340,9 @@ document.write(`
         <span class="p">}</span>
 
 
-<div class="viewcode-block" id="Beaver.get_vocabulary"><a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.get_vocabulary">[docs]</a>    <span class="k">def</span> <span class="nf">get_vocabulary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="Beaver.get_vocabulary">
+<a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.get_vocabulary">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_vocabulary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                        <span class="n">dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                        <span class="n">target_column</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">split_with</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -469,7 +473,10 @@ document.write(`
         <span class="k">return</span> <span class="n">vocabulary</span></div>
 
 
-<div class="viewcode-block" id="Beaver.coauthor_tensor"><a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.coauthor_tensor">[docs]</a>    <span class="k">def</span> <span class="nf">coauthor_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Beaver.coauthor_tensor">
+<a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.coauthor_tensor">[docs]</a>
+    <span class="k">def</span> <span class="nf">coauthor_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                         <span class="n">dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                         <span class="n">target_columns</span><span class="p">:</span> <span class="nb">tuple</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;authorIDs&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">),</span>
                         <span class="n">split_authors_with</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span>
@@ -604,7 +611,10 @@ document.write(`
             <span class="k">return</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">authors_idx_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="n">time_idx_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
 
-<div class="viewcode-block" id="Beaver.cocitation_tensor"><a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.cocitation_tensor">[docs]</a>    <span class="k">def</span> <span class="nf">cocitation_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Beaver.cocitation_tensor">
+<a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.cocitation_tensor">[docs]</a>
+    <span class="k">def</span> <span class="nf">cocitation_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                           <span class="n">dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                           <span class="n">target_columns</span><span class="p">:</span> <span class="nb">tuple</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;authorIDs&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;paper_id&quot;</span><span class="p">,</span> <span class="s2">&quot;references&quot;</span><span class="p">),</span>
                           <span class="n">split_authors_with</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span>
@@ -762,7 +772,10 @@ document.write(`
             <span class="k">return</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">authors_idx_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="n">time_idx_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
 
-<div class="viewcode-block" id="Beaver.participation_tensor"><a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.participation_tensor">[docs]</a>    <span class="k">def</span> <span class="nf">participation_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Beaver.participation_tensor">
+<a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.participation_tensor">[docs]</a>
+    <span class="k">def</span> <span class="nf">participation_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                              <span class="n">dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                              <span class="n">target_columns</span><span class="p">:</span> <span class="nb">tuple</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;author_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;paper_id&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">),</span>
                              <span class="n">dimension_order</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
@@ -903,7 +916,10 @@ document.write(`
             <span class="k">return</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">authors_idx_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="n">papers_idx_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="n">time_idx_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
 
-<div class="viewcode-block" id="Beaver.citation_tensor"><a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.citation_tensor">[docs]</a>    <span class="k">def</span> <span class="nf">citation_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Beaver.citation_tensor">
+<a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.citation_tensor">[docs]</a>
+    <span class="k">def</span> <span class="nf">citation_tensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                         <span class="n">dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                         <span class="n">target_columns</span><span class="p">:</span> <span class="nb">tuple</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;author_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;paper_id&quot;</span><span class="p">,</span> <span class="s2">&quot;references&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">),</span>
                         <span class="n">dimension_order</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
@@ -1056,7 +1072,10 @@ document.write(`
             <span class="k">return</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">authors_idx_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="n">papers_idx_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="n">time_idx_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
 
-<div class="viewcode-block" id="Beaver.cooccurrence_matrix"><a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.cooccurrence_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">cooccurrence_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Beaver.cooccurrence_matrix">
+<a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.cooccurrence_matrix">[docs]</a>
+    <span class="k">def</span> <span class="nf">cooccurrence_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                            <span class="n">dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                            <span class="n">target_column</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;abstracts&quot;</span><span class="p">,</span>
                            <span class="n">cooccurrence_settings</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="p">{},</span>
@@ -1128,7 +1147,10 @@ document.write(`
             <span class="k">return</span> <span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">SPPMI</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Beaver.documents_words"><a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.documents_words">[docs]</a>    <span class="k">def</span> <span class="nf">documents_words</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Beaver.documents_words">
+<a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.documents_words">[docs]</a>
+    <span class="k">def</span> <span class="nf">documents_words</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                         <span class="n">dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                         <span class="n">target_column</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;abstracts&quot;</span><span class="p">,</span>
                         <span class="n">options</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;min_df&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;max_df&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
@@ -1236,7 +1258,10 @@ document.write(`
             <span class="k">return</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">vocabulary</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Beaver.something_words"><a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.something_words">[docs]</a>    <span class="k">def</span> <span class="nf">something_words</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Beaver.something_words">
+<a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.something_words">[docs]</a>
+    <span class="k">def</span> <span class="nf">something_words</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                         <span class="n">dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                         <span class="n">target_columns</span><span class="p">:</span> <span class="nb">tuple</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;authorIDs&quot;</span><span class="p">,</span> <span class="s2">&quot;abstracts&quot;</span><span class="p">),</span>
                         <span class="n">split_something_with</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span>
@@ -1337,7 +1362,10 @@ document.write(`
             <span class="k">return</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">somethings</span><span class="p">,</span> <span class="n">vocabulary</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Beaver.something_words_time"><a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.something_words_time">[docs]</a>    <span class="k">def</span> <span class="nf">something_words_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Beaver.something_words_time">
+<a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.something_words_time">[docs]</a>
+    <span class="k">def</span> <span class="nf">something_words_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                              <span class="n">dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                              <span class="n">vocabulary</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
                              <span class="n">target_columns</span><span class="p">:</span> <span class="nb">tuple</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;authorIDs&quot;</span><span class="p">,</span> <span class="s2">&quot;abstracts&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">),</span>
@@ -1487,6 +1515,7 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">save_funcs</span><span class="p">[</span><span class="n">output_mode</span><span class="p">](</span><span class="n">X</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">target_columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_words_time.npz&#39;</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">return_object</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">something_idx_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="n">word_idx_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="n">time_idx_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
+
 
 
     <span class="k">def</span> <span class="nf">_dist_parallel_tensor_build_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
@@ -2010,7 +2039,9 @@ document.write(`
         <span class="k">return</span> <span class="n">ngrams</span>
 
 
-<div class="viewcode-block" id="Beaver.get_ngrams"><a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.get_ngrams">[docs]</a>    <span class="k">def</span> <span class="nf">get_ngrams</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span>  <span class="n">dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">target_column</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+<div class="viewcode-block" id="Beaver.get_ngrams">
+<a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.get_ngrams">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_ngrams</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span>  <span class="n">dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">target_column</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
                     <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates n-grams from a column in a dataset</span>
@@ -2053,7 +2084,9 @@ document.write(`
             <span class="n">counter_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">counter</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Ngram&#39;</span><span class="p">,</span> <span class="s1">&#39;Count&#39;</span><span class="p">])</span>
             <span class="n">counter_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s2">&quot;top_ngrams.txt&quot;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">top_ngrams</span></div></div>
+        <span class="k">return</span> <span class="n">top_ngrams</span></div>
+</div>
+
 </pre></div>
 
                 </article>

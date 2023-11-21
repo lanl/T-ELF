@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.utilities.plot_NMFk &#8212; TELF 0.0.1 documentation</title>
+    <title>TELF.factorization.utilities.plot_NMFk &#8212; TELF 0.0.2 documentation</title>
   
   
   
@@ -36,9 +36,9 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=8fa999b9"></script>
+    <script src="../../../../_static/documentation_options.js?v=f131489c"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/factorization/utilities/plot_NMFk';</script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.1 documentation</p>
+    <p class="title logo__title">TELF 0.0.2 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -272,7 +272,9 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="plot_BNMFk"><a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_BNMFk">[docs]</a><span class="k">def</span> <span class="nf">plot_BNMFk</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">sils</span><span class="p">,</span> <span class="n">bool_err</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_BNMFk">
+<a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_BNMFk">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_BNMFk</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">sils</span><span class="p">,</span> <span class="n">bool_err</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;svg.fonttype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
     <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;tab:red&#39;</span>
@@ -301,7 +303,10 @@ document.write(`
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="plot_NMFk"><a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_NMFk">[docs]</a><span class="k">def</span> <span class="nf">plot_NMFk</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">k_predict</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">plot_predict</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_final</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">simple_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="plot_NMFk">
+<a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_NMFk">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_NMFk</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">k_predict</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">plot_predict</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_final</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">simple_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 
 
@@ -447,7 +452,10 @@ document.write(`
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_consensus_mat"><a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_consensus_mat">[docs]</a><span class="k">def</span> <span class="nf">plot_consensus_mat</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">figname</span><span class="p">):</span>
+
+<div class="viewcode-block" id="plot_consensus_mat">
+<a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_consensus_mat">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_consensus_mat</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">figname</span><span class="p">):</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
@@ -455,13 +463,17 @@ document.write(`
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="plot_cophenetic_coeff"><a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_cophenetic_coeff">[docs]</a><span class="k">def</span> <span class="nf">plot_cophenetic_coeff</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">figname</span><span class="p">):</span>
+
+<div class="viewcode-block" id="plot_cophenetic_coeff">
+<a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_cophenetic_coeff">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_cophenetic_coeff</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">figname</span><span class="p">):</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">coeff</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Cophenetic Correlation&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figname</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span></div>
+
 </pre></div>
 
                 </article>

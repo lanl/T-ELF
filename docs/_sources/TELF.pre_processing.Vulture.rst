@@ -12,38 +12,6 @@ Subpackages
 Submodules
 ----------
 
-TELF.pre\_processing.Vulture.default\_stop\_phrases module
-----------------------------------------------------------
-
-.. automodule:: TELF.pre_processing.Vulture.default_stop_phrases
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-TELF.pre\_processing.Vulture.default\_stop\_words module
---------------------------------------------------------
-
-.. automodule:: TELF.pre_processing.Vulture.default_stop_words
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-TELF.pre\_processing.Vulture.detect\_language module
-----------------------------------------------------
-
-.. automodule:: TELF.pre_processing.Vulture.detect_language
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-TELF.pre\_processing.Vulture.detect\_nonenglish module
-------------------------------------------------------
-
-.. automodule:: TELF.pre_processing.Vulture.detect_nonenglish
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 TELF.pre\_processing.Vulture.pre\_process module
 ------------------------------------------------
 

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.decompositions.utilities.data_reshaping &#8212; TELF 0.0.1 documentation</title>
+    <title>TELF.factorization.decompositions.utilities.data_reshaping &#8212; TELF 0.0.2 documentation</title>
   
   
   
@@ -36,9 +36,9 @@
 <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js?v=8fa999b9"></script>
+    <script src="../../../../../_static/documentation_options.js?v=f131489c"></script>
     <script src="../../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/factorization/decompositions/utilities/data_reshaping';</script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.1 documentation</p>
+    <p class="title logo__title">TELF 0.0.2 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -268,7 +268,9 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for TELF.factorization.decompositions.utilities.data_reshaping</h1><div class="highlight"><pre>
-<div class="viewcode-block" id="unfold"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.data_reshaping.unfold">[docs]</a><span></span><span class="k">def</span> <span class="nf">unfold</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="unfold">
+<a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.data_reshaping.unfold">[docs]</a>
+<span></span><span class="k">def</span> <span class="nf">unfold</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a matricized tensor.</span>
 <span class="sd">        Parameters</span>
@@ -290,7 +292,10 @@ document.write(`
     <span class="k">return</span> <span class="n">X_t</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="move_axis"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.data_reshaping.move_axis">[docs]</a><span class="k">def</span> <span class="nf">move_axis</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="move_axis">
+<a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.data_reshaping.move_axis">[docs]</a>
+<span class="k">def</span> <span class="nf">move_axis</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a matricized tensor.</span>
 <span class="sd">        Parameters</span>
@@ -310,7 +315,10 @@ document.write(`
     <span class="k">return</span> <span class="n">X_t</span></div>
 
 
-<div class="viewcode-block" id="fold"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.data_reshaping.fold">[docs]</a><span class="k">def</span> <span class="nf">fold</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+
+<div class="viewcode-block" id="fold">
+<a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.data_reshaping.fold">[docs]</a>
+<span class="k">def</span> <span class="nf">fold</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a tensor from matrix.</span>
 <span class="sd">    Parameters</span>
@@ -332,6 +340,7 @@ document.write(`
         <span class="k">return</span> <span class="n">sparse</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">sparse</span><span class="o">.</span><span class="n">COO</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">full_shape</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">full_shape</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span></div>
+
 </pre></div>
 
                 </article>

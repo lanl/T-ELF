@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.decompositions.utilities.nnsvd &#8212; TELF 0.0.1 documentation</title>
+    <title>TELF.factorization.decompositions.utilities.nnsvd &#8212; TELF 0.0.2 documentation</title>
   
   
   
@@ -36,9 +36,9 @@
 <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js?v=8fa999b9"></script>
+    <script src="../../../../../_static/documentation_options.js?v=f131489c"></script>
     <script src="../../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/factorization/decompositions/utilities/nnsvd';</script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.1 documentation</p>
+    <p class="title logo__title">TELF 0.0.2 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -272,7 +272,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.math_utils</span> <span class="kn">import</span> <span class="n">fro_norm</span>
 
 
-<div class="viewcode-block" id="nnsvd"><a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.nnsvd.nnsvd">[docs]</a><span class="k">def</span> <span class="nf">nnsvd</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="nnsvd">
+<a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.nnsvd.nnsvd">[docs]</a>
+<span class="k">def</span> <span class="nf">nnsvd</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Nonnegative SVD algorithm for NMF initialization based off of Gillis et al. in https://arxiv.org/pdf/1807.04020.pdf.</span>
 
@@ -323,6 +325,7 @@ document.write(`
     <span class="n">H</span> <span class="o">=</span> <span class="n">H</span> <span class="o">*</span> <span class="n">Wsum</span><span class="o">.</span><span class="n">T</span>
     <span class="n">W</span> <span class="o">=</span> <span class="n">W</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">Wsum</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span></div>
+
 </pre></div>
 
                 </article>

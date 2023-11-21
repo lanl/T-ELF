@@ -5,8 +5,7 @@
 
 #SBATCH --time=00:30:00
 #SBATCH --nodes=2
-#SBATCH -p shared-gpu
-#SBATCH -C gpu_count:8
+#SBATCH -p general
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=32
 

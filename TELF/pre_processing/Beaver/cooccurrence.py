@@ -227,7 +227,7 @@ def co_occurrence(documents, vocabulary, window_size=20, verbose=True, sentences
         
         # prepare COO data for communication
         tensor_data_comm = []
-        for key, value in tqdm(matrix_dict.items(), disable=not verbose, total=len(coords)):
+        for key, value in tqdm(matrix_dict.items(), disable=not verbose, total=len(matrix_dict)):
             curr_cords = [float(key[0]), float(key[1])]
             tensor_data_comm.extend(curr_cords)
             tensor_data_comm.append(float(value))
@@ -279,13 +279,12 @@ def co_occurrence(documents, vocabulary, window_size=20, verbose=True, sentences
         # first combine all elements into single element from all nodes
         matrix_dict = defaultdict(int)
         for x, y, value in tqdm(zip(*[iter(tensor_data_comm)]*3), disable=not verbose, total=len(tensor_data_comm)/3):
-            matrix_dict[(x, y)] += value
+            matrix_dict[(int(x), int(y))] += int(value)
          
     # sparse matrix from coordinate and values
     if verbose:
         print("Building sparse matrix from COO matrix...")
     M = sparse.COO(matrix_dict, shape=(len(V_map), len(V_map)))
     M = M.tocsr()
-
     return M
 

@@ -32,7 +32,7 @@ def main(argv):
     settings = {
     "dataset":df,
     "target_column":"clean_abstract",
-    "cooccurance_settings":{
+    "cooccurrence_settings":{
         "n_jobs":n_jobs,
         "n_nodes":n_nodes,
         "window_size": 200, 
@@ -42,8 +42,8 @@ def main(argv):
     "save_path":None
     }
 
-    CO_OCCURANCE, SPPMI = beaver.cooccurance_matrix(**settings)
-    print(CO_OCCURANCE)
+    CO_OCCURRENCE, SPPMI = beaver.cooccurrence_matrix(**settings)
+    print(CO_OCCURRENCE)
     print(SPPMI)
 
 if __name__ == "__main__":

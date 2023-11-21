@@ -184,7 +184,7 @@ def relative_error_rescal(X,A, R, normX=None):
     output:
       rel_err (double): the relative error $||X-WH||_F/||X||_F$.
     """
-    import numpy as np
+    np = get_np(X, use_gpu=False)
 
     error = np.linalg.norm([relative_error(X[i],A,R[i]@A.T)*norm_X(X[i]) for i in range(len(X))]) \
             /np.linalg.norm([norm_X(X[i]) for i in range(len(X))])

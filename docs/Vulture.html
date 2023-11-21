@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF.pre_processing.Vulture: Advanced text pre-processing and cleaning tool for NLP and text-mining &#8212; TELF 0.0.1 documentation</title>
+    <title>TELF.pre_processing.Vulture: Advanced text pre-processing and cleaning tool for NLP and text-mining &#8212; TELF 0.0.2 documentation</title>
   
   
   
@@ -37,9 +37,9 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=8fa999b9"></script>
+    <script src="_static/documentation_options.js?v=f131489c"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'Vulture';</script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -127,7 +127,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.1 documentation</p>
+    <p class="title logo__title">TELF 0.0.2 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -321,11 +321,20 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.vulture">Module Contents</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture"><code class="docutils literal notranslate"><span class="pre">Vulture</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_PIPELINE"><code class="docutils literal notranslate"><span class="pre">Vulture.DEFAULT_PIPELINE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.PARALLEL_BACKEND_OPTIONS"><code class="docutils literal notranslate"><span class="pre">Vulture.PARALLEL_BACKEND_OPTIONS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.cache"><code class="docutils literal notranslate"><span class="pre">Vulture.cache</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean"><code class="docutils literal notranslate"><span class="pre">Vulture.clean()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.dataframe_clean"><code class="docutils literal notranslate"><span class="pre">Vulture.dataframe_clean()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.distributed_clean"><code class="docutils literal notranslate"><span class="pre">Vulture.distributed_clean()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe"><code class="docutils literal notranslate"><span class="pre">Vulture.clean_dataframe()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.n_jobs"><code class="docutils literal notranslate"><span class="pre">Vulture.n_jobs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.n_nodes"><code class="docutils literal notranslate"><span class="pre">Vulture.n_nodes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.parallel_backend"><code class="docutils literal notranslate"><span class="pre">Vulture.parallel_backend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.save_path"><code class="docutils literal notranslate"><span class="pre">Vulture.save_path</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.use_mpi"><code class="docutils literal notranslate"><span class="pre">Vulture.use_mpi()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.verbose"><code class="docutils literal notranslate"><span class="pre">Vulture.verbose</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.chunk_tuple_list"><code class="docutils literal notranslate"><span class="pre">chunk_tuple_list()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -341,109 +350,103 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="telf-pre-processing-vulture-advanced-text-pre-processing-and-cleaning-tool-for-nlp-and-text-mining">
-<h1><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining<a class="headerlink" href="#telf-pre-processing-vulture-advanced-text-pre-processing-and-cleaning-tool-for-nlp-and-text-mining" title="Permalink to this heading">#</a></h1>
+<h1><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining<a class="headerlink" href="#telf-pre-processing-vulture-advanced-text-pre-processing-and-cleaning-tool-for-nlp-and-text-mining" title="Link to this heading">#</a></h1>
 <p>Vulture is a tool for text pre-processing and cleaning. It has multi-processing and distributed computing capabilities, and designed to run fast.</p>
 </section>
 <section id="example">
-<h1>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h1>
+<h1>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h1>
 <p>First let’s load the example dataset (example dataset can be found <a class="reference external" href="https://github.com/lanl/T-ELF/tree/main/data">here</a>):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
 
-<span class="n">documents</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;../../data/documents.p&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Next let’s load the stop words (example stop words can be found <a class="reference external" href="https://github.com/lanl/T-ELF/tree/main/data">here</a>):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;../../data/stop_words.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
-<span class="n">stop_words</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">DATA_FILE</span> <span class="o">=</span> <span class="s1">&#39;documents.p&#39;</span>
+<span class="n">documents</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span> <span class="n">DATA_FILE</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Now we can perform pre-processing:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">TELF.pre_processing</span> <span class="kn">import</span> <span class="n">Vulture</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import libraries</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1"># number of parallel jobs</span>
-    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-    <span class="c1"># number of nodes</span>
-    <span class="s2">&quot;n_nodes&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
-    <span class="c1"># verbosity level</span>
-    <span class="s2">&quot;verbose&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
-    <span class="c1"># minimum number of characters in tokens</span>
-    <span class="s2">&quot;min_characters&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>
-    <span class="c1"># minimum number of unique characters in tokens</span>
-    <span class="s2">&quot;min_unique_characters&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>
-    <span class="c1"># Lemmatize the tokens</span>
-    <span class="s2">&quot;lemmatize&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># Lemmatize document using Spacy, performed during advance pre-processing</span>
-    <span class="s2">&quot;lemmatize_spacy&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># nltk stems and substitution</span>
-    <span class="s1">&#39;lemmatize_slic&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># Stemming of the tokens</span>
-    <span class="s2">&quot;stem&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span>
-    <span class="c1"># Perform text cleaning</span>
-    <span class="s2">&quot;clean_text&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># If True, advance text cleaning, otherwise simple only</span>
-    <span class="s2">&quot;advance_clean&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># Allowed postags for Spacy, used if advance_clean=True</span>
-    <span class="s2">&quot;allowed_postags&quot;</span><span class="p">:[</span><span class="s1">&#39;NOUN&#39;</span><span class="p">,</span> <span class="s1">&#39;ADJ&#39;</span><span class="p">,</span> <span class="s1">&#39;VERB&#39;</span><span class="p">,</span> <span class="s1">&#39;ADV&#39;</span><span class="p">,</span> <span class="s2">&quot;PROPN&quot;</span><span class="p">],</span>
-    <span class="c1"># Spacy NLP model, used if advance_clean=True</span>
-    <span class="s2">&quot;spacy_model&quot;</span><span class="p">:</span><span class="s2">&quot;en_core_web_lg&quot;</span><span class="p">,</span>
-    <span class="c1"># If True, detects language</span>
-    <span class="s2">&quot;detect_language&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
-    <span class="c1"># Number of words to use when detecting language, used if detect_language=True</span>
-    <span class="s2">&quot;n_words_use_language&quot;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span>
-    <span class="c1"># backend to use</span>
-    <span class="s2">&quot;parallel_backend&quot;</span><span class="p">:</span><span class="s2">&quot;loky&quot;</span><span class="p">,</span>
-    <span class="c1"># Settings for simple cleaning</span>
-    <span class="s2">&quot;simple_clean_settings&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;remove_copyright_with_symbol&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_stop_phrases&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;make_lower_case&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_trailing_dash&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># -foo-bar- -&gt; foo-bar</span>
-                               <span class="s2">&quot;make_hyphens_words&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># foo-bar -&gt; foobar</span>
-                               <span class="s2">&quot;remove_next_line&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_email&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_dash&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_between_[]&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_between_()&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_[]&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_()&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_^&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_numbers&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_nonASCII&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                               <span class="s2">&quot;remove_tags&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># remove HTML tags</span>
-                               <span class="s2">&quot;remove_special_characters&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># option to specify these?</span>
-                               <span class="s2">&quot;remove_stop_words&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                            <span class="p">},</span>
-<span class="p">}</span>
-<span class="n">vulture</span> <span class="o">=</span> <span class="n">Vulture</span><span class="p">(</span><span class="o">**</span><span class="n">settings</span><span class="p">)</span>
-<span class="n">substitutions</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;pair&#39;</span><span class="p">:</span><span class="s1">&#39;pair_modded&#39;</span><span class="p">,</span><span class="s1">&#39;theory&#39;</span><span class="p">:</span><span class="s1">&#39;moddified_theories&#39;</span><span class="p">,}</span>
-<span class="n">vulture</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">stop_words</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;results/clean_example&quot;</span><span class="p">,</span> <span class="n">substitutions</span><span class="o">=</span><span class="n">substitutions</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing</span> <span class="kn">import</span> <span class="n">Vulture</span>
+
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.modules</span> <span class="kn">import</span> <span class="n">SimpleCleaner</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.modules</span> <span class="kn">import</span> <span class="n">LemmatizeCleaner</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.modules</span> <span class="kn">import</span> <span class="n">SubstitutionCleaner</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.modules</span> <span class="kn">import</span> <span class="n">RemoveNonEnglishCleaner</span>
+
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.default_stop_words</span> <span class="kn">import</span> <span class="n">STOP_WORDS</span>
+<span class="kn">from</span> <span class="nn">TELF.pre_processing.Vulture.default_stop_phrases</span> <span class="kn">import</span> <span class="n">STOP_PHRASES</span>
+
+
+<span class="c1"># output directory</span>
+<span class="n">RESULTS_DIR</span> <span class="o">=</span> <span class="s1">&#39;results&#39;</span>
+<span class="n">RESULTS_DIR</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">RESULTS_DIR</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">RESULTS_FILE</span> <span class="o">=</span> <span class="s1">&#39;clean_documents.p&#39;</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">RESULTS_DIR</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="c1"># create a cleaning pipeline</span>
+<span class="n">vulture</span> <span class="o">=</span> <span class="n">Vulture</span><span class="p">(</span><span class="n">n_jobs</span>  <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+              <span class="n">verbose</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1"># Disable == 0, Verbose &gt;= 1</span>
+             <span class="p">)</span>
+
+<span class="n">steps</span> <span class="o">=</span> <span class="p">[</span>
+<span class="n">RemoveNonEnglishCleaner</span><span class="p">(</span><span class="n">ascii_ratio</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">stopwords_ratio</span><span class="o">=</span><span class="mf">0.25</span><span class="p">),</span>
+<span class="n">SimpleCleaner</span><span class="p">(</span><span class="n">stop_words</span> <span class="o">=</span> <span class="n">STOP_WORDS</span><span class="p">,</span>
+                  <span class="n">stop_phrases</span> <span class="o">=</span> <span class="n">STOP_PHRASES</span><span class="p">,</span>
+                  <span class="n">order</span> <span class="o">=</span> <span class="p">[</span>
+                      <span class="s1">&#39;standardize_hyphens&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;isolate_frozen&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_copyright_statement&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_stop_phrases&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;make_lower_case&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_formulas&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;normalize&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_next_line&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_email&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_()&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_[]&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_special_characters&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_nonASCII_boundary&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_nonASCII&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_tags&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_stop_words&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_standalone_numbers&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;remove_extra_whitespace&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;min_characters&#39;</span><span class="p">,</span>
+                  <span class="p">]</span>
+                 <span class="p">),</span>
+    <span class="n">LemmatizeCleaner</span><span class="p">(</span><span class="s1">&#39;spacy&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="c1"># clean</span>
+<span class="n">cleaned_documents</span> <span class="o">=</span> <span class="n">vulture</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Results will be saved under <code class="docutils literal notranslate"><span class="pre">results/clean_example</span></code>.</p>
 </section>
 <section id="available-functions">
-<h1>Available Functions<a class="headerlink" href="#available-functions" title="Permalink to this heading">#</a></h1>
+<h1>Available Functions<a class="headerlink" href="#available-functions" title="Link to this heading">#</a></h1>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vulture.__init__</span></code>([n_jobs, n_nodes, verbose, ...])</p></td>
-<td><p>Vulture is a parallel, multi-node parallel, and distributed parallel document pre-processing tool.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vulture.__init__</span></code>(*[, n_jobs, n_nodes, ...])</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean" title="TELF.pre_processing.Vulture.vulture.Vulture.clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vulture.clean</span></code></a>(documents[, stop_words, ...])</p></td>
-<td><p>Performs single-node parallel pre-processing, or multi-node parallel pre-processing.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean" title="TELF.pre_processing.Vulture.vulture.Vulture.clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vulture.clean</span></code></a>(documents[, steps, ...])</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.pre_processing.Vulture.vulture.Vulture.dataframe_clean" title="TELF.pre_processing.Vulture.vulture.Vulture.dataframe_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vulture.dataframe_clean</span></code></a>(data, columns[, ...])</p></td>
-<td><p>Wrapper function for Vulture text cleaning.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#TELF.pre_processing.Vulture.vulture.Vulture.distributed_clean" title="TELF.pre_processing.Vulture.vulture.Vulture.distributed_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vulture.distributed_clean</span></code></a>(files[, ...])</p></td>
-<td><p>Each n node loads a segment of the set of files, and performs parallel pre-processing on the documents from the loaded files.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe" title="TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vulture.clean_dataframe</span></code></a>(df, columns[, ...])</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="module-TELF.pre_processing.Vulture.vulture">
-<span id="module-contents"></span><h1>Module Contents<a class="headerlink" href="#module-TELF.pre_processing.Vulture.vulture" title="Permalink to this heading">#</a></h1>
+<span id="module-contents"></span><h1>Module Contents<a class="headerlink" href="#module-TELF.pre_processing.Vulture.vulture" title="Link to this heading">#</a></h1>
 <p>© 2022. Triad National Security, LLC. All rights reserved.
 This program was produced under U.S. Government contract 89233218CNA000001 for Los Alamos
 National Laboratory (LANL), which is operated by Triad National Security, LLC for the U.S.
@@ -455,152 +458,84 @@ derivative works, distribute copies to the public, perform publicly and display 
 others to do so.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.vulture.</span></span><span class="sig-name descname"><span class="pre">Vulture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_characters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_unique_characters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advance_clean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_postags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['NOUN',</span> <span class="pre">'ADJ',</span> <span class="pre">'VERB',</span> <span class="pre">'ADV',</span> <span class="pre">'PROPN']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacy_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'en_core_web_lg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lemmatize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lemmatize_spacy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lemmatize_slic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detect_language</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_words_use_language</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_nonenglish</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_nonenglish_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.9,</span> <span class="pre">0.175)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel_backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'multiprocessing'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simple_clean_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#Vulture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.vulture.</span></span><span class="sig-name descname"><span class="pre">Vulture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel_backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'multiprocessing'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/tmp'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#Vulture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Vulture is a parallel, multi-node parallel, and distributed parallel document
 pre-processing tool.
 It is designed to be simple and fast.</p>
 <p>Vultures are natures’ cleaners!</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel processes. The default is -1.</p></li>
-<li><p><strong>n_nodes</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of nodes. The default is 1.</p></li>
-<li><p><strong>verbose</strong> (<em>int</em><em>, </em><em>optional</em>) – Verbosity level. The default is 10.</p></li>
-<li><p><strong>min_characters</strong> (<em>int</em><em>, </em><em>optional</em>) – Minimum number of characters a token should have. The default is 2.</p></li>
-<li><p><strong>min_unique_characters</strong> (<em>int</em><em>, </em><em>optional</em>) – Minimum number of unique characters a token should have.. The default is 2.</p></li>
-<li><p><strong>clean_text</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, perform cleaning. The default is True.</p></li>
-<li><p><strong>advance_clean</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, and clean_text is also True, then performs advance cleaning. The default is False.</p></li>
-<li><p><strong>allowed_postags</strong> (<em>list</em><em>, </em><em>optional</em>) – List of allowed postags for Spacy. The default is [‘NOUN’, ‘ADJ’, ‘VERB’, ‘ADV’, “PROPN”].</p></li>
-<li><p><strong>spacy_model</strong> (<em>string</em><em>, </em><em>optional</em>) – Spacy model to load. The default is “en_core_web_lg”.</p></li>
-<li><p><strong>lemmatize</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, performs lemmatization. Uses WordNet lemmatization. The default is True.</p></li>
-<li><p><strong>lemmatize_spacy</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, performs lemmatization on the Spacy model during advance pre-processing.
-advance_clean must be true to use this.
-The default is False.</p></li>
-<li><p><strong>lemmatize_slic</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, performs lemmatization on the nltk model during advance pre-processing.
-advance_clean must be true to use this.
-The default is Fasle.</p></li>
-<li><p><strong>stem</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, performs stemming. The default is True.</p></li>
-<li><p><strong>detect_language</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, performs language detection. The default is False.</p></li>
-<li><p><strong>n_words_use_language</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of words to use when detecting langauge. The default is 30.</p></li>
-<li><p><strong>remove_nonenglish</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use heuristic to remove foreign language papers</p></li>
-<li><p><strong>remove_nonenglish_params</strong> (<em>(</em><em>float</em><em>, </em><em>float</em><em>)</em><em>, </em><em>optional</em>) – A tuple of floats that control the heuristic. The first entry in the tuple is the minimum
-acceptable ratio for ascii characters to total characters in the text. The second float
-is the min acceptable ratio of stopwords in the text</p></li>
-<li><p><strong>simple_clean_settings</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Settings used in simple cleaning. See <a class="reference external" href="https://github.com/lanl/T-ELF/blob/main/TELF/pre_processing/Vulture/pre_process.py#L356">pre_process._organize_simple_clean_defaults</a> for defaults.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><strong>Example Settings:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">simple_clean_settings</span><span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;remove_copyright_with_symbol&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="s2">&quot;remove_stop_phrases&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;make_lower_case&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="s2">&quot;remove_trailing_dash&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># -foo-bar- -&gt; foo-bar</span>
-    <span class="s2">&quot;make_hyphens_words&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># foo-bar -&gt; foobar</span>
-    <span class="s2">&quot;remove_next_line&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="s2">&quot;remove_email&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="s2">&quot;remove_dash&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;remove_between_[]&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="s2">&quot;remove_between_()&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="s2">&quot;remove_[]&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;remove_()&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;remove_</span><span class="se">\&quot;</span><span class="s2">: False,</span>
-    <span class="s2">&quot;remove_^&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;remove_numbers&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;remove_nonASCII&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s2">&quot;remove_tags&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># remove HTML tags</span>
-    <span class="s2">&quot;remove_special_characters&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># option to specify these?</span>
-    <span class="s2">&quot;remove_stop_words&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None.</p>
-</dd>
-</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_PIPELINE">
+<span class="sig-name descname"><span class="pre">DEFAULT_PIPELINE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;TELF.pre_processing.Vulture.modules.simple_clean.SimpleCleaner</span> <span class="pre">object&gt;]</span></em><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_PIPELINE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.PARALLEL_BACKEND_OPTIONS">
+<span class="sig-name descname"><span class="pre">PARALLEL_BACKEND_OPTIONS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'loky',</span> <span class="pre">'multiprocessing',</span> <span class="pre">'threading'}</span></em><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.PARALLEL_BACKEND_OPTIONS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.cache">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cache</span></span><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.cache" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.clean">
-<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_phrases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cleaned_documents'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">substitutions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#Vulture.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean" title="Permalink to this definition">#</a></dt>
-<dd><p>Performs single-node parallel pre-processing, or multi-node parallel pre-processing.
-Entire corpus is given at once, and each node will work on certain segment of the documents
-when using multi-node parallel pre-processing.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>documents</strong> (<em>dict</em>) – Dictionary of documents to clean. In this dictionary, keys are the unique document
-identifiers, and values are the text to clean.</p></li>
-<li><p><strong>stop_words</strong> (<em>dict</em><em> (</em><em>recommended</em><em>)</em><em>, or </em><em>list</em>) – Hashmap (dict) of stopwords. O(1) lookup.
-List of stopwords. O(n) lookup. Default is {}.</p></li>
-<li><p><strong>stop_phrases</strong> (<em>list</em><em>, </em><em>optional</em>) – List of phrases to be removed.</p></li>
-<li><p><strong>filename</strong> (<em>string</em><em>, </em><em>optional</em>) – Pattern and path when saving the results. The default is “cleaned_documents”.</p></li>
-<li><p><strong>substitutions</strong> (<em>dict</em>) – src_word as keys, destination words as values. Keys should not be in values, and v.v.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">substitutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#Vulture.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.dataframe_clean">
-<span class="sig-name descname"><span class="pre">dataframe_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_to_original_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concat_cleaned_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_words</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_phrases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#Vulture.dataframe_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.dataframe_clean" title="Permalink to this definition">#</a></dt>
-<dd><p>Wrapper function for Vulture text cleaning. Cleans the text from a chosen DataFrame columms and applies
-cleaning. Then formats the cleaned data and returns as a new DataFrame.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>pd.DataFrame</em>) – The DataFrame containing text to be cleaned</p></li>
-<li><p><strong>columns</strong> (<em>list</em>) – The name of the text column that needs to be cleaned</p></li>
-<li><p><strong>append_to_original_df</strong> (<em>bool</em><em>, </em><em>optional</em>) – If the cleaned columns of the dataframe should be appended on the columns of the original dataframe</p></li>
-<li><p><strong>concat_cleaned_cols</strong> (<em>bool</em><em>, </em><em>optional</em>) – If the cleaned columns of the dataframe should be concatenated together into a single common column</p></li>
-<li><p><strong>stop_words</strong> (<em>list</em><em>, </em><em>optional</em>) – Words that will be removed during cleaning</p></li>
-<li><p><strong>stop_phrases</strong> (<em>list</em><em>, </em><em>optional</em>) – Phrases to be removed.</p></li>
-<li><p><strong>data_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Vulture outputs the cleaned text as pickle files. This argument specifies the path
-at which they are saved. These pickle files are later loaded and converted to a DataFrame.</p></li>
-<li><p><strong>overwrite</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag that controls if results should be overwritten. If true, cleaning will be performed
-regardless of existence of previous data. Default is True.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>if not concateneated, DataFrame containing the cleaned results
-if concateneated, original DataFrame with appended columns containing the cleaned results</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>pd.DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe">
+<span class="sig-name descname"><span class="pre">clean_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">substitutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_to_original_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concat_cleaned_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#Vulture.clean_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.n_jobs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_jobs</span></span><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.n_jobs" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.n_nodes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_nodes</span></span><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.n_nodes" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.parallel_backend">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parallel_backend</span></span><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.parallel_backend" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.save_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save_path</span></span><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.save_path" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.distributed_clean">
-<span class="sig-name descname"><span class="pre">distributed_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_phrases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cleaned_documents'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_loader</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#Vulture.distributed_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.distributed_clean" title="Permalink to this definition">#</a></dt>
-<dd><p>Each n node loads a segment of the set of files, and performs parallel pre-processing on
-the documents from the loaded files.</p>
-<p>Use this approach when the corpus cannot fit in the memmory at once.</p>
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.use_mpi">
+<span class="sig-name descname"><span class="pre">use_mpi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#Vulture.use_mpi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.use_mpi" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.verbose">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">verbose</span></span><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.verbose" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.chunk_tuple_list">
+<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.vulture.</span></span><span class="sig-name descname"><span class="pre">chunk_tuple_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_chunks</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#chunk_tuple_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.chunk_tuple_list" title="Link to this definition">#</a></dt>
+<dd><p>Splits the given list of (key, value) tuples into sub-lists.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>files</strong> (<em>list</em>) – List if strings for locations to the files.</p></li>
-<li><p><strong>stop_words</strong> (<em>dict</em><em> (</em><em>recommended</em><em>)</em><em>, or </em><em>list</em>) – Hashmap (dict) of stopwords. O(1) lookup.
-List of stopwords. O(n) lookup. Default is {}.</p></li>
-<li><p><strong>stop_phrases</strong> (<em>list</em><em>, </em><em>optional</em>) – List of phrases to be removed.</p></li>
-<li><p><strong>filename</strong> (<em>string</em><em>, </em><em>optional</em>) – Pattern and path when saving the results. The default is “cleaned_documents”.</p></li>
-<li><p><strong>file_loader</strong> (<em>function</em><em>, </em><em>optional</em>) – Custom function for loading the files. The default is None.
-It should take in string path to the file, and return dictionary
-where the keys are the unique document IDs and values are the text.</p></li>
+<li><p><strong>l</strong> (<em>list</em><em> of </em><em>tuple</em>) – List of (key, value) tuples to split.</p></li>
+<li><p><strong>n_chunks</strong> (<em>int</em>) – How many sets of sub-lists to create.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>list</em> – Sub-list containing (key, value) tuples.</p>
 </dd>
 </dl>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -654,11 +589,20 @@ where the keys are the unique document IDs and values are the text.</p></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.vulture">Module Contents</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture"><code class="docutils literal notranslate"><span class="pre">Vulture</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_PIPELINE"><code class="docutils literal notranslate"><span class="pre">Vulture.DEFAULT_PIPELINE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.PARALLEL_BACKEND_OPTIONS"><code class="docutils literal notranslate"><span class="pre">Vulture.PARALLEL_BACKEND_OPTIONS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.cache"><code class="docutils literal notranslate"><span class="pre">Vulture.cache</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean"><code class="docutils literal notranslate"><span class="pre">Vulture.clean()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.dataframe_clean"><code class="docutils literal notranslate"><span class="pre">Vulture.dataframe_clean()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.distributed_clean"><code class="docutils literal notranslate"><span class="pre">Vulture.distributed_clean()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe"><code class="docutils literal notranslate"><span class="pre">Vulture.clean_dataframe()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.n_jobs"><code class="docutils literal notranslate"><span class="pre">Vulture.n_jobs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.n_nodes"><code class="docutils literal notranslate"><span class="pre">Vulture.n_nodes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.parallel_backend"><code class="docutils literal notranslate"><span class="pre">Vulture.parallel_backend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.save_path"><code class="docutils literal notranslate"><span class="pre">Vulture.save_path</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.use_mpi"><code class="docutils literal notranslate"><span class="pre">Vulture.use_mpi()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.verbose"><code class="docutils literal notranslate"><span class="pre">Vulture.verbose</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.chunk_tuple_list"><code class="docutils literal notranslate"><span class="pre">chunk_tuple_list()</span></code></a></li>
 </ul>
 </li>
 </ul>

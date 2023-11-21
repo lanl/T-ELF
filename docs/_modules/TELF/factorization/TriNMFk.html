@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.TriNMFk &#8212; TELF 0.0.1 documentation</title>
+    <title>TELF.factorization.TriNMFk &#8212; TELF 0.0.2 documentation</title>
   
   
   
@@ -36,9 +36,9 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=8fa999b9"></script>
+    <script src="../../../_static/documentation_options.js?v=f131489c"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/factorization/TriNMFk';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.1 documentation</p>
+    <p class="title logo__title">TELF 0.0.2 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -284,9 +284,8 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.decompositions.tri_nmf_fro_mu</span> <span class="kn">import</span> <span class="n">trinmf</span> <span class="k">as</span> <span class="n">trinmf_fro_mu</span>
 <span class="kn">from</span> <span class="nn">.utilities.organize_n_jobs</span> <span class="kn">import</span> <span class="n">organize_n_jobs</span>
 
+<span class="kn">import</span> <span class="nn">concurrent.futures</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
-<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
-<span class="kn">import</span> <span class="nn">multiprocessing</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">scipy.sparse</span>
@@ -353,7 +352,9 @@ document.write(`
     <span class="k">return</span> <span class="n">W</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">error</span>
 
 
-<div class="viewcode-block" id="TriNMFk"><a class="viewcode-back" href="../../../TriNMFk.html#TELF.factorization.TriNMFk.TriNMFk">[docs]</a><span class="k">class</span> <span class="nc">TriNMFk</span><span class="p">():</span>
+<div class="viewcode-block" id="TriNMFk">
+<a class="viewcode-back" href="../../../TriNMFk.html#TELF.factorization.TriNMFk.TriNMFk">[docs]</a>
+<span class="k">class</span> <span class="nc">TriNMFk</span><span class="p">():</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">experiment_name</span><span class="o">=</span><span class="s2">&quot;TriNMFk&quot;</span><span class="p">,</span>
@@ -366,7 +367,6 @@ document.write(`
                  <span class="n">alpha</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
                  <span class="n">n_iters</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
                  <span class="n">n_inits</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                 <span class="n">joblib_backend</span><span class="o">=</span><span class="s2">&quot;multiprocessing&quot;</span><span class="p">,</span>
                  <span class="n">pruned</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">transpose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -396,8 +396,6 @@ document.write(`
 <span class="sd">            Number of NMF iterations. The default is 100.</span>
 <span class="sd">        n_inits : int, optional</span>
 <span class="sd">            Number of matrix initilization for the bootstrap operation. The default is 10.</span>
-<span class="sd">        joblib_backend : str, optional</span>
-<span class="sd">            Backend used by Joblib for parallel computation. The default is &quot;multiprocessing&quot;.</span>
 <span class="sd">        pruned : bool, optional</span>
 <span class="sd">            When True, removes columns and rows from the input matrix that has only 0 values. The default is True.</span>
 <span class="sd">        transpose : bool, optional</span>
@@ -423,7 +421,6 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">n_iters</span> <span class="o">=</span> <span class="n">n_iters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_inits</span> <span class="o">=</span> <span class="n">n_inits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_fit</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">joblib_backend</span> <span class="o">=</span> <span class="n">joblib_backend</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pruned</span> <span class="o">=</span> <span class="n">pruned</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transpose</span> <span class="o">=</span> <span class="n">transpose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -431,9 +428,6 @@ document.write(`
 
         <span class="c1"># organize n_jobs</span>
         <span class="n">n_jobs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="n">organize_n_jobs</span><span class="p">(</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">n_jobs</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">n_jobs</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">multiprocessing</span><span class="o">.</span><span class="n">set_start_method</span><span class="p">(</span><span class="s1">&#39;spawn&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">n_jobs</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_inits</span><span class="p">:</span>
             <span class="n">n_jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_inits</span>
@@ -456,7 +450,9 @@ document.write(`
 
 
     
-<div class="viewcode-block" id="TriNMFk.fit_nmfk"><a class="viewcode-back" href="../../../TriNMFk.html#TELF.factorization.TriNMFk.TriNMFk.fit_nmfk">[docs]</a>    <span class="k">def</span> <span class="nf">fit_nmfk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Ks</span><span class="p">,</span> <span class="n">note</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="TriNMFk.fit_nmfk">
+<a class="viewcode-back" href="../../../TriNMFk.html#TELF.factorization.TriNMFk.TriNMFk.fit_nmfk">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit_nmfk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Ks</span><span class="p">,</span> <span class="n">note</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Factorize the input matrix ``X`` for the each given K value in ``Ks``.</span>
 
@@ -491,7 +487,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">nmfk_results</span></div>
 
-<div class="viewcode-block" id="TriNMFk.fit_tri_nmfk"><a class="viewcode-back" href="../../../TriNMFk.html#TELF.factorization.TriNMFk.TriNMFk.fit_tri_nmfk">[docs]</a>    <span class="k">def</span> <span class="nf">fit_tri_nmfk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">k1k2</span><span class="p">:</span><span class="nb">tuple</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TriNMFk.fit_tri_nmfk">
+<a class="viewcode-back" href="../../../TriNMFk.html#TELF.factorization.TriNMFk.TriNMFk.fit_tri_nmfk">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit_tri_nmfk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">k1k2</span><span class="p">:</span><span class="nb">tuple</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Factorize the input matrix ``X``, after applying ``fit_nmfk()`` to select the ``Wk`` and ``Hk``, to factorize the given matrix with ``k1k2=(Wk, Hk)``.</span>
 
@@ -529,41 +528,31 @@ document.write(`
             <span class="n">X</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">prune</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="n">job_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;nmf&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">nmf</span><span class="p">,</span>
+            <span class="s2">&quot;nmf_params&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">nmf_params</span><span class="p">,</span>
+            <span class="s2">&quot;k1k2&quot;</span><span class="p">:</span><span class="n">k1k2</span><span class="p">,</span>
+            <span class="s2">&quot;use_gpu&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
+            <span class="s2">&quot;X&quot;</span><span class="p">:</span><span class="n">X</span><span class="p">,</span>
+            <span class="s2">&quot;mask&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span>
+        <span class="p">}</span>
         
         <span class="n">W_all</span><span class="p">,</span> <span class="n">S_all</span><span class="p">,</span> <span class="n">H_all</span><span class="p">,</span> <span class="n">errors</span>  <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">ninit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_inits</span><span class="p">):</span>
-                <span class="n">w</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">_nmf_wrapper</span><span class="p">(</span>
-                    <span class="n">init_num</span><span class="o">=</span><span class="n">ninit</span><span class="p">,</span>
-                    <span class="n">nmf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nmf</span><span class="p">,</span>
-                    <span class="n">nmf_params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nmf_params</span><span class="p">,</span>
-                    <span class="n">k1k2</span><span class="o">=</span><span class="n">k1k2</span><span class="p">,</span>
-                    <span class="n">gpuid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                    <span class="n">use_gpu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
-                    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
-                    <span class="n">mask</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span>
-                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">ninit</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_inits</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_inits</span><span class="p">):</span>
+                <span class="n">w</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">_nmf_wrapper</span><span class="p">(</span><span class="n">init_num</span><span class="o">=</span><span class="n">ninit</span><span class="p">,</span> <span class="n">gpuid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">job_data</span><span class="p">)</span>
                 <span class="n">W_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
                 <span class="n">S_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
                 <span class="n">H_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
                 <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">current_pert_results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span>
-                <span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span>
-                <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
-                <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">joblib_backend</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">_nmf_wrapper</span><span class="p">)(</span>
-                    <span class="n">ninit</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">nmf</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">nmf_params</span><span class="p">,</span>
-                    <span class="n">k1k2</span><span class="p">,</span>
-                    <span class="n">ninit</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
-                    <span class="n">X</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">mask</span>
-                    <span class="p">)</span> <span class="k">for</span> <span class="n">ninit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_inits</span><span class="p">))</span>
+            <span class="n">executor</span> <span class="o">=</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">)</span>
+            <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">_nmf_wrapper</span><span class="p">,</span> <span class="n">init_num</span><span class="o">=</span><span class="n">ninit</span><span class="p">,</span> <span class="n">gpuid</span><span class="o">=</span><span class="n">ninit</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="o">**</span><span class="n">job_data</span><span class="p">)</span> <span class="k">for</span> <span class="n">ninit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_inits</span><span class="p">)]</span>
+            <span class="n">all_k_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_inits</span><span class="p">)]</span>
             
-            <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="ow">in</span> <span class="n">current_pert_results</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="ow">in</span> <span class="n">all_k_results</span><span class="p">:</span>
                 <span class="n">W_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
                 <span class="n">S_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
                 <span class="n">H_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
@@ -603,6 +592,7 @@ document.write(`
 
         <span class="k">return</span> <span class="n">results</span></div>
 
+
     <span class="k">def</span> <span class="nf">_organize_nmfk_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="n">params</span><span class="p">[</span><span class="s2">&quot;save_output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">params</span><span class="p">[</span><span class="s2">&quot;collect_output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
@@ -610,6 +600,7 @@ document.write(`
         <span class="n">params</span><span class="p">[</span><span class="s2">&quot;calculate_pac&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">return</span> <span class="n">params</span></div>
+
 </pre></div>
 
                 </article>
