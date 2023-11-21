@@ -621,6 +621,13 @@ class RESCALk:
         if self.save_output and ((self.n_nodes == 1) or (self.n_nodes > 1 and rank == 0)):
             if not Path(self.save_path_full).is_dir():
                 Path(self.save_path_full).mkdir(parents=True)
+                
+        if self.n_nodes > 1:
+            comm.Barrier()
+            time.sleep(1)
+
+        # logging
+        if self.save_output:
 
             append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
             append_to_note(["start_time= " + str(datetime.now()),

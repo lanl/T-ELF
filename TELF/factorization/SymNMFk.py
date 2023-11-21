@@ -470,9 +470,18 @@ class SymNMFk:
                         'err_mean': 'Error Mean', 
                         'err_std': 'Error STD-DEV'}
         stats_header['time'] = 'Time Elapsed'
-
+        
         # start the file logging (only root node needs to do this step)
         if self.save_output and ((self.n_nodes == 1) or (self.n_nodes > 1 and rank == 0)):
+            if not Path(save_path).is_dir():
+                Path(save_path).mkdir(parents=True)
+                
+        if self.n_nodes > 1:
+            comm.Barrier()
+            time.sleep(1)
+
+        # logging
+        if self.save_output:
             if not Path(save_path).is_dir():
                 Path(save_path).mkdir(parents=True)
 
