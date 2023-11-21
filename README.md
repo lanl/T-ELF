@@ -25,7 +25,7 @@ T-ELF's versatility extends to a diverse array of disciplines, making it a poten
 
 ## Installation
 
-#### Option 1: Install via PIP and CONDAgit 
+#### Option 1: Install via PIP and CONDA
 - **Step 1:** Install the library
 ```shell
 git clone https://github.com/lanl/T-ELF.git
