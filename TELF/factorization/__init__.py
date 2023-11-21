@@ -5,6 +5,7 @@ sys.path += ["decompositions/"]
 
 from .NMFk import NMFk
 from .RESCALk import RESCALk
+from .SymNMFk import SymNMFk
 from .TriNMFk import TriNMFk
 
 from .decompositions.nmf_recommender import RNMFk_predict
