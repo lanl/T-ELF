@@ -1,0 +1,1406 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>TELF.factorization.decompositions package &#8212; TELF 0.0.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="_static/documentation_options.js?v=f131489c"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'TELF.factorization.decompositions';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TELF.factorization.decompositions.utilities package" href="TELF.factorization.decompositions.utilities.html" />
+    <link rel="prev" title="TELF.factorization package" href="TELF.factorization.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.2 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">TELF</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="TELF.html">TELF package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="TELF.factorization.html">TELF.factorization package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.pre_processing.html">TELF.pre_processing package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/TELF.factorization.decompositions.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>TELF.factorization.decompositions package</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.nmf_fro_admm">TELF.factorization.decompositions.nmf_fro_admm module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_fro_admm.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_fro_admm.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_fro_admm.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.nmf_fro_mu">TELF.factorization.decompositions.nmf_fro_mu module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_fro_mu.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_fro_mu.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_fro_mu.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.nmf_kl_admm">TELF.factorization.decompositions.nmf_kl_admm module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_kl_admm.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_kl_admm.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_kl_admm.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.nmf_kl_mu">TELF.factorization.decompositions.nmf_kl_mu module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_kl_mu.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_kl_mu.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_kl_mu.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.nmf_mc_fro_mu">TELF.factorization.decompositions.nmf_mc_fro_mu module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.H_update_ADMM"><code class="docutils literal notranslate"><span class="pre">H_update_ADMM()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.H_update_MU"><code class="docutils literal notranslate"><span class="pre">H_update_MU()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.W_update_ADMM"><code class="docutils literal notranslate"><span class="pre">W_update_ADMM()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.W_update_MU"><code class="docutils literal notranslate"><span class="pre">W_update_MU()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh"><code class="docutils literal notranslate"><span class="pre">coord_desc_thresh()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh_onefactor"><code class="docutils literal notranslate"><span class="pre">coord_desc_thresh_onefactor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.find_thres_WH"><code class="docutils literal notranslate"><span class="pre">find_thres_WH()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.nmf_with_ADMM"><code class="docutils literal notranslate"><span class="pre">nmf_with_ADMM()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.old_find_thres_WH"><code class="docutils literal notranslate"><span class="pre">old_find_thres_WH()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.old_nmf"><code class="docutils literal notranslate"><span class="pre">old_nmf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.roc_W_H"><code class="docutils literal notranslate"><span class="pre">roc_W_H()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.thres_norm"><code class="docutils literal notranslate"><span class="pre">thres_norm()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.rescal_fro_mu">TELF.factorization.decompositions.rescal_fro_mu module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.rescal_fro_mu.A_update"><code class="docutils literal notranslate"><span class="pre">A_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.rescal_fro_mu.R_update"><code class="docutils literal notranslate"><span class="pre">R_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.rescal_fro_mu.rescal"><code class="docutils literal notranslate"><span class="pre">rescal()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.tri_nmf_fro_mu">TELF.factorization.decompositions.tri_nmf_fro_mu module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.S_update"><code class="docutils literal notranslate"><span class="pre">S_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.trinmf"><code class="docutils literal notranslate"><span class="pre">trinmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions">Module contents</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="telf-factorization-decompositions-package">
+<h1>TELF.factorization.decompositions package<a class="headerlink" href="#telf-factorization-decompositions-package" title="Link to this heading">#</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html">TELF.factorization.decompositions.utilities package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.bool_clustering">TELF.factorization.decompositions.utilities.bool_clustering module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.bool_clustering.custom_bool_clustering"><code class="docutils literal notranslate"><span class="pre">custom_bool_clustering()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.bool_noise">TELF.factorization.decompositions.utilities.bool_noise module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.bool_noise.add_Bool_noise"><code class="docutils literal notranslate"><span class="pre">add_Bool_noise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.bool_noise.add_Bool_posneg_noise"><code class="docutils literal notranslate"><span class="pre">add_Bool_posneg_noise()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.clustering">TELF.factorization.decompositions.utilities.clustering module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.clustering.custom_k_means"><code class="docutils literal notranslate"><span class="pre">custom_k_means()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.clustering.silhouettes"><code class="docutils literal notranslate"><span class="pre">silhouettes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.concensus_matrix">TELF.factorization.decompositions.utilities.concensus_matrix module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.concensus_matrix.compute_connectivity_mat"><code class="docutils literal notranslate"><span class="pre">compute_connectivity_mat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.concensus_matrix.compute_consensus_matrix"><code class="docutils literal notranslate"><span class="pre">compute_consensus_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.concensus_matrix.reorder_con_mat"><code class="docutils literal notranslate"><span class="pre">reorder_con_mat()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.data_reshaping">TELF.factorization.decompositions.utilities.data_reshaping module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.data_reshaping.fold"><code class="docutils literal notranslate"><span class="pre">fold()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.data_reshaping.move_axis"><code class="docutils literal notranslate"><span class="pre">move_axis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.data_reshaping.unfold"><code class="docutils literal notranslate"><span class="pre">unfold()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.generic_utils">TELF.factorization.decompositions.utilities.generic_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.bary_proj"><code class="docutils literal notranslate"><span class="pre">bary_proj()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_cupyx"><code class="docutils literal notranslate"><span class="pre">get_cupyx()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_np"><code class="docutils literal notranslate"><span class="pre">get_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_scipy"><code class="docutils literal notranslate"><span class="pre">get_scipy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.grid_eval"><code class="docutils literal notranslate"><span class="pre">grid_eval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.update_opts"><code class="docutils literal notranslate"><span class="pre">update_opts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.math_utils">TELF.factorization.decompositions.utilities.math_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.bary_coords"><code class="docutils literal notranslate"><span class="pre">bary_coords()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.fro_norm"><code class="docutils literal notranslate"><span class="pre">fro_norm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.get_pac"><code class="docutils literal notranslate"><span class="pre">get_pac()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.kl_divergence"><code class="docutils literal notranslate"><span class="pre">kl_divergence()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.masked_nmf"><code class="docutils literal notranslate"><span class="pre">masked_nmf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.nan_to_num"><code class="docutils literal notranslate"><span class="pre">nan_to_num()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.norm_X"><code class="docutils literal notranslate"><span class="pre">norm_X()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.nz_indices"><code class="docutils literal notranslate"><span class="pre">nz_indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.prune"><code class="docutils literal notranslate"><span class="pre">prune()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.relative_error"><code class="docutils literal notranslate"><span class="pre">relative_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.relative_error_rescal"><code class="docutils literal notranslate"><span class="pre">relative_error_rescal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.relative_trinmf_error"><code class="docutils literal notranslate"><span class="pre">relative_trinmf_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.sparse_divide_product"><code class="docutils literal notranslate"><span class="pre">sparse_divide_product()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.sparse_dot_product"><code class="docutils literal notranslate"><span class="pre">sparse_dot_product()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.unprune"><code class="docutils literal notranslate"><span class="pre">unprune()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.nnsvd">TELF.factorization.decompositions.utilities.nnsvd module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.nnsvd.nnsvd"><code class="docutils literal notranslate"><span class="pre">nnsvd()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.resample">TELF.factorization.decompositions.utilities.resample module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.resample.poisson"><code class="docutils literal notranslate"><span class="pre">poisson()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.resample.uniform_product"><code class="docutils literal notranslate"><span class="pre">uniform_product()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.silhouettes">TELF.factorization.decompositions.utilities.silhouettes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.silhouettes.custom_silhouettes"><code class="docutils literal notranslate"><span class="pre">custom_silhouettes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+</section>
+<section id="module-TELF.factorization.decompositions.nmf_fro_admm">
+<span id="telf-factorization-decompositions-nmf-fro-admm-module"></span><h2>TELF.factorization.decompositions.nmf_fro_admm module<a class="headerlink" href="#module-TELF.factorization.decompositions.nmf_fro_admm" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_fro_admm.H_update">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_fro_admm.</span></span><span class="sig-name descname"><span class="pre">H_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_fro_admm.html#H_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_fro_admm.H_update" title="Link to this definition">#</a></dt>
+<dd><p>ADMM algorithm for the right factor, <span class="math notranslate nohighlight">\(H\)</span>, in a nonnegative optimization with Frobenius norm loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{H}{\operatorname{minimize}} &amp;= \frac{1}{2} \Vert X - W H \Vert_F^2 \\
+\text{subject to} &amp; \quad H \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+<p>’rho’ (double): convergence parameter.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative k by n right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>H (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_fro_admm.W_update">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_fro_admm.</span></span><span class="sig-name descname"><span class="pre">W_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_fro_admm.html#W_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_fro_admm.W_update" title="Link to this definition">#</a></dt>
+<dd><p>ADMM algorithm for the left factor, <span class="math notranslate nohighlight">\(W\)</span>, in a nonnegative optimization with Frobenius norm loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{W}{\operatorname{minimize}} &amp;= \frac{1}{2} \Vert X - W H \Vert_F^2 \\
+\text{subject to} &amp; \quad W \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+<p>’rho’ (double): convergence parameter.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative k by n right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_fro_admm.nmf">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_fro_admm.</span></span><span class="sig-name descname"><span class="pre">nmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_fro_admm.html#nmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_fro_admm.nmf" title="Link to this definition">#</a></dt>
+<dd><p>ADMM algorithm for a nonnegative optimization with Frobenius norm loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{W,H}{\operatorname{minimize}} &amp;= \frac{1}{2} \Vert X - W H \Vert_F^2 \\
+\text{subject to} &amp; \quad W \geq 0 \\
+&amp; \quad H \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+<p>’W_opts’ (dict): options dictionary for <a class="reference internal" href="#TELF.factorization.decompositions.nmf_fro_admm.W_update" title="TELF.factorization.decompositions.nmf_fro_admm.W_update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">W_update()</span></code></a>.</p>
+<p>’H_opts’ (dict): options dictionary for <a class="reference internal" href="#TELF.factorization.decompositions.nmf_fro_admm.H_update" title="TELF.factorization.decompositions.nmf_fro_admm.H_update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">H_update()</span></code></a>.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Nonnegative m by k left factor of X.</p>
+<p>H (ndarray): Nonnegative k by n right factor of X.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.nmf_fro_mu">
+<span id="telf-factorization-decompositions-nmf-fro-mu-module"></span><h2>TELF.factorization.decompositions.nmf_fro_mu module<a class="headerlink" href="#module-TELF.factorization.decompositions.nmf_fro_mu" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_fro_mu.H_update">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_fro_mu.</span></span><span class="sig-name descname"><span class="pre">H_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_fro_mu.html#H_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_fro_mu.H_update" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for the right factor, <span class="math notranslate nohighlight">\(H\)</span>, in a nonnegative optimization with Frobenius norm loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{H}{\operatorname{minimize}} &amp;= \frac{1}{2} \Vert X - W H \Vert_F^2 \\
+\text{subject to} &amp; \quad H \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative k by n right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>H (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_fro_mu.W_update">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_fro_mu.</span></span><span class="sig-name descname"><span class="pre">W_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_fro_mu.html#W_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_fro_mu.W_update" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for the left factor, <span class="math notranslate nohighlight">\(W\)</span>, in a nonnegative optimization with Frobenius norm loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{W}{\operatorname{minimize}} &amp;= \frac{1}{2} \Vert X - W H \Vert_F^2 \\
+\text{subject to} &amp; \quad W \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative m by k right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_fro_mu.nmf">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_fro_mu.</span></span><span class="sig-name descname"><span class="pre">nmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W_opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'hist':</span> <span class="pre">None,</span> <span class="pre">'niter':</span> <span class="pre">1}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H_opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'hist':</span> <span class="pre">None,</span> <span class="pre">'niter':</span> <span class="pre">1}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmf_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_consensus_stopping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_fro_mu.html#nmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_fro_mu.nmf" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for a nonnegative optimization with Frobenius norm loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{W,H}{\operatorname{minimize}} &amp;= \frac{1}{2} \Vert X - W H \Vert_F^2 \\
+\text{subject to} &amp; \quad W \geq 0 \\
+&amp; \quad H \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+<p>’W_opts’ (dict): options dictionary for <a class="reference internal" href="#TELF.factorization.decompositions.nmf_fro_mu.W_update" title="TELF.factorization.decompositions.nmf_fro_mu.W_update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">W_update()</span></code></a>.</p>
+<p>’H_opts’ (dict): options dictionary for <a class="reference internal" href="#TELF.factorization.decompositions.nmf_fro_mu.H_update" title="TELF.factorization.decompositions.nmf_fro_mu.H_update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">H_update()</span></code></a>.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Nonnegative m by k left factor of X.</p>
+<p>H (ndarray): Nonnegative k by n right factor of X.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.nmf_kl_admm">
+<span id="telf-factorization-decompositions-nmf-kl-admm-module"></span><h2>TELF.factorization.decompositions.nmf_kl_admm module<a class="headerlink" href="#module-TELF.factorization.decompositions.nmf_kl_admm" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_kl_admm.H_update">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_kl_admm.</span></span><span class="sig-name descname"><span class="pre">H_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_kl_admm.html#H_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_kl_admm.H_update" title="Link to this definition">#</a></dt>
+<dd><p>ADMM algorithm for the right factor, <span class="math notranslate nohighlight">\(H\)</span>, in a nonnegative optimization with Kullback–Leibler divergence loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{H}{\operatorname{minimize}} &amp;= \operatorname{D}_{KL}(X, W H) = \sum_{i,j} X_{i,j} \log \frac{X_{i,j}}{(WH)_{i,j}} - X_{i,j} + (WH)_{i,j} \\
+\text{subject to} &amp; \quad H \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+<p>’rho’ (double): convergence parameter.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative k by n right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>H (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_kl_admm.W_update">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_kl_admm.</span></span><span class="sig-name descname"><span class="pre">W_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_kl_admm.html#W_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_kl_admm.W_update" title="Link to this definition">#</a></dt>
+<dd><p>ADMM algorithm for the left factor, <span class="math notranslate nohighlight">\(W\)</span>, in a nonnegative optimization with Kullback–Leibler divergence loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{W}{\operatorname{minimize}} &amp;= \operatorname{D}_{KL}(X, W H) = \sum_{i,j} X_{i,j} \log \frac{X_{i,j}}{(WH)_{i,j}} - X_{i,j} + (WH)_{i,j} \\
+\text{subject to} &amp; \quad W \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+<p>’rho’ (double): convergence parameter.</p>
+</p></li>
+<li><p><strong>nz_rows</strong> (<em>ndarray</em>) – If X is sparse, nz_rows is a 1d array of the row indices when X is in csr format. Useful when calling this function multiple times with the same sparse matrix X.</p></li>
+<li><p><strong>nz_cols</strong> (<em>ndarray</em>) – If X is sparse, nz_cols is a 1d array of the col indices when X is in csr format. Useful when calling this function multiple times with the same sparse matrix X.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative m by k left factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_kl_admm.nmf">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_kl_admm.</span></span><span class="sig-name descname"><span class="pre">nmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_kl_admm.html#nmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_kl_admm.nmf" title="Link to this definition">#</a></dt>
+<dd><p>ADMM algorithm for a nonnegative optimization with Kullback–Leibler divergence loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{W,H}{\operatorname{minimize}} &amp;= \operatorname{D}_{KL}(X, W H) = \sum_{i,j} X_{i,j} \log \frac{X_{i,j}}{(WH)_{i,j}} - X_{i,j} + (WH)_{i,j} \\
+\text{subject to} &amp; \quad W \geq 0 \\
+&amp; \quad H \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+<p>’pruned’ (bool): indicator if the input matrix needs to be pruned of zeros.</p>
+<p>’rho’ (double): convergence parameter.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Nonnegative m by k left factor of X.</p>
+<p>H (ndarray): Nonnegative k by n right factor of X.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.nmf_kl_mu">
+<span id="telf-factorization-decompositions-nmf-kl-mu-module"></span><h2>TELF.factorization.decompositions.nmf_kl_mu module<a class="headerlink" href="#module-TELF.factorization.decompositions.nmf_kl_mu" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_kl_mu.H_update">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_kl_mu.</span></span><span class="sig-name descname"><span class="pre">H_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_kl_mu.html#H_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_kl_mu.H_update" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for the right factor, <span class="math notranslate nohighlight">\(H\)</span>, in a nonnegative optimization with Kullback–Leibler divergence loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{H}{\operatorname{minimize}} &amp;= \operatorname{D}_{KL}(X, W H) = \sum_{i,j} X_{i,j} \log \frac{X_{i,j}}{(WH)_{i,j}} - X_{i,j} + (WH)_{i,j} \\
+\text{subject to} &amp; \quad H \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+</p></li>
+<li><p><strong>nz_rows</strong> (<em>ndarray</em>) – If X is sparse, nz_rows is a 1d array of the row indices when X is in csc format. Useful when calling this function multiple times with the same sparse matrix X.</p></li>
+<li><p><strong>nz_cols</strong> (<em>ndarray</em>) – If X is sparse, nz_cols is a 1d array of the col indices when X is in csc format. Useful when calling this function multiple times with the same sparse matrix X.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative k by n right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>H (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_kl_mu.W_update">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_kl_mu.</span></span><span class="sig-name descname"><span class="pre">W_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_kl_mu.html#W_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_kl_mu.W_update" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for the left factor, <span class="math notranslate nohighlight">\(W\)</span>, in a nonnegative optimization with Kullback–Leibler divergence loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{W}{\operatorname{minimize}} &amp;= \operatorname{D}_{KL}(X, W H) = \sum_{i,j} X_{i,j} \log \frac{X_{i,j}}{(WH)_{i,j}} - X_{i,j} + (WH)_{i,j} \\
+\text{subject to} &amp; \quad W \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+</p></li>
+<li><p><strong>nz_rows</strong> (<em>ndarray</em>) – If X is sparse, nz_rows is a 1d array of the row indices when X is in csr format. Useful when calling this function multiple times with the same sparse matrix X.</p></li>
+<li><p><strong>nz_cols</strong> (<em>ndarray</em>) – If X is sparse, nz_cols is a 1d array of the col indices when X is in csr format. Useful when calling this function multiple times with the same sparse matrix X.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative m by k left factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_kl_mu.nmf">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_kl_mu.</span></span><span class="sig-name descname"><span class="pre">nmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W_opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'hist':</span> <span class="pre">None,</span> <span class="pre">'niter':</span> <span class="pre">1}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H_opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'hist':</span> <span class="pre">None,</span> <span class="pre">'niter':</span> <span class="pre">1}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmf_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_consensus_stopping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_kl_mu.html#nmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_kl_mu.nmf" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for a nonnegative optimization with Kullback–Leibler divergence loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{W,H}{\operatorname{minimize}} &amp;= \operatorname{D}_{KL}(X, W H) = \sum_{i,j} X_{i,j} \log \frac{X_{i,j}}{(WH)_{i,j}} - X_{i,j} + (WH)_{i,j} \\
+\text{subject to} &amp; \quad W \geq 0 \\
+&amp; \quad H \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+<p>’W_opts’ (dict): options dictionary for <a class="reference internal" href="#TELF.factorization.decompositions.nmf_kl_mu.W_update" title="TELF.factorization.decompositions.nmf_kl_mu.W_update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">W_update()</span></code></a>.</p>
+<p>’H_opts’ (dict): options dictionary for <a class="reference internal" href="#TELF.factorization.decompositions.nmf_kl_mu.H_update" title="TELF.factorization.decompositions.nmf_kl_mu.H_update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">H_update()</span></code></a>.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Nonnegative m by k left factor of X.</p>
+<p>H (ndarray): Nonnegative k by n right factor of X.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.nmf_mc_fro_mu">
+<span id="telf-factorization-decompositions-nmf-mc-fro-mu-module"></span><h2>TELF.factorization.decompositions.nmf_mc_fro_mu module<a class="headerlink" href="#module-TELF.factorization.decompositions.nmf_mc_fro_mu" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_mc_fro_mu.H_update_ADMM">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_mc_fro_mu.</span></span><span class="sig-name descname"><span class="pre">H_update_ADMM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_mc_fro_mu.html#H_update_ADMM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.H_update_ADMM" title="Link to this definition">#</a></dt>
+<dd><p>ADMM algorithm for the right factor in a nonnegative optimization with Frobenius norm loss function. ||X-WH||_F^2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – Dictionary or optional arguments.
+‘hist’ (list): list to append the objective function to.
+‘niter’ (int): number of iterations.
+‘rho’ (double): convergence parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative k by n right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>H (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_mc_fro_mu.H_update_MU">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_mc_fro_mu.</span></span><span class="sig-name descname"><span class="pre">H_update_MU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_mc_fro_mu.html#H_update_MU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.H_update_MU" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for the right factor in a nonnegative optimization with Frobenius norm loss function. ||X-WH||_F^2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – Dictionary or optional arguments.
+‘hist’ (list): list to append the objective function to.
+‘niter’ (int): number of iterations.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative k by n right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>H (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_mc_fro_mu.W_update_ADMM">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_mc_fro_mu.</span></span><span class="sig-name descname"><span class="pre">W_update_ADMM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_mc_fro_mu.html#W_update_ADMM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.W_update_ADMM" title="Link to this definition">#</a></dt>
+<dd><p>ADMM algorithm for the left factor in a nonnegative optimization with Frobenius norm loss function. ||X-WH||_F^2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – Dictionary or optional arguments.
+‘hist’ (list): list to append the objective function to.
+‘niter’ (int): number of iterations.
+‘rho’ (double): convergence parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative m by k left factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_mc_fro_mu.W_update_MU">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_mc_fro_mu.</span></span><span class="sig-name descname"><span class="pre">W_update_MU</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_mc_fro_mu.html#W_update_MU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.W_update_MU" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for the left factor in a nonnegative optimization with Frobenius norm loss function. ||X-WH||_F^2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – Dictionary or optional arguments.
+‘hist’ (list): list to append the objective function to.
+‘niter’ (int): number of iterations.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative m by k left factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_mc_fro_mu.</span></span><span class="sig-name descname"><span class="pre">coord_desc_thresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ht</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_mc_fro_mu.html#coord_desc_thresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh_onefactor">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_mc_fro_mu.</span></span><span class="sig-name descname"><span class="pre">coord_desc_thresh_onefactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_mc_fro_mu.html#coord_desc_thresh_onefactor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh_onefactor" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_mc_fro_mu.find_thres_WH">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_mc_fro_mu.</span></span><span class="sig-name descname"><span class="pre">find_thres_WH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Wn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Hn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_mc_fro_mu.html#find_thres_WH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.find_thres_WH" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_mc_fro_mu.nmf">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_mc_fro_mu.</span></span><span class="sig-name descname"><span class="pre">nmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowerthres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upperthres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_mc_fro_mu.html#nmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.nmf" title="Link to this definition">#</a></dt>
+<dd><p>penalized nmf with adaptive alpha</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_mc_fro_mu.nmf_with_ADMM">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_mc_fro_mu.</span></span><span class="sig-name descname"><span class="pre">nmf_with_ADMM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowerthres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upperthres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_mc_fro_mu.html#nmf_with_ADMM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.nmf_with_ADMM" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for NMF with Frobenius norm loss function. ||X-WH||_F^2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – Dictionary or optional arguments.
+‘hist’ (list): list to append the objective function to.
+‘niter’ (int): number of iterations.
+‘pruned’ (bool): indicator if the input matrix needs to be pruned of zeros.
+‘W_opts’ (dict): options dictionary for W update
+‘H_opts’ (dict): options dictionary for H update</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative m by k left factor of X.
+H (ndarray): Nonnegative k by n right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_mc_fro_mu.old_find_thres_WH">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_mc_fro_mu.</span></span><span class="sig-name descname"><span class="pre">old_find_thres_WH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Wn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Hn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'grid_search'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_mc_fro_mu.html#old_find_thres_WH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.old_find_thres_WH" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_mc_fro_mu.old_nmf">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_mc_fro_mu.</span></span><span class="sig-name descname"><span class="pre">old_nmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lowerthres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upperthres</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_mc_fro_mu.html#old_nmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.old_nmf" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for NMF with Frobenius norm loss function. ||X-WH||_F^2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – Dictionary or optional arguments.
+‘hist’ (list): list to append the objective function to.
+‘niter’ (int): number of iterations.
+‘pruned’ (bool): indicator if the input matrix needs to be pruned of zeros.
+‘W_opts’ (dict): options dictionary for W update
+‘H_opts’ (dict): options dictionary for H update</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative m by k left factor of X.
+H (ndarray): Nonnegative k by n right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_mc_fro_mu.roc_W_H">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_mc_fro_mu.</span></span><span class="sig-name descname"><span class="pre">roc_W_H</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_mc_fro_mu.html#roc_W_H"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.roc_W_H" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.nmf_mc_fro_mu.thres_norm">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.nmf_mc_fro_mu.</span></span><span class="sig-name descname"><span class="pre">thres_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/nmf_mc_fro_mu.html#thres_norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.thres_norm" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.rescal_fro_mu">
+<span id="telf-factorization-decompositions-rescal-fro-mu-module"></span><h2>TELF.factorization.decompositions.rescal_fro_mu module<a class="headerlink" href="#module-TELF.factorization.decompositions.rescal_fro_mu" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.rescal_fro_mu.A_update">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.rescal_fro_mu.</span></span><span class="sig-name descname"><span class="pre">A_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/rescal_fro_mu.html#A_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.rescal_fro_mu.A_update" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for the A factor in a nonnegative optimization with Frobenius norm loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{A}{\operatorname{minimize}} &amp;= \sum \frac{1}{2} \Vert X_i - A R_i A^\top \Vert_F^2 \\
+\text{subject to} &amp; \quad A \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>list</em><em> of </em><em>ndarray</em><em>, </em><em>sparse matrix</em>) – List of nonnegative m by m matrices to decompose.</p></li>
+<li><p><strong>A</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of the A factor.</p></li>
+<li><p><strong>R</strong> (<em>list</em><em> of </em><em>ndarray</em>) – List of nonnegative k by k matrices in the decomposition so X[k] is paired with R[k].</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative m by k factor in the decomposition.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.rescal_fro_mu.R_update">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.rescal_fro_mu.</span></span><span class="sig-name descname"><span class="pre">R_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/rescal_fro_mu.html#R_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.rescal_fro_mu.R_update" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for the R factor in a nonnegative optimization with Frobenius norm loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{R}{\operatorname{minimize}} &amp;= \sum \frac{1}{2} \Vert X_i - A R_i A^\top \Vert_F^2 \\
+\text{subject to} &amp; \quad R \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>list</em><em> of </em><em>ndarray</em><em>, </em><em>sparse matrix</em>) – List of nonnegative m by m matrices to decompose.</p></li>
+<li><p><strong>A</strong> (<em>ndarray</em>) – Nonnegative m by k matrix in the decomposition.</p></li>
+<li><p><strong>R</strong> (<em>list</em><em> of </em><em>ndarray</em>) – List of nonnegative k by k initilizations for the decomposition so X[k] is paired with R[k].</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of nonnegative k by k factors in the decomposition.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>R (list of ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.rescal_fro_mu.rescal">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.rescal_fro_mu.</span></span><span class="sig-name descname"><span class="pre">rescal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A_opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'hist':</span> <span class="pre">None,</span> <span class="pre">'niter':</span> <span class="pre">1}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R_opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'hist':</span> <span class="pre">None,</span> <span class="pre">'niter':</span> <span class="pre">1}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rescal_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/rescal_fro_mu.html#rescal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.rescal_fro_mu.rescal" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for the R factor in a nonnegative optimization with Frobenius norm loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{R}{\operatorname{minimize}} &amp;= \sum \frac{1}{2} \Vert X_i - A R_i A^\top \Vert_F^2 \\
+\text{subject to} &amp; \quad R \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>list</em><em> of </em><em>ndarray</em><em>, </em><em>sparse matrix</em>) – List of nonnegative m by m matrices to decompose.</p></li>
+<li><p><strong>A</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of the A factor.</p></li>
+<li><p><strong>R</strong> (<em>list</em><em> of </em><em>ndarray</em>) – List of nonnegative k by k initilizations for the decomposition so X[k] is paired with R[k].</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>Nonnegative m by k factor in the decomposition.</p>
+<p>R (list of ndarray): List of nonnegative k by k factors in the decomposition.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions.tri_nmf_fro_mu">
+<span id="telf-factorization-decompositions-tri-nmf-fro-mu-module"></span><h2>TELF.factorization.decompositions.tri_nmf_fro_mu module<a class="headerlink" href="#module-TELF.factorization.decompositions.tri_nmf_fro_mu" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.tri_nmf_fro_mu.H_update">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.tri_nmf_fro_mu.</span></span><span class="sig-name descname"><span class="pre">H_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/tri_nmf_fro_mu.html#H_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.H_update" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for the right factor, <span class="math notranslate nohighlight">\(H\)</span>, in a nonnegative optimization with Frobenius norm loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{H}{\operatorname{minimize}} &amp;= \frac{1}{2} \Vert X - W H \Vert_F^2 \\
+\text{subject to} &amp; \quad H \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative k by n right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>H (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.tri_nmf_fro_mu.S_update">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.tri_nmf_fro_mu.</span></span><span class="sig-name descname"><span class="pre">S_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/tri_nmf_fro_mu.html#S_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.S_update" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for the R factor in a nonnegative optimization with Frobenius norm loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{R}{\operatorname{minimize}} &amp;= \sum \frac{1}{2} \Vert X_i - A R_i A^\top \Vert_F^2 \\
+\text{subject to} &amp; \quad R \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>list</em><em> of </em><em>ndarray</em><em>, </em><em>sparse matrix</em>) – List of nonnegative m by m matrices to decompose.</p></li>
+<li><p><strong>A</strong> (<em>ndarray</em>) – Nonnegative m by k matrix in the decomposition.</p></li>
+<li><p><strong>R</strong> (<em>list</em><em> of </em><em>ndarray</em>) – List of nonnegative k by k initilizations for the decomposition so X[k] is paired with R[k].</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of nonnegative k by k factors in the decomposition.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>R (list of ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.tri_nmf_fro_mu.W_update">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.tri_nmf_fro_mu.</span></span><span class="sig-name descname"><span class="pre">W_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/tri_nmf_fro_mu.html#W_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.W_update" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for the left factor, <span class="math notranslate nohighlight">\(W\)</span>, in a tri - nonnegative optimization with Frobenius norm loss function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\underset{W}{\operatorname{minimize}} &amp;= \frac{1}{2} \Vert X - W H \Vert_F^2 \\
+\text{subject to} &amp; \quad W \geq 0\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by k initialization of left factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative k by n right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative m by k right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.decompositions.tri_nmf_fro_mu.trinmf">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.decompositions.tri_nmf_fro_mu.</span></span><span class="sig-name descname"><span class="pre">trinmf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W_opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'hist':</span> <span class="pre">None,</span> <span class="pre">'niter':</span> <span class="pre">1}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H_opts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'hist':</span> <span class="pre">None,</span> <span class="pre">'niter':</span> <span class="pre">1}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmf_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_consensus_stopping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.0,</span> <span class="pre">1.0]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/decompositions/tri_nmf_fro_mu.html#trinmf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.trinmf" title="Link to this definition">#</a></dt>
+<dd><p>Multiplicative update algorithm for a nonnegative optimization with Frobenius norm loss function
+With orthogonality constraints</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em>, </em><em>sparse matrix</em>) – Nonnegative m by n matrix to decompose.</p></li>
+<li><p><strong>W</strong> (<em>ndarray</em>) – Nonnegative m by kw initialization of left factor of X.</p></li>
+<li><p><strong>S</strong> (<em>ndarray</em>) – Nonnegative kx by kh initialization of the middle factor of X.</p></li>
+<li><p><strong>H</strong> (<em>ndarray</em>) – Nonnegative kh by n initialization of right factor of X.</p></li>
+<li><p><strong>opts</strong> (<em>dict</em>) – <p>Dictionary or optional arguments.</p>
+<p>’hist’ (list): list to append the objective function to.</p>
+<p>’niter’ (int): number of iterations.</p>
+<p>’W_opts’ (dict): options dictionary for <a class="reference internal" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.W_update" title="TELF.factorization.decompositions.tri_nmf_fro_mu.W_update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">W_update()</span></code></a>.</p>
+<p>’H_opts’ (dict): options dictionary for <a class="reference internal" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.H_update" title="TELF.factorization.decompositions.tri_nmf_fro_mu.H_update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">H_update()</span></code></a>.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nonnegative m by kw left factor of X.
+S (ndarray): Nonnegative kw by kh middle factor of X.
+H (ndarray): Nonnegative kh by n right factor of X.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>W (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-TELF.factorization.decompositions">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-TELF.factorization.decompositions" title="Link to this heading">#</a></h2>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="TELF.factorization.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">TELF.factorization package</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="TELF.factorization.decompositions.utilities.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">TELF.factorization.decompositions.utilities package</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.nmf_fro_admm">TELF.factorization.decompositions.nmf_fro_admm module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_fro_admm.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_fro_admm.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_fro_admm.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.nmf_fro_mu">TELF.factorization.decompositions.nmf_fro_mu module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_fro_mu.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_fro_mu.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_fro_mu.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.nmf_kl_admm">TELF.factorization.decompositions.nmf_kl_admm module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_kl_admm.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_kl_admm.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_kl_admm.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.nmf_kl_mu">TELF.factorization.decompositions.nmf_kl_mu module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_kl_mu.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_kl_mu.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_kl_mu.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.nmf_mc_fro_mu">TELF.factorization.decompositions.nmf_mc_fro_mu module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.H_update_ADMM"><code class="docutils literal notranslate"><span class="pre">H_update_ADMM()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.H_update_MU"><code class="docutils literal notranslate"><span class="pre">H_update_MU()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.W_update_ADMM"><code class="docutils literal notranslate"><span class="pre">W_update_ADMM()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.W_update_MU"><code class="docutils literal notranslate"><span class="pre">W_update_MU()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh"><code class="docutils literal notranslate"><span class="pre">coord_desc_thresh()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh_onefactor"><code class="docutils literal notranslate"><span class="pre">coord_desc_thresh_onefactor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.find_thres_WH"><code class="docutils literal notranslate"><span class="pre">find_thres_WH()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.nmf_with_ADMM"><code class="docutils literal notranslate"><span class="pre">nmf_with_ADMM()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.old_find_thres_WH"><code class="docutils literal notranslate"><span class="pre">old_find_thres_WH()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.old_nmf"><code class="docutils literal notranslate"><span class="pre">old_nmf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.roc_W_H"><code class="docutils literal notranslate"><span class="pre">roc_W_H()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.nmf_mc_fro_mu.thres_norm"><code class="docutils literal notranslate"><span class="pre">thres_norm()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.rescal_fro_mu">TELF.factorization.decompositions.rescal_fro_mu module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.rescal_fro_mu.A_update"><code class="docutils literal notranslate"><span class="pre">A_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.rescal_fro_mu.R_update"><code class="docutils literal notranslate"><span class="pre">R_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.rescal_fro_mu.rescal"><code class="docutils literal notranslate"><span class="pre">rescal()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions.tri_nmf_fro_mu">TELF.factorization.decompositions.tri_nmf_fro_mu module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.S_update"><code class="docutils literal notranslate"><span class="pre">S_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.decompositions.tri_nmf_fro_mu.trinmf"><code class="docutils literal notranslate"><span class="pre">trinmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.decompositions">Module contents</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

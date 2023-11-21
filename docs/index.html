@@ -1,0 +1,665 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tensor Extraction of Latent Features (T-ELF) &#8212; TELF 0.0.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="_static/documentation_options.js?v=f131489c"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TELF.factorization.NMFk: Non-negative Matrix Factorization with Automatic Model Determination" href="NMFk.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.2 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">TELF</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="TELF.html">TELF package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.factorization.html">TELF.factorization package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.pre_processing.html">TELF.pre_processing package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/index.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Tensor Extraction of Latent Features (T-ELF)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Tensor Extraction of Latent Features (T-ELF)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#capabilities">Capabilities</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-cite-t-elf">How to Cite T-ELF?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#authors">Authors</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#copyright-notice">Copyright Notice</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-test-suite">Developer Test Suite</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="tensor-extraction-of-latent-features-t-elf">
+<h1>Tensor Extraction of Latent Features (T-ELF)<a class="headerlink" href="#tensor-extraction-of-latent-features-t-elf" title="Link to this heading">#</a></h1>
+<a class="reference internal image-reference" href="_images/tensorsrnd.png"><img alt="_images/tensorsrnd.png" class="align-center" src="_images/tensorsrnd.png" style="width: 648.0px; height: 400.0px;" /></a>
+<p>T-ELF presents an array of customizable software solutions crafted for analysis of datasets. Acting as a comprehensive toolbox, T-ELF specializes in data pre-processing, extraction of latent features, and structuring results to facilitate informed decision-making. Leveraging high-performance computing and cutting-edge GPU architectures, our toolbox is optimized for analyzing extensive datasets.</p>
+<p>Central to T-ELF’s core capabilities lie non-negative matrix and tensor factorization solutions for discovering multi-faceted hidden details in data, featuring automated model determination facilitating the estimation of latent factors or rank. This pivotal functionality ensures precise data modeling and the extraction of concealed patterns. Additionally, our software suite incorporates cutting-edge modules for both pre-processing and post-processing of data, tailored for diverse tasks including text mining, Natural Language Processing, and robust tools for matrix and tensor analysis and construction.</p>
+<p>T-ELF’s adaptability spans across a multitude of disciplines, positioning it as a robust AI and data analytics solution. Its proven efficacy extends across various fields such as Large-scale Text Mining, High Performance Computing, Computer Security, Applied Mathematics, Dynamic Networks and Ranking, Biology, Material Science, Medicine, Chemistry, Data Compression, Climate Studies, Relational Databases, Data Privacy, Economy, and Agriculture.</p>
+</section>
+<section id="resources">
+<h1>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/lanl/T-ELF/tree/main/examples">Examples</a></p></li>
+<li><p><a class="reference external" href="https://smart-tensors.lanl.gov">Website</a></p></li>
+<li><p><a class="reference external" href="https://github.com/lanl/T-ELF">Code</a></p></li>
+</ul>
+</section>
+<section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
+<p><strong>Option 1: Install via PIP and CONDA</strong></p>
+<ul class="simple">
+<li><p><strong>Step 1:</strong> Install the library</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/lanl/T-ELF.git
+<span class="nb">cd</span><span class="w"> </span>T-ELF
+conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>TELF<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11.5
+<span class="nb">source</span><span class="w"> </span>activate<span class="w"> </span>TELF<span class="w"> </span><span class="c1"># or conda activate TELF</span>
+python<span class="w"> </span>setup.py<span class="w"> </span>install
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Step 2:</strong> Install Spacy NLP model and NLTK Packages</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>spacy<span class="w"> </span>download<span class="w"> </span>en_core_web_lg
+python<span class="w"> </span>-m<span class="w"> </span>nltk.downloader<span class="w"> </span>wordnet<span class="w"> </span>omw-1.4
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Step 3:</strong> Install Cupy if using GPU (<em>Optional</em>)</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>cupy
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Step 4:</strong> Install MPI if using HPC (<em>Optional</em>)</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>load<span class="w"> </span>&lt;openmpi&gt;<span class="w"> </span><span class="c1"># On a HPC Node</span>
+pip<span class="w"> </span>install<span class="w"> </span>mpi4py
+</pre></div>
+</div>
+<p><strong>Option 2: Install via CONDA Only</strong></p>
+<ul class="simple">
+<li><p><strong>Step 1:</strong> Download the Library</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/lanl/T-ELF.git
+<span class="nb">cd</span><span class="w"> </span>T-ELF
+</pre></div>
+</div>
+<ul>
+<li><dl>
+<dt><strong>Step 2:</strong> Install/Setup the Environment (CPU or GPU)</dt><dd><ul class="simple">
+<li><p>2a: CPU</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>--file<span class="w"> </span>environment_cpu.yml
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>2b: or GPU</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>--file<span class="w"> </span>environment_gpu.yml
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><p><strong>Step 3:</strong> Setup TELF</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>TELF_conda
+conda<span class="w"> </span>develop<span class="w"> </span>.
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Step 4:</strong> Install Spacy NLP model and NLTK Packages</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>spacy<span class="w"> </span>download<span class="w"> </span>en_core_web_lg
+python<span class="w"> </span>-m<span class="w"> </span>nltk.downloader<span class="w"> </span>wordnet<span class="w"> </span>omw-1.4
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Step 5:</strong> Install MPI if using HPC (<em>Optional</em>)</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>load<span class="w"> </span>&lt;openmpi&gt;
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>mpi4py
+</pre></div>
+</div>
+</section>
+<section id="capabilities">
+<h1>Capabilities<a class="headerlink" href="#capabilities" title="Link to this heading">#</a></h1>
+<a class="reference internal image-reference" href="_images/Second_image_TensorNetworks.jpg"><img alt="_images/Second_image_TensorNetworks.jpg" class="align-center" src="_images/Second_image_TensorNetworks.jpg" style="width: 450.0px; height: 400.0px;" /></a>
+<p>Please see our <a class="reference external" href="https://smart-tensors.lanl.gov/publications/">publications</a> for the capabilities.</p>
+</section>
+<section id="how-to-cite-t-elf">
+<h1>How to Cite T-ELF?<a class="headerlink" href="#how-to-cite-t-elf" title="Link to this heading">#</a></h1>
+<p><strong>APA:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Boureima, I., Skau, E., Rasmussen, K., &amp; Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.2) [Computer software]. https://github.com/lanl/T-ELF</span>
+</pre></div>
+</div>
+<p><strong>BibTeX:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">@software{Tensor_Extraction_of_2023,</span>
+<span class="go">   author = {Eren, Maksim and Solovyev, Nick and Barron, Ryan and Bhattarai, Manish and Boureima, Ismael and Skau, Erik and Rasmussen, Kim and Alexandrov, Boian},</span>
+<span class="go">   month = oct,</span>
+<span class="go">   title = {{Tensor Extraction of Latent Features (T-ELF)}},</span>
+<span class="go">   url = {https://github.com/lanl/T-ELF},</span>
+<span class="go">   version = {0.0.2},</span>
+<span class="go">   year = {2023}</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</section>
+<section id="authors">
+<h1>Authors<a class="headerlink" href="#authors" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="mailto:maksim&#37;&#52;&#48;lanl&#46;gov">Maksim E Eren</a>: Advanced Research in Cyber Systems, Los Alamos National Laboratory</p></li>
+<li><p><a class="reference external" href="mailto:nks&#37;&#52;&#48;lanl&#46;gov">Nicholas Solovyev</a>: Theoretical Division, Los Alamos National Laboratory</p></li>
+<li><p><a class="reference external" href="mailto:barron&#37;&#52;&#48;lanl&#46;gov">Ryan Barron</a>: Theoretical Division, Los Alamos National Laboratory</p></li>
+<li><p><a class="reference external" href="mailto:ceodspspectrum&#37;&#52;&#48;lanl&#46;gov">Manish Bhattarai</a>: Theoretical Division, Los Alamos National Laboratory</p></li>
+<li><p><a class="reference external" href="mailto:iboureima&#37;&#52;&#48;lanl&#46;gov">Ismael Boureima</a>: Theoretical Division, Los Alamos National Laboratory</p></li>
+<li><p><a class="reference external" href="mailto:ewskau&#37;&#52;&#48;lanl&#46;gov">Erik Skau</a>: Computer, Computational, and Statistical Sciences Division, Los Alamos National Laboratory</p></li>
+<li><p><a class="reference external" href="mailto:kor&#37;&#52;&#48;lanl&#46;gov">Kim Rasmussen</a>: Theoretical Division, Los Alamos National Laboratory</p></li>
+<li><p><a class="reference external" href="mailto:boian&#37;&#52;&#48;lanl&#46;gov">Boian Alexandrov</a>: Theoretical Division, Los Alamos National Laboratory</p></li>
+</ul>
+</section>
+<section id="copyright-notice">
+<h1>Copyright Notice<a class="headerlink" href="#copyright-notice" title="Link to this heading">#</a></h1>
+<p>© 2022. Triad National Security, LLC. All rights reserved.
+This program was produced under U.S. Government contract 89233218CNA000001 for Los Alamos
+National Laboratory (LANL), which is operated by Triad National Security, LLC for the U.S.
+Department of Energy/National Nuclear Security Administration. All rights in the program are
+reserved by Triad National Security, LLC, and the U.S. Department of Energy/National Nuclear
+Security Administration. The Government is granted for itself and others acting on its behalf a
+nonexclusive, paid-up, irrevocable worldwide license in this material to reproduce, prepare
+derivative works, distribute copies to the public, perform publicly and display publicly, and to permit
+others to do so.</p>
+<p><strong>LANL C Number: C22048</strong></p>
+</section>
+<section id="license">
+<h1>License<a class="headerlink" href="#license" title="Link to this heading">#</a></h1>
+<p>This program is open source under the BSD-3 License.
+Redistribution and use in source and binary forms, with or without modification, are permitted
+provided that the following conditions are met:</p>
+<p>1. Redistributions of source code must retain the above copyright notice, this list of conditions and
+the following disclaimer.</p>
+<p>2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions
+and the following disclaimer in the documentation and/or other materials provided with the
+distribution.</p>
+<p>3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse
+or promote products derived from this software without specific prior written permission.</p>
+<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS
+IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+</section>
+<section id="developer-test-suite">
+<h1>Developer Test Suite<a class="headerlink" href="#developer-test-suite" title="Link to this heading">#</a></h1>
+<p>Developer test suites are located under <code class="docutils literal notranslate"><span class="pre">tests/</span></code> directory (located <a class="reference external" href="https://github.com/lanl/T-ELF/tree/main/tests">here</a>).</p>
+<p>Tests can be ran from this folder using <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pytest</span> <span class="pre">*</span></code>.</p>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NMFk.html#example">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NMFk.html#available-functions">Available Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NMFk.html#module-TELF.factorization.NMFk">Module Contents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="NMFk.html#TELF.factorization.NMFk.NMFk"><code class="docutils literal notranslate"><span class="pre">NMFk</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RESCALk.html#example">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RESCALk.html#available-functions">Available Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RESCALk.html#module-TELF.factorization.RESCALk">Module Contents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="RESCALk.html#TELF.factorization.RESCALk.RESCALk"><code class="docutils literal notranslate"><span class="pre">RESCALk</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TriNMFk.html#example">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TriNMFk.html#available-functions">Available Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TriNMFk.html#module-TELF.factorization.TriNMFk">Module Contents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="TriNMFk.html#TELF.factorization.TriNMFk.TriNMFk"><code class="docutils literal notranslate"><span class="pre">TriNMFk</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Beaver.html#example">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Beaver.html#available-functions">Available Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Beaver.html#module-TELF.pre_processing.Beaver.beaver">Module Contents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver"><code class="docutils literal notranslate"><span class="pre">Beaver</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Vulture.html#example">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Vulture.html#available-functions">Available Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Vulture.html#module-TELF.pre_processing.Vulture.vulture">Module Contents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture"><code class="docutils literal notranslate"><span class="pre">Vulture</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Vulture.html#TELF.pre_processing.Vulture.vulture.chunk_tuple_list"><code class="docutils literal notranslate"><span class="pre">chunk_tuple_list()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">TELF</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="TELF.html">TELF package</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="right-next"
+       href="NMFk.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Tensor Extraction of Latent Features (T-ELF)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#capabilities">Capabilities</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-cite-t-elf">How to Cite T-ELF?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#authors">Authors</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#copyright-notice">Copyright Notice</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-test-suite">Developer Test Suite</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

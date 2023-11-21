@@ -2,7 +2,7 @@ from .generic_utils import get_np, get_scipy
 from .math_utils import fro_norm
 
 
-def nnsvd(X, k):
+def nnsvd(X, k, use_gpu=False):
     """
     Nonnegative SVD algorithm for NMF initialization based off of Gillis et al. in https://arxiv.org/pdf/1807.04020.pdf.
 
@@ -14,8 +14,8 @@ def nnsvd(X, k):
         W (ndarray): Nonnegative m by k left factor of X.
         H (ndarray): Nonnegative k by n right factor of X.
     """
-    np = get_np(X, use_gpu=False)
-    scipy = get_scipy(X, use_gpu=False)
+    np = get_np(X, use_gpu=use_gpu)
+    scipy = get_scipy(X, use_gpu=use_gpu)
     dtype = X.dtype
     
     if np.issubdtype(dtype, np.integer):
@@ -25,22 +25,15 @@ def nnsvd(X, k):
     else:
         raise Exception("Unknown data type!")
     
-    m, n = X.shape
-    if scipy.sparse.issparse(X):
-        # U, S, V = np.linalg.svd(X.todense(), full_matrices=False)
-        # U, S, V = U[:, :k], S[:k], V[:k, :].T
-        U, S, V = scipy.sparse.linalg.svds(X, k=k)
-        V = V.T
-        # #there is a bug in sparse svd
-        # #sometimes it returns some 0 singular values/singular vectors
-        # #if 0.0 in S, then revent to dense computation
-        # if 0.0 in S:
-        #     U,S,V = np.linalg.svd(np.array(X.todense()),full_matrices=False)
-        #     U,S,V = U[:,:k], S[:k], V[:k,:].T
-    else:
-        U, S, V = np.linalg.svd(X, full_matrices=False)
-        U, S, V = U[:, :k], S[:k], V[:k, :].T
-
+    #
+    # Truncated SVD
+    #
+    U, S, V = scipy.sparse.linalg.svds(X, k=k)
+    V = V.T
+    
+    #
+    # NN-SVD
+    #
     UP = np.where(U > 0, U, 0)
     UN = np.where(U < 0, -U, 0)
     VP = np.where(V > 0, V, 0)

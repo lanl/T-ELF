@@ -1,0 +1,930 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>TELF.pre_processing.Beaver: Fast matrix and tensor building tool &#8212; TELF 0.0.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="_static/documentation_options.js?v=f131489c"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Beaver';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TELF.pre_processing.Vulture: Advanced text pre-processing and cleaning tool for NLP and text-mining" href="Vulture.html" />
+    <link rel="prev" title="TELF.factorization.TriNMFk: NMFk with Automatic Determination of Latent Clusters and Patterns" href="TriNMFk.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.2 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">TELF</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="TELF.html">TELF package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.factorization.html">TELF.factorization package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.pre_processing.html">TELF.pre_processing package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Beaver.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>TELF.pre_processing.Beaver: Fast matrix and tensor building tool</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Beaver.beaver">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver"><code class="docutils literal notranslate"><span class="pre">Beaver</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.SUPPORTED_OUTPUT_FORMATS"><code class="docutils literal notranslate"><span class="pre">Beaver.SUPPORTED_OUTPUT_FORMATS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.citation_tensor"><code class="docutils literal notranslate"><span class="pre">Beaver.citation_tensor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.coauthor_tensor"><code class="docutils literal notranslate"><span class="pre">Beaver.coauthor_tensor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.cocitation_tensor"><code class="docutils literal notranslate"><span class="pre">Beaver.cocitation_tensor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.cooccurrence_matrix"><code class="docutils literal notranslate"><span class="pre">Beaver.cooccurrence_matrix()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.documents_words"><code class="docutils literal notranslate"><span class="pre">Beaver.documents_words()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.get_ngrams"><code class="docutils literal notranslate"><span class="pre">Beaver.get_ngrams()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.get_vocabulary"><code class="docutils literal notranslate"><span class="pre">Beaver.get_vocabulary()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.n_jobs"><code class="docutils literal notranslate"><span class="pre">Beaver.n_jobs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.n_nodes"><code class="docutils literal notranslate"><span class="pre">Beaver.n_nodes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.participation_tensor"><code class="docutils literal notranslate"><span class="pre">Beaver.participation_tensor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.something_words"><code class="docutils literal notranslate"><span class="pre">Beaver.something_words()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.something_words_time"><code class="docutils literal notranslate"><span class="pre">Beaver.something_words_time()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="telf-pre-processing-beaver-fast-matrix-and-tensor-building-tool">
+<h1><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool<a class="headerlink" href="#telf-pre-processing-beaver-fast-matrix-and-tensor-building-tool" title="Link to this heading">#</a></h1>
+<p>Beaver is a matrix and tensor building tool.</p>
+</section>
+<section id="example">
+<h1>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h1>
+<p>Several examples for Beaver can be found <a class="reference external" href="https://github.com/lanl/T-ELF/tree/main/examples/Beaver">here</a>. Here we will show example usage for creating a Document-Words matrix. First let’s load the example dataset (example dataset can be found <a class="reference external" href="https://github.com/lanl/T-ELF/tree/main/data">here</a>):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/sample.csv&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Next, let’s build the vocabulary:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">TELF.pre_processing</span> <span class="kn">import</span> <span class="n">Beaver</span>
+
+<span class="n">beaver</span> <span class="o">=</span> <span class="n">Beaver</span><span class="p">()</span>
+<span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
+   <span class="s2">&quot;dataset&quot;</span><span class="p">:</span><span class="n">df</span><span class="p">,</span>
+   <span class="s2">&quot;target_column&quot;</span><span class="p">:</span><span class="s2">&quot;clean_abstract&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;split_with&quot;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span>
+   <span class="s2">&quot;min_df&quot;</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span>
+   <span class="s2">&quot;max_df&quot;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">,</span>
+   <span class="s2">&quot;verbose&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span>
+   <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+   <span class="s2">&quot;parallel_backend&quot;</span><span class="p">:</span><span class="s2">&quot;multiprocessing&quot;</span>
+<span class="p">}</span>
+
+<span class="n">vocabulary</span> <span class="o">=</span> <span class="n">beaver</span><span class="o">.</span><span class="n">get_vocabulary</span><span class="p">(</span><span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Next we can build the matrix:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
+   <span class="s2">&quot;dataset&quot;</span><span class="p">:</span><span class="n">df</span><span class="p">,</span>
+   <span class="s2">&quot;target_column&quot;</span><span class="p">:</span><span class="s2">&quot;clean_abstract&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;options&quot;</span><span class="p">:{</span><span class="s2">&quot;min_df&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;max_df&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;vocabulary&quot;</span><span class="p">:</span><span class="n">vocabulary</span><span class="p">},</span>
+   <span class="s2">&quot;matrix_type&quot;</span><span class="p">:</span><span class="s2">&quot;tfidf&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;highlighting&quot;</span><span class="p">:[</span><span class="s1">&#39;aberration&#39;</span><span class="p">,</span> <span class="s1">&#39;ability&#39;</span><span class="p">,</span> <span class="s1">&#39;ablation&#39;</span><span class="p">,</span> <span class="s1">&#39;ablator&#39;</span><span class="p">,</span> <span class="s1">&#39;able&#39;</span><span class="p">],</span>
+   <span class="s2">&quot;weights&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>
+   <span class="s2">&quot;save_path&quot;</span><span class="p">:</span><span class="s2">&quot;./&quot;</span>
+<span class="p">}</span>
+
+<span class="n">beaver</span><span class="o">.</span><span class="n">documents_words</span><span class="p">(</span><span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We cam then load the matrix:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">ss</span>
+
+<span class="c1"># load the saved file which is in Sparse COO format</span>
+<span class="n">X_csr_sparse</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">load_npz</span><span class="p">(</span><span class="s2">&quot;documents_words.npz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="available-functions">
+<h1>Available Functions<a class="headerlink" href="#available-functions" title="Link to this heading">#</a></h1>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Beaver.__init__</span></code>([n_nodes, n_jobs])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.get_vocabulary" title="TELF.pre_processing.Beaver.beaver.Beaver.get_vocabulary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Beaver.get_vocabulary</span></code></a>(dataset[, ...])</p></td>
+<td><p>Builds the vocabulary</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.coauthor_tensor" title="TELF.pre_processing.Beaver.beaver.Beaver.coauthor_tensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Beaver.coauthor_tensor</span></code></a>(dataset[, ...])</p></td>
+<td><p>Create co-author tensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.cocitation_tensor" title="TELF.pre_processing.Beaver.beaver.Beaver.cocitation_tensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Beaver.cocitation_tensor</span></code></a>(dataset[, ...])</p></td>
+<td><p>Creates an Authors by Authors by Time tensor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.participation_tensor" title="TELF.pre_processing.Beaver.beaver.Beaver.participation_tensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Beaver.participation_tensor</span></code></a>(dataset[, ...])</p></td>
+<td><p>Creates a boolean Authors by Papers by Time tensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.citation_tensor" title="TELF.pre_processing.Beaver.beaver.Beaver.citation_tensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Beaver.citation_tensor</span></code></a>(dataset[, ...])</p></td>
+<td><p>Creates an Authors by Papers by Time tensor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.cooccurrence_matrix" title="TELF.pre_processing.Beaver.beaver.Beaver.cooccurrence_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Beaver.cooccurrence_matrix</span></code></a>(dataset[, ...])</p></td>
+<td><p>Generates co-occurance and SPPMI matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.documents_words" title="TELF.pre_processing.Beaver.beaver.Beaver.documents_words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Beaver.documents_words</span></code></a>(dataset[, ...])</p></td>
+<td><p>Creates document-words matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.something_words" title="TELF.pre_processing.Beaver.beaver.Beaver.something_words"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Beaver.something_words</span></code></a>(dataset[, ...])</p></td>
+<td><p>Creates a Something by Words matrix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.something_words_time" title="TELF.pre_processing.Beaver.beaver.Beaver.something_words_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Beaver.something_words_time</span></code></a>(dataset, vocabulary)</p></td>
+<td><p>Creates a Something by Words by Time tensor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.get_ngrams" title="TELF.pre_processing.Beaver.beaver.Beaver.get_ngrams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Beaver.get_ngrams</span></code></a>(dataset[, target_column, ...])</p></td>
+<td><p>Generates n-grams from a column in a dataset</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-TELF.pre_processing.Beaver.beaver">
+<span id="module-contents"></span><h1>Module Contents<a class="headerlink" href="#module-TELF.pre_processing.Beaver.beaver" title="Link to this heading">#</a></h1>
+<p>© 2022. Triad National Security, LLC. All rights reserved.
+This program was produced under U.S. Government contract 89233218CNA000001 for Los Alamos
+National Laboratory (LANL), which is operated by Triad National Security, LLC for the U.S.
+Department of Energy/National Nuclear Security Administration. All rights in the program are
+reserved by Triad National Security, LLC, and the U.S. Department of Energy/National Nuclear
+Security Administration. The Government is granted for itself and others acting on its behalf a
+nonexclusive, paid-up, irrevocable worldwide license in this material to reproduce, prepare
+derivative works, distribute copies to the public, perform publicly and display publicly, and to permit
+others to do so.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Beaver.beaver.</span></span><span class="sig-name descname"><span class="pre">Beaver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Beaver/beaver.html#Beaver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver.SUPPORTED_OUTPUT_FORMATS">
+<span class="sig-name descname"><span class="pre">SUPPORTED_OUTPUT_FORMATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'pydata',</span> <span class="pre">'scipy'}</span></em><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver.SUPPORTED_OUTPUT_FORMATS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver.citation_tensor">
+<span class="sig-name descname"><span class="pre">citation_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('author_ids',</span> <span class="pre">'paper_id',</span> <span class="pre">'references',</span> <span class="pre">'year')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_authors_with</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">';'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_references_with</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">';'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joblib_backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'loky'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'pydata'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Beaver/beaver.html#Beaver.citation_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver.citation_tensor" title="Link to this definition">#</a></dt>
+<dd><p>Creates an Authors by Papers by Time tensor. An non-zero entry x at author i,
+paper j, year k means that author i cited paper j x times in year k</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pd.DataFrame</em>) – Dataframe containing the target columns.</p></li>
+<li><p><strong>target_columns</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Target column names in dataset DataFrame. The default is (“author_ids”, “paper_id”, “references”, “year”).
+When assigning names in this tuple, type order should be preserved, e.g. time column name comes last.</p></li>
+<li><p><strong>dimension_order</strong> (<em>list</em><em>, </em><em>optional</em>) – Order in which the dimensions appear.
+For example, [0,1,2] means it is Authors, Papers, Time
+and [1,0,2] means it is Papers, Authors, Time.</p></li>
+<li><p><strong>split_authors_with</strong> (<em>str</em><em>, </em><em>optional</em>) – What symbol to use to get list of individual elements from string of target_columns[0]. The default is “;”.</p></li>
+<li><p><strong>split_references_with</strong> (<em>str</em><em>, </em><em>optional</em>) – What symbol to use to get list of individual elements from string of target_columns[2]. The default is “;”.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, saves the outputs. The default is None.</p></li>
+<li><p><strong>n_nodes</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of nodes to use. Default is the Beaver default.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of jobs to use. Default is the Beaver default.</p></li>
+<li><p><strong>joblib_backend</strong> (<em>str</em><em>, </em><em>optional</em>) – Joblib parallel backend. Default is multiprocessing.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Vebosity flag. The default is False.</p></li>
+<li><p><strong>return_object</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag that determines whether the generated object is returned from this function. In the case of large
+tensors it may be better to save to disk without returning. Default is True.</p></li>
+<li><p><strong>output_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – The type of object returned in the output. See supported options in Beaver.SUPPORTED_OUTPUT_FORMATS.
+Default is ‘pydata’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver.coauthor_tensor">
+<span class="sig-name descname"><span class="pre">coauthor_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('authorIDs',</span> <span class="pre">'year')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_authors_with</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">';'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joblib_backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'multiprocessing'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authors_idx_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_idx_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'pydata'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Beaver/beaver.html#Beaver.coauthor_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver.coauthor_tensor" title="Link to this definition">#</a></dt>
+<dd><p>Create co-author tensor.
+Returns tuple of tensor, authors, and time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pd.DataFrame</em>) – Dataframe containing the target columns.</p></li>
+<li><p><strong>target_columns</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Target column names in dataset DataFrame. The default is (“authorIDs”, “year”).
+When assigning names in this tuple, type order should be preserved, e.g. time column name comes second.</p></li>
+<li><p><strong>split_authors_with</strong> (<em>str</em><em>, </em><em>optional</em>) – What symbol to use to get list of individual authors from string. The default is “;”.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Vebosity flag. The default is False.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, saves the outputs.. The default is None.</p></li>
+<li><p><strong>n_nodes</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of nodes to use. Default is the Beaver default.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of jobs to use. Default is the Beaver default.</p></li>
+<li><p><strong>joblib_backend</strong> (<em>str</em><em>, </em><em>optional</em>) – Joblib parallel backend. Default is multiprocessing.</p></li>
+<li><p><strong>authors_idx_map</strong> (<em>dict</em><em>, </em><em>optional</em>) – Author to tensor dimension index mapping. Default is {}.
+If not passed, it is created.</p></li>
+<li><p><strong>time_idx_map</strong> (<em>dict</em><em>, </em><em>optional</em>) – Time to tensor dimension index mapping. Default is {}.
+If not passed, it is created.</p></li>
+<li><p><strong>return_object</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag that determines whether the generated object is returned from this function. In the case of large
+tensors it may be better to save to disk without returning. Default is True.</p></li>
+<li><p><strong>output_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – The type of object returned in the output. See supported options in Beaver.SUPPORTED_OUTPUT_FORMATS.
+Default is ‘pydata’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple of tensor, author vocabulary, and time vocabulary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver.cocitation_tensor">
+<span class="sig-name descname"><span class="pre">cocitation_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('authorIDs',</span> <span class="pre">'year',</span> <span class="pre">'paper_id',</span> <span class="pre">'references')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_authors_with</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">';'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_references_with</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">';'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joblib_backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'multiprocessing'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authors_idx_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_idx_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'pydata'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Beaver/beaver.html#Beaver.cocitation_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver.cocitation_tensor" title="Link to this definition">#</a></dt>
+<dd><p>Creates an Authors by Authors by Time tensor. An non-zero entry x at author i,
+author j, year k means that author j cited author i x times in year k. Note that
+x is normalized. This means that for two papers a and b where a cites b, the n
+authors of a, and a single author from b, the author from b receives 1/n citations
+from each author on paper a.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pd.DataFrame</em>) – Dataframe containing the target columns.</p></li>
+<li><p><strong>target_columns</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Target column names in dataset DataFrame. The default is (“authorIDs”, “year”, “paper_id”, “references”).
+When assigning names in this tuple, type order should be preserved, e.g. time column name comes second.</p></li>
+<li><p><strong>split_authors_with</strong> (<em>str</em><em>, </em><em>optional</em>) – What symbol to use to get list of individual authors from string. The default is “;”.</p></li>
+<li><p><strong>split_references_with</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – What symbol to use to get list of individual references from string. The default is “;”.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Vebosity flag. The default is False.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, saves the outputs. The default is None.</p></li>
+<li><p><strong>n_nodes</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of nodes to use. Default is is the Beaver default.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel jobs. The default is the Beaver default.</p></li>
+<li><p><strong>authors_idx_map</strong> (<em>dict</em><em>, </em><em>optional</em>) – Author to tensor dimension index mapping. Default is {}.
+If not passed, it is created.</p></li>
+<li><p><strong>time_idx_map</strong> (<em>dict</em><em>, </em><em>optional</em>) – Time to tensor dimension index mapping. Default is {}.
+If not passed, it is created.</p></li>
+<li><p><strong>return_object</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag that determines whether the generated object is returned from this function. In the case of large
+tensors it may be better to save to disk without returning. Default is True.</p></li>
+<li><p><strong>output_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – The type of object returned in the output. See supported options in Beaver.SUPPORTED_OUTPUT_FORMATS.
+Default is ‘pydata’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple of tensor, author vocabulary, and time vocabulary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver.cooccurrence_matrix">
+<span class="sig-name descname"><span class="pre">cooccurrence_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'abstracts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cooccurrence_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sppmi_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'scipy'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Beaver/beaver.html#Beaver.cooccurrence_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver.cooccurrence_matrix" title="Link to this definition">#</a></dt>
+<dd><p>Generates co-occurance and SPPMI matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pd.DataFrame</em>) – Dataframe containing the target columns.</p></li>
+<li><p><strong>target_column</strong> (<em>str</em><em>, </em><em>optional</em>) – Target column name in dataset DataFrame. The default is “abstracts”.
+Target column should be for text data, where tokens are retrived via empty spaces.</p></li>
+<li><p><strong>cooccurrence_settings</strong> (<em>dict</em><em>, </em><em>optional</em>) – Settings for co-occurance matrix. The default is dict.
+Options are: vocabulary, window_size=20, dense=True, verbose=True, sentences=False</p></li>
+<li><p><strong>sppmi_settings</strong> (<em>dict</em><em>, </em><em>optional</em>) – Settings for SPPMI matrix. The default is dict.
+Options are: shift=4</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, saves the outputs. The default is None.</p></li>
+<li><p><strong>return_object</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag that determines whether the generated object is returned from this function. In the case of large
+tensors it may be better to save to disk without returning. Default is True.</p></li>
+<li><p><strong>output_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – The type of object returned in the output. See supported options in Beaver.SUPPORTED_OUTPUT_FORMATS.
+Default is ‘scipy’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple of co-occurance and SPPMI matrix.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver.documents_words">
+<span class="sig-name descname"><span class="pre">documents_words</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'abstracts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'max_df':</span> <span class="pre">0.5,</span> <span class="pre">'min_df':</span> <span class="pre">5}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlighting</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'tfidf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'scipy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Beaver/beaver.html#Beaver.documents_words"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver.documents_words" title="Link to this definition">#</a></dt>
+<dd><p>Creates document-words matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pd.DataFrame</em>) – Dataframe containing the target columns.</p></li>
+<li><p><strong>target_column</strong> (<em>str</em><em>, </em><em>optional</em>) – Target column name in dataset DataFrame.  The default is “abstracts”.
+Target column should be for text data, where tokens are retrived via empty spaces.</p></li>
+<li><p><strong>options</strong> (<em>dict</em><em>, </em><em>optional</em>) – Settings for when doing vectorization. The default is {“min_df”: 5, “max_df”: 0.5}.</p></li>
+<li><p><strong>matrix_type</strong> (<em>str</em><em>, </em><em>optional</em>) – TF-IDF or Count vectorization. The default is “tfidf”.
+Other option is “count”.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Vebosity flag. The default is False.</p></li>
+<li><p><strong>highlighting</strong> (<em>list</em><em>, </em><em>optional</em>) – The vocabulary or list of tokens to highlight. The default is [].
+Other option is “count”.</p></li>
+<li><p><strong>weights</strong> (<em>list</em><em> or </em><em>float</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – Weights of the highlighted words. The default is [].</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, saves the outputs. The default is None.</p></li>
+<li><p><strong>return_object</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag that determines whether the generated object is returned from this function. In the case of large
+tensors it may be better to save to disk without returning. Default is True.</p></li>
+<li><p><strong>output_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – The type of object returned in the output. See supported options in Beaver.SUPPORTED_OUTPUT_FORMATS.
+Default is ‘scipy’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple of matrix and vocabulary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver.get_ngrams">
+<span class="sig-name descname"><span class="pre">get_ngrams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Beaver/beaver.html#Beaver.get_ngrams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver.get_ngrams" title="Link to this definition">#</a></dt>
+<dd><p>Generates n-grams from a column in a dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pd.DataFrame</em>) – Dataframe containing the target columns.</p></li>
+<li><p><strong>target_column</strong> (<em>str</em><em>, </em><em>optional</em>) – Target column name in dataset DataFrame. The default is “abstracts”.
+Target column should be for text data, where tokens are retrived via empty spaces.</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Number of tokens in a gram to generate</p></li>
+<li><p><strong>limit</strong> (<em>int</em>) – Restrict number of top n-grams to return</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, saves the outputs as csv using the column names ‘Ngram’, ‘Count’. The default save_path is None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Top ngrams as a list of tuples containing the ngram then count.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver.get_vocabulary">
+<span class="sig-name descname"><span class="pre">get_vocabulary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_with</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel_backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'multiprocessing'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_alphabetical</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Beaver/beaver.html#Beaver.get_vocabulary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver.get_vocabulary" title="Link to this definition">#</a></dt>
+<dd><p>Builds the vocabulary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pd.DataFrame</em>) – Dataframe containing the target columns.</p></li>
+<li><p><strong>target_column</strong> (<em>str</em><em>, </em><em>optional</em>) – Target column name in dataset DataFrame.</p></li>
+<li><p><strong>split_with</strong> (<em>str</em><em>, </em><em>optional</em>) – Delimeter to use in tokenization, if None split in whitespace. The default is None.</p></li>
+<li><p><strong>max_df</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – When building the vocabulary ignore terms that have a document frequency strictly higher
+than the given threshold (corpus-specific stop words). If float in range [0.0, 1.0],
+the parameter represents a proportion of documents, integer absolute counts.
+The default is 1.0.</p></li>
+<li><p><strong>min_df</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – When building the vocabulary ignore terms that have a document frequency strictly lower
+than the given threshold. This value is also called cut-off in the literature.
+If float in range of [0.0, 1.0], the parameter represents a proportion of documents,
+integer absolute counts. This parameter is ignored if vocabulary is not None. The default is 1.</p></li>
+<li><p><strong>max_features</strong> (<em>int</em><em>, </em><em>optional</em>) – If not None, build a vocabulary that only consider the top max_features ordered by term frequency across the corpus.
+The default is None.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Vebosity flag. The default is False.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel processes. The default is the Beaver default.</p></li>
+<li><p><strong>parallel_backend</strong> (<em>str</em><em>, </em><em>optional</em>) – Which backend Joblib should use.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, saves the outputs. The default is None.</p></li>
+<li><p><strong>sort_alphabetical</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, sorts the output vocabulary alphabetically. Otherwise the vocabulary is sorted by document frequency.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of tokens in the vocabulary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver.n_jobs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_jobs</span></span><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver.n_jobs" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver.n_nodes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_nodes</span></span><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver.n_nodes" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver.participation_tensor">
+<span class="sig-name descname"><span class="pre">participation_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('author_ids',</span> <span class="pre">'paper_id',</span> <span class="pre">'year')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_authors_with</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">';'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joblib_backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'multiprocessing'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'pydata'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Beaver/beaver.html#Beaver.participation_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver.participation_tensor" title="Link to this definition">#</a></dt>
+<dd><p>Creates a boolean Authors by Papers by Time tensor. An non-zero entry at author i,
+paper j, year k means that author i published paper j in year k</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pd.DataFrame</em>) – Dataframe containing the target columns.</p></li>
+<li><p><strong>target_columns</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Target column names in dataset DataFrame. The default is (“author_ids”, “paper_id”, “year”).
+When assigning names in this tuple, type order should be preserved, e.g. time column name comes last.</p></li>
+<li><p><strong>dimension_order</strong> (<em>list</em><em>, </em><em>optional</em>) – Order in which the dimensions appear.
+For example, [0,1,2] means it is Authors, Papers, Time
+and [1,0,2] means it is Papers, Authors, Time.</p></li>
+<li><p><strong>split_authors_with</strong> (<em>str</em><em>, </em><em>optional</em>) – What symbol to use to get list of individual elements from string of target_columns[0]. The default is “;”.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, saves the outputs. The default is None.</p></li>
+<li><p><strong>n_nodes</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of nodes to use. Default is the Beaver default.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of jobs to use. Default is the Beaver default.</p></li>
+<li><p><strong>joblib_backend</strong> (<em>str</em><em>, </em><em>optional</em>) – Joblib parallel backend. Default is multiprocessing.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Vebosity flag. The default is False.</p></li>
+<li><p><strong>return_object</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag that determines whether the generated object is returned from this function. In the case of large
+tensors it may be better to save to disk without returning. Default is True.</p></li>
+<li><p><strong>output_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – The type of object returned in the output. See supported options in Beaver.SUPPORTED_OUTPUT_FORMATS.
+Default is ‘pydata’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver.something_words">
+<span class="sig-name descname"><span class="pre">something_words</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('authorIDs',</span> <span class="pre">'abstracts')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_something_with</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">';'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'max_df':</span> <span class="pre">0.5,</span> <span class="pre">'min_df':</span> <span class="pre">5}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlighting</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'tfidf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'scipy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Beaver/beaver.html#Beaver.something_words"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver.something_words" title="Link to this definition">#</a></dt>
+<dd><p>Creates a Something by Words matrix. For example, Authors-Words.
+Here something is specified by first index of variable target_columns.
+Individual evelements of target_columns[0] is seperated by split_something_with.
+For example “autho1;author2” when split_something_with=”;”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pd.DataFrame</em>) – Dataframe containing the target columns.</p></li>
+<li><p><strong>target_columns</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Target column names in dataset DataFrame. The default is (“authorIDs”, “abstracts”).
+When assigning names in this tuple, type order should be preserved, e.g. text data column name comes second.</p></li>
+<li><p><strong>split_something_with</strong> (<em>str</em><em>, </em><em>optional</em>) – What symbol to use to get list of individual elements from string of target_columns[0]. The default is “;”.</p></li>
+<li><p><strong>options</strong> (<em>str</em><em>, </em><em>optional</em>) – Settings for when doing vectorization. The default is {“min_df”: 5, “max_df”: 0.5}.</p></li>
+<li><p><strong>highlighting</strong> (<em>list</em><em>, </em><em>optional</em>) – The vocabulary or list of tokens to highlight. The default is [].
+Other option is “count”.</p></li>
+<li><p><strong>weights</strong> (<em>list</em><em> or </em><em>float</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – Weights of the highlighted words. The default is [].</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Vebosity flag. The default is False.</p></li>
+<li><p><strong>matrix_type</strong> (<em>str</em><em>, </em><em>optional</em>) – TF-IDF or Count vectorization. The default is “tfidf”.
+Other option is “count”</p></li>
+<li><p><strong>save_path</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – If not None, saves the outputs. The default is None.</p></li>
+<li><p><strong>return_object</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag that determines whether the generated object is returned from this function. In the case of large
+tensors it may be better to save to disk without returning. Default is True.</p></li>
+<li><p><strong>output_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – The type of object returned in the output. See supported options in Beaver.SUPPORTED_OUTPUT_FORMATS.
+Default is ‘scipy’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple of matrix, vocabulary for somethings (target information specified in target_columns[0]),
+and the vocabulary for words.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.beaver.Beaver.something_words_time">
+<span class="sig-name descname"><span class="pre">something_words_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vocabulary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">('authorIDs',</span> <span class="pre">'abstracts',</span> <span class="pre">'year')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_something_with</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">';'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tfidf_transformer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unfold_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'pydata'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Beaver/beaver.html#Beaver.something_words_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Beaver.beaver.Beaver.something_words_time" title="Link to this definition">#</a></dt>
+<dd><p>Creates a Something by Words by Time tensor. For example, Authors-Words-Time.
+Here something is specified by first index of variable target_columns.
+Individual evelements of target_columns[0] is seperated by split_something_with.
+For example “autho1;author2” when split_something_with=”;”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pd.DataFrame</em>) – Dataframe containing the target columns.</p></li>
+<li><p><strong>vocabulary</strong> (<em>list</em>) – Token vocabulary to use.</p></li>
+<li><p><strong>target_columns</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Target column names in dataset DataFrame. The default is (“authorIDs”, “abstracts”, “year”).
+When assigning names in this tuple, type order should be preserved, e.g. time column name comes last.</p></li>
+<li><p><strong>split_something_with</strong> (<em>str</em><em>, </em><em>optional</em>) – What symbol to use to get list of individual elements from string of target_columns[0]. The default is “;”.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>optional</em>) – If not None, saves the outputs. The default is None.</p></li>
+<li><p><strong>tfidf_transformer</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, performs TF-IDF normalization via unfolding over dimension unfold_at. The default is False.</p></li>
+<li><p><strong>unfold_at</strong> (<em>int</em><em>, </em><em>optional</em>) – Which dimension to unfold the tensor for TF-IDF normalization, when tfidf_transformer=True. The default is 1.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Vebosity flag. The default is False.</p></li>
+<li><p><strong>dimension_order</strong> (<em>list</em><em>, </em><em>optional</em>) – Order in which the dimensions appear.
+For example, [0,1,2] means it is Something, Words, Time.
+and [1,0,2] means it is Words, Something, Time.</p></li>
+<li><p><strong>return_object</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag that determines whether the generated object is returned from this function. In the case of large
+tensors it may be better to save to disk without returning. Default is True.</p></li>
+<li><p><strong>output_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – The type of object returned in the output. See supported options in Beaver.SUPPORTED_OUTPUT_FORMATS.
+Default is ‘scipy’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple of matrix, vocabulary for somethings (target information specified in target_columns[0]),
+the vocabulary for words, and the vocabulary for time.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="TriNMFk.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Vulture.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Beaver.beaver">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver"><code class="docutils literal notranslate"><span class="pre">Beaver</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.SUPPORTED_OUTPUT_FORMATS"><code class="docutils literal notranslate"><span class="pre">Beaver.SUPPORTED_OUTPUT_FORMATS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.citation_tensor"><code class="docutils literal notranslate"><span class="pre">Beaver.citation_tensor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.coauthor_tensor"><code class="docutils literal notranslate"><span class="pre">Beaver.coauthor_tensor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.cocitation_tensor"><code class="docutils literal notranslate"><span class="pre">Beaver.cocitation_tensor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.cooccurrence_matrix"><code class="docutils literal notranslate"><span class="pre">Beaver.cooccurrence_matrix()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.documents_words"><code class="docutils literal notranslate"><span class="pre">Beaver.documents_words()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.get_ngrams"><code class="docutils literal notranslate"><span class="pre">Beaver.get_ngrams()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.get_vocabulary"><code class="docutils literal notranslate"><span class="pre">Beaver.get_vocabulary()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.n_jobs"><code class="docutils literal notranslate"><span class="pre">Beaver.n_jobs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.n_nodes"><code class="docutils literal notranslate"><span class="pre">Beaver.n_nodes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.participation_tensor"><code class="docutils literal notranslate"><span class="pre">Beaver.participation_tensor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.something_words"><code class="docutils literal notranslate"><span class="pre">Beaver.something_words()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.beaver.Beaver.something_words_time"><code class="docutils literal notranslate"><span class="pre">Beaver.something_words_time()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

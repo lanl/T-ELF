@@ -2,7 +2,7 @@
 
 <div align="center", style="font-size: 50px">
 
-[![Build Status](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main)](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main) [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg) [![Python Version](https://img.shields.io/badge/python-v3.8.5-blue)](https://img.shields.io/badge/python-v3.8.5-blue)
+[![Build Status](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main)](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main) [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg) [![Python Version](https://img.shields.io/badge/python-v3.11.5-blue)](https://img.shields.io/badge/python-v3.8.5-blue)
 
 </div> 
 
@@ -10,15 +10,16 @@
   <img src="docs/tensorsrnd.png">
 </p>
 
-T-ELF offers an expansive range of tailored software solutions designed for in-depth analysis of extensive datasets. We excel in extracting hidden patterns with precision, leveraging the formidable capabilities of high-performance computing and cutting-edge GPU architectures. Our methodology is rooted in scalable, highly efficient algorithms.
+T-ELF presents an array of customizable software solutions crafted for analysis of datasets. Acting as a comprehensive toolbox, T-ELF specializes in data pre-processing, extraction of latent features, and structuring results to facilitate informed decision-making. Leveraging high-performance computing and cutting-edge GPU architectures, our toolbox is optimized for analyzing extensive datasets.
 
-Within T-ELF's arsenal are non-negative matrix and tensor factorization solutions, equipped with automatic model determination (also known as the estimation of latent factors - rank). This ensures accurate data modeling and extraction of concealed patterns. Furthermore, our software suite encompasses cutting-edge data pre-processing and post-processing modules for tasks such as text mining, Natural Language Processing, as well as matrix and tensor analysis/building tools.
+Central to T-ELF's core capabilities lie non-negative matrix and tensor factorization solutions for discovering multi-faceted hidden details in data, featuring automated model determination facilitating the estimation of latent factors or rank. This pivotal functionality ensures precise data modeling and the extraction of concealed patterns. Additionally, our software suite incorporates cutting-edge modules for both pre-processing and post-processing of data, tailored for diverse tasks including text mining, Natural Language Processing, and robust tools for matrix and tensor analysis and construction.
 
-T-ELF's versatility extends to a diverse array of disciplines, making it a potent AI and data analytics solution. It has found applications in Large-scale Text Mining, High Performance Computing, Computer Security, Applied Mathematics, Dynamic Networks and Ranking, Biology, Material Science, Medicine, Chemistry, Data Compression, Climate Studies, Relational Databases, Data Privacy, Economy, and Agriculture.
+T-ELF's adaptability spans across a multitude of disciplines, positioning it as a robust AI and data analytics solution. Its proven efficacy extends across various fields such as Large-scale Text Mining, High Performance Computing, Computer Security, Applied Mathematics, Dynamic Networks and Ranking, Biology, Material Science, Medicine, Chemistry, Data Compression, Climate Studies, Relational Databases, Data Privacy, Economy, and Agriculture.
+
 
 <div align="center", style="font-size: 50px">
 
-### [:information_source: Documentation](https://lanl.github.io/telf/) &emsp; [:orange_book: Examples](examples/) &emsp; [:page_with_curl: Publications](Publications.md) &emsp; [:link: Website](https://smart-tensors.LANL.gov)
+### [:information_source: Documentation](https://lanl.github.io/telf/) &emsp; [:orange_book: Examples](examples/) &emsp; [:page_with_curl: Publications](https://smart-tensors.lanl.gov/publications/) &emsp; [:link: Website](https://smart-tensors.LANL.gov)
 
 </div>
 
@@ -30,7 +31,7 @@ T-ELF's versatility extends to a diverse array of disciplines, making it a poten
 ```shell
 git clone https://github.com/lanl/T-ELF.git
 cd T-ELF
-conda create --name TELF python=3.8.5
+conda create --name TELF python=3.11.5
 source activate TELF # or conda activate TELF
 python setup.py install
 ```
@@ -88,7 +89,7 @@ conda install -c conda-forge mpi4py
   <img src="docs/Second_image_TensorNetworks.jpg">
 </p>
 
-### [:page_with_curl: Publications](Publications.md)
+### [:page_with_curl: Publications](https://smart-tensors.lanl.gov/publications/)
 
 </div>
 
@@ -102,10 +103,11 @@ conda install -c conda-forge mpi4py
 |            NMFk           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: | :heavy_check_mark: |              NMF with Automatic Model Determination                              |   [Link](examples/NMFk/NMFk.ipynb)  | :white_check_mark: |
 |        Custom NMFk        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: | :heavy_check_mark: |                Use Custom NMF Functions with NMFk                                |   [Link](examples/NMFk/Custom_NMF_NMFk.ipynb)  | :white_check_mark: |
 |          TriNMFk          | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: |                    | NMF with Automatic Model Determination for Clusters and Patterns                 |   [Link](examples/TriNMFk/TriNMFk.ipynb)  | :white_check_mark: |
-|          RESCALk          | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: |                    |             RESCAL with Automatic Model Determination                            |   [Link](examples/RESCALk/RESCALk.ipynb)  | :white_check_mark: |
+|          RESCALk          | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: | :heavy_check_mark: |             RESCAL with Automatic Model Determination                            |   [Link](examples/RESCALk/RESCALk.ipynb)  | :white_check_mark: |
+|           RNMFk           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: | :heavy_check_mark: |                         Recommender NMFk                                         |   [Link](examples/RNMFk/RNMFk.ipynb)  |       :white_check_mark:       |
+|           SymNMFk         | :heavy_check_mark: |                    | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: | :heavy_check_mark: |                         NMFk with Symmetric Clustering                           |   [Link](examples/SymNMFk/SymNMFk.ipynb)          |       :white_check_mark:       |
 |           BNMFk           |                    |                    |                    |                    |                     |                    |                           Boolean NMFk                                           |             |       :soon:       |
 |           HNMFk           |                    |                    |                    |                    |                     |                    |                         Hierarchical NMFk                                        |             |       :soon:       |
-|           RNMFk           |                    |                    |                    |                    |                     |                    |                         Recommender NMFk                                         |             |       :soon:       |
 |         SPLIT NMFk        |                    |                    |                    |                    |                     |                    |        Joint NMFk factorization of multiple data via SPLIT                       |             |       :soon:       |
 | SPLIT Transfer Classifier |                    |                    |                    |                    |                     |                    |      Supervised transfer learning method via SPLIT and NMFk                      |             |       :soon:       |
 |           CP-ALS          |                    |                    |                    |                    |                     |                    |    Alternating least squares algorithm for canonical polyadic decomposition      |             |       :soon:       |
@@ -116,8 +118,8 @@ conda install -c conda-forge mpi4py
 
 | **Method** | **Multiprocessing** |       **HPC**       |                           **Description**                          | **Example** | **Release Status** |
 |:----------:|:-------------------:|:-------------------:|:------------------------------------------------------------------:|:-----------:|:------------------:|
-|   Vulture  | :heavy_check_mark: | :heavy_check_mark: |         Advanced text processing tool for cleaning and NLP         |  [Link](examples/Vulture)  | :white_check_mark: |
-|   Beaver   | :heavy_check_mark: | :heavy_check_mark: |        Fast matrix and tensor building tool for text mining        |  [Link](examples/Beaver)  | :white_check_mark: |
+|   Vulture  | :heavy_check_mark:  | :heavy_check_mark:  |         Advanced text processing tool for cleaning and NLP         |  [Link](examples/Vulture)  | :white_check_mark: |
+|   Beaver   | :heavy_check_mark:  | :heavy_check_mark:  |        Fast matrix and tensor building tool for text mining        |  [Link](examples/Beaver)  | :white_check_mark: |
 |  iPenguin  |                     |                     |         Online Semantic Scholar information retrieval tool         |             |       :soon:       |
 |    Orca    |                     |                     | Duplicate author detector for text mining and information retrival |             |       :soon:       |
 |            |                     |                     |                                                                    |             |                    |
@@ -142,7 +144,7 @@ If you use T-ELF please cite.
 
 **APA:**
 ```latex
-Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.1) [Computer software]. https://github.com/lanl/T-ELF
+Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.2) [Computer software]. https://github.com/lanl/T-ELF
 ```
 
 **BibTeX:**
@@ -152,7 +154,7 @@ author = {Eren, Maksim and Solovyev, Nick and Barron, Ryan and Bhattarai, Manish
 month = oct,
 title = {{Tensor Extraction of Latent Features (T-ELF)}},
 url = {https://github.com/lanl/T-ELF},
-version = {0.0.1},
+version = {0.0.2},
 year = {2023}
 }
 ```

@@ -113,8 +113,8 @@ def prune(X, use_gpu=False):
         return Y, rows, cols
 
 
-def unprune(A, indices, axis):
-    np = get_np(A, use_gpu=False)
+def unprune(A, indices, axis, use_gpu=False):
+    np = get_np(A, use_gpu=use_gpu)
     if axis == 0:
         B = np.zeros((len(indices), A.shape[1]), dtype=A.dtype)
         B[indices, :] = A
@@ -184,7 +184,7 @@ def relative_error_rescal(X,A, R, normX=None):
     output:
       rel_err (double): the relative error $||X-WH||_F/||X||_F$.
     """
-    import numpy as np
+    np = get_np(X, use_gpu=False)
 
     error = np.linalg.norm([relative_error(X[i],A,R[i]@A.T)*norm_X(X[i]) for i in range(len(X))]) \
             /np.linalg.norm([norm_X(X[i]) for i in range(len(X))])
@@ -233,9 +233,9 @@ def relative_error(X, W, H, normX=None):
     return rel_err
 
 
-def fro_norm(X):
-    np = get_np(X, use_gpu=False)
-    scipy = get_scipy(X, use_gpu=False)
+def fro_norm(X, use_gpu=False):
+    np = get_np(X, use_gpu=use_gpu)
+    scipy = get_scipy(X, use_gpu=use_gpu)
     if scipy.sparse.issparse(X):
         X = X.data
     return np.sqrt(np.nansum(np.square(X)), dtype=X.dtype)
@@ -301,18 +301,18 @@ def masked_nmf(X,W,H,mask,itr=1000):
     return W,H     
         
 
-def sparse_divide_product(X, A, B, nz_rows=None, nz_cols=None):
+def sparse_divide_product(X, A, B, nz_rows=None, nz_cols=None, use_gpu=False):
     """
     Efficiently computes X/(A@B).
     """
-    np = get_np(X, use_gpu=False)
-    scipy = get_scipy(X, use_gpu=False)
+    np = get_np(X, use_gpu=use_gpu)
+    scipy = get_scipy(X, use_gpu=use_gpu)
     dtype = X.dtype
     A = A.astype(dtype)
     B = B.astype(dtype)
 
     if nz_rows is None or nz_cols is None:
-        nz_rows, nz_cols = nz_indices(X)
+        nz_rows, nz_cols = nz_indices(X, use_gpu=use_gpu)
 
     Y = X.copy()
     Y._has_canonical_format = X.has_canonical_format

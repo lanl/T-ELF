@@ -1,0 +1,1058 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TELF.factorization.decompositions.nmf_mc_fro_mu &#8212; TELF 0.0.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" href="../../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="../../../../_static/documentation_options.js?v=f131489c"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/factorization/decompositions/nmf_mc_fro_mu';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.2 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../modules.html">TELF</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../TELF.html">TELF package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../TELF.factorization.html">TELF.factorization package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../TELF.pre_processing.html">TELF.pre_processing package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for TELF.factorization.decompositions.nmf_mc_fro_mu</h1><div class="highlight"><pre>
+<span></span><span class="c1"># %%</span>
+<span class="kn">from</span> <span class="nn">.utilities.generic_utils</span> <span class="kn">import</span> <span class="n">get_np</span><span class="p">,</span> <span class="n">get_scipy</span><span class="p">,</span> <span class="n">update_opts</span>
+<span class="kn">from</span> <span class="nn">.utilities.math_utils</span> <span class="kn">import</span> <span class="n">prune</span><span class="p">,</span> <span class="n">unprune</span><span class="p">,</span> <span class="n">fro_norm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="H_update_ADMM">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.H_update_ADMM">[docs]</a>
+<span class="k">def</span> <span class="nf">H_update_ADMM</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dual</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ADMM algorithm for the right factor in a nonnegative optimization with Frobenius norm loss function. ||X-WH||_F^2</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">                    X (ndarray, sparse matrix): Nonnegative m by n matrix to decompose.</span>
+<span class="sd">                    W (ndarray): Nonnegative m by k left factor of X.</span>
+<span class="sd">                    H (ndarray): Nonnegative k by n initialization of right factor of X.</span>
+<span class="sd">                    opts (dict), optional: Dictionary or optional arguments.</span>
+<span class="sd">                            &#39;hist&#39; (list): list to append the objective function to.</span>
+<span class="sd">                            &#39;niter&#39; (int): number of iterations.</span>
+<span class="sd">                            &#39;rho&#39; (double): convergence parameter.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">                    H (ndarray): Nonnegative k by n right factor of X.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dual</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dual</span> <span class="o">=</span> <span class="n">dual</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">return</span> <span class="n">W_update_ADMM</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="n">opts</span><span class="p">,</span> <span class="n">dual</span><span class="o">=</span><span class="n">dual</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span><span class="o">.</span><span class="n">T</span></div>
+
+
+
+<div class="viewcode-block" id="W_update_ADMM">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.W_update_ADMM">[docs]</a>
+<span class="k">def</span> <span class="nf">W_update_ADMM</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dual</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ADMM algorithm for the left factor in a nonnegative optimization with Frobenius norm loss function. ||X-WH||_F^2</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">                    X (ndarray, sparse matrix): Nonnegative m by n matrix to decompose.</span>
+<span class="sd">                    W (ndarray): Nonnegative m by k initialization of left factor of X.</span>
+<span class="sd">                    H (ndarray): Nonnegative k by n right factor of X.</span>
+<span class="sd">                    opts (dict), optional: Dictionary or optional arguments.</span>
+<span class="sd">                            &#39;hist&#39; (list): list to append the objective function to.</span>
+<span class="sd">                            &#39;niter&#39; (int): number of iterations.</span>
+<span class="sd">                            &#39;rho&#39; (double): convergence parameter.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">                    W (ndarray): Nonnegative m by k left factor of X.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">default_opts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">update_opts</span><span class="p">(</span><span class="n">default_opts</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+    <span class="n">scipy</span> <span class="o">=</span> <span class="n">get_scipy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">dtype</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown data type!&quot;</span><span class="p">)</span>
+        
+    <span class="n">W</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dual</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">HHT_rhoI</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lu_factor</span><span class="p">(</span>
+        <span class="n">H</span> <span class="o">@</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
+        <span class="n">overwrite_a</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">check_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+        <span class="c1"># bug in setting has_canonical_format flag in cupy</span>
+        <span class="c1"># https://github.com/cupy/cupy/issues/2365</span>
+        <span class="c1"># issue is closed, but still not fixed.</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">_has_canonical_format</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">XHT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">XHT</span> <span class="o">=</span> <span class="n">X</span> <span class="o">@</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">opts</span><span class="p">[</span><span class="s2">&quot;niter&quot;</span><span class="p">]):</span>
+        <span class="n">primal</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lu_solve</span><span class="p">(</span>
+            <span class="n">HHT_rhoI</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">XHT</span> <span class="o">+</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;rho&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">W</span> <span class="o">-</span> <span class="n">dual</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+            <span class="n">overwrite_b</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">check_finite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">primal</span> <span class="o">+</span> <span class="n">dual</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># ! change this line for W constraint</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">primal</span> <span class="o">+</span> <span class="n">dual</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">dual</span> <span class="o">+=</span> <span class="n">primal</span> <span class="o">-</span> <span class="n">W</span>
+
+        <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;hist&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;hist&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fro_norm</span><span class="p">(</span><span class="n">W</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">W</span></div>
+
+
+
+<div class="viewcode-block" id="H_update_MU">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.H_update_MU">[docs]</a>
+<span class="k">def</span> <span class="nf">H_update_MU</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Multiplicative update algorithm for the right factor in a nonnegative optimization with Frobenius norm loss function. ||X-WH||_F^2</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">                    X (ndarray, sparse matrix): Nonnegative m by n matrix to decompose.</span>
+<span class="sd">                    W (ndarray): Nonnegative m by k left factor of X.</span>
+<span class="sd">                    H (ndarray): Nonnegative k by n initialization of right factor of X.</span>
+<span class="sd">                    opts (dict), optional: Dictionary or optional arguments.</span>
+<span class="sd">                            &#39;hist&#39; (list): list to append the objective function to.</span>
+<span class="sd">                            &#39;niter&#39; (int): number of iterations.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">                    H (ndarray): Nonnegative k by n right factor of X.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">W_update_MU</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="n">opts</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span><span class="o">.</span><span class="n">T</span></div>
+
+
+
+<div class="viewcode-block" id="W_update_MU">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.W_update_MU">[docs]</a>
+<span class="k">def</span> <span class="nf">W_update_MU</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Multiplicative update algorithm for the left factor in a nonnegative optimization with Frobenius norm loss function. ||X-WH||_F^2</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">                    X (ndarray, sparse matrix): Nonnegative m by n matrix to decompose.</span>
+<span class="sd">                    W (ndarray): Nonnegative m by k initialization of left factor of X.</span>
+<span class="sd">                    H (ndarray): Nonnegative k by n right factor of X.</span>
+<span class="sd">                    opts (dict), optional: Dictionary or optional arguments.</span>
+<span class="sd">                            &#39;hist&#39; (list): list to append the objective function to.</span>
+<span class="sd">                            &#39;niter&#39; (int): number of iterations.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">                    W (ndarray): Nonnegative m by k left factor of X.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">default_opts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">update_opts</span><span class="p">(</span><span class="n">default_opts</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span>
+        <span class="s2">&quot;alpha&quot;</span>
+    <span class="p">]</span>  <span class="c1">#! this is the regularization parameter (lambda in derivation)</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+    <span class="n">scipy</span> <span class="o">=</span> <span class="n">get_scipy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">dtype</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown data type!&quot;</span><span class="p">)</span>
+        
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">),</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">HHT</span> <span class="o">=</span> <span class="n">H</span> <span class="o">@</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+        <span class="c1"># bug in setting has_canonical_format flag in cupy</span>
+        <span class="c1"># https://github.com/cupy/cupy/issues/2365</span>
+        <span class="c1"># issue is closed, but still not fixed.</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">_has_canonical_format</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">XHT</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">XHT</span> <span class="o">=</span> <span class="n">X</span> <span class="o">@</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">opts</span><span class="p">[</span><span class="s2">&quot;niter&quot;</span><span class="p">]):</span>
+        <span class="c1"># import pdb; pdb.set_trace() #! stop here for debugging</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">W</span>
+            <span class="o">*</span> <span class="p">(</span><span class="n">XHT</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">W</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="o">/</span> <span class="p">(</span><span class="n">W</span> <span class="o">@</span> <span class="n">HHT</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">W</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">W</span> <span class="o">+</span> <span class="mf">1e-9</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;hist&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;hist&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">W</span></div>
+
+
+
+<div class="viewcode-block" id="nmf_with_ADMM">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.nmf_with_ADMM">[docs]</a>
+<span class="k">def</span> <span class="nf">nmf_with_ADMM</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">lowerthres</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upperthres</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Multiplicative update algorithm for NMF with Frobenius norm loss function. ||X-WH||_F^2</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">            X (ndarray, sparse matrix): Nonnegative m by n matrix to decompose.</span>
+<span class="sd">            W (ndarray): Nonnegative m by k initialization of left factor of X.</span>
+<span class="sd">            H (ndarray): Nonnegative k by n initialization of right factor of X.</span>
+<span class="sd">            opts (dict), optional: Dictionary or optional arguments.</span>
+<span class="sd">                    &#39;hist&#39; (list): list to append the objective function to.</span>
+<span class="sd">                    &#39;niter&#39; (int): number of iterations.</span>
+<span class="sd">                    &#39;pruned&#39; (bool): indicator if the input matrix needs to be pruned of zeros.</span>
+<span class="sd">                    &#39;W_opts&#39; (dict): options dictionary for W update</span>
+<span class="sd">                    &#39;H_opts&#39; (dict): options dictionary for H update</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">            W (ndarray): Nonnegative m by k left factor of X.</span>
+<span class="sd">            H (ndarray): Nonnegative k by n right factor of X.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># *update algorithm</span>
+    <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;MU&quot;</span><span class="p">:</span>
+        <span class="n">W_update</span> <span class="o">=</span> <span class="n">W_update_MU</span>
+        <span class="n">H_update</span> <span class="o">=</span> <span class="n">H_update_MU</span>
+        <span class="n">default_opts</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+            <span class="s2">&quot;histX&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;pruned&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;algorithm&quot;</span><span class="p">:</span> <span class="s2">&quot;MU&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tol&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;W_opts&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="s2">&quot;H_opts&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+        <span class="p">}</span>
+    <span class="k">elif</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ADMM&quot;</span><span class="p">:</span>
+        <span class="n">W_update</span> <span class="o">=</span> <span class="n">W_update_ADMM</span>
+        <span class="n">H_update</span> <span class="o">=</span> <span class="n">H_update_ADMM</span>
+        <span class="n">default_opts</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+            <span class="s2">&quot;histX&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;pruned&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;algorithm&quot;</span><span class="p">:</span> <span class="s2">&quot;ADMM&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tol&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;W_opts&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+            <span class="s2">&quot;H_opts&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+        <span class="p">}</span>
+
+    <span class="c1"># print(&#39;Using {}&#39;.format(opts[&#39;algorithm&#39;]))</span>
+
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">update_opts</span><span class="p">(</span><span class="n">default_opts</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+    <span class="n">scipy</span> <span class="o">=</span> <span class="n">get_scipy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">dtype</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown data type!&quot;</span><span class="p">)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">),</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">),</span> <span class="n">eps</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">upperthres</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">upperthres</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1">#! X is a boolean matrix dtype = float</span>
+    <span class="n">Mask</span> <span class="o">=</span> <span class="n">X</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;pruned&quot;</span><span class="p">]:</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">prune</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">W</span><span class="p">[</span><span class="n">rows</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">H</span><span class="p">[:,</span> <span class="n">cols</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+        <span class="n">Xcsc</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tocsc</span><span class="p">()</span>
+        <span class="n">Xcsr</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="n">YErr</span> <span class="o">=</span> <span class="n">YErrold</span> <span class="o">=</span> <span class="n">YErrchange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">opts</span><span class="p">[</span><span class="s2">&quot;niter&quot;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">H_update</span><span class="p">(</span><span class="n">Xcsc</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;H_opts&quot;</span><span class="p">])</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="n">W_update</span><span class="p">(</span><span class="n">Xcsr</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;W_opts&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">H_update</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;H_opts&quot;</span><span class="p">])</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="n">W_update</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;W_opts&quot;</span><span class="p">])</span>
+
+        <span class="c1">#! update X step</span>
+        <span class="c1"># * update rule: only update X at ij location if (WH)_{ij}&gt;1 and X_{ij} = 1</span>
+        <span class="c1"># Xhat = W@H</span>
+
+        <span class="k">if</span> <span class="n">upperthres</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">,</span> <span class="n">lowerthres</span><span class="p">,</span> <span class="n">upperthres</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">lowerthres</span><span class="p">,</span> <span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">YErrold</span> <span class="o">=</span> <span class="n">YErr</span>
+        <span class="n">YErr</span> <span class="o">=</span> <span class="n">fro_norm</span><span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">)</span> <span class="o">/</span> <span class="n">fro_norm</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">YErrchange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">YErr</span> <span class="o">-</span> <span class="n">YErrold</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;hist&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;hist&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">YErr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;histX&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># opts[&#39;histX&#39;].append(fro_norm(Mask.astype(float) - W@H))</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;histX&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;tol&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">YErr</span> <span class="o">-</span> <span class="n">YErrold</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;tol&quot;</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;converge in </span><span class="si">{}</span><span class="s2"> iterations -- </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">YErrchange</span><span class="p">))</span>
+                <span class="k">break</span>
+    <span class="c1"># * Normalize W</span>
+    <span class="c1"># Wsum  = np.sum(W,0,keepdims=True)</span>
+    <span class="c1"># H = H * Wsum.T</span>
+    <span class="c1"># W = W / Wsum</span>
+    <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;pruned&quot;</span><span class="p">]:</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">unprune</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">unprune</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># print(&#39;id of X = {}&#39;.format(id(X)))</span>
+    <span class="c1"># print(&#39;id of Mask = {}&#39;.format(id(Mask)))</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="old_nmf">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.old_nmf">[docs]</a>
+<span class="k">def</span> <span class="nf">old_nmf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">lowerthres</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upperthres</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Multiplicative update algorithm for NMF with Frobenius norm loss function. ||X-WH||_F^2</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">            X (ndarray, sparse matrix): Nonnegative m by n matrix to decompose.</span>
+<span class="sd">            W (ndarray): Nonnegative m by k initialization of left factor of X.</span>
+<span class="sd">            H (ndarray): Nonnegative k by n initialization of right factor of X.</span>
+<span class="sd">            opts (dict), optional: Dictionary or optional arguments.</span>
+<span class="sd">                    &#39;hist&#39; (list): list to append the objective function to.</span>
+<span class="sd">                    &#39;niter&#39; (int): number of iterations.</span>
+<span class="sd">                    &#39;pruned&#39; (bool): indicator if the input matrix needs to be pruned of zeros.</span>
+<span class="sd">                    &#39;W_opts&#39; (dict): options dictionary for W update</span>
+<span class="sd">                    &#39;H_opts&#39; (dict): options dictionary for H update</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">            W (ndarray): Nonnegative m by k left factor of X.</span>
+<span class="sd">            H (ndarray): Nonnegative k by n right factor of X.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># *update algorithm</span>
+    <span class="n">default_opts</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s2">&quot;histX&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;pruned&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;tol&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;W_opts&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+        <span class="s2">&quot;H_opts&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">update_opts</span><span class="p">(</span><span class="n">default_opts</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+    <span class="n">scipy</span> <span class="o">=</span> <span class="n">get_scipy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">dtype</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown data type!&quot;</span><span class="p">)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">),</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">),</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1">#! X is a boolean matrix dtype = float</span>
+    <span class="n">Mask</span> <span class="o">=</span> <span class="n">X</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;pruned&quot;</span><span class="p">]:</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">prune</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">W</span><span class="p">[</span><span class="n">rows</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">H</span><span class="p">[:,</span> <span class="n">cols</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+        <span class="n">Xcsc</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tocsc</span><span class="p">()</span>
+        <span class="n">Xcsr</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="n">YErr</span> <span class="o">=</span> <span class="n">YErrold</span> <span class="o">=</span> <span class="n">YErrchange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">opts</span><span class="p">[</span><span class="s2">&quot;niter&quot;</span><span class="p">]):</span>
+        <span class="c1">#! set adaptive alpha here</span>
+
+        <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">H_update_MU</span><span class="p">(</span><span class="n">Xcsc</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;H_opts&quot;</span><span class="p">])</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="n">W_update_MU</span><span class="p">(</span><span class="n">Xcsr</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;W_opts&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">H_update_MU</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;H_opts&quot;</span><span class="p">])</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="n">W_update_MU</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;W_opts&quot;</span><span class="p">])</span>
+
+        <span class="c1">#! update X step</span>
+        <span class="c1"># * update rule: only update X at ij location if (WH)_{ij}&gt;1 and X_{ij} = 1</span>
+        <span class="c1"># Xhat = W@H</span>
+
+        <span class="k">if</span> <span class="n">upperthres</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">,</span> <span class="n">lowerthres</span><span class="p">,</span> <span class="n">upperthres</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">lowerthres</span><span class="p">,</span> <span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;hist&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;hist&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fro_norm</span><span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;histX&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># opts[&#39;histX&#39;].append(fro_norm(Mask.astype(float) - W@H))</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;histX&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;tol&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">YErrold</span> <span class="o">=</span> <span class="n">YErr</span>
+            <span class="n">YErr</span> <span class="o">=</span> <span class="n">fro_norm</span><span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">)</span> <span class="o">/</span> <span class="n">fro_norm</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="n">YErrchange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">YErr</span> <span class="o">-</span> <span class="n">YErrold</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">YErr</span> <span class="o">-</span> <span class="n">YErrold</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;tol&quot;</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;converge in </span><span class="si">{}</span><span class="s2"> iterations -- </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">YErrchange</span><span class="p">))</span>
+                <span class="k">break</span>
+
+    <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;pruned&quot;</span><span class="p">]:</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">unprune</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">unprune</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="nmf">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.nmf">[docs]</a>
+<span class="k">def</span> <span class="nf">nmf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">lowerthres</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upperthres</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    penalized nmf with adaptive alpha</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">default_opts</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s2">&quot;histX&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;pruned&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;tol&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;constrainttol&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;W_opts&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+        <span class="s2">&quot;H_opts&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;hist&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">update_opts</span><span class="p">(</span><span class="n">default_opts</span><span class="p">,</span> <span class="n">opts</span><span class="p">)</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+    <span class="n">scipy</span> <span class="o">=</span> <span class="n">get_scipy</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">dtype</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown data type!&quot;</span><span class="p">)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">),</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">),</span> <span class="n">eps</span><span class="p">)</span>
+
+    <span class="c1">#! X is a boolean matrix dtype = float</span>
+    <span class="k">if</span> <span class="n">Mask</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">Mask</span> <span class="o">=</span> <span class="n">X</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;pruned&quot;</span><span class="p">]:</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">prune</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">W</span><span class="p">[</span><span class="n">rows</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">H</span><span class="p">[:,</span> <span class="n">cols</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+        <span class="n">Xcsc</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tocsc</span><span class="p">()</span>
+        <span class="n">Xcsr</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="n">YErr</span> <span class="o">=</span> <span class="n">YErrold</span> <span class="o">=</span> <span class="n">YErrchange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">opts</span><span class="p">[</span><span class="s2">&quot;niter&quot;</span><span class="p">]):</span>
+
+        <span class="c1">#! adaptive alpha</span>
+        <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;constrainttol&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;H_opts&quot;</span><span class="p">][</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;niter&quot;</span><span class="p">])[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;W_opts&quot;</span><span class="p">][</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;niter&quot;</span><span class="p">])[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">H_update_MU</span><span class="p">(</span><span class="n">Xcsc</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;H_opts&quot;</span><span class="p">])</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="n">W_update_MU</span><span class="p">(</span><span class="n">Xcsr</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;W_opts&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">H_update_MU</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;H_opts&quot;</span><span class="p">])</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="n">W_update_MU</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;W_opts&quot;</span><span class="p">])</span>
+
+        <span class="c1">#! update X step</span>
+        <span class="c1"># * update rule: only update X at ij location if (WH)_{ij}&gt;1 and X_{ij} = 1</span>
+        <span class="c1"># Xhat = W@H</span>
+        <span class="k">if</span> <span class="n">upperthres</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">,</span> <span class="n">lowerthres</span><span class="p">,</span> <span class="n">upperthres</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">lowerthres</span><span class="p">,</span> <span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1">#!check for constraint tolerance</span>
+        <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;constrainttol&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">fro_norm</span><span class="p">(</span><span class="n">H</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">H</span><span class="p">)</span> <span class="o">+</span> <span class="n">fro_norm</span><span class="p">(</span><span class="n">W</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">W</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;constrainttol&quot;</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;factors converge in </span><span class="si">{}</span><span class="s2"> iterations&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;hist&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;hist&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fro_norm</span><span class="p">(</span><span class="n">Mask</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">-</span> <span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;histX&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># opts[&#39;histX&#39;].append(fro_norm(Mask.astype(float) - W@H))</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;histX&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fro_norm</span><span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">)</span> <span class="o">/</span> <span class="n">fro_norm</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;tol&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">YErrold</span> <span class="o">=</span> <span class="n">YErr</span>
+            <span class="n">YErr</span> <span class="o">=</span> <span class="n">fro_norm</span><span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">W</span> <span class="o">@</span> <span class="n">H</span><span class="p">)</span> <span class="o">/</span> <span class="n">fro_norm</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+            <span class="n">YErrchange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">YErr</span> <span class="o">-</span> <span class="n">YErrold</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">YErr</span> <span class="o">-</span> <span class="n">YErrold</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;tol&quot;</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;converge in </span><span class="si">{}</span><span class="s2"> iterations -- </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">YErrchange</span><span class="p">))</span>
+                <span class="k">break</span>
+    <span class="c1"># * Normalize W</span>
+    <span class="c1"># Wsum  = np.sum(W,0,keepdims=True)</span>
+    <span class="c1"># H = H * Wsum.T</span>
+    <span class="c1"># W = W / Wsum</span>
+    <span class="k">if</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;pruned&quot;</span><span class="p">]:</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">unprune</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">unprune</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="thres_norm">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.thres_norm">[docs]</a>
+<span class="k">def</span> <span class="nf">thres_norm</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">):</span>
+    <span class="c1"># try to normalize BOTH W,H by dividing to column minimum</span>
+    <span class="n">Wsum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">Hsum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Wsum = np.max(W)</span>
+    <span class="c1"># Hsum = np.max(H)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">W</span> <span class="o">/</span> <span class="n">Wsum</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="p">(</span><span class="n">H</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="n">Hsum</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">Wsum</span> <span class="o">*</span> <span class="n">Hsum</span><span class="p">)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">W</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">@</span> <span class="n">H</span>
+    <span class="k">return</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span></div>
+
+
+
+<div class="viewcode-block" id="old_find_thres_WH">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.old_find_thres_WH">[docs]</a>
+<span class="k">def</span> <span class="nf">old_find_thres_WH</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Wn</span><span class="p">,</span> <span class="n">Hn</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;grid_search&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">npoint</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="c1"># Wn, Hn are normalized using thres_norm function</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;W@H&quot;</span><span class="p">:</span>
+        <span class="c1"># npoint = 100</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">Wn</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">Wn</span> <span class="o">@</span> <span class="n">Hn</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">npoint</span><span class="p">)</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">L</span><span class="p">)))</span>
+
+        <span class="c1"># *brute force way</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npoint</span><span class="p">):</span>
+            <span class="n">lambdaWH</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">lambdaW</span> <span class="o">=</span> <span class="n">lambdaWH</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">lambdaH</span> <span class="o">=</span> <span class="n">lambdaWH</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">Xhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Wn</span> <span class="o">&gt;</span> <span class="n">lambdaW</span><span class="p">,</span> <span class="n">Hn</span> <span class="o">&gt;</span> <span class="n">lambdaH</span><span class="p">)</span>
+            <span class="n">err</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="o">^</span> <span class="n">Xhat</span><span class="p">)</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">L</span><span class="p">[</span><span class="n">I</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">err</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">I</span><span class="p">]</span>  <span class="c1"># optimal threshold for W and H and error</span>
+
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;grid_search&quot;</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">Wn</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">Lw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Wn</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Wn</span><span class="p">),</span> <span class="n">npoint</span><span class="p">)</span>
+        <span class="n">Lh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Hn</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Hn</span><span class="p">),</span> <span class="n">npoint</span><span class="p">)</span>
+
+        <span class="c1"># Lw = np.unique(np.concatenate(Wn.reshape(-1,1)))</span>
+        <span class="c1"># Lh = np.unique(np.concatenate(Hn.reshape(-1,1)))</span>
+
+        <span class="n">Wpoint</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lw</span><span class="p">)</span>
+        <span class="n">Hpoint</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lh</span><span class="p">)</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">Lw</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lh</span><span class="p">)))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Wpoint</span><span class="p">):</span>
+            <span class="n">lambdaW</span> <span class="o">=</span> <span class="n">Lw</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Hpoint</span><span class="p">):</span>
+                <span class="n">lambdaH</span> <span class="o">=</span> <span class="n">Lh</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">Xhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Wn</span> <span class="o">&gt;=</span> <span class="n">lambdaW</span><span class="p">,</span> <span class="n">Hn</span> <span class="o">&gt;=</span> <span class="n">lambdaH</span><span class="p">)</span>
+                <span class="n">err</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="o">^</span> <span class="n">Xhat</span><span class="p">)</span>
+
+        <span class="p">[</span><span class="n">iw</span><span class="p">,</span> <span class="n">ih</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">argmin</span><span class="p">(),</span> <span class="n">err</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;best&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">err</span><span class="p">),</span> <span class="p">[</span><span class="n">Lw</span><span class="p">[</span><span class="n">iw</span><span class="p">],</span> <span class="n">Lh</span><span class="p">[</span><span class="n">ih</span><span class="p">]]</span>
+        <span class="k">elif</span> <span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;grid&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">err</span><span class="p">,</span> <span class="n">Lw</span><span class="p">,</span> <span class="n">Lh</span>
+
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;WH&quot;</span><span class="p">:</span>
+        <span class="n">Lthres</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">Wn</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Hn</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
+        <span class="n">Lthres</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lthres</span><span class="p">)))</span>
+
+        <span class="c1"># *brute force way</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Lthres</span><span class="p">)):</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">Lthres</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">Xhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Wn</span> <span class="o">&gt;</span> <span class="n">t</span><span class="p">,</span> <span class="n">Hn</span> <span class="o">&gt;</span> <span class="n">t</span><span class="p">)</span>
+            <span class="n">err</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="o">^</span> <span class="n">Xhat</span><span class="p">)</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">err</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">I</span><span class="p">],</span> <span class="n">Lthres</span><span class="p">[</span><span class="n">I</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="find_thres_WH">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.find_thres_WH">[docs]</a>
+<span class="k">def</span> <span class="nf">find_thres_WH</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Wn</span><span class="p">,</span> <span class="n">Hn</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">npoint</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="c1"># Wn, Hn are normalized using thres_norm function</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">npoint</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">Lw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">Wn</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="n">Lh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">Hn</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">Lw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Wn</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Wn</span><span class="p">),</span> <span class="n">npoint</span><span class="p">)</span>
+        <span class="n">Lh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Hn</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Hn</span><span class="p">),</span> <span class="n">npoint</span><span class="p">)</span>
+
+    <span class="n">Wpoint</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lw</span><span class="p">)</span>
+    <span class="n">Hpoint</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lh</span><span class="p">)</span>
+    <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">Lw</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lh</span><span class="p">)))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Wpoint</span><span class="p">):</span>
+        <span class="n">lambdaW</span> <span class="o">=</span> <span class="n">Lw</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Hpoint</span><span class="p">):</span>
+            <span class="n">lambdaH</span> <span class="o">=</span> <span class="n">Lh</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">Xhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Wn</span> <span class="o">&gt;=</span> <span class="n">lambdaW</span><span class="p">,</span> <span class="n">Hn</span> <span class="o">&gt;=</span> <span class="n">lambdaH</span><span class="p">)</span>
+            <span class="n">err</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="o">^</span> <span class="n">Xhat</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;best&quot;</span><span class="p">:</span>
+        <span class="p">[</span><span class="n">iw</span><span class="p">,</span> <span class="n">ih</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">argmin</span><span class="p">(),</span> <span class="n">err</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span><span class="n">err</span><span class="p">[</span><span class="n">iw</span><span class="p">,</span> <span class="n">ih</span><span class="p">],</span> <span class="s2">&quot;Lw&quot;</span><span class="p">:</span><span class="n">Lw</span><span class="p">[</span><span class="n">iw</span><span class="p">],</span> <span class="s2">&quot;Lh&quot;</span><span class="p">:</span><span class="n">Lh</span><span class="p">[</span><span class="n">ih</span><span class="p">]}</span>
+    <span class="k">elif</span> <span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;grid&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span><span class="n">err</span><span class="p">,</span> <span class="s2">&quot;Lw&quot;</span><span class="p">:</span><span class="n">Lw</span><span class="p">,</span> <span class="s2">&quot;Lh&quot;</span><span class="p">:</span><span class="n">Lh</span><span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="coord_desc_thresh">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh">[docs]</a>
+<span class="k">def</span> <span class="nf">coord_desc_thresh</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">wt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ht</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">wt</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">wt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)])</span>
+    <span class="k">if</span> <span class="n">ht</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ht</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)])</span>
+    <span class="n">Wrange</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">W</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span>
+    <span class="n">Hrange</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">H</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span>
+    <span class="n">err</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+        <span class="n">old_err</span> <span class="o">=</span> <span class="n">err</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">Wrange</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">wrange</span> <span class="o">=</span> <span class="n">Wrange</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">Wt</span> <span class="o">=</span> <span class="n">W</span> <span class="o">&gt;=</span> <span class="n">wt</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">Ht</span> <span class="o">=</span> <span class="n">H</span> <span class="o">&gt;=</span> <span class="n">ht</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="n">cache</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">Wt</span><span class="p">[:,</span> <span class="p">[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">]]</span>
+<div class="viewcode-block" id="coord_desc_thresh_onefactor">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh_onefactor">[docs]</a>
+                <span class="o">@</span> <span class="n">Ht</span><span class="p">[[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">],</span> <span class="p">:]</span>
+            <span class="p">)</span>
+            <span class="n">this_component</span> <span class="o">=</span> <span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">wrange</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">@</span> <span class="n">Ht</span><span class="p">[[</span><span class="n">i</span><span class="p">],</span> <span class="p">:]</span>
+            <span class="n">Ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">this_component</span><span class="p">)</span>
+            <span class="n">errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_xor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Ys</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">X</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">wrange</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">errors</span><span class="p">)]</span>
+
+            <span class="c1"># * update H</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">Hrange</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">hrange</span> <span class="o">=</span> <span class="n">Hrange</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">Ht</span> <span class="o">=</span> <span class="n">H</span> <span class="o">&gt;=</span> <span class="n">ht</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="n">Wt</span> <span class="o">=</span> <span class="n">W</span> <span class="o">&gt;=</span> <span class="n">wt</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">cache</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">Wt</span><span class="p">[:,</span> <span class="p">[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">]]</span>
+                <span class="o">@</span> <span class="n">Ht</span><span class="p">[[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">],</span> <span class="p">:]</span>
+            <span class="p">)</span>
+            <span class="n">this_component</span> <span class="o">=</span> <span class="n">Wt</span><span class="p">[:,</span> <span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">@</span> <span class="p">(</span><span class="n">H</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&gt;=</span> <span class="n">hrange</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">Ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">this_component</span><span class="p">)</span>
+            <span class="n">errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_xor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Ys</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">X</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">ht</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">hrange</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">errors</span><span class="p">)]</span>
+
+        <span class="c1"># * error after one sweep</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+        <span class="c1"># * stopping criteria</span>
+        <span class="k">if</span> <span class="n">err</span> <span class="o">==</span> <span class="n">old_err</span><span class="p">:</span>
+            <span class="c1"># print(&#39;converged in num iter = {}, err = {}&#39;.format(j, np.min(errors)))</span>
+            <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">err</span><span class="p">,</span> <span class="n">wt</span><span class="p">,</span> <span class="n">ht</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">coord_desc_thresh_onefactor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="c1"># * only threshold W given H. Use transpose to threshold H</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">wt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)])</span>
+    <span class="n">Wrange</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">W</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span>
+    <span class="n">err</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+        <span class="n">old_err</span> <span class="o">=</span> <span class="n">err</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">Wrange</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">wrange</span> <span class="o">=</span> <span class="n">Wrange</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">Wt</span> <span class="o">=</span> <span class="n">W</span> <span class="o">&gt;=</span> <span class="n">wt</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">Ht</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+            <span class="n">cache</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">Wt</span><span class="p">[:,</span> <span class="p">[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">]]</span>
+<div class="viewcode-block" id="roc_W_H">
+<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.roc_W_H">[docs]</a>
+                <span class="o">@</span> <span class="n">Ht</span><span class="p">[[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">],</span> <span class="p">:]</span>
+            <span class="p">)</span>
+            <span class="n">this_component</span> <span class="o">=</span> <span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">wrange</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">@</span> <span class="n">Ht</span><span class="p">[[</span><span class="n">i</span><span class="p">],</span> <span class="p">:]</span>
+            <span class="n">Ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">this_component</span><span class="p">)</span>
+            <span class="n">errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_xor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Ys</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">X</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">wrange</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">errors</span><span class="p">)]</span>
+
+        <span class="c1"># * error after one sweep</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">err</span><span class="p">,</span> <span class="n">wt</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">roc_W_H</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">):</span>
+    <span class="n">Lthres</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">W</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">H</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
+    <span class="n">Lthres</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="n">fpr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">Lthres</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">tpr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">Lthres</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Lthres</span><span class="p">)):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">Lthres</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">Xhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span> <span class="o">&gt;</span> <span class="n">t</span><span class="p">,</span> <span class="n">H</span> <span class="o">&gt;</span> <span class="n">t</span><span class="p">)</span>
+        <span class="n">Xhat</span> <span class="o">=</span> <span class="n">Xhat</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="c1"># * compute TP, TN, FP, FN</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">X</span> <span class="o">+</span> <span class="n">Xhat</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">tn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">X</span> <span class="o">+</span> <span class="n">Xhat</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">fp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">X</span> <span class="o">-</span> <span class="n">Xhat</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">X</span> <span class="o">-</span> <span class="n">Xhat</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">fpr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">fp</span> <span class="o">/</span> <span class="p">(</span><span class="n">fp</span> <span class="o">+</span> <span class="n">tn</span><span class="p">)</span>
+        <span class="n">tpr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">Lthres</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -3,7 +3,7 @@ from .utilities.math_utils import fro_norm
 from tqdm import tqdm
 
 
-def A_update(X, A, R, opts=None, XT=None, use_gpu=True):
+def A_update(X, A, R, opts=None, use_gpu=True):
     r"""
     Multiplicative update algorithm for the A factor in a nonnegative optimization with Frobenius norm loss function.
 
@@ -24,14 +24,13 @@ def A_update(X, A, R, opts=None, XT=None, use_gpu=True):
 
         'niter' (int): number of iterations.
 
-      XT (list of sparse matrix), optional: If X is list of sparse matrix, XT should be list of transpose matrices in csr format, XT = [x.T.tocsr() for x in X].
-
     Returns:
       A (ndarray): Nonnegative m by k factor in the decomposition.
     """
-    np = get_np(*X)
-    scipy = get_scipy(*X)
+    np = get_np(X[0], use_gpu=use_gpu)
+    scipy = get_scipy(X[0], use_gpu=use_gpu)
     dtype = X[0].dtype
+
     if np.issubdtype(dtype, np.integer):
         eps = np.finfo(float).eps
     elif np.issubdtype(dtype, np.floating):
@@ -43,27 +42,23 @@ def A_update(X, A, R, opts=None, XT=None, use_gpu=True):
 
     A = np.maximum(A.astype(dtype), eps)
     R = [r.astype(dtype) for r in R]
+    
     if scipy.sparse.issparse(X[0]):
-        X = [x.astype(dtype).tocsr() for x in X]
-        if XT is None:
-            XT = [x.T.astype(dtype).tocsr() for x in X]
-        # bug in setting has_canonical_format flag in cupy
-        # https://github.com/cupy/cupy/issues/2365
-        # issue is closed, but still not fixed.
-        for x, xt in zip(X, XT):
+        for x in X:
             x._has_canonical_format = True
-            xt._has_canonical_format = True
-    else:
-        X = [x.astype(dtype) for x in X]
+
     for i in range(opts["niter"]):
         ATA = A.T @ A
         num = np.zeros_like(A)
         denom = np.zeros_like(R[0])
         for j, r in enumerate(R):
             if scipy.sparse.issparse(X[j]):
-                num += X[j].dot(A).dot(r.T) + XT[j].dot(A).dot(r)
+                xjt = X[j].T
+                xjt._has_canonical_format = True
+                num += X[j].dot(A).dot(r.T) + xjt.dot(A).dot(r)
             else:
                 num += X[j].dot(A).dot(r.T) + X[j].T.dot(A).dot(r)
+                
             denom += r.dot(ATA).dot(r.T) + (r.T).dot(ATA).dot(r)
         A *= num / (A @ denom+eps)
 
@@ -102,9 +97,10 @@ def R_update(X, A, R, opts=None, use_gpu=True):
     Returns:
       R (list of ndarray): List of nonnegative k by k factors in the decomposition.
     """
-    np = get_np(*X, use_gpu=use_gpu)
-    scipy = get_scipy(*X, use_gpu=use_gpu)
+    np = get_np(X[0], use_gpu=use_gpu)
+    scipy = get_scipy(X[0], use_gpu=use_gpu)
     dtype = X[0].dtype
+
     if np.issubdtype(dtype, np.integer):
         eps = np.finfo(float).eps
     elif np.issubdtype(dtype, np.floating):
@@ -113,28 +109,22 @@ def R_update(X, A, R, opts=None, use_gpu=True):
         raise Exception("Unknown data type!")
     default_opts = {"niter": 1000, "hist": None}
     opts = update_opts(default_opts, opts)
+    
     A = A.astype(dtype)
     R = [np.maximum(r.astype(dtype), eps) for r in R]
 
     if scipy.sparse.issparse(X[0]):
-        X = [x.astype(dtype).tocsr() for x in X]
-        # bug in setting has_canonical_format flag in cupy
-        # https://github.com/cupy/cupy/issues/2365
-        # issue is closed, but still not fixed.
         for x in X:
             x._has_canonical_format = True
-    else:
-        X = [x.astype(dtype) for x in X]
+            
     ATXA = [A.T.dot(x.dot(A)) for x in X]
     ATA = A.T @ A
     for i in range(opts["niter"]):
-        for j, r in enumerate(R):
-            r /= np.maximum(ATA.T @ r @ ATA, eps)
-            r *= ATXA[j]
-
+        for j in range(len(R)):
+            R[j] /= np.maximum(ATA.T @ R[j] @ ATA, eps)
+            R[j] *= ATXA[j]
         if (i + 1) % 10 == 0:
-            for r in R:
-                r = np.maximum(r, eps)
+            R[j] = np.maximum(R[j], eps)
 
         if opts["hist"] is not None:
             opts["hist"].append(
@@ -143,12 +133,10 @@ def R_update(X, A, R, opts=None, use_gpu=True):
 
     return R
 
-
-# def rescal(X, A, R, opts=None):
 def rescal(X, A, R,
            niter=1000, hist=None,
            A_opts={"niter": 1, "hist": None}, R_opts={"niter": 1, "hist": None},
-           use_gpu=False,
+           use_gpu=True,
            rescal_verbose=True
            ):
     r"""
@@ -176,9 +164,10 @@ def rescal(X, A, R,
 
       R (list of ndarray): List of nonnegative k by k factors in the decomposition.
     """
-    np = get_np(*X, use_gpu=use_gpu)
-    scipy = get_scipy(*X, use_gpu=use_gpu)
+    np = get_np(X[0], use_gpu=use_gpu)
+    scipy = get_scipy(X[0], use_gpu=use_gpu)
     dtype = X[0].dtype
+    
     if np.issubdtype(dtype, np.integer):
         eps = np.finfo(float).eps
     elif np.issubdtype(dtype, np.floating):
@@ -186,27 +175,12 @@ def rescal(X, A, R,
     else:
         raise Exception("Unknown data type!")
 
-    if scipy.sparse.issparse(X[0]):
-        X = [x.astype(dtype).tocsr() for x in X]
-        XT = [x.T.astype(dtype).tocsr() for x in X]
-        # bug in setting has_canonical_format flag in cupy
-        # https://github.com/cupy/cupy/issues/2365
-        # issue is closed, but still not fixed.
-        for x, xt in zip(X, XT):
-            x._has_canonical_format = True
-            xt._has_canonical_format = True
-        A_args = {"XT": XT}
-    else:
-        X = [x.astype(dtype) for x in X]
     A = A.astype(dtype)
     R = [r.astype(dtype) for r in R]
-    for i in tqdm(range(niter), disable=rescal_verbose == False):
-        if scipy.sparse.issparse(X[0]):
-            A = A_update(X, A, R, A_opts)
-            R = R_update(X, A, R, R_opts)
-        else:
-            A = A_update(X, A, R, A_opts)
-            R = R_update(X, A, R, R_opts)
+    
+    for _ in tqdm(range(niter), disable=rescal_verbose == False):
+        A = A_update(X, A, R, A_opts, use_gpu=use_gpu)
+        R = R_update(X, A, R, R_opts, use_gpu=use_gpu)
 
         if hist is not None:
             hist.append(

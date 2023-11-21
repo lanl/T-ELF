@@ -1,0 +1,833 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>TELF.pre_processing.Vulture package &#8212; TELF 0.0.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="_static/documentation_options.js?v=f131489c"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'TELF.pre_processing.Vulture';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TELF.pre_processing.Vulture.tokens_analysis package" href="TELF.pre_processing.Vulture.tokens_analysis.html" />
+    <link rel="prev" title="TELF.pre_processing.Beaver package" href="TELF.pre_processing.Beaver.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.2 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">TELF</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="TELF.html">TELF package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.factorization.html">TELF.factorization package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="TELF.pre_processing.html">TELF.pre_processing package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/TELF.pre_processing.Vulture.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>TELF.pre_processing.Vulture package</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.pre_process">TELF.pre_processing.Vulture.pre_process module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.advance_document_clean"><code class="docutils literal notranslate"><span class="pre">advance_document_clean()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.build_stem_map"><code class="docutils literal notranslate"><span class="pre">build_stem_map()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.build_vocab_stem_subs"><code class="docutils literal notranslate"><span class="pre">build_vocab_stem_subs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.check_character_lengths"><code class="docutils literal notranslate"><span class="pre">check_character_lengths()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.correct_text"><code class="docutils literal notranslate"><span class="pre">correct_text()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.lemmatize_document"><code class="docutils literal notranslate"><span class="pre">lemmatize_document()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.nested_defaultdict"><code class="docutils literal notranslate"><span class="pre">nested_defaultdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.simple_document_clean"><code class="docutils literal notranslate"><span class="pre">simple_document_clean()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.stem_document"><code class="docutils literal notranslate"><span class="pre">stem_document()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.strip_suffixes"><code class="docutils literal notranslate"><span class="pre">strip_suffixes()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.vulture">TELF.pre_processing.Vulture.vulture module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture"><code class="docutils literal notranslate"><span class="pre">Vulture</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_PIPELINE"><code class="docutils literal notranslate"><span class="pre">Vulture.DEFAULT_PIPELINE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.PARALLEL_BACKEND_OPTIONS"><code class="docutils literal notranslate"><span class="pre">Vulture.PARALLEL_BACKEND_OPTIONS</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.cache"><code class="docutils literal notranslate"><span class="pre">Vulture.cache</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean"><code class="docutils literal notranslate"><span class="pre">Vulture.clean()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe"><code class="docutils literal notranslate"><span class="pre">Vulture.clean_dataframe()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.n_jobs"><code class="docutils literal notranslate"><span class="pre">Vulture.n_jobs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.n_nodes"><code class="docutils literal notranslate"><span class="pre">Vulture.n_nodes</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.parallel_backend"><code class="docutils literal notranslate"><span class="pre">Vulture.parallel_backend</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.save_path"><code class="docutils literal notranslate"><span class="pre">Vulture.save_path</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.use_mpi"><code class="docutils literal notranslate"><span class="pre">Vulture.use_mpi()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.verbose"><code class="docutils literal notranslate"><span class="pre">Vulture.verbose</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.chunk_tuple_list"><code class="docutils literal notranslate"><span class="pre">chunk_tuple_list()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture">Module contents</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="telf-pre-processing-vulture-package">
+<h1>TELF.pre_processing.Vulture package<a class="headerlink" href="#telf-pre-processing-vulture-package" title="Link to this heading">#</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="TELF.pre_processing.Vulture.tokens_analysis.html">TELF.pre_processing.Vulture.tokens_analysis package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="TELF.pre_processing.Vulture.tokens_analysis.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TELF.pre_processing.Vulture.tokens_analysis.html#module-TELF.pre_processing.Vulture.tokens_analysis.top_words">TELF.pre_processing.Vulture.tokens_analysis.top_words module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="TELF.pre_processing.Vulture.tokens_analysis.html#TELF.pre_processing.Vulture.tokens_analysis.top_words.get_top_words"><code class="docutils literal notranslate"><span class="pre">get_top_words()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="TELF.pre_processing.Vulture.tokens_analysis.html#module-TELF.pre_processing.Vulture.tokens_analysis">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+</section>
+<section id="module-TELF.pre_processing.Vulture.pre_process">
+<span id="telf-pre-processing-vulture-pre-process-module"></span><h2>TELF.pre_processing.Vulture.pre_process module<a class="headerlink" href="#module-TELF.pre_processing.Vulture.pre_process" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.pre_process.advance_document_clean">
+<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.pre_process.</span></span><span class="sig-name descname"><span class="pre">advance_document_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nlp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_postags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'ADJ':</span> <span class="pre">1,</span> <span class="pre">'ADV':</span> <span class="pre">1,</span> <span class="pre">'NOUN':</span> <span class="pre">1,</span> <span class="pre">'PROPN':</span> <span class="pre">1,</span> <span class="pre">'VERB':</span> <span class="pre">1}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lemmatize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/pre_process.html#advance_document_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.pre_process.advance_document_clean" title="Link to this definition">#</a></dt>
+<dd><p>Form Bigrams, Trigrams, filter to the allowed postags and apply spacy lemmatization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document</strong> (<em>str</em>) – single text document.</p></li>
+<li><p><strong>document_id</strong> (<em>str</em>) – unique identifier of the given document.</p></li>
+<li><p><strong>nlp</strong> (<em>callable</em>) – Spacy NLP model.</p></li>
+<li><p><strong>allowed_postags</strong> (<em>list</em><em>, </em><em>optional</em>) – The list of allowed Postags. The default is [‘NOUN’, ‘ADJ’, ‘VERB’, ‘ADV’, “PROPN”].</p></li>
+<li><p><strong>lemmatize</strong> (<em>bool</em><em>, </em><em>optional</em>) – Parameter to select if we are doing lemmatization</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>document ID, cleaned document pair.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.pre_process.build_stem_map">
+<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.pre_process.</span></span><span class="sig-name descname"><span class="pre">build_stem_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vocabulary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'frequency'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/pre_process.html#build_stem_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.pre_process.build_stem_map" title="Link to this definition">#</a></dt>
+<dd><p>Stems vocabulary map, ununified</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vocabulary</strong> (<em>list</em>) – Node containing a row of the data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>vocab_stems</strong> – variants map to shortest variant, ununified</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict (str:str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.pre_process.build_vocab_stem_subs">
+<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.pre_process.</span></span><span class="sig-name descname"><span class="pre">build_vocab_stem_subs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vocabulary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_char_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/pre_process.html#build_vocab_stem_subs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.pre_process.build_vocab_stem_subs" title="Link to this definition">#</a></dt>
+<dd><p>Stems vocabulary, constructs map of all variants to the shorstest variant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vocabulary</strong> (<em>list</em>) – Node containing a row of the data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>subs_stemed</strong> (<em>dict (str:str)</em>) – variants map to shortest variant</p></li>
+<li><p><strong>shortened_vocabulary</strong> (<em>list</em>) – new vocab with only mapped variants</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.pre_process.check_character_lengths">
+<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.pre_process.</span></span><span class="sig-name descname"><span class="pre">check_character_lengths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_characters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_unique_characters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/pre_process.html#check_character_lengths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.pre_process.check_character_lengths" title="Link to this definition">#</a></dt>
+<dd><p>check tokens for character lengths</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document</strong> (<em>str</em>) – single text document.</p></li>
+<li><p><strong>document_id</strong> (<em>str</em>) – unique identifier of the given document.</p></li>
+<li><p><strong>min_characters</strong> (<em>int</em><em>, </em><em>optional</em>) – Minimum number of characters a token should have. The default is 2.</p></li>
+<li><p><strong>min_unique_characters</strong> (<em>int</em><em>, </em><em>optional</em>) – Minimum number of unique characters a token should have. The default is 2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>document ID, cleaned document pair.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.pre_process.correct_text">
+<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.pre_process.</span></span><span class="sig-name descname"><span class="pre">correct_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corrections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/pre_process.html#correct_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.pre_process.correct_text" title="Link to this definition">#</a></dt>
+<dd><p>Checks word boundaries for any and all occurances of corrections, replaces key with value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>documents</strong> (<em>dict</em>) – id, text of corpus</p></li>
+<li><p><strong>corrections</strong> (<em>dict</em>) – mapping of replacements, where key is source and value is destination</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>results</strong> – list of tuples containing the original id, text parings.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.pre_process.lemmatize_document">
+<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.pre_process.</span></span><span class="sig-name descname"><span class="pre">lemmatize_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/pre_process.html#lemmatize_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.pre_process.lemmatize_document" title="Link to this definition">#</a></dt>
+<dd><p>Performs lemmatization of a given document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document</strong> (<em>str</em>) – single text document.</p></li>
+<li><p><strong>document_id</strong> (<em>str</em>) – unique identifier of the given document.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>document ID, lemmatized document pair.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.pre_process.nested_defaultdict">
+<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.pre_process.</span></span><span class="sig-name descname"><span class="pre">nested_defaultdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/pre_process.html#nested_defaultdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.pre_process.nested_defaultdict" title="Link to this definition">#</a></dt>
+<dd><p>can be called for another default dict, where the third dimension becomes a list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>default dict with list values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.pre_process.simple_document_clean">
+<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.pre_process.</span></span><span class="sig-name descname"><span class="pre">simple_document_clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_words</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_phrases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/pre_process.html#simple_document_clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.pre_process.simple_document_clean" title="Link to this definition">#</a></dt>
+<dd><p>Cleans the given document.</p>
+<p>Have the capability to do:
+- make lower case
+- remove copyright statements with copyright symbol
+- remove stop-phrases
+- make hypen words single word
+- remove next line characters
+- remove emails
+- replace dashes with spaces
+- replace [ and ] with space
+- replace with space
+- replace ^ with space
+- Remove numbers
+- remove non ASCII characters
+- remove tags
+- remove any other symbols
+- remove anything in between [], including []
+- filter stop-words</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document</strong> (<em>str</em>) – single text document.</p></li>
+<li><p><strong>document_id</strong> (<em>str</em>) – unique identifier of the given document.</p></li>
+<li><p><strong>stop_words</strong> (<em>dict</em><em> (</em><em>recommended</em><em>)</em><em>, or </em><em>list</em>) – Hashmap (dict) of stopwords. O(1) lookup.
+List of stopwords. O(n) lookup.</p></li>
+<li><p><strong>stop_phrases</strong> (<em>list</em><em>, </em><em>optional</em>) – List of phrases to be removed.</p></li>
+<li><p><strong>clean_settings</strong> (<em>dict</em><em>, </em><em>optional</em>) – Settings used in simple cleaning. See _organize_simple_clean_defaults for defaults.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>document ID, cleaned document pair.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.pre_process.stem_document">
+<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.pre_process.</span></span><span class="sig-name descname"><span class="pre">stem_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">document_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/pre_process.html#stem_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.pre_process.stem_document" title="Link to this definition">#</a></dt>
+<dd><p>Performs stemming of a given document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>document</strong> (<em>str</em>) – single text document.</p></li>
+<li><p><strong>document_id</strong> (<em>str</em>) – unique identifier of the given document.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>document ID, stemmed document pair.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.pre_process.strip_suffixes">
+<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.pre_process.</span></span><span class="sig-name descname"><span class="pre">strip_suffixes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffixes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/pre_process.html#strip_suffixes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.pre_process.strip_suffixes" title="Link to this definition">#</a></dt>
+<dd><p>Removes found suffixes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>word</strong> (<em>str</em>) – element to remove suffex from</p></li>
+<li><p><strong>suffixes</strong> (<em>list</em>) – common suffixes in english</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>word</strong> – element without suffix</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-TELF.pre_processing.Vulture.vulture">
+<span id="telf-pre-processing-vulture-vulture-module"></span><h2>TELF.pre_processing.Vulture.vulture module<a class="headerlink" href="#module-TELF.pre_processing.Vulture.vulture" title="Link to this heading">#</a></h2>
+<p>© 2022. Triad National Security, LLC. All rights reserved.
+This program was produced under U.S. Government contract 89233218CNA000001 for Los Alamos
+National Laboratory (LANL), which is operated by Triad National Security, LLC for the U.S.
+Department of Energy/National Nuclear Security Administration. All rights in the program are
+reserved by Triad National Security, LLC, and the U.S. Department of Energy/National Nuclear
+Security Administration. The Government is granted for itself and others acting on its behalf a
+nonexclusive, paid-up, irrevocable worldwide license in this material to reproduce, prepare
+derivative works, distribute copies to the public, perform publicly and display publicly, and to permit
+others to do so.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.vulture.</span></span><span class="sig-name descname"><span class="pre">Vulture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel_backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'multiprocessing'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/tmp'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#Vulture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Vulture is a parallel, multi-node parallel, and distributed parallel document
+pre-processing tool.
+It is designed to be simple and fast.</p>
+<p>Vultures are natures’ cleaners!</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_PIPELINE">
+<span class="sig-name descname"><span class="pre">DEFAULT_PIPELINE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;TELF.pre_processing.Vulture.modules.simple_clean.SimpleCleaner</span> <span class="pre">object&gt;]</span></em><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_PIPELINE" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.PARALLEL_BACKEND_OPTIONS">
+<span class="sig-name descname"><span class="pre">PARALLEL_BACKEND_OPTIONS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'loky',</span> <span class="pre">'multiprocessing',</span> <span class="pre">'threading'}</span></em><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.PARALLEL_BACKEND_OPTIONS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.cache">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cache</span></span><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.cache" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">substitutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#Vulture.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe">
+<span class="sig-name descname"><span class="pre">clean_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">substitutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append_to_original_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concat_cleaned_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#Vulture.clean_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.n_jobs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_jobs</span></span><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.n_jobs" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.n_nodes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_nodes</span></span><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.n_nodes" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.parallel_backend">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parallel_backend</span></span><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.parallel_backend" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.save_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save_path</span></span><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.save_path" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.use_mpi">
+<span class="sig-name descname"><span class="pre">use_mpi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#Vulture.use_mpi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.use_mpi" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.Vulture.verbose">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">verbose</span></span><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.Vulture.verbose" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.pre_processing.Vulture.vulture.chunk_tuple_list">
+<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Vulture.vulture.</span></span><span class="sig-name descname"><span class="pre">chunk_tuple_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_chunks</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Vulture/vulture.html#chunk_tuple_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Vulture.vulture.chunk_tuple_list" title="Link to this definition">#</a></dt>
+<dd><p>Splits the given list of (key, value) tuples into sub-lists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>l</strong> (<em>list</em><em> of </em><em>tuple</em>) – List of (key, value) tuples to split.</p></li>
+<li><p><strong>n_chunks</strong> (<em>int</em>) – How many sets of sub-lists to create.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>list</em> – Sub-list containing (key, value) tuples.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-TELF.pre_processing.Vulture">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-TELF.pre_processing.Vulture" title="Link to this heading">#</a></h2>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="TELF.pre_processing.Beaver.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">TELF.pre_processing.Beaver package</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="TELF.pre_processing.Vulture.tokens_analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">TELF.pre_processing.Vulture.tokens_analysis package</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.pre_process">TELF.pre_processing.Vulture.pre_process module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.advance_document_clean"><code class="docutils literal notranslate"><span class="pre">advance_document_clean()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.build_stem_map"><code class="docutils literal notranslate"><span class="pre">build_stem_map()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.build_vocab_stem_subs"><code class="docutils literal notranslate"><span class="pre">build_vocab_stem_subs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.check_character_lengths"><code class="docutils literal notranslate"><span class="pre">check_character_lengths()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.correct_text"><code class="docutils literal notranslate"><span class="pre">correct_text()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.lemmatize_document"><code class="docutils literal notranslate"><span class="pre">lemmatize_document()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.nested_defaultdict"><code class="docutils literal notranslate"><span class="pre">nested_defaultdict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.simple_document_clean"><code class="docutils literal notranslate"><span class="pre">simple_document_clean()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.stem_document"><code class="docutils literal notranslate"><span class="pre">stem_document()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.pre_process.strip_suffixes"><code class="docutils literal notranslate"><span class="pre">strip_suffixes()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture.vulture">TELF.pre_processing.Vulture.vulture module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture"><code class="docutils literal notranslate"><span class="pre">Vulture</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_PIPELINE"><code class="docutils literal notranslate"><span class="pre">Vulture.DEFAULT_PIPELINE</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.PARALLEL_BACKEND_OPTIONS"><code class="docutils literal notranslate"><span class="pre">Vulture.PARALLEL_BACKEND_OPTIONS</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.cache"><code class="docutils literal notranslate"><span class="pre">Vulture.cache</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean"><code class="docutils literal notranslate"><span class="pre">Vulture.clean()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe"><code class="docutils literal notranslate"><span class="pre">Vulture.clean_dataframe()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.n_jobs"><code class="docutils literal notranslate"><span class="pre">Vulture.n_jobs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.n_nodes"><code class="docutils literal notranslate"><span class="pre">Vulture.n_nodes</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.parallel_backend"><code class="docutils literal notranslate"><span class="pre">Vulture.parallel_backend</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.save_path"><code class="docutils literal notranslate"><span class="pre">Vulture.save_path</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.use_mpi"><code class="docutils literal notranslate"><span class="pre">Vulture.use_mpi()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.Vulture.verbose"><code class="docutils literal notranslate"><span class="pre">Vulture.verbose</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Vulture.vulture.chunk_tuple_list"><code class="docutils literal notranslate"><span class="pre">chunk_tuple_list()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Vulture">Module contents</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

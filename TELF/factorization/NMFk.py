@@ -17,13 +17,13 @@ from .utilities.pvalue_analysis import pvalue_analysis
 from .utilities.organize_n_jobs import organize_n_jobs
 from .decompositions.nmf_kl_mu import nmf as nmf_kl_mu
 from .decompositions.nmf_fro_mu import nmf as nmf_fro_mu
+from .decompositions.nmf_recommender import nmf as nmf_recommender
 from .decompositions.nmf_fro_mu import H_update
 from .decompositions.utilities.nnsvd import nnsvd
 from .decompositions.utilities.resample import poisson, uniform_product
 from .decompositions.utilities.clustering import custom_k_means, silhouettes
 from .decompositions.utilities.math_utils import prune, unprune, relative_error, get_pac
 from .decompositions.utilities.concensus_matrix import compute_consensus_matrix, reorder_con_mat
-from joblib import Parallel, delayed
 from datetime import datetime, timedelta
 from collections import defaultdict
 import sys
@@ -34,9 +34,9 @@ import numpy as np
 import warnings
 import time
 import socket
-import multiprocessing
 from pathlib import Path
-
+import concurrent.futures
+from threading import Lock
 
 try:
     import cupy as cp
@@ -51,60 +51,8 @@ except Exception:
     MPI = None
 
 
-def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
-    if use_gpu:
-
-        with cp.cuda.Device(gpuid):
-            # move data and initialization from host to device
-            W = cp.array(W)
-            H = cp.array(H)
-            if scipy.sparse.issparse(Y):
-                Y = cupyx.scipy.sparse.csr_matrix(
-                    (cp.array(Y.data), cp.array(Y.indices), cp.array(Y.indptr)),
-                    shape=Y.shape,
-                    dtype=Y.dtype,
-                )
-            else:
-                Y = cp.array(Y)
-
-            # do optimization on GPU
-            W_, H_ = nmf(X=Y, W=W, H=H, **nmf_params)
-
-            # move solution from device to host
-            W = cp.asnumpy(W_)
-            H = cp.asnumpy(H_)
-
-            del Y, W_, H_
-
-            cp._default_memory_pool.free_all_blocks()
-
-    else:
-        W, H = nmf(X=Y, W=W, H=H, **nmf_params)
-
-    return W, H
-
-def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
-
-    np.random.seed(perturbation)
-    if perturb_type == "uniform":
-        Y = uniform_product(X, epsilon)
-    elif perturb_type == "poisson":
-        Y = poisson(X)
-
-    return Y
-
-def __init_WH(Y, k, mask, init_type:str):
-    if init_type == "nnsvd":
-        if mask is not None:
-            Y[mask] = 0
-        W, H = nnsvd(Y, k)
-    elif init_type == "random":
-        W, H = np.random.rand(Y.shape[0], k), np.random.rand(k, Y.shape[1])
-
-    return W, H
-
-def __H_regression(X, W, mask, use_gpu):
-    if use_gpu:
+def __put_X_gpu(X, gpuid:int):
+    with cp.cuda.Device(gpuid):
         if scipy.sparse.issparse(X):
             Y = cupyx.scipy.sparse.csr_matrix(
                 (cp.array(X.data), cp.array(X.indices), cp.array(X.indptr)),
@@ -113,18 +61,112 @@ def __H_regression(X, W, mask, use_gpu):
             )
         else:
             Y = cp.array(X)
+    return Y
 
-        H_ = H_update(Y, cp.array(W), cp.random.rand(
-            W.shape[1], X.shape[1]), use_gpu=use_gpu, mask=mask)
-        H = cp.asnumpy(H_)
+def __put_WH_gpu(W, H, gpuid:int):
+    with cp.cuda.Device(gpuid):
+        W = cp.array(W)
+        H = cp.array(H)
+        
+    return W, H
+
+def __put_WH_cpu(W, H):
+    W = cp.asnumpy(W)
+    H = cp.asnumpy(H)
+    return W, H
+
+def __put_other_results_cpu(other_results):
+    other_results_cpu = {}
+    for key, value in other_results.items():
+        other_results_cpu[key] = cp.asnumpy(value)
+    del other_results
+    return other_results_cpu
+    
+def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
+    if use_gpu:
+        with cp.cuda.Device(gpuid):
+            W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
+    else:
+        W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
+
+    return W, H, other_results
+
+def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
+
+    if perturb_type == "uniform":
+        Y = uniform_product(X, epsilon, random_state=perturbation)
+    elif perturb_type == "poisson":
+        Y = poisson(X, random_state=perturbation)
+
+    return Y
+
+def __init_WH(Y, k, mask, init_type:str):
+    if init_type == "nnsvd":
+        if mask is not None:
+            Y[mask] = 0
+        W, H = nnsvd(Y, k, use_gpu=False)
+            
+    elif init_type == "random":
+        W, H = np.random.rand(Y.shape[0], k), np.random.rand(k, Y.shape[1])
+        
+    return W, H
+
+def __H_regression(X, W, mask, use_gpu:bool, gpuid:int):
+    if use_gpu:
+        Y = __put_X_gpu(X, gpuid)
+        with cp.cuda.Device(gpuid):
+            H_ = H_update(Y, cp.array(W), cp.random.rand(
+                W.shape[1], Y.shape[1]), use_gpu=use_gpu, mask=mask)
+            H = cp.asnumpy(H_)
+            
         del Y, H_
         cp._default_memory_pool.free_all_blocks()
-
+        
     else:
-        H = H_update(X.copy(), W, np.random.rand(
+        H = H_update(X, W, np.random.rand(
             W.shape[1], X.shape[1]), use_gpu=use_gpu, mask=mask)
         
     return H
+
+def _perturb_parallel_wrapper(
+    perturbation,
+    gpuid,
+    epsilon,
+    perturb_type,
+    X,
+    k,
+    mask,
+    use_gpu,
+    init_type,
+    nmf_params,
+    nmf,
+    calculate_error):
+
+    # Prepare
+    Y = __perturb_X(X, perturbation, epsilon, perturb_type)
+    W_init, H_init = __init_WH(Y, k, mask=mask, init_type=init_type)
+
+    # transfer to GPU
+    if use_gpu:
+        Y = __put_X_gpu(Y, gpuid)
+        W_init, H_init = __put_WH_gpu(W_init, H_init, gpuid)
+
+    W, H, other_results = __run_nmf(Y, W_init, H_init, nmf, nmf_params, use_gpu, gpuid)
+
+    # transfer to CPU
+    if use_gpu:
+        W, H = __put_WH_cpu(W, H)
+        other_results = __put_other_results_cpu(other_results)
+        cp._default_memory_pool.free_all_blocks()
+
+    # error calculation
+    if calculate_error:
+        error = relative_error(X, W, H)
+    else:
+        error = 0
+        
+    return W, H, error, other_results
+        
 
 def _nmf_parallel_wrapper(
         n_perturbs, 
@@ -147,29 +189,64 @@ def _nmf_parallel_wrapper(
         perturb_cols=None,
         save_output=True,
         save_path="",
-        experiment_name="",
         collect_output=False,
         logging_stats={},
-        start_time=time.time()):
+        start_time=time.time(),
+        n_jobs=1,
+        perturb_multiprocessing=False,
+        perturb_verbose=False,
+        lock=None,
+        note_name="experiment"):
 
     #
     # run for each perturbations
     #
-    W_all, H_all, errors = [], [], []
-    for perturbation in range(n_perturbs):
-        Y = __perturb_X(X, perturbation, epsilon, perturb_type)
-        W, H = __init_WH(Y, k, mask, init_type)
-        W, H = __run_nmf(Y, W, H, nmf, nmf_params, use_gpu, gpuid)
+    perturb_job_data = {
+        "epsilon":epsilon,
+        "perturb_type":perturb_type,
+        "X":X,
+        "use_gpu":use_gpu,
+        "nmf_params":nmf_params,
+        "nmf":nmf,
+        "calculate_error":calculate_error,
+        "k":k,
+        "mask":mask,
+        "init_type":init_type
+    }
+    
+    # single job or parallel over Ks
+    W_all, H_all, errors, other_results_all = [], [], [], []
+    if n_jobs == 1 or not perturb_multiprocessing:
+        for perturbation in tqdm(range(n_perturbs), disable=not perturb_verbose, total=n_perturbs):
+            W, H, error, other_results_curr = _perturb_parallel_wrapper(perturbation=perturbation, gpuid=gpuid, **perturb_job_data)
+            W_all.append(W)
+            H_all.append(H)
+            errors.append(error)
+            other_results_all.append(other_results_curr)
+            
+    # multiple jobs over perturbations
+    else:
+        executor = concurrent.futures.ThreadPoolExecutor(max_workers=n_jobs)
+        futures = [executor.submit(_perturb_parallel_wrapper, gpuid=pidx % n_jobs, perturbation=perturbation, **perturb_job_data) for pidx, perturbation in enumerate(range(n_perturbs))]
+        all_perturbation_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), disable=not perturb_verbose, total=n_perturbs)]
 
-        if calculate_error:
-            error = relative_error(X, W, H)
-        else:
-            error = 0
-
-        W_all.append(W)
-        H_all.append(H)
-        errors.append(error)
-
+        for W, H, error, other_results_curr in all_perturbation_results:
+            W_all.append(W)
+            H_all.append(H)
+            errors.append(error)
+            other_results_all.append(other_results_curr)
+    
+    #
+    # Organize other results
+    #
+    other_results = {}
+    for other_results_curr in other_results_all:
+        for key, value in other_results_curr.items():
+            if key not in other_results:
+                other_results[key] = value
+            else:
+                other_results[key] = (other_results[key] + value) / 2
+    
     #
     # organize colutions from each perturbations
     #
@@ -179,8 +256,8 @@ def _nmf_parallel_wrapper(
 
     #
     # cluster the solutions
-    #
-    W, W_clust = custom_k_means(W_all)
+    #        
+    W, W_clust = custom_k_means(W_all, use_gpu=False)
     sils_all = silhouettes(W_clust)
 
     #
@@ -195,7 +272,10 @@ def _nmf_parallel_wrapper(
     #
     # Regress H
     #
-    H = __H_regression(X, W, mask, use_gpu)
+    H = __H_regression(X, W, mask, use_gpu, gpuid)
+    
+    if use_gpu:
+        cp._default_memory_pool.free_all_blocks()
 
     # 
     #  reconstruction error
@@ -241,7 +321,8 @@ def _nmf_parallel_wrapper(
             "errors": errors,
             "reordered_con_mat": reordered_con_mat,
             "H_all": H_all,
-            "cophenetic_coeff": coeff_k
+            "cophenetic_coeff": coeff_k,
+            "other_results": other_results
         }
         np.savez_compressed(
             save_path
@@ -286,7 +367,7 @@ def _nmf_parallel_wrapper(
             else:
                 warnings.warn(f'[tELF]: Encountered unknown logging metric "{key}"', RuntimeWarning)
                 plot_data[key] = 'N/A'
-        take_note_fmat(save_path, **plot_data)
+        take_note_fmat(save_path, name=note_name, lock=lock, **plot_data)
 
     #
     # collect results
@@ -308,6 +389,7 @@ def _nmf_parallel_wrapper(
     if collect_output:
         results_k["W"] = W
         results_k["H"] = H
+        results_k["other_results"] = other_results
 
     return results_k
 
@@ -328,8 +410,9 @@ class NMFk:
             collect_output=False,
             predict_k=False,
             predict_k_method="pvalue",
-            verbose=False,
+            verbose=True,
             nmf_verbose=False,
+            perturb_verbose=False,
             transpose=False,
             sill_thresh=0.8,
             nmf_func=None,
@@ -337,13 +420,13 @@ class NMFk:
             nmf_obj_params={},
             pruned=True,
             calculate_error=True,
-            joblib_backend="multiprocessing",
+            perturb_multiprocessing=False,
             consensus_mat=False,
             use_consensus_stopping=0,
             mask=None,
             calculate_pac=False,
             get_plot_data=False,
-            simple_plot=True):
+            simple_plot=True,):
         """
         NMFk is a Non-negative Matrix Factorization module with the capability to do automatic model determination.
 
@@ -354,7 +437,8 @@ class NMFk:
         n_iters : int, optional
             Number of NMF iterations. The default is 100.
         epsilon : float, optional
-            Error amount for the random matrices generated around the original matrix. The default is 0.015.
+            Error amount for the random matrices generated around the original matrix. The default is 0.015.\n
+            ``epsilon`` is used when ``perturb_type='uniform'``.
         perturb_type : str, optional
             Type of error sampling to perform for the bootstrap operation. The default is "uniform".\n
             * ``perturb_type='uniform'`` will use uniform distribution for sampling.\n
@@ -392,9 +476,11 @@ class NMFk:
                 ``predict_k_method='pvalue'`` prediction will result in significantly longer processing time! ``predict_k_method='sill'``, on the other hand, will be much faster.
 
         verbose : bool, optional
-            If True, shows progress in each k. The default is False.
+            If True, shows progress in each k. The default is True.
         nmf_verbose : bool, optional
             If True, shows progress in each NMF operation. The default is False.
+        perturb_verbose : bool, optional
+            If True, it shows progress in each perturbation. The default is False.
         transpose : bool, optional
             If True, transposes the input matrix before factorization. The default is False.
         sill_thresh : float, optional
@@ -406,18 +492,32 @@ class NMFk:
             * ``nmf_method='nmf_fro_mu'`` will use NMF with Frobenious Norm.\n
             * ``nmf_method='nmf_kl_mu'`` will use NMF with Multiplicative Update rules with KL-Divergence.\n
             * ``nmf_method='func'`` will use the custom NMF function passed using the ``nmf_func`` parameter.\n
+            * ``nmf_method='nmf_recommender'`` will use the Recommender NMF method for collaborative filtering.\n
+
+            .. note::
+
+                When using ``nmf_method='nmf_recommender'``, RNMFk prediction method can be done using ``from TELF.factorization import RNMFk_predict``.\n
+                Here ``RNMFk_predict(W, H, global_mean, bu, bi, u, i)``, ``W`` and ``H`` are the latent factors, ``global_mean``, ``bu``, and ``bi`` are the biases returned from ``nmf_recommender`` method.\n
+                Finally, ``u`` and ``i`` are the indices to perform prediction on.
+                
+
         nmf_obj_params : dict, optional
             Parameters used by NMF function. The default is {}.
         pruned : bool, optional
             When True, removes columns and rows from the input matrix that has only 0 values. The default is True.
+
+            .. warning::
+                Pruning should not be used with ``nmf_method='nmf_recommender'``.
+
         calculate_error : bool, optional
             When True, calculates the relative reconstruction error. The default is True.
 
             .. warning::
                 If ``calculate_error=True``, it will result in longer processing time.
 
-        joblib_backend : str, optional
-            Backend used by Joblib for parallel computation. The default is "multiprocessing".
+        perturb_multiprocessing : bool, optional
+            If ``perturb_multiprocessing=True``, it will make parallel computation over each perturbation. Default is ``perturb_multiprocessing=False``.\n
+            When ``perturb_multiprocessing=False``, which is default, parallelization is done over each K (rank).
         consensus_mat : bool, optional
             When True, computes the Consensus Matrices for each k. The default is False.
         use_consensus_stopping : str, optional
@@ -430,18 +530,11 @@ class NMFk:
             When True, collectes the data used in plotting each intermidiate k factorization. The default is False.
         simple_plot : bool, optional
             When True, creates a simple plot for each intermidiate k factorization which hides the statistics such as average and maximum Silhouette scores. The default is True.
-            
         Returns
         -------
         None.
 
         """
-
-
-        # check the save path
-        if save_output:
-            if not Path(save_path).is_dir():
-                Path(save_path).mkdir(parents=True)
 
         init_options = ["nnsvd", "random"]
         if init not in init_options:
@@ -463,6 +556,7 @@ class NMFk:
         self.use_gpu = use_gpu
         self.verbose = verbose
         self.nmf_verbose = nmf_verbose
+        self.perturb_verbose = perturb_verbose
         self.transpose = transpose
         self.collect_output = collect_output
         self.sill_thresh = sill_thresh
@@ -475,13 +569,13 @@ class NMFk:
         self.nmf_obj_params = nmf_obj_params
         self.pruned = pruned
         self.calculate_error = calculate_error
-        self.joblib_backend = joblib_backend
         self.consensus_mat = consensus_mat
         self.use_consensus_stopping = use_consensus_stopping
         self.mask = mask
         self.calculate_pac = calculate_pac
         self.simple_plot = simple_plot
         self.get_plot_data = get_plot_data
+        self.perturb_multiprocessing = perturb_multiprocessing
 
         # warnings
         assert self.predict_k_method in ["pvalue", "sill"]
@@ -507,10 +601,9 @@ class NMFk:
 
         # organize n_jobs
         self.n_jobs, self.use_gpu = organize_n_jobs(use_gpu, n_jobs)
-        if self.use_gpu:
-            # multiprocessing on GPU
-            if self.n_jobs < 0 or self.n_jobs > 1:
-                multiprocessing.set_start_method('spawn', force=True)
+        
+        # create a shared lock
+        self.lock = Lock()
 
         #
         # Save information from the solution
@@ -521,10 +614,16 @@ class NMFk:
         #
         # Prepare NMF function
         #
-        avail_nmf_methods = ["nmf_fro_mu", "nmf_kl_mu", "func"]
+        avail_nmf_methods = [
+            "nmf_fro_mu", 
+            "nmf_kl_mu", 
+            "nmf_recommender", 
+            "func"
+        ]
         if self.nmf_method not in avail_nmf_methods:
             raise Exception("Invalid NMF method is selected. Choose from: " +
                             ",".join(avail_nmf_methods))
+        
         if self.nmf_method == "nmf_fro_mu":
             self.nmf_params = {
                 "niter": self.n_iters,
@@ -549,11 +648,32 @@ class NMFk:
             self.nmf_params = self.nmf_obj_params
             self.nmf = nmf_func
 
+        elif self.nmf_method == "nmf_recommender":
+            if self.pruned:
+                warnings.warn(
+                    f'nmf_recommender method should not be used with pruning!')
+                
+            self.nmf_params = {
+                "niter": self.n_iters,
+                "use_gpu": self.use_gpu,
+                "nmf_verbose": self.nmf_verbose,
+            }
+            self.nmf = nmf_recommender
+
         else:
             raise Exception("Unknown NMF method or nmf_func was not passed")
 
+        #
+        # Additional NMF settings
+        #
+        if len(self.nmf_obj_params) > 0:
+            for key, value in self.nmf_obj_params.items():
+                if key not in self.nmf_params:
+                    self.nmf_params[key] = value
+                    
         if self.verbose:
-            print('Performing NMF with ', self.nmf_method)
+            for key, value in vars(self).items():
+                print(f'{key}:', value)
 
     def fit(self, X, Ks, name="NMFk", note=""):
         """
@@ -581,6 +701,11 @@ class NMFk:
             * results will always include a field for ``time``, that gives the total compute time.
         """
 
+        #
+        # check X format
+        #
+        assert scipy.sparse._csr.csr_matrix == type(X) or np.ndarray == type(X), "X sould be np.ndarray or scipy.sparse._csr.csr_matrix"
+
         if X.dtype != np.dtype(np.float32):
             warnings.warn(
                 f'X is data type {X.dtype}. Whic is not float32. Higher precision will result in significantly longer runtime!')
@@ -601,15 +726,17 @@ class NMFk:
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
             Ks = self.__chunk_Ks(Ks, n_chunks=self.n_nodes)[rank]
+            note_name = f'{rank}_experiment'
             if self.verbose:
                 print("Rank=", rank, "Host=", socket.gethostname(), "Ks=", Ks)
         else:
+            note_name = f'experiment'
             comm = None
             rank = 0
-
+            
         #
-        # Setup
-        # 
+        # Organize save path
+        #
         self.experiment_name = (
             str(name)
             + "_"
@@ -622,8 +749,11 @@ class NMFk:
             + str(self.init)
             + "-init"
         )
-        save_path = os.path.join(self.save_path, self.experiment_name)
+        self.save_path_full = os.path.join(self.save_path, self.experiment_name)
 
+        #
+        # Setup
+        # 
         if self.n_jobs > len(Ks):
             self.n_jobs = len(Ks)
             
@@ -648,23 +778,33 @@ class NMFk:
         if self.calculate_pac:
             stats_header['pac'] = 'PAC'
         stats_header['time'] = 'Time Elapsed'
-
+        
         # start the file logging (only root node needs to do this step)
         if self.save_output and ((self.n_nodes == 1) or (self.n_nodes > 1 and rank == 0)):
-            if not Path(save_path).is_dir():
-                Path(save_path).mkdir(parents=True)
+            try:
+                if not Path(self.save_path_full).is_dir():
+                    Path(self.save_path_full).mkdir(parents=True)
+            except Exception as e:
+                print(e)
+                
+        if self.n_nodes > 1:
+            comm.Barrier()
+            time.sleep(1)
 
-            append_to_note(["#" * 100], save_path)
+        # logging
+        if self.save_output:
+            
+            append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
             append_to_note(["start_time= " + str(datetime.now()),
                             "name=" + str(name),
-                            "note=" + str(note)], save_path)
+                            "note=" + str(note)], self.save_path_full, name=note_name, lock=self.lock)
 
-            append_to_note(["#" * 100], save_path)
+            append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
             object_notes = vars(self).copy()
             del object_notes["total_exec_seconds"]
             del object_notes["nmf"]
-            take_note(object_notes, save_path)
-            append_to_note(["#" * 100], save_path)
+            take_note(object_notes, self.save_path_full, name=note_name, lock=self.lock)
+            append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
 
             notes = {}
             notes["Ks"] = Ks
@@ -673,9 +813,9 @@ class NMFk:
             notes["num_nnz"] = len(X.nonzero()[0])
             notes["sparsity"] = len(X.nonzero()[0]) / np.prod(X.shape)
             notes["X_shape"] = X.shape
-            take_note(notes, save_path)
-            append_to_note(["#" * 100], save_path)
-            take_note_fmat(save_path, **stats_header)
+            take_note(notes, self.save_path_full, name=note_name, lock=self.lock)
+            append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
+            take_note_fmat(self.save_path_full, name=note_name, lock=self.lock, **stats_header)
         
         if self.n_nodes > 1:
             comm.Barrier()
@@ -711,25 +851,29 @@ class NMFk:
             "perturb_rows":perturb_rows,
             "perturb_cols":perturb_cols,
             "save_output":self.save_output,
-            "save_path":save_path,
-            "experiment_name":self.experiment_name,
+            "save_path":self.save_path_full,
             "collect_output":self.collect_output,
             "logging_stats":stats_header,
             "start_time":start_time,
-            
+            "n_jobs":self.n_jobs,
+            "perturb_multiprocessing":self.perturb_multiprocessing,
+            "perturb_verbose":self.perturb_verbose,
+            "lock":self.lock,
+            "note_name":note_name
         }
-
-        if self.n_jobs == 1:
+        
+        # Single job or parallel over perturbations
+        if self.n_jobs == 1 or self.perturb_multiprocessing:
             all_k_results = []
             for k in tqdm(Ks, total=len(Ks), disable=not self.verbose):
                 k_result = _nmf_parallel_wrapper(gpuid=0, k=k, **job_data)
                 all_k_results.append(k_result)
+        
+        # multiprocessing over each K
         else:   
-            all_k_results = Parallel(
-                n_jobs=self.n_jobs,
-                verbose=self.verbose,
-                backend=self.joblib_backend)(delayed(_nmf_parallel_wrapper)(
-                    gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks))
+            executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.n_jobs)
+            futures = [executor.submit(_nmf_parallel_wrapper, gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks)]
+            all_k_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), total=len(Ks), disable=not self.verbose)]
 
         #
         # Collect results if multi-node
@@ -800,7 +944,7 @@ class NMFk:
 
                 # * save the plot
                 if self.save_output:
-                    con_fig_name = f'{save_path}/k_{Ks[0]}_{Ks[-1]}_cophenetic_coeff.png'
+                    con_fig_name = f'{self.save_path_full}/k_{Ks[0]}_{Ks[-1]}_cophenetic_coeff.png'
                     plot_cophenetic_coeff(Ks, combined_result["cophenetic_coeff"], con_fig_name)
 
                 if self.calculate_pac:
@@ -815,21 +959,24 @@ class NMFk:
                         results["W"] = combined_result["W"][combined_result["Ks"].index(k_predict)]
                         results["H"] = combined_result["H"][combined_result["Ks"].index(k_predict)]
 
+                        if self.nmf_method == "nmf_recommender":
+                            results["other_results"] = combined_result["other_results"][combined_result["Ks"].index(k_predict)]
+
             # final plot
             if self.save_output:
                 plot_NMFk(
                     combined_result, 
                     k_predict, 
                     self.experiment_name, 
-                    save_path, 
+                    self.save_path_full, 
                     plot_predict=self.predict_k,
                     plot_final=True,
                     simple_plot=self.simple_plot
                 )
-                append_to_note(["#" * 100], save_path)
-                append_to_note(["end_time= "+str(datetime.now())], save_path)
+                append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
+                append_to_note(["end_time= "+str(datetime.now())], self.save_path_full, name=note_name, lock=self.lock)
                 append_to_note(
-                    ["total_time= "+str(time.time() - start_time) + " (seconds)"], save_path)
+                    ["total_time= "+str(time.time() - start_time) + " (seconds)"], self.save_path_full, name=note_name, lock=self.lock)
         
             
             if self.get_plot_data:

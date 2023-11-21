@@ -37,7 +37,7 @@ def format_note(kwargs, spacing=16):
         return '\n'
         
     
-def take_note(notes, path, name="experiment"):
+def take_note(notes, path, lock, name="experiment"):
     """
     Writes key-value pairs from a dictionary into a log file in the format 'key = value'. Each string
     is separated with a newline character
@@ -59,12 +59,13 @@ def take_note(notes, path, name="experiment"):
     -------
     None
     """
-    with open(os.path.join(path, f"{name}.log"), 'a+') as fh:
-        for key, value in notes.items():
-            fh.write(f"{key} = {value}\n")
+    with lock:
+        with open(os.path.join(path, f"{name}.log"), 'a+') as fh:
+            for key, value in notes.items():
+                fh.write(f"{key} = {value}\n")
 
 
-def append_to_note(notes, path, name="experiment"):
+def append_to_note(notes, path, lock, name="experiment"):
     """
     Writes string from a list of strings called notes into a log file. Each string is separated 
     with a newline character
@@ -86,12 +87,13 @@ def append_to_note(notes, path, name="experiment"):
     -------
     None
     """
-    with open(os.path.join(path, f"{name}.log"), 'a+') as fh:
-        for note in notes:
-            fh.write(f'{note}{os.linesep}')
+    with lock:
+        with open(os.path.join(path, f"{name}.log"), 'a+') as fh:
+            for note in notes:
+                fh.write(f'{note}{os.linesep}')
 
 
-def take_note_fmat(path, name="experiment", sort_index=0, spacing=16, **kwargs):
+def take_note_fmat(path, lock, name="experiment", sort_index=0, spacing=16, **kwargs):
     """
     Records some stats into the log file in a formatted manner. These stats are the values stored
     in the kwargs dictionary. The keys signify the type of stat being recorded and the value is 
@@ -121,36 +123,37 @@ def take_note_fmat(path, name="experiment", sort_index=0, spacing=16, **kwargs):
     None
     """
     note = format_note(kwargs, spacing)  # create the formatted stats string for recording in the log
-    delimiter_line = 0
-    with open(os.path.join(path, f"{name}.log"), 'r') as fh:
-        lines = fh.readlines()
-        for i, line in enumerate(reversed(lines)):
-            if line.strip() == FILE_DELIMITER:
-                delimiter_line = len(lines) - i - 1  # record line number when last delimiter encountered
-                break
+    with lock:
+        delimiter_line = 0
+        with open(os.path.join(path, f"{name}.log"), 'r') as fh:
+            lines = fh.readlines()
+            for i, line in enumerate(reversed(lines)):
+                if line.strip() == FILE_DELIMITER:
+                    delimiter_line = len(lines) - i - 1  # record line number when last delimiter encountered
+                    break
 
-        stat_lines = deque()
-        fh_out = tempfile.NamedTemporaryFile('w', delete=False)
-        _, fh_out_path = tempfile.mkstemp(dir=path)
-        with open(os.path.join(path, f"{name}.log"), 'r') as fh_in, open(fh_out_path, 'w') as fh_out:
-            for i, line in enumerate(fh_in):
-                if i < delimiter_line:
-                    fh_out.write(line)
-                else:
-                    if line.split()[0].isdigit(): # check if the line starts with a numeric entry
-                        stat_lines.appendleft((int(line.split()[sort_index]), line))
-                    else:
+            stat_lines = deque()
+            fh_out = tempfile.NamedTemporaryFile('w', delete=False)
+            _, fh_out_path = tempfile.mkstemp(dir=path)
+            with open(os.path.join(path, f"{name}.log"), 'r') as fh_in, open(fh_out_path, 'w') as fh_out:
+                for i, line in enumerate(fh_in):
+                    if i < delimiter_line:
                         fh_out.write(line)
-        
-            # sort the lines and write to fh_out
-            if note.split()[0].isdigit(): # check if the line starts with a numeric entry
-                stat_lines.appendleft((int(note.split()[sort_index]), note))
-                sorted_lines = [line for idx, line in sorted(stat_lines)]
-                for sorted_line in sorted_lines:
-                    fh_out.write(sorted_line)
-            else:
-                fh_out.write(note)
-            
-        fh_out.close()
-        os.replace(fh_out.name, os.path.join(path, f"{name}.log"))
+                    else:
+                        if line.split()[0].isdigit(): # check if the line starts with a numeric entry
+                            stat_lines.appendleft((int(line.split()[sort_index]), line))
+                        else:
+                            fh_out.write(line)
+
+                # sort the lines and write to fh_out
+                if note.split()[0].isdigit(): # check if the line starts with a numeric entry
+                    stat_lines.appendleft((int(note.split()[sort_index]), note))
+                    sorted_lines = [line for idx, line in sorted(stat_lines)]
+                    for sorted_line in sorted_lines:
+                        fh_out.write(sorted_line)
+                else:
+                    fh_out.write(note)
+
+            fh_out.close()
+            os.replace(fh_out.name, os.path.join(path, f"{name}.log"))
         
