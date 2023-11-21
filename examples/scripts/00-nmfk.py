@@ -82,7 +82,7 @@ def init_vulture_steps(settings):
     return steps
     
     
-def main(file_path, cols, n_nodes, n_jobs, verbose):
+def main(file_path, n_nodes, n_jobs, verbose):
     config = load_config(CONFIG_PATH)
     
     # get settings from config 
@@ -98,7 +98,10 @@ def main(file_path, cols, n_nodes, n_jobs, verbose):
     matrix_is_dense = config['beaver']['dense']
     if beaver_vocabulary is not None:
         beaver_vocabulary = load_list(beaver_vocabulary)
-        
+    
+    # get the columns of the DataFrame which to clean and utilize
+    cols = config['input']['text']
+    
     # setup output directory
     file_path = pathlib.Path(file_path)
     file_name = file_path.stem
@@ -167,7 +170,8 @@ def main(file_path, cols, n_nodes, n_jobs, verbose):
         settings['weights'] = list(highlighting_map.values())
         beaver_vocabulary = settings['highlighting'] + beaver_vocabulary
         beaver_vocabulary = remove_duplicates(beaver_vocabulary)
-    
+        settings["options"] = {"vocabulary": beaver_vocabulary}
+	
     # create the documents words matrix
     beaver.documents_words(**settings)
     
@@ -212,8 +216,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Full example of TELF library. A CSV file is cleaned with Vulture to create a " \
                                                  "Documents by Words TF-IDF matrix which is then decomposed by NMFk")
     parser.add_argument("-p", "--path", type=str, required=True, help="The path to the input CSV file")
-    parser.add_argument("-c", "--cols", nargs='+', required=True, help="The columns of the DataFrame which to clean and utilize")
+
     parser.add_argument("-n", "--n_nodes", type=int, required=True, help="Number of nodes (integer > 0)")
     parser.add_argument("-j", "--n_jobs", type=int, required=True, help="Number of jobs (integer > 0)")
     args = parser.parse_args()
-    main(args.path, args.cols, args.n_nodes, args.n_jobs, True)
+    main(args.path, args.n_nodes, args.n_jobs, True)
