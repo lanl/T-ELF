@@ -26,6 +26,7 @@ from collections import defaultdict
 from joblib import Parallel, delayed
 from datetime import datetime, timedelta
 from scipy.spatial.distance import pdist, squareform
+from threading import Lock
 
 from .utilities.take_note import take_note, take_note_fmat, append_to_note
 from .utilities.plot_NMFk import plot_SymNMFk, plot_consensus_mat, plot_cophenetic_coeff
@@ -167,7 +168,10 @@ def _symnmf_parallel_wrapper(
         start_time=time.time(),
         n_jobs=1,
         perturb_multiprocessing=False,
-        perturb_verbose=False):
+        perturb_verbose=False,
+        lock=None,
+        note_name="experiment",
+):
 
     assert graph_type in {'full'}, 'Supported graph types are ["full"]'
     assert similarity_type in {'gaussian'}, 'Supported similarity metrics are ["gaussian"]'
@@ -270,7 +274,7 @@ def _symnmf_parallel_wrapper(
             else:
                 warnings.warn(f'[tELF]: Encountered unknown logging metric "{key}"', RuntimeWarning)
                 plot_data[key] = 'N/A'
-        take_note_fmat(save_path, **plot_data)
+        take_note_fmat(save_path, name=note_name, lock=lock, **plot_data)
 
     #
     # collect results
@@ -312,6 +316,7 @@ class SymNMFk:
             perturb_multiprocessing=False,
             calculate_pac=True,
             mask=None,
+            pac_thresh=0,
             get_plot_data=False):
 
         # check the save path
@@ -329,6 +334,7 @@ class SymNMFk:
         #
         # Object hyper-parameters
         #
+        self.pac_thresh=pac_thresh
         self.n_perturbs = n_perturbs
         self.perturb_type = perturb_type
         self.n_iters = n_iters
@@ -371,6 +377,9 @@ class SymNMFk:
 
         # organize n_jobs
         self.n_jobs, self.use_gpu = organize_n_jobs(use_gpu, n_jobs)
+        
+        # create a shared lock
+        self.lock = Lock()
 
         #
         # Save information from the solution
@@ -387,6 +396,8 @@ class SymNMFk:
                              f"{','.join(avail_nmf_methods)}")
         if self.nmf_method == "newton":
             self.nmf = sym_nmf_newt
+            self.nmf_obj_params['n_iters'] = self.n_iters
+            self.nmf_obj_params['use_gpu'] = self.use_gpu
             self.nmf_obj_params['use_consensus_stopping'] = self.use_consensus_stopping
             supported_args = {'n_iters', 'use_gpu', 'tol', 'sigma', 'beta', 'use_consensus_stopping', 'debug'}
             assert set(self.nmf_obj_params.keys()).issubset(supported_args), \
@@ -418,9 +429,11 @@ class SymNMFk:
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
             Ks = self.__chunk_Ks(Ks, n_chunks=self.n_nodes)[rank]
+            note_name = f'{rank}_experiment'
             if self.verbose:
                 print("Rank=", rank, "Host=", socket.gethostname(), "Ks=", Ks)
         else:
+            note_name = f'experiment'
             comm = None
             rank = 0
 
@@ -463,17 +476,17 @@ class SymNMFk:
             if not Path(save_path).is_dir():
                 Path(save_path).mkdir(parents=True)
 
-            append_to_note(["#" * 100], save_path)
+            append_to_note(["#" * 100], save_path, name=note_name, lock=self.lock)
             append_to_note(["start_time= " + str(datetime.now()),
                             "name=" + str(name),
-                            "note=" + str(note)], save_path)
+                            "note=" + str(note)], save_path, name=note_name, lock=self.lock)
 
-            append_to_note(["#" * 100], save_path)
+            append_to_note(["#" * 100], save_path, name=note_name, lock=self.lock)
             object_notes = vars(self).copy()
             del object_notes["total_exec_seconds"]
             del object_notes["nmf"]
-            take_note(object_notes, save_path)
-            append_to_note(["#" * 100], save_path)
+            take_note(object_notes, save_path, name=note_name, lock=self.lock)
+            append_to_note(["#" * 100], save_path, name=note_name, lock=self.lock)
 
             notes = {}
             notes["Ks"] = Ks
@@ -482,9 +495,9 @@ class SymNMFk:
             notes["num_nnz"] = len(X.nonzero()[0])
             notes["sparsity"] = len(X.nonzero()[0]) / np.prod(X.shape)
             notes["X_shape"] = X.shape
-            take_note(notes, save_path)
-            append_to_note(["#" * 100], save_path)
-            take_note_fmat(save_path, **stats_header)
+            take_note(notes, save_path, name=note_name, lock=self.lock)
+            append_to_note(["#" * 100], save_path, name=note_name, lock=self.lock)
+            take_note_fmat(save_path, name=note_name, lock=self.lock, **stats_header)
         
         if self.n_nodes > 1:
             comm.Barrier()
@@ -516,6 +529,8 @@ class SymNMFk:
             "n_jobs":self.n_jobs,
             "perturb_multiprocessing":self.perturb_multiprocessing,
             "perturb_verbose":self.perturb_verbose,
+            "lock":self.lock,
+            "note_name":note_name
         }
 
         
@@ -594,7 +609,8 @@ class SymNMFk:
                 if self.calculate_pac:
                     consensus_tensor = np.array(combined_result["reordered_con_mat"])
                     combined_result["pac"] = np.array(get_pac(consensus_tensor, use_gpu=self.use_gpu))
-                    argmin = np.argmin(combined_result["pac"])
+                    argmin = np.max(np.argwhere(
+                        np.array(combined_result["pac"]) <= self.pac_thresh).flatten())
                     results["clusters"] = np.argmax(combined_result["W"][argmin], 1)
                     
             # final plot
@@ -605,10 +621,10 @@ class SymNMFk:
                     save_path, 
                     plot_final=True,
                 )
-                append_to_note(["#" * 100], save_path)
-                append_to_note(["end_time= "+str(datetime.now())], save_path)
+                append_to_note(["#" * 100], save_path, name=note_name, lock=self.lock)
+                append_to_note(["end_time= "+str(datetime.now())], save_path, name=note_name, lock=self.lock)
                 append_to_note(
-                    ["total_time= "+str(time.time() - start_time) + " (seconds)"], save_path)
+                    ["total_time= "+str(time.time() - start_time) + " (seconds)"], save_path, name=note_name, lock=self.lock)
         
             
             if self.get_plot_data:

@@ -237,19 +237,9 @@ def compute_newton_step(T, W, gradW, projnorm_idx, projnorm_idx_prev, R, p, n_jo
             else:
                 return step_part
 
-    # DISABLING PARALLELIZATION ON Ks FOR TESTING
     for k in range(Ks):
         step[:, k] = compute_newton_step_helper(k)   
     return step
-	
-    # if n_jobs == 1:
-    #     for k in range(Ks):
-    #         step[:, k] = compute_newton_step_helper(k)
-    # else:
-    #     results = Parallel(n_jobs=n_jobs)(delayed(compute_newton_step_helper)(k) for k in range(Ks))
-    #     for k, result in enumerate(results):
-    #         step[:, k] = result
-    # return step
 
 
 def armijo_update(A, W, gradW, step, sigma, beta, obj=None, use_gpu=False):
