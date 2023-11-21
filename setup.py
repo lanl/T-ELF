@@ -26,10 +26,10 @@ setup(
     packages=find_packages(),
     classifiers=[
         'Development Status :: 3 - Alpha',
-        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.11.5',
         'Topic :: Software Development :: Libraries'
     ],
-    python_requires='>=3.11',
+    python_requires='>=3.11.5',
     install_requires=INSTALL_REQUIRES,
     license='License :: BSD License',
 )

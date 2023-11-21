@@ -13,11 +13,12 @@ Tensor Extraction of Latent Features (T-ELF)
    :align: center
 
 
-T-ELF offers an expansive range of tailored software solutions designed for in-depth analysis of extensive datasets. We excel in extracting hidden patterns with precision, leveraging the formidable capabilities of high-performance computing and cutting-edge GPU architectures. Our methodology is rooted in scalable, highly efficient algorithms.
+T-ELF presents an array of customizable software solutions crafted for analysis of datasets. Acting as a comprehensive toolbox, T-ELF specializes in data pre-processing, extraction of latent features, and structuring results to facilitate informed decision-making. Leveraging high-performance computing and cutting-edge GPU architectures, our toolbox is optimized for analyzing extensive datasets.
 
-Within T-ELF's arsenal are non-negative matrix and tensor factorization solutions, equipped with automatic model determination (also known as the estimation of latent factors - rank). This ensures accurate data modeling and extraction of concealed patterns. Furthermore, our software suite encompasses cutting-edge data pre-processing and post-processing modules for tasks such as text mining, Natural Language Processing, as well as matrix and tensor analysis/building tools.
+Central to T-ELF's core capabilities lie non-negative matrix and tensor factorization solutions for discovering multi-faceted hidden details in data, featuring automated model determination facilitating the estimation of latent factors or rank. This pivotal functionality ensures precise data modeling and the extraction of concealed patterns. Additionally, our software suite incorporates cutting-edge modules for both pre-processing and post-processing of data, tailored for diverse tasks including text mining, Natural Language Processing, and robust tools for matrix and tensor analysis and construction.
 
-T-ELF's versatility extends to a diverse array of disciplines, making it a potent AI and data analytics solution. It has found applications in Large-scale Text Mining, High Performance Computing, Computer Security, Applied Mathematics, Dynamic Networks and Ranking, Biology, Material Science, Medicine, Chemistry, Data Compression, Climate Studies, Relational Databases, Data Privacy, Economy, and Agriculture.
+T-ELF's adaptability spans across a multitude of disciplines, positioning it as a robust AI and data analytics solution. Its proven efficacy extends across various fields such as Large-scale Text Mining, High Performance Computing, Computer Security, Applied Mathematics, Dynamic Networks and Ranking, Biology, Material Science, Medicine, Chemistry, Data Compression, Climate Studies, Relational Databases, Data Privacy, Economy, and Agriculture.
+
 
 Resources
 ========================================
@@ -36,7 +37,7 @@ Installation
 
    git clone https://github.com/lanl/T-ELF.git
    cd T-ELF
-   conda create --name TELF python=3.11
+   conda create --name TELF python=3.11.5
    source activate TELF # or conda activate TELF
    python setup.py install
 
