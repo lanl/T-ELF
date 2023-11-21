@@ -2,6 +2,88 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
+def plot_SymNMFk(data, name, path, plot_final=False):
+    pac = False
+    if "pac" in data and len(data["pac"]) > 0:
+        pac = True
+    
+    fig, ax1 = plt.subplots(figsize=(8, 8), dpi=80)
+    
+    # silhouette
+    color = "black"
+    ax1.set_xlabel("latent dimension")
+    ax1.set_ylabel("PAC", color=color)
+    
+    # add a vertical line for xtick k-values to make it easier to see which point corresponds to which k
+    if not isinstance(data["pac"], np.float64):  # if plot contains more than one k-value
+        for xtick in ax1.get_xticks():
+            if xtick in data["Ks"]:
+                y = data["pac"][np.where(data["Ks"] == xtick)[0][0]]  # get the y value that corresponds to xtick
+                plt.vlines(xtick, min(data["pac"] + [0]), y, colors='black', alpha=0.4)
+
+    # pac
+    color = "black"
+    ax1.plot(
+        list(data["Ks"]),
+        data["pac"],
+        linestyle="--",
+        marker="s",
+        color=color,
+        label="PAC",
+    )
+    ax1.set_ylim(min(0, np.min(data["pac"])), 1)
+    ax1.tick_params(axis="y", labelcolor=color)
+        
+    # legend
+    ax1.legend(
+        loc="upper left",
+        bbox_to_anchor=(0.5, -0.07),
+        fancybox=True,
+        shadow=True,
+    )
+    
+    # relative error
+    ax2 = ax1.twinx()
+    if set(data["err_mean"]) != set([0.0]):
+        color = "tab:blue"
+        ax2.set_ylabel("Objective", color=color)
+        ax2.plot(
+            list(data["Ks"]),
+            data["err_mean"],
+            "o-",
+            color=color,
+            label="Objective",
+        )
+
+    ax2.tick_params(axis="y", labelcolor=color)
+    ax2.legend(
+        loc="upper right",
+        bbox_to_anchor=(0.5, -0.07),
+        fancybox=True,
+        shadow=True,
+    )
+    
+    # finalize
+    fig.tight_layout()
+    plt.title(name + "  " + str(min(list(data["Ks"]))) + "-" + str(max(list(data["Ks"]))))
+    plt.ioff()
+    
+    # save
+    if plot_final:
+        plt.savefig(
+            str(path) + "/FINAL_k=" +
+            str(min(list(data["Ks"]))) + "-" + str(max(list(data["Ks"]))) + ".png",
+            bbox_inches="tight",
+        )
+    else:
+        plt.savefig(
+            str(path) + "/k=" + str(min(list(data["Ks"]))) +
+            "-" + str(max(list(data["Ks"]))) + ".png",
+            bbox_inches="tight",
+        )
+    plt.close("all")
+
+
 def plot_BNMFk(Ks, sils, bool_err, path=None, name=None):
     fig, ax1 = plt.subplots(figsize=(8, 8), dpi=80)
     plt.rcParams['svg.fonttype'] = 'none'
