@@ -260,10 +260,16 @@ def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False,
 
 
 def plot_consensus_mat(C, figname):  
+    
     plt.figure()
-    plt.imshow(C)
-    plt.colorbar()
-    plt.savefig(figname)
+    
+    try:
+        plt.imshow(C)
+        plt.colorbar()
+        plt.savefig(figname)
+    except:
+        pass
+    
     plt.close("all")
 
 
