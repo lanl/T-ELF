@@ -409,6 +409,11 @@ class SymNMFk:
             
     def fit(self, X, Ks, name="SymNMFk", note=""):
 
+        #
+        # check X format
+        #
+        assert scipy.sparse._csr.csr_matrix == type(X) or np.ndarray == type(X), "X should be np.ndarray or scipy.sparse._csr.csr_matrix"
+
         if X.dtype != np.dtype(np.float32):
             warnings.warn(
                 f'X is data type {X.dtype}. Whic is not float32. Higher precision will result in significantly longer runtime!')
@@ -453,7 +458,7 @@ class SymNMFk:
         save_path = os.path.join(self.save_path, self.experiment_name)
 
         if self.n_jobs > len(Ks):
-            warnings.warn(f'Requested {self.n_jobs} jobs but only processing {len(Ks)} k values!')
+            #warnings.warn(f'Requested {self.n_jobs} jobs but only processing {len(Ks)} k values!')
             self.n_jobs = len(Ks)
             
         if self.transpose:
