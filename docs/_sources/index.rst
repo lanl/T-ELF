@@ -7,7 +7,7 @@ Tensor Extraction of Latent Features (T-ELF)
 =================================================
 
 .. image:: ../tensorsrnd.png
-   :width: 648px
+   :width: 668px
    :height: 400px
    :scale: 100 %
    :align: center
@@ -17,14 +17,14 @@ T-ELF presents an array of customizable software solutions crafted for analysis 
 
 Central to T-ELF's core capabilities lie non-negative matrix and tensor factorization solutions for discovering multi-faceted hidden details in data, featuring automated model determination facilitating the estimation of latent factors or rank. This pivotal functionality ensures precise data modeling and the extraction of concealed patterns. Additionally, our software suite incorporates cutting-edge modules for both pre-processing and post-processing of data, tailored for diverse tasks including text mining, Natural Language Processing, and robust tools for matrix and tensor analysis and construction.
 
-T-ELF's adaptability spans across a multitude of disciplines, positioning it as a robust AI and data analytics solution. Its proven efficacy extends across various fields such as Large-scale Text Mining, High Performance Computing, Computer Security, Applied Mathematics, Dynamic Networks and Ranking, Biology, Material Science, Medicine, Chemistry, Data Compression, Climate Studies, Relational Databases, Data Privacy, Economy, and Agriculture.
-
 .. image:: ../capabilities.png
-   :width: 648px
+   :width: 700px
    :height: 400px
    :scale: 100 %
    :align: center
 
+
+T-ELF's adaptability spans across a multitude of disciplines, positioning it as a robust AI and data analytics solution. Its proven efficacy extends across various fields such as Large-scale Text Mining, High Performance Computing, Computer Security, Applied Mathematics, Dynamic Networks and Ranking, Biology, Material Science, Medicine, Chemistry, Data Compression, Climate Studies, Relational Databases, Data Privacy, Economy, and Agriculture.
 
 Resources
 ========================================
@@ -76,7 +76,7 @@ Installation
 	python -m nltk.downloader wordnet omw-1.4
 
 
-**Step 3: Install Cupy if using GPU (*Optional* - Skip if used *Option 3* in *Step 1*)**
+**Step 3: Install Cupy if using GPU (*Optional* - Skip if used Option 3 in Step 1)**
 
 .. code-block:: shell
 
@@ -91,7 +91,8 @@ Installation
 	pip install mpi4py # or <conda install -c conda-forge mpi4py> depending on the system
 
 
-**Jupyter Setup Tutorial for using the examples (`[Link] <https://www.maksimeren.com/post/conda-and-jupyter-setup-for-research/>`_)**
+**Optional Tutorial for Examples:**
+Jupyter Setup Tutorial for using the examples (`Link <https://www.maksimeren.com/post/conda-and-jupyter-setup-for-research/>`_)
 
 **Other Considerations**
 On some Linux devices, based on how CUDA was configured, you may get an error when using a GPU. Install ``cudatoolkit`` to resolve the error:

@@ -95,7 +95,7 @@ conda install cudnn
   <img src="docs/Second_image_TensorNetworks.jpg">
 </p>
 
-### Please see our [:page_with_curl: Publications](https://smart-tensors.lanl.gov/publications/) for the capabilities.
+### Please see our [:page_with_curl: Publications](https://smart-tensors.lanl.gov/publications/) for the capabilities
 
 </div>
 
