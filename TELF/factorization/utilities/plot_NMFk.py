@@ -259,18 +259,7 @@ def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False,
     plt.close("all")
 
 
-def plot_consensus_mat(C, figname):
-    
-    dtype = C.dtype
-    if np.issubdtype(dtype, np.integer):
-        eps = np.finfo(float).eps
-    elif np.issubdtype(dtype, np.floating):
-        eps = np.finfo(dtype).eps
-    else:
-        raise Exception("Unknown data type!")
-        
-    C = np.maximum(C.astype(dtype), eps)
-    
+def plot_consensus_mat(C, figname):  
     plt.figure()
     plt.imshow(C)
     plt.colorbar()

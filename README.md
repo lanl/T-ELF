@@ -81,6 +81,9 @@ module load <openmpi>
 conda install -c conda-forge mpi4py
 ```
 
+#### [Jupyter Setup Tutorial for Examples](https://www.maksimeren.com/post/conda-and-jupyter-setup-for-research/)
+
+
 ## Capabilities
 
 <div align="center", style="font-size: 50px">
