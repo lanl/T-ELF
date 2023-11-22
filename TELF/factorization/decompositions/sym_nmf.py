@@ -9,10 +9,36 @@ Desc:    Newton-like optimization algorithm for Symmetric NMF (SymNMF)
          The 12th SIAM International Conference on Data Mining (SDM '12), pp. 106--117.
 '''
 import sys
+import numpy as np
 from joblib import Parallel, delayed
 from .utilities.generic_utils import get_np, get_scipy
 
-    
+try:
+	import cupyx
+except:
+	cupyx = None
+
+
+class LinAlgErrContext:
+    """ 
+    Error Context Manager used to handle numpy.linalg / cupy.linalg errors
+    """
+    def __init__(self, use_numpy=True, raise_errors=True):
+        self.use_numpy = use_numpy
+        self.raise_errors = raise_errors
+        self.errstate = None
+
+    def __enter__(self):
+        if self.use_numpy: # use numpy errstate
+            self.errstate = np.errstate(all='raise') if self.raise_errors else np.errstate()
+        else:  # use cupy errstate
+            self.errstate = cupyx.errstate(linalg='raise') if self.raise_errors else cupyx.errstate()
+        self.errstate.__enter__()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.errstate.__exit__(exc_type, exc_val, exc_tb)
+
+
 def sym_nmf_objective(A, W, use_gpu=False):
     """
     Compute the Symmetric non-Negative Matrix Factorization (SymNMF) objective value.
@@ -146,10 +172,11 @@ def compute_newton_step(T, W, gradW, projnorm_idx, projnorm_idx_prev, R, p, n_jo
         step_k = np.zeros(m)
         if np.any(projnorm_idx_prev[:, k] != projnorm_idx[:, k]):
             hessian[k] = hessian_blkdiag(T, W, k, projnorm_idx, use_gpu=use_gpu)
-            try:
-                R[k] = np.linalg.cholesky(hessian[k])
-            except np.linalg.LinAlgError:
-                p[k] = 1
+            with LinAlgErrContext(use_numpy=not use_gpu):  # set cupy/numpy error context manager 
+                try:
+                    R[k] = np.linalg.cholesky(hessian[k])
+                except np.linalg.LinAlgError:
+                    p[k] = 1  # set error flag
                 
         if p[k] > 0:
             return gradW[:, k]
