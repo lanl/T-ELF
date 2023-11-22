@@ -26,59 +26,48 @@ T-ELF's adaptability spans across a multitude of disciplines, positioning it as 
 
 ## Installation
 
-#### Option 1: Install via PIP and CONDA
-- **Step 1:** Install the library
+### Step 1: Install the Library
+
+**Option 1: Install via PIP**
+```shell
+conda create --name TELF python=3.11.5
+source activate TELF # or <conda activate TELF>
+pip install git+https://github.com/lanl/T-ELF.git
+```
+
+**Option 2: Install from Source**
 ```shell
 git clone https://github.com/lanl/T-ELF.git
 cd T-ELF
 conda create --name TELF python=3.11.5
-source activate TELF # or conda activate TELF
-python setup.py install
-```
-- **Step 2:** Install Spacy NLP model and NLTK Packages
-```shell
-python -m spacy download en_core_web_lg
-python -m nltk.downloader wordnet omw-1.4
-```
-- **Step 3:** Install Cupy if using GPU (*Optional*)
-```shell
-conda install -c conda-forge cupy
-```
-- **Step 4:** Install MPI if using HPC (*Optional*)
-```shell
-module load <openmpi> # On a HPC Node
-pip install mpi4py
+source activate TELF # or <conda activate TELF>
+pip install -e . # or <python setup.py install>
 ```
 
-#### Option 2: Install via CONDA Only
-- **Step 1:** Download the Library
+**Option 3: Install via Conda**
 ```shell
 git clone https://github.com/lanl/T-ELF.git
 cd T-ELF
-```
-- **Step 2:** Install/Setup the Environment (CPU or GPU)
-    - 2a: CPU
-    ```shell
-    conda env create --file environment_cpu.yml
-    ```
-    - 2b: or GPU
-    ```shell
-    conda env create --file environment_gpu.yml
-    ```
-- **Step 3:** Setup TELF
-```shell
+conda env create --file environment_gpu.yml # use <conda env create --file environment_cpu.yml> for CPU only
 conda activate TELF_conda
 conda develop .
 ```
-- **Step 4:** Install Spacy NLP model and NLTK Packages
+
+### Step 2: Install Spacy NLP model and NLTK Packages
 ```shell
 python -m spacy download en_core_web_lg
 python -m nltk.downloader wordnet omw-1.4
 ```
-- **Step 5:** Install MPI if using HPC (*Optional*)
+
+### Step 3: Install Cupy if using GPU (*Optional* - Skip if used *Option 3* in *Step 1*)
 ```shell
-module load <openmpi>
-conda install -c conda-forge mpi4py
+conda install -c conda-forge cupy
+```
+
+### Step 4: Install MPI if using HPC (*Optional*)
+```shell
+module load <openmpi> # On a HPC Node
+pip install mpi4py # or <conda install -c conda-forge mpi4py> depending on the system
 ```
 
 #### Jupyter Setup Tutorial for using the examples ([Link](https://www.maksimeren.com/post/conda-and-jupyter-setup-for-research/))
