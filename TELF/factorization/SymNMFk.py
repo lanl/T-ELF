@@ -81,19 +81,19 @@ def __run_symnmf(Y, W, nmf, nmf_params, use_gpu:bool, gpuid:int):
 
 def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
     if perturb_type == "uniform":
-        Y = uniform_product(X, epsilon)
+        Y = uniform_product(X, epsilon, random_state=perturbation)
     elif perturb_type == "poisson":
         Y = poisson(X)
     return Y
 
 
-def __init_W(Y, k, mask, init_type:str):
-    # REMOVED SEEDING
+def __init_W(Y, k, mask, init_type:str, seed=42):
     if init_type == "nnsvd":
         if mask is not None:
             Y[mask] = 0
         W, _ = nnsvd(Y, k, use_gpu=False)
     elif init_type == "random":
+        np.random.seed(seed)
         W = 2 * np.sqrt(np.mean(Y) / k) * np.random.rand(Y.shape[0], k)
     return W
 
@@ -125,7 +125,10 @@ def _perturb_parallel_wrapper(
         raise ValueError('Unknown graph_type and/or similarity_type')
 
     # Initialize W
-    Wq = __init_W(Aq, k, mask=mask, init_type=init_type)
+    # Dq = dist2(X, X)
+    # Aq = scale_dist3(Dq, nearest_neighbors)
+    #print(Aq)
+    Wq = __init_W(Aq, k, mask=mask, init_type=init_type, seed=perturbation)
     
     
     # transfer to GPU
@@ -296,6 +299,7 @@ class SymNMFk:
             n_perturbs=20,
             n_iters=1000,
             epsilon=0.015,
+            init_type="random",
             perturb_type="uniform",
             n_jobs=1,
             n_nodes=1,
@@ -331,6 +335,7 @@ class SymNMFk:
         #
         self.pac_thresh=pac_thresh
         self.n_perturbs = n_perturbs
+        self.init_type = init_type
         self.perturb_type = perturb_type
         self.n_iters = n_iters
         self.epsilon = epsilon
@@ -517,6 +522,7 @@ class SymNMFk:
         job_data = {
             "n_perturbs":self.n_perturbs,
             "nmf":self.nmf,
+            "init_type":self.init_type,
             "nmf_params":self.nmf_obj_params,
             "X":X,
             "epsilon":self.epsilon,
@@ -608,17 +614,14 @@ class SymNMFk:
             combined_result["pac"] = []
             if self.consensus_mat:
 
-                # # * save the plot
-                # if self.save_output:
-                #     con_fig_name = f'{save_path}/k_{Ks[0]}_{Ks[-1]}_cophenetic_coeff.png'
-                #     plot_cophenetic_coeff(Ks, combined_result["cophenetic_coeff"], con_fig_name)
-
                 if self.calculate_pac:
                     consensus_tensor = np.array(combined_result["reordered_con_mat"])
                     combined_result["pac"] = np.array(get_pac(consensus_tensor, use_gpu=self.use_gpu))
-                    argmin = np.max(np.argwhere(
-                        np.array(combined_result["pac"]) <= self.pac_thresh).flatten())
-                    results["clusters"] = np.argmax(combined_result["W"][argmin], 1)
+                    argmin = np.argmin(combined_result["pac"])
+                    if combined_result["pac"][argmin] <= self.pac_thresh:
+                        results["clusters"] = np.argmax(combined_result["W"][argmin], 1)
+                    else:
+                        warnings.warn(f'Minimum PAC is {combined_result["pac"][argmin]} and the threshold is {self.pac_thresh}. Not performing clustering!')
                     
             # final plot
             if self.save_output:
