@@ -270,7 +270,7 @@ document.write(`
   <h1>Source code for TELF.factorization.utilities.plot_NMFk</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
+<span class="kn">import</span> <span class="nn">time</span>
 
 <div class="viewcode-block" id="plot_SymNMFk">
 <a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_SymNMFk">[docs]</a>
@@ -540,11 +540,17 @@ document.write(`
 
 <div class="viewcode-block" id="plot_consensus_mat">
 <a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_consensus_mat">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_consensus_mat</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">figname</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">plot_consensus_mat</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">figname</span><span class="p">):</span>  
+    
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figname</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figname</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+    
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span></div>
 
 

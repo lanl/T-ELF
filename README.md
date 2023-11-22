@@ -23,6 +23,12 @@ T-ELF's adaptability spans across a multitude of disciplines, positioning it as 
 
 </div>
 
+<div align="center", style="font-size: 50px">
+<p align="center">
+  <img src="docs/capabilities.png">
+</p>
+
+</div>
 
 ## Installation
 
@@ -88,7 +94,7 @@ conda install cudnn
   <img src="docs/Second_image_TensorNetworks.jpg">
 </p>
 
-### [:page_with_curl: Publications](https://smart-tensors.lanl.gov/publications/)
+### Please see our [:page_with_curl: Publications](https://smart-tensors.lanl.gov/publications/) for the capabilities.
 
 </div>
 
