@@ -81,6 +81,16 @@ module load <openmpi>
 conda install -c conda-forge mpi4py
 ```
 
+#### Jupyter Setup Tutorial for using the examples ([Link](https://www.maksimeren.com/post/conda-and-jupyter-setup-for-research/))
+
+### Other Considerations
+On some Linux devices, based on how CUDA was configured, you may get an error when using a GPU. Install ```cudatoolkit``` to resolve the error:
+```shell
+conda install cudatoolkit
+conda install cudnn
+```
+
+
 ## Capabilities
 
 <div align="center", style="font-size: 50px">
