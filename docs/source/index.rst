@@ -207,6 +207,7 @@ Tests can be ran from this folder using ``python -m pytest *``.
    NMFk
    RESCALk
    TriNMFk
+   SymNMFk
    Beaver
    Vulture
    modules
