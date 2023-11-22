@@ -3,7 +3,8 @@ File:   similarity_matrix.py
 Author: Ryan Barron, Nick Solovyev
 Desc:   Helper functions for computing similarity matrix for SymNMFk
 '''
-import math 
+import math
+import scipy.sparse
 from scipy.linalg import fractional_matrix_power
 from .generic_utils import get_np, get_scipy
 
@@ -206,7 +207,7 @@ def dist2(X, C, use_gpu=False):
 
     Parameters:
     -----------
-    X: np.ndarray
+    X: np.ndarray, scipy.sparse.csr_matrix
         First matrix of vectors with shape (m, n)
     C: np.ndarray
         Second matrix of vectors with shape (l, n)
@@ -220,9 +221,16 @@ def dist2(X, C, use_gpu=False):
         from the ith row of X to the jth row of C.
     """
     np = get_np(X, C, use_gpu=use_gpu)
+    scipy = get_scipy(X, C, use_gpu=use_gpu)
     
     assert X.shape[1] == C.shape[1], 'Data dimension does not match dimension of centres!'
 
+    # If input is sparse
+    if scipy.sparse.issparse(X):
+        X = X.toarray()
+    if scipy.sparse.issparse(C):
+        C = C.toarray()
+    
     # compute squared norms of each row in X and C
     X_tmp = np.sum(X**2, axis=1, keepdims=True)
     C_tmp = np.sum(C**2, axis=1, keepdims=True).T
