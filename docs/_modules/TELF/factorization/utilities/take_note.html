@@ -143,6 +143,9 @@
 
 
 
+<li class="toctree-l1"><a class="reference internal" href="../../../../SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
 <li class="toctree-l1"><a class="reference internal" href="../../../../Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
 
 
@@ -312,7 +315,7 @@ document.write(`
     
 <div class="viewcode-block" id="take_note">
 <a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.take_note">[docs]</a>
-<span class="k">def</span> <span class="nf">take_note</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">take_note</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes key-value pairs from a dictionary into a log file in the format &#39;key = value&#39;. Each string</span>
 <span class="sd">    is separated with a newline character</span>
@@ -334,15 +337,16 @@ document.write(`
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">),</span> <span class="s1">&#39;a+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">notes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">),</span> <span class="s1">&#39;a+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">notes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="append_to_note">
 <a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.append_to_note">[docs]</a>
-<span class="k">def</span> <span class="nf">append_to_note</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">append_to_note</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes string from a list of strings called notes into a log file. Each string is separated </span>
 <span class="sd">    with a newline character</span>
@@ -364,15 +368,16 @@ document.write(`
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">),</span> <span class="s1">&#39;a+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">notes</span><span class="p">:</span>
-            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">note</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+    <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">),</span> <span class="s1">&#39;a+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">notes</span><span class="p">:</span>
+                <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">note</span><span class="si">}{</span><span class="n">os</span><span class="o">.</span><span class="n">linesep</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="take_note_fmat">
 <a class="viewcode-back" href="../../../../TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.take_note_fmat">[docs]</a>
-<span class="k">def</span> <span class="nf">take_note_fmat</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">,</span> <span class="n">sort_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">take_note_fmat</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">,</span> <span class="n">sort_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Records some stats into the log file in a formatted manner. These stats are the values stored</span>
 <span class="sd">    in the kwargs dictionary. The keys signify the type of stat being recorded and the value is </span>
@@ -402,38 +407,39 @@ document.write(`
 <span class="sd">    None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">note</span> <span class="o">=</span> <span class="n">format_note</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">spacing</span><span class="p">)</span>  <span class="c1"># create the formatted stats string for recording in the log</span>
-    <span class="n">delimiter_line</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">lines</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">FILE_DELIMITER</span><span class="p">:</span>
-                <span class="n">delimiter_line</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># record line number when last delimiter encountered</span>
-                <span class="k">break</span>
+    <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+        <span class="n">delimiter_line</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">lines</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="n">FILE_DELIMITER</span><span class="p">:</span>
+                    <span class="n">delimiter_line</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># record line number when last delimiter encountered</span>
+                    <span class="k">break</span>
 
-        <span class="n">stat_lines</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
-        <span class="n">fh_out</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">fh_out_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh_in</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">fh_out_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh_out</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fh_in</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">delimiter_line</span><span class="p">:</span>
-                    <span class="n">fh_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> <span class="c1"># check if the line starts with a numeric entry</span>
-                        <span class="n">stat_lines</span><span class="o">.</span><span class="n">appendleft</span><span class="p">((</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="n">sort_index</span><span class="p">]),</span> <span class="n">line</span><span class="p">))</span>
-                    <span class="k">else</span><span class="p">:</span>
+            <span class="n">stat_lines</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+            <span class="n">fh_out</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">fh_out_path</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh_in</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">fh_out_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh_out</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fh_in</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">delimiter_line</span><span class="p">:</span>
                         <span class="n">fh_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        
-            <span class="c1"># sort the lines and write to fh_out</span>
-            <span class="k">if</span> <span class="n">note</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> <span class="c1"># check if the line starts with a numeric entry</span>
-                <span class="n">stat_lines</span><span class="o">.</span><span class="n">appendleft</span><span class="p">((</span><span class="nb">int</span><span class="p">(</span><span class="n">note</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="n">sort_index</span><span class="p">]),</span> <span class="n">note</span><span class="p">))</span>
-                <span class="n">sorted_lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">stat_lines</span><span class="p">)]</span>
-                <span class="k">for</span> <span class="n">sorted_line</span> <span class="ow">in</span> <span class="n">sorted_lines</span><span class="p">:</span>
-                    <span class="n">fh_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">sorted_line</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">fh_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">note</span><span class="p">)</span>
-            
-        <span class="n">fh_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">fh_out</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">))</span></div>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> <span class="c1"># check if the line starts with a numeric entry</span>
+                            <span class="n">stat_lines</span><span class="o">.</span><span class="n">appendleft</span><span class="p">((</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="n">sort_index</span><span class="p">]),</span> <span class="n">line</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">fh_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+                <span class="c1"># sort the lines and write to fh_out</span>
+                <span class="k">if</span> <span class="n">note</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> <span class="c1"># check if the line starts with a numeric entry</span>
+                    <span class="n">stat_lines</span><span class="o">.</span><span class="n">appendleft</span><span class="p">((</span><span class="nb">int</span><span class="p">(</span><span class="n">note</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="n">sort_index</span><span class="p">]),</span> <span class="n">note</span><span class="p">))</span>
+                    <span class="n">sorted_lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">stat_lines</span><span class="p">)]</span>
+                    <span class="k">for</span> <span class="n">sorted_line</span> <span class="ow">in</span> <span class="n">sorted_lines</span><span class="p">:</span>
+                        <span class="n">fh_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">sorted_line</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fh_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">note</span><span class="p">)</span>
+
+            <span class="n">fh_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">fh_out</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">))</span></div>
 
         
 </pre></div>
