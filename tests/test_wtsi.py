@@ -7,7 +7,7 @@ def test_wtsi_k():
     X = mat73.loadmat('../data/wtsi.mat')['X'].astype('float32')
 
     params = {
-	"n_perturbs":32,
+        "n_perturbs":32,
         "n_iters":5000,
         "epsilon":0.015,
         "n_jobs":-1,
