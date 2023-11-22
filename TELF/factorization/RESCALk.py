@@ -552,7 +552,7 @@ class RESCALk:
 
         if X[0].dtype != np.dtype(np.float32):
             warnings.warn(
-                f'X is data type {X.dtype}. Whic is not float32. Higher precision will result in significantly longer runtime!')
+                f'X is data type {X[0].dtype}. Whic is not float32. Higher precision will result in significantly longer runtime!')
 
         #
         # Error check
