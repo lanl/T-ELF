@@ -28,12 +28,14 @@ T-ELF's adaptability spans across a multitude of disciplines, positioning it as 
 
 ### Step 1: Install the Library
 
-**Option 1:Install via PIP**
+**Option 1: Install via PIP**
 ```shell
+conda create --name TELF python=3.11.5
+source activate TELF # or <conda activate TELF>
 pip install git+https://github.com/lanl/T-ELF.git
 ```
 
-**Option 2:Install from Source**
+**Option 2: Install from Source**
 ```shell
 git clone https://github.com/lanl/T-ELF.git
 cd T-ELF
