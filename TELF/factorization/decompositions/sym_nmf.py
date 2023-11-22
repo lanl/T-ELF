@@ -13,78 +13,6 @@ from joblib import Parallel, delayed
 from .utilities.generic_utils import get_np, get_scipy
 
     
-def chol(A, use_gpu=False):
-    """
-    Compute the Cholesky factorization of a matrix A.
-    
-    This function mimics the behavior of Matlab's chol function. If A is symmetric and positive definite, 
-    the factorization is completed and the function returns R and flag=0. If A is not symmetric positive 
-    definite, the function returns a partial factorization up to the pivot position where the factorization 
-    failed, along with a flag indicating the index of the failed pivot.
-    
-    Parameters:
-    -----------
-    A: np.ndarray 
-        A symmetric matrix. Note that this function does not validate A.
-    use_gpu: bool
-        Flag that determines whether GPU should be used. Default is False.
-        
-    Returns:
-    --------
-    R: np.ndarray
-        If the factorization is successful then R is an upper triangular matrix of shape (n, n) such that A = R'*R.
-        Otherwise, R is a partial upper triangular matrix up to the pivot position where the factorization failed.
-    flag: int
-        A status indicator where:
-          - If flag = 0 then the input matrix is symmetric positive definite and the factorization was successful.
-          - If flag is not zero, then the input matrix is not symmetric positive definite and flag is an integer 
-            indicating the index of the pivot position where the factorization failed
-        
-    Example:
-    --------
-    >>> A = np.array([[1,  1,  1,  1,  1],
-                      [1,  2,  3,  4,  5],
-                      [1,  3,  6, 10, 15],
-                      [1,  4, 10, 20, 35],
-                      [1,  5, 15, 35, 69]])
-    >>> R, flag = chol(A)
-    >>> print(R)
-    >>> [[1. 1. 1. 1.]
-         [0. 1. 2. 3.]
-         [0. 0. 1. 3.]
-         [0. 0. 0. 1.]]
-    >>> print(flag)
-    >>> 5
-    """
-    np = get_np(A, use_gpu=use_gpu)
-    
-    n = A.shape[0]
-    R = np.zeros((n, n))
-    flag = 0
-    
-    for i in range(n):
-        s = A[i, i] - np.sum(R[:i, i]**2)
-        
-        if s <= 0:
-            flag = i + 1
-            break
-            
-        R[i, i] = np.sqrt(s)
-        
-        if i < n - 1:
-			# COMMENTING OUT FOR LOOP FOR VECTORIZED SOLUTION
-            # for j in range(i + 1, n):
-            #     R[i, j] = (A[i, j] - np.dot(R[:i, i], R[:i, j])) / R[i, i]
-            Rii_inv = 1 / R[i, i]  # compute inverse
-            dot_products = np.dot(R[:i, i], R[:i, i+1:n])
-            R[i, i+1:n] = (A[i, i+1:n] - dot_products) * Rii_inv
-    
-    if flag == 0:
-        return R, 0
-    else:
-        return R[:flag-1, :flag-1], flag
-
-    
 def sym_nmf_objective(A, W, use_gpu=False):
     """
     Compute the Symmetric non-Negative Matrix Factorization (SymNMF) objective value.
@@ -218,8 +146,11 @@ def compute_newton_step(T, W, gradW, projnorm_idx, projnorm_idx_prev, R, p, n_jo
         step_k = np.zeros(m)
         if np.any(projnorm_idx_prev[:, k] != projnorm_idx[:, k]):
             hessian[k] = hessian_blkdiag(T, W, k, projnorm_idx, use_gpu=use_gpu)
-            R[k], p[k] = chol(hessian[k], use_gpu=use_gpu)  # R and p are modified in place
-
+            try:
+                R[k] = np.linalg.cholesky(hessian[k])
+            except np.linalg.LinAlgError:
+                p[k] = 1
+                
         if p[k] > 0:
             return gradW[:, k]
         else:
