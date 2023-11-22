@@ -293,6 +293,7 @@ document.write(`
 
 
 <span class="kn">import</span> <span class="nn">concurrent.futures</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -453,7 +454,9 @@ document.write(`
         <span class="n">start_time</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
         <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">perturb_multiprocessing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">perturb_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">perturb_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">lock</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">note_name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">):</span>
 
     <span class="c1">#</span>
     <span class="c1"># run for each perturbations</span>
@@ -572,7 +575,7 @@ document.write(`
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[tELF]: Encountered unknown logging metric &quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
                 <span class="n">plot_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;N/A&#39;</span>
-        <span class="n">take_note_fmat</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_data</span><span class="p">)</span>
+        <span class="n">take_note_fmat</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="n">lock</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_data</span><span class="p">)</span>
 
     <span class="c1">#</span>
     <span class="c1"># collect results</span>
@@ -687,12 +690,6 @@ document.write(`
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-
-        <span class="c1"># check the save path</span>
-        <span class="k">if</span> <span class="n">save_output</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-                <span class="n">Path</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
         <span class="n">init_options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nnsvd&quot;</span><span class="p">,</span> <span class="s2">&quot;random&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">init</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">init_options</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid init. Choose from:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">init_options</span><span class="p">)))</span>
@@ -742,6 +739,9 @@ document.write(`
 
         <span class="c1"># organize n_jobs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="n">organize_n_jobs</span><span class="p">(</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
+        
+        <span class="c1"># create a shared lock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
 
         <span class="c1">#</span>
         <span class="c1"># Save information from the solution</span>
@@ -826,7 +826,7 @@ document.write(`
 
         <span class="k">if</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">):</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s1">&#39;X is data type </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s1">. Whic is not float32. Higher precision will result in significantly longer runtime!&#39;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s1">&#39;X is data type </span><span class="si">{</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s1">. Whic is not float32. Higher precision will result in significantly longer runtime!&#39;</span><span class="p">)</span>
 
         <span class="c1">#</span>
         <span class="c1"># Error check</span>
@@ -844,9 +844,11 @@ document.write(`
             <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
             <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
             <span class="n">Ks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__chunk_Ks</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">n_chunks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">)[</span><span class="n">rank</span><span class="p">]</span>
+            <span class="n">note_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1">_experiment&#39;</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rank=&quot;</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="s2">&quot;Host=&quot;</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">(),</span> <span class="s2">&quot;Ks=&quot;</span><span class="p">,</span> <span class="n">Ks</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="n">note_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;experiment&#39;</span>
             <span class="n">comm</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">rank</span> <span class="o">=</span> <span class="mi">0</span>
             
@@ -885,20 +887,30 @@ document.write(`
 
         <span class="c1"># start the file logging (only root node needs to do this step)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span> <span class="ow">and</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-                <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+                    <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">comm</span><span class="o">.</span><span class="n">Barrier</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-            <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span>
+        <span class="c1"># logging</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">:</span>
+
+            <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
             <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;start_time= &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()),</span>
                             <span class="s2">&quot;name=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
-                            <span class="s2">&quot;note=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="p">)],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span>
+                            <span class="s2">&quot;note=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="p">)],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
 
-            <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span>
+            <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
             <span class="n">object_notes</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="k">del</span> <span class="n">object_notes</span><span class="p">[</span><span class="s2">&quot;total_exec_seconds&quot;</span><span class="p">]</span>
             <span class="k">del</span> <span class="n">object_notes</span><span class="p">[</span><span class="s2">&quot;rescal&quot;</span><span class="p">]</span>
-            <span class="n">take_note</span><span class="p">(</span><span class="n">object_notes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span>
-            <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span>
+            <span class="n">take_note</span><span class="p">(</span><span class="n">object_notes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
+            <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
 
             <span class="n">notes</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;Ks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ks</span>
@@ -909,9 +921,9 @@ document.write(`
             <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;n_jobs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span>
             <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;experiment_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
             <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;num_iterations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iters</span>
-            <span class="n">take_note</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span>
-            <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span>
-            <span class="n">take_note_fmat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="o">**</span><span class="n">stats_header</span><span class="p">)</span>
+            <span class="n">take_note</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
+            <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
+            <span class="n">take_note_fmat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="o">**</span><span class="n">stats_header</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">comm</span><span class="o">.</span><span class="n">Barrier</span><span class="p">()</span>
@@ -950,6 +962,8 @@ document.write(`
             <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span>
             <span class="s2">&quot;perturb_multiprocessing&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">perturb_multiprocessing</span><span class="p">,</span>
             <span class="s2">&quot;perturb_verbose&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">perturb_verbose</span><span class="p">,</span>
+            <span class="s2">&quot;lock&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">,</span>
+            <span class="s2">&quot;note_name&quot;</span><span class="p">:</span><span class="n">note_name</span>
         <span class="p">}</span>
         
         <span class="c1"># Single job or parallel over perturbations</span>
@@ -1026,10 +1040,10 @@ document.write(`
                     <span class="n">plot_final</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="n">simple_plot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">simple_plot</span>
                 <span class="p">)</span>
-                <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span>
-                <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;end_time= &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span>
+                <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
+                <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;end_time= &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
                 <span class="n">append_to_note</span><span class="p">(</span>
-                    <span class="p">[</span><span class="s2">&quot;total_time= &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; (seconds)&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span>
+                    <span class="p">[</span><span class="s2">&quot;total_time= &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; (seconds)&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
         
             
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_plot_data</span><span class="p">:</span>
