@@ -19,6 +19,12 @@ Central to T-ELF's core capabilities lie non-negative matrix and tensor factoriz
 
 T-ELF's adaptability spans across a multitude of disciplines, positioning it as a robust AI and data analytics solution. Its proven efficacy extends across various fields such as Large-scale Text Mining, High Performance Computing, Computer Security, Applied Mathematics, Dynamic Networks and Ranking, Biology, Material Science, Medicine, Chemistry, Data Compression, Climate Studies, Relational Databases, Data Privacy, Economy, and Agriculture.
 
+.. image:: ../capabilities.png
+   :width: 648px
+   :height: 400px
+   :scale: 100 %
+   :align: center
+
 
 Resources
 ========================================
@@ -29,81 +35,71 @@ Resources
 
 Installation
 ========================================
-**Option 1: Install via PIP and CONDA**
+**Step 1: Install the Library**
 
-* **Step 1:** Install the library
-
-.. code-block:: shell
-
-   git clone https://github.com/lanl/T-ELF.git
-   cd T-ELF
-   conda create --name TELF python=3.11.5
-   source activate TELF # or conda activate TELF
-   python setup.py install
-
-* **Step 2:** Install Spacy NLP model and NLTK Packages
+* Option 1: Install via PIP
 
 .. code-block:: shell
 
-   python -m spacy download en_core_web_lg
-   python -m nltk.downloader wordnet omw-1.4
+	conda create --name TELF python=3.11.5
+	source activate TELF # or <conda activate TELF>
+	pip install git+https://github.com/lanl/T-ELF.git
 
-* **Step 3:** Install Cupy if using GPU (*Optional*)
 
-.. code-block:: shell
-
-   conda install -c conda-forge cupy
-
-* **Step 4:** Install MPI if using HPC (*Optional*)
+* Option 2: Install from Source
 
 .. code-block:: shell
 
-   module load <openmpi> # On a HPC Node
-   pip install mpi4py
+	git clone https://github.com/lanl/T-ELF.git
+	cd T-ELF
+	conda create --name TELF python=3.11.5
+	source activate TELF # or <conda activate TELF>
+	pip install -e . # or <python setup.py install>
 
 
-**Option 2: Install via CONDA Only**
-
-* **Step 1:** Download the Library
-
-.. code-block:: shell
-
-   git clone https://github.com/lanl/T-ELF.git
-   cd T-ELF
-
-* **Step 2:** Install/Setup the Environment (CPU or GPU)
-    - 2a: CPU
-
-    .. code-block:: shell
-
-      conda env create --file environment_cpu.yml
-
-    - 2b: or GPU
-
-    .. code-block:: shell
-
-      conda env create --file environment_gpu.yml
-
-* **Step 3:** Setup TELF
+* Option 3: Install via Conda
 
 .. code-block:: shell
 
-   conda activate TELF_conda
-   conda develop .
+	git clone https://github.com/lanl/T-ELF.git
+	cd T-ELF
+	conda env create --file environment_gpu.yml # use <conda env create --file environment_cpu.yml> for CPU only
+	conda activate TELF_conda
+	conda develop .
 
-- **Step 4:** Install Spacy NLP model and NLTK Packages
 
-.. code-block:: shell
-
-   python -m spacy download en_core_web_lg
-   python -m nltk.downloader wordnet omw-1.4
-
-* **Step 5:** Install MPI if using HPC (*Optional*)
+**Step 2: Install Spacy NLP model and NLTK Packages**
 
 .. code-block:: shell
 
-   module load <openmpi>
-   conda install -c conda-forge mpi4py
+	python -m spacy download en_core_web_lg
+	python -m nltk.downloader wordnet omw-1.4
+
+
+**Step 3: Install Cupy if using GPU (*Optional* - Skip if used *Option 3* in *Step 1*)**
+
+.. code-block:: shell
+
+	conda install -c conda-forge cupy
+
+
+**Step 4: Install MPI if using HPC (*Optional*)**
+
+.. code-block:: shell
+
+	module load <openmpi> # On a HPC Node
+	pip install mpi4py # or <conda install -c conda-forge mpi4py> depending on the system
+
+
+**Jupyter Setup Tutorial for using the examples (`[Link] <https://www.maksimeren.com/post/conda-and-jupyter-setup-for-research/>`_)**
+
+**Other Considerations**
+On some Linux devices, based on how CUDA was configured, you may get an error when using a GPU. Install ``cudatoolkit`` to resolve the error:
+
+.. code-block:: shell
+	
+	conda install cudatoolkit
+	conda install cudnn
 
 
 Capabilities

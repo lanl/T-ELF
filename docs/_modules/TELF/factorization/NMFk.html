@@ -808,12 +808,6 @@ document.write(`
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-
-        <span class="c1"># check the save path</span>
-        <span class="k">if</span> <span class="n">save_output</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-                <span class="n">Path</span><span class="p">(</span><span class="n">save_path</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
         <span class="n">init_options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;nnsvd&quot;</span><span class="p">,</span> <span class="s2">&quot;random&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">init</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">init_options</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid init. Choose from:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">init_options</span><span class="p">)))</span>
@@ -1058,12 +1052,22 @@ document.write(`
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_pac</span><span class="p">:</span>
             <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;pac&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;PAC&#39;</span>
         <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Time Elapsed&#39;</span>
-
+        
         <span class="c1"># start the file logging (only root node needs to do this step)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span> <span class="ow">and</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-                <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+                    <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">comm</span><span class="o">.</span><span class="n">Barrier</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
+        <span class="c1"># logging</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">:</span>
+            
             <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
             <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;start_time= &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()),</span>
                             <span class="s2">&quot;name=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>

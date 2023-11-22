@@ -343,6 +343,7 @@ document.write(`
 <p>T-ELF presents an array of customizable software solutions crafted for analysis of datasets. Acting as a comprehensive toolbox, T-ELF specializes in data pre-processing, extraction of latent features, and structuring results to facilitate informed decision-making. Leveraging high-performance computing and cutting-edge GPU architectures, our toolbox is optimized for analyzing extensive datasets.</p>
 <p>Central to T-ELF’s core capabilities lie non-negative matrix and tensor factorization solutions for discovering multi-faceted hidden details in data, featuring automated model determination facilitating the estimation of latent factors or rank. This pivotal functionality ensures precise data modeling and the extraction of concealed patterns. Additionally, our software suite incorporates cutting-edge modules for both pre-processing and post-processing of data, tailored for diverse tasks including text mining, Natural Language Processing, and robust tools for matrix and tensor analysis and construction.</p>
 <p>T-ELF’s adaptability spans across a multitude of disciplines, positioning it as a robust AI and data analytics solution. Its proven efficacy extends across various fields such as Large-scale Text Mining, High Performance Computing, Computer Security, Applied Mathematics, Dynamic Networks and Ranking, Biology, Material Science, Medicine, Chemistry, Data Compression, Climate Studies, Relational Databases, Data Privacy, Economy, and Agriculture.</p>
+<a class="reference internal image-reference" href="_images/capabilities.png"><img alt="_images/capabilities.png" class="align-center" src="_images/capabilities.png" style="width: 648.0px; height: 400.0px;" /></a>
 </section>
 <section id="resources">
 <h1>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h1>
@@ -354,80 +355,54 @@ document.write(`
 </section>
 <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
-<p><strong>Option 1: Install via PIP and CONDA</strong></p>
+<p><strong>Step 1: Install the Library</strong></p>
 <ul class="simple">
-<li><p><strong>Step 1:</strong> Install the library</p></li>
+<li><p>Option 1: Install via PIP</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>TELF<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11.5
+<span class="nb">source</span><span class="w"> </span>activate<span class="w"> </span>TELF<span class="w"> </span><span class="c1"># or &lt;conda activate TELF&gt;</span>
+pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/lanl/T-ELF.git
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Option 2: Install from Source</p></li>
 </ul>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/lanl/T-ELF.git
 <span class="nb">cd</span><span class="w"> </span>T-ELF
 conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>TELF<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11.5
-<span class="nb">source</span><span class="w"> </span>activate<span class="w"> </span>TELF<span class="w"> </span><span class="c1"># or conda activate TELF</span>
-python<span class="w"> </span>setup.py<span class="w"> </span>install
+<span class="nb">source</span><span class="w"> </span>activate<span class="w"> </span>TELF<span class="w"> </span><span class="c1"># or &lt;conda activate TELF&gt;</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span><span class="c1"># or &lt;python setup.py install&gt;</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>Step 2:</strong> Install Spacy NLP model and NLTK Packages</p></li>
-</ul>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>spacy<span class="w"> </span>download<span class="w"> </span>en_core_web_lg
-python<span class="w"> </span>-m<span class="w"> </span>nltk.downloader<span class="w"> </span>wordnet<span class="w"> </span>omw-1.4
-</pre></div>
-</div>
-<ul class="simple">
-<li><p><strong>Step 3:</strong> Install Cupy if using GPU (<em>Optional</em>)</p></li>
-</ul>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>cupy
-</pre></div>
-</div>
-<ul class="simple">
-<li><p><strong>Step 4:</strong> Install MPI if using HPC (<em>Optional</em>)</p></li>
-</ul>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>load<span class="w"> </span>&lt;openmpi&gt;<span class="w"> </span><span class="c1"># On a HPC Node</span>
-pip<span class="w"> </span>install<span class="w"> </span>mpi4py
-</pre></div>
-</div>
-<p><strong>Option 2: Install via CONDA Only</strong></p>
-<ul class="simple">
-<li><p><strong>Step 1:</strong> Download the Library</p></li>
+<li><p>Option 3: Install via Conda</p></li>
 </ul>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/lanl/T-ELF.git
 <span class="nb">cd</span><span class="w"> </span>T-ELF
-</pre></div>
-</div>
-<ul>
-<li><dl>
-<dt><strong>Step 2:</strong> Install/Setup the Environment (CPU or GPU)</dt><dd><ul class="simple">
-<li><p>2a: CPU</p></li>
-</ul>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>--file<span class="w"> </span>environment_cpu.yml
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>2b: or GPU</p></li>
-</ul>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>--file<span class="w"> </span>environment_gpu.yml
-</pre></div>
-</div>
-</dd>
-</dl>
-</li>
-<li><p><strong>Step 3:</strong> Setup TELF</p></li>
-</ul>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>TELF_conda
+conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>--file<span class="w"> </span>environment_gpu.yml<span class="w"> </span><span class="c1"># use &lt;conda env create --file environment_cpu.yml&gt; for CPU only</span>
+conda<span class="w"> </span>activate<span class="w"> </span>TELF_conda
 conda<span class="w"> </span>develop<span class="w"> </span>.
 </pre></div>
 </div>
-<ul class="simple">
-<li><p><strong>Step 4:</strong> Install Spacy NLP model and NLTK Packages</p></li>
-</ul>
+<p><strong>Step 2: Install Spacy NLP model and NLTK Packages</strong></p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>spacy<span class="w"> </span>download<span class="w"> </span>en_core_web_lg
 python<span class="w"> </span>-m<span class="w"> </span>nltk.downloader<span class="w"> </span>wordnet<span class="w"> </span>omw-1.4
 </pre></div>
 </div>
-<ul class="simple">
-<li><p><strong>Step 5:</strong> Install MPI if using HPC (<em>Optional</em>)</p></li>
-</ul>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>load<span class="w"> </span>&lt;openmpi&gt;
-conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>mpi4py
+<p><strong>Step 3: Install Cupy if using GPU (*Optional* - Skip if used *Option 3* in *Step 1*)</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>cupy
+</pre></div>
+</div>
+<p><strong>Step 4: Install MPI if using HPC (*Optional*)</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>load<span class="w"> </span>&lt;openmpi&gt;<span class="w"> </span><span class="c1"># On a HPC Node</span>
+pip<span class="w"> </span>install<span class="w"> </span>mpi4py<span class="w"> </span><span class="c1"># or &lt;conda install -c conda-forge mpi4py&gt; depending on the system</span>
+</pre></div>
+</div>
+<p><strong>Jupyter Setup Tutorial for using the examples (`[Link] &lt;https://www.maksimeren.com/post/conda-and-jupyter-setup-for-research/&gt;`_)</strong></p>
+<p><strong>Other Considerations</strong>
+On some Linux devices, based on how CUDA was configured, you may get an error when using a GPU. Install <code class="docutils literal notranslate"><span class="pre">cudatoolkit</span></code> to resolve the error:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>cudatoolkit
+conda<span class="w"> </span>install<span class="w"> </span>cudnn
 </pre></div>
 </div>
 </section>
