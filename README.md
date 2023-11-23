@@ -12,7 +12,7 @@
 
 <div align="center", style="font-size: 50px">
 
-### [:information_source: Documentation](https://lanl.github.io/telf/) &emsp; [:orange_book: Examples](examples/) &emsp; [:page_with_curl: Publications](https://smart-tensors.lanl.gov/publications/) &emsp; [:link: Website](https://smart-tensors.LANL.gov)
+### [:information_source: Documentation](https://lanl.github.io/T-ELF/) &emsp; [:orange_book: Examples](examples/) &emsp; [:page_with_curl: Publications](https://smart-tensors.lanl.gov/publications/) &emsp; [:link: Website](https://smart-tensors.LANL.gov)
 
 </div>
 
