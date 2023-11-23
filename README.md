@@ -150,17 +150,16 @@ If you use T-ELF please cite.
 
 **APA:**
 ```latex
-Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.2) [Computer software]. https://github.com/lanl/T-ELF
+Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) [Computer software]. https://github.com/lanl/T-ELF
 ```
 
 **BibTeX:**
 ```latex
 @software{Tensor_Extraction_of_2023,
-author = {Eren, Maksim and Solovyev, Nick and Barron, Ryan and Bhattarai, Manish and Boureima, Ismael and Skau, Erik and Rasmussen, Kim and Alexandrov, Boian},
+author = {Eren, Maksim and Solovyev, Nick and Barron, Ryan and Bhattarai, Manish and Truong, Duc and Boureima, Ismael and Skau, Erik and Rasmussen, Kim and Alexandrov, Boian},
 month = oct,
 title = {{Tensor Extraction of Latent Features (T-ELF)}},
 url = {https://github.com/lanl/T-ELF},
-version = {0.0.2},
 year = {2023}
 }
 ```
@@ -170,6 +169,7 @@ year = {2023}
 - [Nicholas Solovyev](mailto:nks@lanl.gov): Theoretical Division, Los Alamos National Laboratory
 - [Ryan Barron](mailto:barron@lanl.gov): Theoretical Division, Los Alamos National Laboratory
 - [Manish Bhattarai](mailto:ceodspspectrum@lanl.gov): Theoretical Division, Los Alamos National Laboratory
+- [Duc Truong](mailto:dptruong@lanl.gov): Theoretical Division, Los Alamos National Laboratory
 - [Ismael Boureima](mailto:iboureima@lanl.gov): Theoretical Division, Los Alamos National Laboratory
 - [Erik Skau](mailto:ewskau@lanl.gov): Computer, Computational, and Statistical Sciences Division, Los Alamos National Laboratory
 - [Kim Rasmussen](mailto:kor@lanl.gov): Theoretical Division, Los Alamos National Laboratory
