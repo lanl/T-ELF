@@ -22,7 +22,7 @@ setup(
     platforms = ["Linux", "Mac", "Windows"],
     include_package_data=True,
     setup_requires=INSTALL_REQUIRES,
-    url='https://gitlab.lanl.gov/maksim/nmfk.git',
+    url='https://github.com/lanl/T-ELF',
     packages=find_packages(),
     classifiers=[
         'Development Status :: 3 - Alpha',
