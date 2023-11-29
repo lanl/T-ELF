@@ -441,7 +441,11 @@ def main(name, k, decomposition, num_top_words, num_top_documents):
         df['year'] = df['year'].astype(int)
         df['year'].replace(-1, np.nan, inplace=True)
 
-
+    # Add H clustering information to DataFrame
+    df['cluster'] = documents_information_df['cluster']
+    df['cluster_coordinates'] = documents_information_df['cluster_coordinates']
+    df['similarity_to_cluster_centroid'] = documents_information_df['similarity_to_cluster_centroid']
+        
     # If type is a column, add the core paper info to H clustering results table
     if 'type' in df:
         core_map = get_core_map(df)
@@ -449,12 +453,7 @@ def main(name, k, decomposition, num_top_words, num_top_documents):
         core_map_counts = {k: round(100*v / num_total_core, 2) for k,v in core_map.items()}
         table_df['core_count'] = table_df['cluster'].map(core_map)
         table_df['core_percentage'] = table_df['cluster'].map(core_map_counts)
-        table_df.to_csv(os.path.join(output_dir, 'table_H-clusterings.csv'), index=False)
-
-    # Add H clustering information to DataFrame
-    df['cluster'] = documents_information_df['cluster']
-    df['cluster_coordinates'] = documents_information_df['cluster_coordinates']
-    df['similarity_to_cluster_centroid'] = documents_information_df['similarity_to_cluster_centroid']
+        table_df.to_csv(os.path.join(output_dir, 'table_H-clustering.csv'), index=False)
 
     # Save the post-processed df
     df.to_csv(os.path.join(output_dir, f'cluster_{name}.csv'), index=False)
