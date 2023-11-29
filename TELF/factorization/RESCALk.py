@@ -238,7 +238,7 @@ def _rescal_parallel_wrapper(
     #
     # Regress H
     #
-    H = __R_regression(X, A, use_gpu, gpuid)
+    R = __R_regression(X, A, use_gpu, gpuid)
     
     if use_gpu:
         cp._default_memory_pool.free_all_blocks()
