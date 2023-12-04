@@ -457,9 +457,10 @@ class SymNMFk:
         )
         save_path = os.path.join(self.save_path, self.experiment_name)
 
-        if self.n_jobs > len(Ks):
-            #warnings.warn(f'Requested {self.n_jobs} jobs but only processing {len(Ks)} k values!')
+        if (self.n_jobs > len(Ks)) and not self.perturb_multiprocessing:
             self.n_jobs = len(Ks)
+        elif (self.n_jobs > self.n_perturbs) and self.perturb_multiprocessing:
+            self.n_jobs = self.n_perturbs
             
         if self.transpose:
             if isinstance(X, np.ndarray):
