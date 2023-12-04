@@ -114,6 +114,7 @@ How to Cite T-ELF?
       month = oct,
       title = {{Tensor Extraction of Latent Features (T-ELF)}},
       url = {https://github.com/lanl/T-ELF},
+      doi = {10.5281/zenodo.10257897},
       year = {2023}
    }
 

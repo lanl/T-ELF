@@ -2,7 +2,7 @@
 
 <div align="center", style="font-size: 50px">
 
-[![Build Status](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main)](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main) [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg) [![Python Version](https://img.shields.io/badge/python-v3.11.5-blue)](https://img.shields.io/badge/python-v3.8.5-blue)
+[![Build Status](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main)](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main) [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg) [![Python Version](https://img.shields.io/badge/python-v3.11.5-blue)](https://img.shields.io/badge/python-v3.8.5-blue) [![DOI](https://zenodo.org/badge/703212457.svg)](https://zenodo.org/doi/10.5281/zenodo.10257896)
 
 </div> 
 
@@ -160,6 +160,7 @@ author = {Eren, Maksim and Solovyev, Nick and Barron, Ryan and Bhattarai, Manish
 month = oct,
 title = {{Tensor Extraction of Latent Features (T-ELF)}},
 url = {https://github.com/lanl/T-ELF},
+doi = {10.5281/zenodo.10257897},
 year = {2023}
 }
 ```
