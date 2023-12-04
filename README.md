@@ -2,7 +2,7 @@
 
 <div align="center", style="font-size: 50px">
 
-[![Build Status](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main)](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main) [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg) [![Python Version](https://img.shields.io/badge/python-v3.11.5-blue)](https://img.shields.io/badge/python-v3.8.5-blue)
+[![Build Status](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main)](https://github.com/lanl/T-ELF/actions/workflows/ci_tests.yml/badge.svg?branch=main) [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg) [![Python Version](https://img.shields.io/badge/python-v3.11.5-blue)](https://img.shields.io/badge/python-v3.8.5-blue) [![DOI](https://zenodo.org/badge/703212457.svg)](https://zenodo.org/doi/10.5281/zenodo.10257896)
 
 </div> 
 
@@ -150,17 +150,18 @@ If you use T-ELF please cite.
 
 **APA:**
 ```latex
-Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) [Computer software]. https://github.com/lanl/T-ELF
+Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.4) [Computer software]. https://doi.org/10.5281/zenodo.10257897
 ```
 
 **BibTeX:**
 ```latex
-@software{Tensor_Extraction_of_2023,
-author = {Eren, Maksim and Solovyev, Nick and Barron, Ryan and Bhattarai, Manish and Truong, Duc and Boureima, Ismael and Skau, Erik and Rasmussen, Kim and Alexandrov, Boian},
-month = oct,
-title = {{Tensor Extraction of Latent Features (T-ELF)}},
-url = {https://github.com/lanl/T-ELF},
-year = {2023}
+@software{TELF,
+  author = {Eren, Maksim and Solovyev, Nick and Barron, Ryan and Bhattarai, Manish and Truong, Duc and Boureima, Ismael and Skau, Erik and Rasmussen, Kim and Alexandrov, Boian},
+  month = oct,
+  title = {{Tensor Extraction of Latent Features (T-ELF)}},
+  url = {https://github.com/lanl/T-ELF},
+  doi = {10.5281/zenodo.10257897},
+  year = {2023}
 }
 ```
 
