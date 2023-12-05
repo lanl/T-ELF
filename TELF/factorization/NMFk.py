@@ -754,8 +754,10 @@ class NMFk:
         #
         # Setup
         # 
-        if self.n_jobs > len(Ks):
+        if (self.n_jobs > len(Ks)) and not self.perturb_multiprocessing:
             self.n_jobs = len(Ks)
+        elif (self.n_jobs > self.n_perturbs) and self.perturb_multiprocessing:
+            self.n_jobs = self.n_perturbs
             
         if self.transpose:
             if isinstance(X, np.ndarray):
