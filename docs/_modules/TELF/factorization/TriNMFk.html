@@ -292,8 +292,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">scipy.sparse</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
@@ -362,6 +362,7 @@ document.write(`
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">experiment_name</span><span class="o">=</span><span class="s2">&quot;TriNMFk&quot;</span><span class="p">,</span>
                  <span class="n">nmfk_params</span><span class="o">=</span><span class="p">{},</span>
+                 <span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;TriNMFk&quot;</span><span class="p">,</span>
                  <span class="n">nmf_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
@@ -383,6 +384,8 @@ document.write(`
 <span class="sd">            Name used for the experiment. Default is &quot;TriNMFk&quot;.</span>
 <span class="sd">        nmfk_params : str, optional</span>
 <span class="sd">            Parameters for NMFk. See documentation for NMFk for the options.</span>
+<span class="sd">        save_path : str, optional</span>
+<span class="sd">            Used for save location when NMFk fit is not performed first, and TriNMFk fit is done.</span>
 <span class="sd">        nmf_verbose : bool, optional</span>
 <span class="sd">            If True, shows progress in each NMF operation. The default is False.</span>
 <span class="sd">        use_gpu : bool, optional</span>
@@ -426,8 +429,9 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_fit</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pruned</span> <span class="o">=</span> <span class="n">pruned</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transpose</span> <span class="o">=</span> <span class="n">transpose</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">=</span> <span class="n">save_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
         <span class="c1"># organize n_jobs</span>
         <span class="n">n_jobs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="n">organize_n_jobs</span><span class="p">(</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
@@ -483,7 +487,7 @@ document.write(`
 
         <span class="c1"># Do NMFk</span>
         <span class="n">nmfk_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmfk</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Ks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="n">note</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nmfk</span><span class="o">.</span><span class="n">save_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmfk</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmfk</span><span class="o">.</span><span class="n">save_path_full</span>
 
         <span class="c1"># Do nmfk here</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_fit</span> <span class="o">=</span> <span class="kc">True</span>
@@ -495,7 +499,8 @@ document.write(`
 <a class="viewcode-back" href="../../../TriNMFk.html#TELF.factorization.TriNMFk.TriNMFk.fit_tri_nmfk">[docs]</a>
     <span class="k">def</span> <span class="nf">fit_tri_nmfk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">k1k2</span><span class="p">:</span><span class="nb">tuple</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Factorize the input matrix ``X``, after applying ``fit_nmfk()`` to select the ``Wk`` and ``Hk``, to factorize the given matrix with ``k1k2=(Wk, Hk)``.</span>
+<span class="sd">        Factorize the input matrix ``X``.\n</span>
+<span class="sd">        after applying ``fit_nmfk()`` to select the ``Wk`` and ``Hk``, to factorize the given matrix with ``k1k2=(Wk, Hk)``.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -513,8 +518,20 @@ document.write(`
 
         
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_fit</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;NMFk needs to be fit first. Use fit_nmfk function!&quot;</span><span class="p">)</span>
-            <span class="k">return</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_iters</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;iters_&quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_inits</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;inits_&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+                    <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transpose</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
@@ -586,7 +603,7 @@ document.write(`
 
         <span class="c1"># save the results</span>
         <span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span>
                     <span class="o">+</span> <span class="s2">&quot;/WSH&quot;</span>
                     <span class="o">+</span> <span class="s2">&quot;_k=&quot;</span>
                     <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k1k2</span><span class="p">)</span>
