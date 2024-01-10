@@ -19,8 +19,8 @@ from tqdm import tqdm
 import numpy as np
 import warnings
 import scipy.sparse
-import numpy as np
 import os
+from pathlib import Path
 
 try:
     import cupy as cp
@@ -87,6 +87,7 @@ class TriNMFk():
     def __init__(self,
                  experiment_name="TriNMFk",
                  nmfk_params={},
+                 save_path = "TriNMFk",
                  nmf_verbose=False,
                  use_gpu=False,
                  n_jobs=-1,
@@ -108,6 +109,8 @@ class TriNMFk():
             Name used for the experiment. Default is "TriNMFk".
         nmfk_params : str, optional
             Parameters for NMFk. See documentation for NMFk for the options.
+        save_path : str, optional
+            Used for save location when NMFk fit is not performed first, and TriNMFk fit is done.
         nmf_verbose : bool, optional
             If True, shows progress in each NMF operation. The default is False.
         use_gpu : bool, optional
@@ -151,8 +154,9 @@ class TriNMFk():
         self.nmfk_fit = False
         self.pruned = pruned
         self.transpose = transpose
-        self.save_path = "",
+        self.save_path = save_path
         self.verbose = verbose
+        self.save_path_full = ""
 
         # organize n_jobs
         n_jobs, self.use_gpu = organize_n_jobs(use_gpu, n_jobs)
@@ -206,7 +210,7 @@ class TriNMFk():
 
         # Do NMFk
         nmfk_results = self.nmfk.fit(X, Ks, self.experiment_name, note)
-        self.save_path = os.path.join(self.nmfk.save_path, self.nmfk.experiment_name)
+        self.save_path_full = self.nmfk.save_path_full
 
         # Do nmfk here
         self.nmfk_fit = True
@@ -215,7 +219,8 @@ class TriNMFk():
 
     def fit_tri_nmfk(self, X, k1k2:tuple):
         """
-        Factorize the input matrix ``X``, after applying ``fit_nmfk()`` to select the ``Wk`` and ``Hk``, to factorize the given matrix with ``k1k2=(Wk, Hk)``.
+        Factorize the input matrix ``X``.\n
+        after applying ``fit_nmfk()`` to select the ``Wk`` and ``Hk``, to factorize the given matrix with ``k1k2=(Wk, Hk)``.
 
         Parameters
         ----------
@@ -233,8 +238,20 @@ class TriNMFk():
 
         
         if not self.nmfk_fit:
-            warnings.warn("NMFk needs to be fit first. Use fit_nmfk function!")
-            return
+            name = (
+                str(self.experiment_name)
+                + "_"
+                + str(self.n_iters)
+                + "iters_"
+                + str(self.n_inits)
+                + "inits"
+            )
+            self.save_path_full = os.path.join(self.save_path, name)
+            try:
+                if not Path(self.save_path_full).is_dir():
+                    Path(self.save_path_full).mkdir(parents=True)
+            except Exception as e:
+                print(e)
         
         if self.transpose:
             if isinstance(X, np.ndarray):
@@ -306,7 +323,7 @@ class TriNMFk():
 
         # save the results
         np.savez_compressed(
-                    self.save_path
+                    self.save_path_full
                     + "/WSH"
                     + "_k="
                     + str(k1k2)

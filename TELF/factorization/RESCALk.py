@@ -598,8 +598,10 @@ class RESCALk:
         #
         # Setup
         # 
-        if self.n_jobs > len(Ks):
+        if (self.n_jobs > len(Ks)) and not self.perturb_multiprocessing:
             self.n_jobs = len(Ks)
+        elif (self.n_jobs > self.n_perturbs) and self.perturb_multiprocessing:
+            self.n_jobs = self.n_perturbs
 
         # init the stats header 
         # this will setup the logging for all configurations of rescalk
