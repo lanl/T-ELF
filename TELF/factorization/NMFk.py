@@ -17,6 +17,7 @@ from .utilities.pvalue_analysis import pvalue_analysis
 from .utilities.organize_n_jobs import organize_n_jobs
 from .decompositions.nmf_kl_mu import nmf as nmf_kl_mu
 from .decompositions.nmf_fro_mu import nmf as nmf_fro_mu
+from .decompositions.wnmf import nmf as wnmf
 from .decompositions.nmf_recommender import nmf as nmf_recommender
 from .decompositions.nmf_fro_mu import H_update
 from .decompositions.utilities.nnsvd import nnsvd
@@ -101,6 +102,7 @@ def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
     return Y
 
 def __init_WH(Y, k, mask, init_type:str):
+
     if init_type == "nnsvd":
         if mask is not None:
             Y[mask] = 0
@@ -493,12 +495,18 @@ class NMFk:
             * ``nmf_method='nmf_kl_mu'`` will use NMF with Multiplicative Update rules with KL-Divergence.\n
             * ``nmf_method='func'`` will use the custom NMF function passed using the ``nmf_func`` parameter.\n
             * ``nmf_method='nmf_recommender'`` will use the Recommender NMF method for collaborative filtering.\n
+            * ``nmf_method='wnmf'`` will use the Weighted NMF for missing value completion.\n
 
             .. note::
 
                 When using ``nmf_method='nmf_recommender'``, RNMFk prediction method can be done using ``from TELF.factorization import RNMFk_predict``.\n
                 Here ``RNMFk_predict(W, H, global_mean, bu, bi, u, i)``, ``W`` and ``H`` are the latent factors, ``global_mean``, ``bu``, and ``bi`` are the biases returned from ``nmf_recommender`` method.\n
                 Finally, ``u`` and ``i`` are the indices to perform prediction on.
+
+            .. note::
+                When using ``nmf_method='wnmf'``, pass ``nmf_obj_params={"WEIGHTS":P}`` where ``P`` is a matrix of size ``X`` and carries the weights for each item in ``X``.\n
+                For example, here ``P`` can be used as a mask where 1s in ``P`` are the known entries, and 0s are the missing values in ``X`` that we want to predict (i.e. a recommender system).\n
+                Note that ``nmf_method='wnmf'`` does not support sparse matrices currently.
                 
 
         nmf_obj_params : dict, optional
@@ -618,6 +626,7 @@ class NMFk:
             "nmf_fro_mu", 
             "nmf_kl_mu", 
             "nmf_recommender", 
+            "wnmf",
             "func"
         ]
         if self.nmf_method not in avail_nmf_methods:
@@ -643,6 +652,16 @@ class NMFk:
                 "use_consensus_stopping": self.use_consensus_stopping
             }
             self.nmf = nmf_kl_mu
+
+        elif self.nmf_method == "wnmf":
+            self.nmf_params = {
+                "niter": self.n_iters,
+                "use_gpu": self.use_gpu,
+                "nmf_verbose": self.nmf_verbose,
+            }
+            if "WEIGHTS" not in self.nmf_obj_params:
+                warnings.warn("When using wnmf, use nmf_obj_params={'WEIGHTS':P}, where P is the weights matrix. Otherwise P will have 1s where X>0.")
+            self.nmf = wnmf
 
         elif self.nmf_method == "func" or nmf_func is not None:
             self.nmf_params = self.nmf_obj_params

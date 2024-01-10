@@ -290,6 +290,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.utilities.organize_n_jobs</span> <span class="kn">import</span> <span class="n">organize_n_jobs</span>
 <span class="kn">from</span> <span class="nn">.decompositions.nmf_kl_mu</span> <span class="kn">import</span> <span class="n">nmf</span> <span class="k">as</span> <span class="n">nmf_kl_mu</span>
 <span class="kn">from</span> <span class="nn">.decompositions.nmf_fro_mu</span> <span class="kn">import</span> <span class="n">nmf</span> <span class="k">as</span> <span class="n">nmf_fro_mu</span>
+<span class="kn">from</span> <span class="nn">.decompositions.wnmf</span> <span class="kn">import</span> <span class="n">nmf</span> <span class="k">as</span> <span class="n">wnmf</span>
 <span class="kn">from</span> <span class="nn">.decompositions.nmf_recommender</span> <span class="kn">import</span> <span class="n">nmf</span> <span class="k">as</span> <span class="n">nmf_recommender</span>
 <span class="kn">from</span> <span class="nn">.decompositions.nmf_fro_mu</span> <span class="kn">import</span> <span class="n">H_update</span>
 <span class="kn">from</span> <span class="nn">.decompositions.utilities.nnsvd</span> <span class="kn">import</span> <span class="n">nnsvd</span>
@@ -374,6 +375,7 @@ document.write(`
     <span class="k">return</span> <span class="n">Y</span>
 
 <span class="k">def</span> <span class="nf">__init_WH</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">init_type</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
+
     <span class="k">if</span> <span class="n">init_type</span> <span class="o">==</span> <span class="s2">&quot;nnsvd&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">Y</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -768,12 +770,18 @@ document.write(`
 <span class="sd">            * ``nmf_method=&#39;nmf_kl_mu&#39;`` will use NMF with Multiplicative Update rules with KL-Divergence.\n</span>
 <span class="sd">            * ``nmf_method=&#39;func&#39;`` will use the custom NMF function passed using the ``nmf_func`` parameter.\n</span>
 <span class="sd">            * ``nmf_method=&#39;nmf_recommender&#39;`` will use the Recommender NMF method for collaborative filtering.\n</span>
+<span class="sd">            * ``nmf_method=&#39;wnmf&#39;`` will use the Weighted NMF for missing value completion.\n</span>
 
 <span class="sd">            .. note::</span>
 
 <span class="sd">                When using ``nmf_method=&#39;nmf_recommender&#39;``, RNMFk prediction method can be done using ``from TELF.factorization import RNMFk_predict``.\n</span>
 <span class="sd">                Here ``RNMFk_predict(W, H, global_mean, bu, bi, u, i)``, ``W`` and ``H`` are the latent factors, ``global_mean``, ``bu``, and ``bi`` are the biases returned from ``nmf_recommender`` method.\n</span>
 <span class="sd">                Finally, ``u`` and ``i`` are the indices to perform prediction on.</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                When using ``nmf_method=&#39;wnmf&#39;``, pass ``nmf_obj_params={&quot;WEIGHTS&quot;:P}`` where ``P`` is a matrix of size ``X`` and carries the weights for each item in ``X``.\n</span>
+<span class="sd">                For example, here ``P`` can be used as a mask where 1s in ``P`` are the known entries, and 0s are the missing values in ``X`` that we want to predict (i.e. a recommender system).\n</span>
+<span class="sd">                Note that ``nmf_method=&#39;wnmf&#39;`` does not support sparse matrices currently.</span>
 <span class="sd">                </span>
 
 <span class="sd">        nmf_obj_params : dict, optional</span>
@@ -893,6 +901,7 @@ document.write(`
             <span class="s2">&quot;nmf_fro_mu&quot;</span><span class="p">,</span> 
             <span class="s2">&quot;nmf_kl_mu&quot;</span><span class="p">,</span> 
             <span class="s2">&quot;nmf_recommender&quot;</span><span class="p">,</span> 
+            <span class="s2">&quot;wnmf&quot;</span><span class="p">,</span>
             <span class="s2">&quot;func&quot;</span>
         <span class="p">]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">avail_nmf_methods</span><span class="p">:</span>
@@ -918,6 +927,16 @@ document.write(`
                 <span class="s2">&quot;use_consensus_stopping&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_consensus_stopping</span>
             <span class="p">}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nmf</span> <span class="o">=</span> <span class="n">nmf_kl_mu</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="o">==</span> <span class="s2">&quot;wnmf&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nmf_params</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iters</span><span class="p">,</span>
+                <span class="s2">&quot;use_gpu&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
+                <span class="s2">&quot;nmf_verbose&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_verbose</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="s2">&quot;WEIGHTS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_obj_params</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;When using wnmf, use nmf_obj_params={&#39;WEIGHTS&#39;:P}, where P is the weights matrix. Otherwise P will have 1s where X&gt;0.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nmf</span> <span class="o">=</span> <span class="n">wnmf</span>
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="o">==</span> <span class="s2">&quot;func&quot;</span> <span class="ow">or</span> <span class="n">nmf_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nmf_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_obj_params</span>
