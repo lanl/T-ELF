@@ -233,8 +233,7 @@ class SimpleCleaner(VultureModuleBase):
             tokens = self.sw_pattern.findall(text)
             cleaned_words = [t for t in tokens if 
                              t in self.frozen or  # entire term in frozen
-                             #self._remove_stop_words_helper(t) or  # term partially in frozen
-                             not any(part in self.effective_stop_words for part in t.split('-'))]  # no part in stopwords
+                             not any(part.lower() in self.effective_stop_words for part in t.split('-'))]  # no part in stopwords
             return ' '.join(cleaned_words)
 
         
