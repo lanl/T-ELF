@@ -152,6 +152,8 @@ def _perturb_parallel_wrapper(
     if use_gpu:
         Y = __put_X_gpu(Y, gpuid)
         W_init, H_init = __put_WH_gpu(W_init, H_init, gpuid)
+        if "WEIGHTS" in nmf_params and nmf_params["WEIGHTS"] is not None:
+            nmf_params["WEIGHTS"] = __put_X_gpu(nmf_params["WEIGHTS"], gpuid)
 
     W, H, other_results = __run_nmf(Y, W_init, H_init, nmf, nmf_params, use_gpu, gpuid)
 
