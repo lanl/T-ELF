@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 from glob import glob
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 # add readme
 with open('README.md', 'r') as f:
