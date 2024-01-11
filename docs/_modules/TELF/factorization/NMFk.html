@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.NMFk &#8212; TELF 0.0.5 documentation</title>
+    <title>TELF.factorization.NMFk &#8212; TELF 0.0.6 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../../../_static/documentation_options.js?v=6424ca4d"></script>
+    <script src="../../../_static/documentation_options.js?v=73504a2b"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.5 documentation</p>
+    <p class="title logo__title">TELF 0.0.6 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -425,6 +425,8 @@ document.write(`
     <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="n">__put_X_gpu</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
         <span class="n">W_init</span><span class="p">,</span> <span class="n">H_init</span> <span class="o">=</span> <span class="n">__put_WH_gpu</span><span class="p">(</span><span class="n">W_init</span><span class="p">,</span> <span class="n">H_init</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;WEIGHTS&quot;</span> <span class="ow">in</span> <span class="n">nmf_params</span> <span class="ow">and</span> <span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;WEIGHTS&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;WEIGHTS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">__put_X_gpu</span><span class="p">(</span><span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;WEIGHTS&quot;</span><span class="p">],</span> <span class="n">gpuid</span><span class="p">)</span>
 
     <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">other_results</span> <span class="o">=</span> <span class="n">__run_nmf</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">W_init</span><span class="p">,</span> <span class="n">H_init</span><span class="p">,</span> <span class="n">nmf</span><span class="p">,</span> <span class="n">nmf_params</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
 
