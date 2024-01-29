@@ -151,7 +151,7 @@ If you use T-ELF please cite.
 
 **APA:**
 ```latex
-Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.5) [Computer software]. https://doi.org/10.5281/zenodo.10257897
+Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.6) [Computer software]. https://doi.org/10.5281/zenodo.10257897
 ```
 
 **BibTeX:**

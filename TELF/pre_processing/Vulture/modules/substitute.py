@@ -67,16 +67,14 @@ class SubstitutionCleaner(VultureModuleBase):
             Tuple of document id and substituted text
         """
         doc_id, doc_text = document
-        
-        if self.lower:  # TODO: test removing this conditional
-            doc_text = doc_text.lower()
+        flags = re.IGNORECASE if self.lower else 0
         for term, target in self.substitution_map.items():
             if term == target:  # if reflective substition (freezing some important term)
                 continue
             if target.strip() == '':  # if using substitution for deletion
-                doc_text = re.sub(r'\b{}\b(?=\s|$)'.format(re.escape(term)), target, doc_text)
+                doc_text = re.sub(r'\b{}\b(?=\s|$)'.format(re.escape(term)), target, doc_text, flags=flags)
             else:
-                doc_text = re.sub(r'\b{}\b'.format(re.escape(term)), target, doc_text)
+                doc_text = re.sub(r'\b{}\b'.format(re.escape(term)), target, doc_text, flags=flags)
         return (doc_id, doc_text)
 
     
@@ -285,6 +283,7 @@ class SubstitutionCleaner(VultureModuleBase):
                           'Ignoring substitution!', RuntimeWarning)
             self._substitution_map = {}
         elif isinstance(substitution_map, dict):
+            substitution_map = substitution_map.copy()  # break reference to input argument
             is_valid = self._validate_substitutions(substitution_map)
             if is_valid:
                 if self.lower:

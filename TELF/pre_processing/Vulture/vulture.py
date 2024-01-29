@@ -17,6 +17,8 @@ import uuid
 import pickle
 import pathlib
 import warnings
+import numpy as np
+import pandas as pd
 from tqdm import tqdm
 import multiprocessing
 from joblib import Parallel, delayed, parallel_backend
@@ -118,7 +120,7 @@ class Vulture:
             self.rank = self.comm.Get_rank()
             self.size = self.comm.Get_size()
 
-		# generate unique ID only on the root process
+        # generate unique ID only on the root process
         if self.rank == 0:
             self.unique_id = str(uuid.uuid4())
         else:
@@ -200,6 +202,7 @@ class Vulture:
         # add the clean data back to the DataFrame
         for col, clean_docs in clean_documents.items():
             df[col] = df.index.map(clean_docs)
+            df[col].replace('', np.nan, inplace=True)  # set null entries to None
         return df
     
     
