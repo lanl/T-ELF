@@ -4,3 +4,4 @@
 - **RESCALk:** RESCAL with Automatic Model Determination. RESCALk has HPC and multi-processing capabilities for both CPU and GPU systems.
 - **TriNMFk:** NMF with Automatic Model Determination for Clusters and Patterns. 
 - **SymNMFk:** NMFk with symmetric clustering.
+- **WNMFk:** NMFk with weighting - used for recommendation system
