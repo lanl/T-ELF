@@ -55,7 +55,7 @@ def nmf(X, W, H,
 
             # H update
             H[curr_k] = np.dot(Rp.T, W[:, curr_k]) / (np.dot(WEIGHTS.T, W[:, curr_k]**2) + lamb)
-            W[:, curr_k] = np.maximum(W[:, curr_k].astype(dtype), eps)
+            H[curr_k] = np.maximum(H[curr_k].astype(dtype), eps)
 
             R -= np.outer(W[:, curr_k], H[curr_k])
 
