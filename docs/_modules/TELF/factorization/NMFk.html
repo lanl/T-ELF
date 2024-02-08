@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.NMFk &#8212; TELF 0.0.7 documentation</title>
+    <title>TELF.factorization.NMFk &#8212; TELF 0.0.8 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../../../_static/documentation_options.js?v=c8acc836"></script>
+    <script src="../../../_static/documentation_options.js?v=820a49c8"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.7 documentation</p>
+    <p class="title logo__title">TELF 0.0.8 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -610,8 +610,6 @@ document.write(`
             <span class="o">**</span><span class="n">save_data</span>
         <span class="p">)</span>
 
-        <span class="c1"># if predict k is True, report &quot;L statistics error&quot;</span>
-        
         <span class="n">plot_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">logging_stats</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;k&#39;</span><span class="p">:</span>
@@ -628,12 +626,6 @@ document.write(`
             <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;err_std&#39;</span><span class="p">:</span>
                 <span class="n">err_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
                 <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;err_std&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err_std</span><span class="p">)</span>
-            <span class="c1">### Commenting out PAC calculation because it is invalid when calculated at a single iteration</span>
-            <span class="c1">### Need to add a solution for adding PAC calculation after experiment has concluded</span>
-            <span class="c1"># elif key == &#39;pac&#39;: </span>
-            <span class="c1">#     consensus_tensor = np.array([reordered_con_mat])</span>
-            <span class="c1">#     pac = get_pac(consensus_tensor, use_gpu=use_gpu)[0]</span>
-            <span class="c1">#     plot_data[&quot;pac&quot;] = &#39;{0:.3f}&#39;.format(pac)</span>
             <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;col_error&#39;</span><span class="p">:</span>
                 <span class="n">mean_col_err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">curr_col_err</span><span class="p">)</span>
                 <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;col_err&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mean_col_err</span><span class="p">)</span>
@@ -659,7 +651,6 @@ document.write(`
         <span class="s2">&quot;sils_std&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
         <span class="s2">&quot;sils_all&quot;</span><span class="p">:</span><span class="n">sils_all</span><span class="p">,</span>
         <span class="s2">&quot;cophenetic_coeff&quot;</span><span class="p">:</span><span class="n">coeff_k</span><span class="p">,</span>
-        <span class="s2">&quot;reordered_con_mat&quot;</span><span class="p">:</span><span class="n">reordered_con_mat</span><span class="p">,</span>
         <span class="s2">&quot;col_err&quot;</span><span class="p">:</span><span class="n">curr_col_err</span><span class="p">,</span>
     <span class="p">}</span>
 
@@ -867,6 +858,13 @@ document.write(`
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_pac</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">consensus_mat</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">consensus_mat</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;consensus_mat was False when calculate_pac was True! consensus_mat changed to True.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_pac</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;calculate_pac is True. PAC calculation for large matrices can take long time. For large matrices, instead use consensus_mat=True and calculate_pac=False.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_pac</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;save_output was False when calculate_pac was True! save_output changed to True.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_error</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
@@ -1248,8 +1246,14 @@ document.write(`
                     <span class="n">plot_cophenetic_coeff</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;cophenetic_coeff&quot;</span><span class="p">],</span> <span class="n">con_fig_name</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_pac</span><span class="p">:</span>
-                    <span class="n">consensus_tensor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;reordered_con_mat&quot;</span><span class="p">])</span>
-                    <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;pac&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">get_pac</span><span class="p">(</span><span class="n">consensus_tensor</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">))</span>
+                    
+                    <span class="c1"># load reordered consensus matrices from each k</span>
+                    <span class="n">reordered_con_matrices</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">curr_k_to_load</span> <span class="ow">in</span> <span class="n">Ks</span><span class="p">:</span>
+                        <span class="n">reordered_con_matrices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="si">}</span><span class="s1">/WH_k=</span><span class="si">{</span><span class="n">curr_k_to_load</span><span class="si">}</span><span class="s1">.npz&#39;</span><span class="p">)[</span><span class="s2">&quot;reordered_con_mat&quot;</span><span class="p">])</span>
+                    <span class="n">consensus_tensor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">reordered_con_matrices</span><span class="p">)</span>
+                    <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;pac&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">get_pac</span><span class="p">(</span><span class="n">consensus_tensor</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">))</span>
+                    <span class="n">consensus_tensor</span><span class="p">,</span> <span class="n">reordered_con_matrices</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
             <span class="c1"># save k prediction</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k</span><span class="p">:</span>

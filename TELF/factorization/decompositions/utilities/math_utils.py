@@ -1,12 +1,11 @@
 from .generic_utils import get_np, get_scipy
 import itertools
+from tqdm import tqdm
 
 
-def get_pac(C, use_gpu=False):
+def get_pac(C, use_gpu=False, verbose=False):
     """
-    TODO: Duc to fix Pac so mathematically it is correct
-
-    Removes zero rows and columns from a matrix
+    Calculates PAC score from consensus matrices
 
     Parameters
     ----------
@@ -20,13 +19,12 @@ def get_pac(C, use_gpu=False):
         
     """
     np = get_np(C, use_gpu=use_gpu)
-    
     C_shape = np.shape(C)
     kmax, N = C_shape[0], C_shape[1]
     c_index = np.linspace(start=0, stop=1, num=10)
     cdf = np.zeros((kmax, len(c_index)))
 
-    for k in range(kmax):
+    for k in tqdm(range(kmax), total=kmax, disable= not verbose):
         M = np.squeeze(C[k,:,:])
         for cval in range(0, len(c_index)):
             sum_ = 0
