@@ -337,8 +337,6 @@ def _nmf_parallel_wrapper(
             **save_data
         )
 
-        # if predict k is True, report "L statistics error"
-        
         plot_data = dict()
         for key in logging_stats:
             if key == 'k':
@@ -355,12 +353,6 @@ def _nmf_parallel_wrapper(
             elif key == 'err_std':
                 err_std = np.std(errors)
                 plot_data["err_std"] = '{0:.3f}'.format(err_std)
-            ### Commenting out PAC calculation because it is invalid when calculated at a single iteration
-            ### Need to add a solution for adding PAC calculation after experiment has concluded
-            # elif key == 'pac': 
-            #     consensus_tensor = np.array([reordered_con_mat])
-            #     pac = get_pac(consensus_tensor, use_gpu=use_gpu)[0]
-            #     plot_data["pac"] = '{0:.3f}'.format(pac)
             elif key == 'col_error':
                 mean_col_err = np.mean(curr_col_err)
                 plot_data["col_err"] = '{0:.3f}'.format(mean_col_err)
@@ -386,7 +378,6 @@ def _nmf_parallel_wrapper(
         "sils_std":np.std(np.mean(sils_all, 1)),
         "sils_all":sils_all,
         "cophenetic_coeff":coeff_k,
-        "reordered_con_mat":reordered_con_mat,
         "col_err":curr_col_err,
     }
 
@@ -592,6 +583,13 @@ class NMFk:
         if self.calculate_pac and not self.consensus_mat:
             self.consensus_mat = True
             warnings.warn("consensus_mat was False when calculate_pac was True! consensus_mat changed to True.")
+
+        if self.calculate_pac:
+            warnings.warn("calculate_pac is True. PAC calculation for large matrices can take long time. For large matrices, instead use consensus_mat=True and calculate_pac=False.")
+
+        if self.calculate_pac and not self.save_output:
+            self.save_output = True
+            warnings.warn("save_output was False when calculate_pac was True! save_output changed to True.")
 
         if self.calculate_error:
             warnings.warn(
@@ -971,8 +969,14 @@ class NMFk:
                     plot_cophenetic_coeff(Ks, combined_result["cophenetic_coeff"], con_fig_name)
 
                 if self.calculate_pac:
-                    consensus_tensor = np.array(combined_result["reordered_con_mat"])
-                    combined_result["pac"] = np.array(get_pac(consensus_tensor, use_gpu=self.use_gpu))
+                    
+                    # load reordered consensus matrices from each k
+                    reordered_con_matrices = []
+                    for curr_k_to_load in Ks:
+                        reordered_con_matrices.append(np.load(f'{self.save_path_full}/WH_k={curr_k_to_load}.npz')["reordered_con_mat"])
+                    consensus_tensor = np.array(reordered_con_matrices)
+                    combined_result["pac"] = np.array(get_pac(consensus_tensor, use_gpu=self.use_gpu, verbose=self.verbose))
+                    consensus_tensor, reordered_con_matrices = None, None
 
             # save k prediction
             if self.predict_k:
