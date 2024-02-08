@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.decompositions.utilities.math_utils &#8212; TELF 0.0.7 documentation</title>
+    <title>TELF.factorization.decompositions.utilities.math_utils &#8212; TELF 0.0.8 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../../../../../_static/documentation_options.js?v=c8acc836"></script>
+    <script src="../../../../../_static/documentation_options.js?v=820a49c8"></script>
     <script src="../../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.7 documentation</p>
+    <p class="title logo__title">TELF 0.0.8 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -273,15 +273,14 @@ document.write(`
   <h1>Source code for TELF.factorization.decompositions.utilities.math_utils</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">.generic_utils</span> <span class="kn">import</span> <span class="n">get_np</span><span class="p">,</span> <span class="n">get_scipy</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 
 <div class="viewcode-block" id="get_pac">
 <a class="viewcode-back" href="../../../../../TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.get_pac">[docs]</a>
-<span class="k">def</span> <span class="nf">get_pac</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_pac</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    TODO: Duc to fix Pac so mathematically it is correct</span>
-
-<span class="sd">    Removes zero rows and columns from a matrix</span>
+<span class="sd">    Calculates PAC score from consensus matrices</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -295,13 +294,12 @@ document.write(`
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
-    
     <span class="n">C_shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
     <span class="n">kmax</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="n">C_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">C_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">c_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
     <span class="n">cdf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">kmax</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">c_index</span><span class="p">)))</span>
 
-    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">kmax</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">kmax</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="n">kmax</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span> <span class="ow">not</span> <span class="n">verbose</span><span class="p">):</span>
         <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">C</span><span class="p">[</span><span class="n">k</span><span class="p">,:,:])</span>
         <span class="k">for</span> <span class="n">cval</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">c_index</span><span class="p">)):</span>
             <span class="n">sum_</span> <span class="o">=</span> <span class="mi">0</span>
