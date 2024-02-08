@@ -270,7 +270,7 @@ def _nmf_parallel_wrapper(
     coeff_k = 0
     reordered_con_mat = None
     if consensus_mat:
-        con_mat_k = compute_consensus_matrix(H_all)
+        con_mat_k = compute_consensus_matrix(H_all, pruned=pruned, perturb_cols=perturb_cols)
         reordered_con_mat, coeff_k = reorder_con_mat(con_mat_k, k)
 
     #
