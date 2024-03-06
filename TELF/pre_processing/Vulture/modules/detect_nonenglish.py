@@ -35,8 +35,8 @@ class RemoveNonEnglishCleaner(VultureModuleBase):
                         'both','during','between'}
 
     
-    def __init__(self, ascii_ratio=0.9, stopwords_ratio=0.2, frozen=None):
-        super().__init__(frozen)  # initialize the base class with the preserve
+    def __init__(self, ascii_ratio=0.9, stopwords_ratio=0.2, frozen=None, **kwargs):
+        super().__init__(frozen, **kwargs)  # initialize the base class with the preserve
         self.ascii_ratio = ascii_ratio
         self.stopwords_ratio = stopwords_ratio
         

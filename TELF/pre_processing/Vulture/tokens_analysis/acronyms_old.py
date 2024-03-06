@@ -165,3 +165,71 @@ def find_acronyms_helper(df, ignore_acs=[], ignore_gram_part=[], keep_only_acron
     df_new['tf'] = all_tf
     df_new['df'] = all_df
     return df_new
+
+
+def make_acronym_subs(self, text:str, exclude_terms: list=None,  grams_1_to_n=7):
+    grams_container = []
+    only_acronyms = []
+    find_acronyms([text], 
+                  acronyms_savepath: str=None, 
+                  exclude_terms: list=None, 
+                  grams_to_n: int=7, 
+                  column: str="clean_title_abstract", 
+                  custom_acronyms: pd.DataFrame=None, 
+                  weight: int=2,
+                  sort_wordcount: bool=True,
+                  save_grams: bool=True
+                  ):
+            
+    if len(only_acronyms) < 1:
+        return None, text
+    acronym_subs = pd.concat(only_acronyms)
+    acronym_subs['weight'] = 2
+
+    search_terms = acronym_subs['word']
+    sub_terms = acronym_subs['subs']
+    words = text.split()
+    replaced_words = [sub_terms[search_terms.index(word)] if word in search_terms else word for word in words]
+    replaced_text = ' '.join(replaced_words)
+
+    return acronym_subs, replaced_text
+
+
+def check_unique_or_concatenate(self, series):
+    if series.nunique() == 1:  
+        return series.iloc[0]
+    else:
+        all_unique_components = set()
+        
+        for value in series.unique():
+            all_unique_components.update(value.split(' | '))
+        return ' | '.join(sorted(all_unique_components)) 
+
+def consolidate_acronyms(self,all_acronyms):
+    combined_df = pd.concat(all_acronyms, ignore_index=True)
+    aggregated_acronyms = combined_df.groupby(['word','subs'], as_index=False).agg({
+        'subs': self.check_unique_or_concatenate,
+        'tf': 'sum',
+        'df': 'sum',
+    })
+    final_acronyms_consolidated = aggregated_acronyms.sort_values(by='df', ascending=False).reset_index(drop=True)
+    return final_acronyms_consolidated
+
+def clean_acronyms_sub_df(self, material_path, column="clean_title_abstract"):
+    df = pd.read_csv(material_path, lineterminator='\n')
+    text_data = df[column].tolist()
+    all_acronyms = []
+    new_texts = []
+    for text in tqdm(text_data[:]):
+        current_acs, subbed_text = self.make_acronym_subs(text)
+        if type(current_acs) != type(None):
+            all_acronyms.append(current_acs)
+        
+        new_texts.append(subbed_text)
+    
+
+    df['clean_subs'] = new_texts
+    # SAVE TO ORIGINAL DATA
+    df.to_csv(material_path, index=False) 
+    consolidated_acronyms = self.consolidate_acronyms(all_acronyms)
+    return consolidated_acronyms

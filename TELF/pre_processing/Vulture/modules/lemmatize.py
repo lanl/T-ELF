@@ -26,8 +26,8 @@ class LemmatizeCleaner(VultureModuleBase):
     # supported lemmatization libraries
     BACKEND_LIBRARIES = ['spacy', 'nltk']
     
-    def __init__(self, library, frozen=None):
-        super().__init__(frozen)
+    def __init__(self, library, frozen=None, **kwargs):
+        super().__init__(frozen, **kwargs)
         self.library = library
         self.backend = None
         

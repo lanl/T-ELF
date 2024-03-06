@@ -1,9 +1,13 @@
 class VultureModuleBase:
     
-    def __init__(self, frozen=None, max_display=25):
+    def __init__(self, frozen=None, max_display=25, **kwargs):
         # store the initialization parameters
         self.frozen = frozen
         self.max_display = max_display
+        self.kwargs = kwargs
+        if not kwargs:
+            kwargs = {}
+
         
     def __repr__(self):
         classname = self.__class__.__name__

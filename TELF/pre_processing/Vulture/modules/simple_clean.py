@@ -101,7 +101,7 @@ class SimpleCleaner(VultureModuleBase):
     }
     
 
-    def __init__(self, custom_patterns=None, stop_words=None, stop_phrases=None, min_characters=2, order=None, frozen=None):
+    def __init__(self, custom_patterns=None, stop_words=None, stop_phrases=None, min_characters=2, order=None, frozen=None, **kwargs):
         self._frozen = set()
         self.effective_stop_words = None
         self.patterns = self.DEFAULT_PATTERNS.copy()
@@ -115,7 +115,7 @@ class SimpleCleaner(VultureModuleBase):
         self.order = order
         
         self.sw_pattern = re.compile(r'\b[\w-]+\b')
-        super().__init__(frozen)
+        super().__init__(frozen, **kwargs)
         
         
     def __call__(self, document):

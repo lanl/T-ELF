@@ -39,8 +39,8 @@ class SubstitutionCleaner(VultureModuleBase):
         then the default LemmatizeCleaner backend library is used. If this is a string then it should 
         match one the LemmatizeCleaner backend library options.
     """
-    def __init__(self, substitution_map, permute=False, lower=False, lemmatize=False, frozen=None):
-        super().__init__(frozen)  # initialize the base class with the preserve
+    def __init__(self, substitution_map, permute=False, lower=False, lemmatize=False, frozen=None, **kwargs):
+        super().__init__(frozen, **kwargs)  # initialize the base class with the preserve
         
         self.lower = lower
         self.permute = permute
