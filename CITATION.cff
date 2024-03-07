@@ -20,7 +20,7 @@ authors:
   - family-names: Alexandrov
     given-names: Boian
 title: "Tensor Extraction of Latent Features (T-ELF)"
-version: 0.0.8
+version: 0.0.9
 url: https://github.com/lanl/T-ELF
 doi: 10.5281/zenodo.10257897
 date-released: 2023-12-04
