@@ -27,6 +27,7 @@ from TELF.pre_processing.Vulture.modules import SimpleCleaner
 from TELF.pre_processing.Vulture.modules import LemmatizeCleaner
 from TELF.pre_processing.Vulture.modules import SubstitutionCleaner
 from TELF.pre_processing.Vulture.modules import RemoveNonEnglishCleaner
+from TELF.pre_processing.Vulture.modules import NEDetector
 from TELF.pre_processing.Vulture.default_stop_words import STOP_WORDS
 from TELF.pre_processing.Vulture.default_stop_phrases import STOP_PHRASES
 
@@ -74,6 +75,9 @@ class Vulture:
     Vultures are natures' cleaners!
     """
     PARALLEL_BACKEND_OPTIONS = {'loky', 'multiprocessing', 'threading'}
+    DEFAULT_OPERATOR_PIPELINE = [
+        NEDetector(library="en_core_web_trf")
+    ]
     DEFAULT_PIPELINE = [
         SimpleCleaner(stop_words = STOP_WORDS,
                       stop_phrases = STOP_PHRASES,
@@ -129,12 +133,60 @@ class Vulture:
         # broadcast unique_id from root process to all other processes
         if self.comm is not None:
             self.unique_id = self.comm.bcast(self.unique_id, root=0)
+
+
+    def operate(self, documents, steps=None, save_path=None, file_name=""):
         
+        if steps is None:
+            steps = self.DEFAULT_OPERATOR_PIPELINE.copy()
+        
+        for step in steps:
+            if "module_type" in vars(step):
+                assert step.module_type == "OPERATOR", "This method can only be used with a OPERATOR type module."
+
+        # transform documents into list of tuples
+        operate_documents = list(documents.items())
+        if self.verbose and self.rank == 0:
+            print(f'[Vulture]: Cleaning {len(operate_documents)} documents', file=sys.stderr)
+
+
+        # prepare for MPI by chunking data and saving chunks (assuming DFS)
+        if self.use_mpi():
+            self._mpi_init(operate_documents)
+            self.comm.Barrier()
+            operate_documents = self._mpi_load_chunk_from_disk(self.rank, is_clean=False)
+
+        # perform operation
+        all_results = []
+        for step in steps:
+            if save_path is not None:
+                self.save_path = f'{save_path}/{file_name}_{step.__class__.__name__}.p'
+            else:
+                self.save_path = save_path
+
+            curr_operated_documents = self._clean_helper(operate_documents, [step])
+            if self.use_mpi():
+                self._mpi_save_chunk_to_disk(curr_operated_documents, self.rank, is_clean=True, custom_fn=f'{step.__class__.__name__}')
+                self.comm.Barrier()
+                curr_operated_documents = self._mpi_combine(custom_fn=f'{step.__class__.__name__}')
+                
+            if self.save_path is not None:
+                self._save_documents(dict(curr_operated_documents))
+            else:
+                all_results.append((f'{step.__class__.__name__}', dict(curr_operated_documents)))
+        
+        if self.save_path is None:
+            return all_results
         
     def clean(self, documents, steps=None, substitutions=None, save_path=None):
         self.save_path = save_path
         if steps is None:
             steps = self.DEFAULT_PIPELINE.copy()
+
+        for step in steps:
+            if "module_type" in vars(step):
+                assert step.module_type == "CLEANER", "This method can only be used with a CLEANER type module."
+
         if substitutions is not None:
             assert isinstance(substitutions, dict), '`substitutions` must be a dict!'
             initial_sub = SubstitutionCleaner(substitutions, permute=True, lower=True, lemmatize=True)
@@ -174,6 +226,13 @@ class Vulture:
         if not all(col in df.columns for col in columns):  # make sure columns exist
             raise ValueError("One or more columns are invalid!")
         
+        if steps is None:
+            steps = self.DEFAULT_PIPELINE.copy()
+
+        for step in steps:
+            if "module_type" in vars(step):
+                assert step.module_type == "CLEANER", "This method can only be used with a CLEANER type module."
+        
         # make a copy of the DataFrame to prevent changing original and fill nans with empty strings
         if append_to_original_df:
             df = df.copy()
@@ -212,29 +271,33 @@ class Vulture:
                 self._mpi_save_chunk_to_disk(chunk, idx, is_clean=False)
 
     
-    def _mpi_get_name(self, rank, is_clean):
-        if is_clean:
-            return f'vulture_{self.unique_id}_{rank}_clean.p'
+    def _mpi_get_name(self, rank, is_clean, custom_fn=None):
+        if not custom_fn:
+            if is_clean:
+                return f'vulture_{self.unique_id}_{rank}_clean.p'
+            else:
+                return f'vulture_{self.unique_id}_{rank}.p'
         else:
-            return f'vulture_{self.unique_id}_{rank}.p'
+            return f'vulture_{self.unique_id}_{rank}_{custom_fn}.p'
     
     
-    def _mpi_save_chunk_to_disk(self, data, rank, *, is_clean):
-        fn = self._mpi_get_name(rank, is_clean)
+    def _mpi_save_chunk_to_disk(self, data, rank, *, is_clean, custom_fn=None):
+        fn = self._mpi_get_name(rank, is_clean, custom_fn)
+
         with open(os.path.join(self.cache, fn), 'wb') as fh:
             pickle.dump(data, fh)
 
                 
-    def _mpi_load_chunk_from_disk(self, rank, *, is_clean):
-        fn = self._mpi_get_name(rank, is_clean)
+    def _mpi_load_chunk_from_disk(self, rank, *, is_clean, custom_fn=None):
+        fn = self._mpi_get_name(rank, is_clean, custom_fn=custom_fn)
         with open(os.path.join(self.cache, fn), 'rb') as fh:
             return pickle.load(fh)
         
 
-    def _mpi_combine(self):
+    def _mpi_combine(self, custom_fn=None):
         clean_documents = []
         for rank in range(self.n_nodes):
-            clean_documents += self._mpi_load_chunk_from_disk(rank, is_clean=True)
+            clean_documents += self._mpi_load_chunk_from_disk(rank, is_clean=True, custom_fn=custom_fn)
         return clean_documents
     
     

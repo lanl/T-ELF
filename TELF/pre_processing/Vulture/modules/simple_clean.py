@@ -103,6 +103,7 @@ class SimpleCleaner(VultureModuleBase):
 
     def __init__(self, custom_patterns=None, stop_words=None, stop_phrases=None, min_characters=2, order=None, frozen=None):
         self._frozen = set()
+        self.module_type = "CLEANER"
         self.effective_stop_words = None
         self.patterns = self.DEFAULT_PATTERNS.copy()
         self.custom_patterns = custom_patterns

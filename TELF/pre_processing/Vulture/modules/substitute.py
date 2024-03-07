@@ -42,6 +42,7 @@ class SubstitutionCleaner(VultureModuleBase):
     def __init__(self, substitution_map, permute=False, lower=False, lemmatize=False, frozen=None):
         super().__init__(frozen)  # initialize the base class with the preserve
         
+        self.module_type = "CLEANER"
         self.lower = lower
         self.permute = permute
         self.lemmatize = lemmatize

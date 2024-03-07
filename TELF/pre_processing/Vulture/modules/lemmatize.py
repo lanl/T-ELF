@@ -28,6 +28,7 @@ class LemmatizeCleaner(VultureModuleBase):
     
     def __init__(self, library, frozen=None):
         super().__init__(frozen)
+        self.module_type = "CLEANER"
         self.library = library
         self.backend = None
         
