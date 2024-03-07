@@ -179,8 +179,8 @@ def nmf(X, W, H,
 
     for i in tqdm(range(niter), disable=nmf_verbose == False):
 
-        H = H_update(X, W, H, H_opts, use_gpu=use_gpu)
-        W = W_update(X, W, H, W_opts, use_gpu=use_gpu)
+        H = H_update(X, W, H, H_opts, use_gpu=use_gpu, mask=mask)
+        W = W_update(X, W, H, W_opts, use_gpu=use_gpu, mask=mask)
 
         if i % 10 == 0:
             H = np.maximum(H.astype(dtype), eps)

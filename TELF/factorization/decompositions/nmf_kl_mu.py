@@ -39,7 +39,7 @@ def H_update(X, W, H, opts=None, nz_rows=None, nz_cols=None, use_gpu=True, mask=
     """
     if mask is not None:
         mask = mask.T
-    return W_update(X.T, H.T, W.T, opts=opts, use_gpu=use_gpu, mask=None, nz_rows=nz_cols, nz_cols=nz_rows).T
+    return W_update(X.T, H.T, W.T, opts=opts, use_gpu=use_gpu, mask=mask, nz_rows=nz_cols, nz_cols=nz_rows).T
 
 
 def W_update(X, W, H, opts=None, nz_rows=None, nz_cols=None, use_gpu=True, mask=None):
@@ -203,8 +203,8 @@ def nmf(X, W, H,
         inc = 0
 
     for i in tqdm(range(niter), disable=nmf_verbose == False):
-        H = H_update(X, W, H, H_opts, use_gpu=use_gpu)
-        W = W_update(X, W, H, W_opts, use_gpu=use_gpu)
+        H = H_update(X, W, H, H_opts, use_gpu=use_gpu, mask=mask)
+        W = W_update(X, W, H, W_opts, use_gpu=use_gpu, mask=mask)
         if i % 10 == 0:
             H = np.maximum(H.astype(dtype), eps)
             W = np.maximum(W.astype(dtype), eps)
