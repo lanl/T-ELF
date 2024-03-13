@@ -1,0 +1,1498 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TELF.applications.Cheetah.cheetah &#8212; TELF 0.0.10 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=362ab14a" />
+    <link rel="stylesheet" href="../../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+
+    <script src="../../../../_static/documentation_options.js?v=94452c26"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/applications/Cheetah/cheetah';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.10 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
+
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../modules.html">TELF</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../TELF.html">TELF package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../TELF.factorization.html">TELF.factorization package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../TELF.pre_processing.html">TELF.pre_processing package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for TELF.applications.Cheetah.cheetah</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Tue Feb 15 17:05:54 2022</span>
+
+<span class="sd">@author: maksimekineren</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span><span class="p">,</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+
+<div class="viewcode-block" id="add_with_union_of_others">
+<a class="viewcode-back" href="../../../../Cheetah.html#TELF.applications.Cheetah.cheetah.add_with_union_of_others">[docs]</a>
+<span class="k">def</span> <span class="nf">add_with_union_of_others</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the addition of a set associated with a given key and the union of all other sets in a dictionary.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    d: dict</span>
+<span class="sd">        A dictionary where keys are strings and values are sets.</span>
+<span class="sd">    s: set</span>
+<span class="sd">        The set (associated with key) to be added to</span>
+<span class="sd">    key: str</span>
+<span class="sd">        The key in the dictionary whose set is to be modified with the union of all other sets.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    set: </span>
+<span class="sd">        The intersection set of the specified key&#39;s set and the union of all other sets in the dictionary.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">    -------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the specified key is not found in the dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Key </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s1"> not found in the dictionary!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># dont do anything if dict only contains target key</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">s</span>
+    <span class="k">else</span><span class="p">:</span>
+        
+        <span class="c1"># create union of all sets (excluding the set for key)</span>
+        <span class="n">union_set</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">other_set</span> <span class="k">for</span> <span class="n">other_key</span><span class="p">,</span> <span class="n">other_set</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">other_key</span> <span class="o">!=</span> <span class="n">key</span><span class="p">))</span>
+        
+        <span class="c1"># create the modified set</span>
+        <span class="n">s_updated</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">s_updated</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">s</span> <span class="o">&amp;</span> <span class="n">union_set</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s_updated</span></div>
+
+
+
+<div class="viewcode-block" id="Cheetah">
+<a class="viewcode-back" href="../../../../Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah">[docs]</a>
+<span class="k">class</span> <span class="nc">Cheetah</span><span class="p">:</span>
+
+
+    <span class="c1"># keys are fields accepted by Cheetah, values are default column names in DataFrame</span>
+    <span class="n">COLUMNS</span> <span class="o">=</span> <span class="p">{</span>
+               <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;title&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;abstract&#39;</span><span class="p">:</span> <span class="s1">&#39;abstract&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;year&#39;</span><span class="p">:</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;author_ids&#39;</span><span class="p">:</span> <span class="s1">&#39;author_ids&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;affiliations&#39;</span><span class="p">:</span> <span class="s1">&#39;affiliations&#39;</span><span class="p">,</span>
+              <span class="p">}</span>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        Init an empty Cheetah object</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            Vebosity flag. The default is False.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indexed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+
+<div class="viewcode-block" id="Cheetah.find_ngram">
+<a class="viewcode-back" href="../../../../Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.find_ngram">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">find_ngram</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">window_size</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ordered</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine if the tokens in the list query are contained within the string text using </span>
+<span class="sd">        a sliding window algorithm with a specified window_size. If ordered is True then the </span>
+<span class="sd">        order of tokens appearing in query and text needs to be maintained for a positive </span>
+<span class="sd">        match. Returns True is such a match is found.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        text : str</span>
+<span class="sd">            A string of multiple tokens that are separated by whitespace</span>
+<span class="sd">        query : list</span>
+<span class="sd">            A list of tokens that should be checked for in text. Duplicate values in query are allowed</span>
+<span class="sd">            and order will be maintained if ordered=True.</span>
+<span class="sd">        window_size : int, optional</span>
+<span class="sd">            Set the size of the sliding window.</span>
+<span class="sd">            NOTE: if window_size &lt; len(query), no matches can ever be found as the query cannot fit </span>
+<span class="sd">                  in the window. Default=5.</span>
+<span class="sd">        ordered : bool, optional</span>
+<span class="sd">            If True, preserve the order of tokens in query when searching for match. Default=True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if ngram query was found in text. False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">window</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">token_set</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>  <span class="c1"># count occurences of tokens in query</span>
+        <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">:</span>
+            <span class="n">window</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">window</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">window_size</span><span class="p">:</span>
+                <span class="n">window</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="c1"># form a list of tokens for comparison using only tokens seen in the query</span>
+            <span class="c1"># an additional precaution is taken to only use each token the exact number</span>
+            <span class="c1"># of times that it is seen in the query at most</span>
+            <span class="n">curr_window</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">window_set</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">window</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">token_set</span> <span class="ow">and</span> <span class="n">window_set</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">token_set</span><span class="p">[</span><span class="n">t</span><span class="p">]:</span>
+                    <span class="n">window_set</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">curr_window</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">curr_window</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">ordered</span> <span class="ow">and</span> <span class="n">curr_window</span> <span class="o">==</span> <span class="n">query</span><span class="p">:</span> <span class="c1"># compare preserving order</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="k">elif</span> <span class="ow">not</span> <span class="n">ordered</span> <span class="ow">and</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">curr_window</span><span class="p">)</span> <span class="o">==</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="Cheetah.index">
+<a class="viewcode-back" href="../../../../Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.index">[docs]</a>
+    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index_file</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reindex</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates indices for selected columns in data for Cheetah search. author_ids and affiliations are</span>
+<span class="sd">        expected to use the their respective SLIC data structures. See an example notebook for a sample</span>
+<span class="sd">        of these data structures. Text data such as &#39;title&#39; and &#39;abstract&#39; should be pre-processed using</span>
+<span class="sd">        Vulture simple clean. The text in these columns is expected to be lowercase with special characters</span>
+<span class="sd">        removed. Tokens are delimited with a single whitespace.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data: pd.DataFrame</span>
+<span class="sd">            Pandas DataFrame of papers </span>
+<span class="sd">        columns: dict, optional</span>
+<span class="sd">            Dictionary where the keys are categories that can be mapped by Cheetah and the values are the </span>
+<span class="sd">            corresponding columns names for these categories in data. See Cheetah.COLUMNS for an example</span>
+<span class="sd">            of the structure and all currently supported keys. If columns is None, Cheetah will default</span>
+<span class="sd">            to the Cheetah.COLUMNS values.</span>
+<span class="sd">        index_file: str, optional</span>
+<span class="sd">            Path a to a previously generated Cheetah index file. If no path is passed, Cheetah will generate</span>
+<span class="sd">            indices for one time use. If index_file is passed but the path does not exist, Cheetah will generate</span>
+<span class="sd">            indices and save them for future use at the index_file path. If a path is passed and reindex=True,</span>
+<span class="sd">            new indices will be generated and saved at index_file, overwriting the current contents of index_file</span>
+<span class="sd">            if it exists.</span>
+<span class="sd">        reindex: int or float, optional</span>
+<span class="sd">            If True, overwrite the index_file if it exists</span>
+<span class="sd">        verbose: bool, optional</span>
+<span class="sd">            Vebosity flag. The default is False.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;slic_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+        <span class="k">if</span> <span class="n">index_file</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">index_file</span><span class="p">)</span> <span class="ow">or</span> <span class="n">reindex</span><span class="p">:</span>  <span class="c1"># index data</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">reindex</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Overwriting existing index.&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Indexing file not found. Creating a new index.&quot;</span><span class="p">)</span>
+                <span class="n">indexing_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># load indexed data from disk</span>
+                <span class="n">indexing_results</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">index_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">indexing_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">abstract_index</span> <span class="o">=</span> <span class="n">indexing_results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title_index</span> <span class="o">=</span> <span class="n">indexing_results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">year_index</span> <span class="o">=</span> <span class="n">indexing_results</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">country_index</span> <span class="o">=</span> <span class="n">indexing_results</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">author_index</span> <span class="o">=</span> <span class="n">indexing_results</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">affiliation_index</span> <span class="o">=</span> <span class="n">indexing_results</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">index_file</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">indexing_results</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">index_file</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">indexed</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_search_result</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="Cheetah.search">
+<a class="viewcode-back" href="../../../../Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.search">[docs]</a>
+    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">and_search</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">in_title</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">in_abstract</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                     <span class="n">save_path</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">author_filter</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="p">[],</span> <span class="n">affiliation_filter</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="p">[],</span> 
+                     <span class="n">country_filter</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="p">[],</span> <span class="n">year_filter</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="p">[],</span> <span class="n">ngram_window_size</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> 
+                     <span class="n">ngram_ordered</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">do_results_table</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">link_search</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Search a dataset indexed by this Cheetah object. Text can be searched using query and properties</span>
+<span class="sd">        of the data can be filtered using year_filter, country_filter, author_filter, affiliation_filter.</span>
+<span class="sd">        If both query and filter(s) are used, the results of the search are intersected. Note that trying</span>
+<span class="sd">        to use a filter that was never indexed by Cheetah will result in an error. </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query: str, list, dict, NoneType</span>
+<span class="sd">            A string or a list of strings to lookup. n-grams for n&gt;1 should be split with whitespace.</span>
+<span class="sd">            Note that query will be pre-processed by converting all characters to lowecase and stripping all</span>
+<span class="sd">            extra whitespace.</span>
+<span class="sd">             &gt;&gt;&gt; query = &#39;laser&#39;                        # a single word to lookup</span>
+<span class="sd">             &gt;&gt;&gt; query = {&#39;laser&#39;: &#39;node&#39;}              # a single word with negative query</span>
+<span class="sd">             &gt;&gt;&gt; query = [&#39;laser&#39;, &#39;angle deflection&#39;]  # a word and bigram to lookup</span>
+<span class="sd">             &gt;&gt;&gt; query = [{&#39;laser&#39;: [&#39;blue&#39;, &#39;green&#39;],  # a word and bigram to lookup with multiple negative</span>
+<span class="sd">                           &#39;angle deflection&#39;]          #  search terms for the unigram</span>
+<span class="sd">             &gt;&gt;&gt; query = None                           # no query to lookup (using filters only)</span>
+<span class="sd">        and_search: bool, optional</span>
+<span class="sd">            This option applies when multiple queries are being looked up simultenously. If True, the </span>
+<span class="sd">            intersection of documents that match all queries is returned. Otherwise, the union. Default=True.</span>
+<span class="sd">        in_title: bool, optional</span>
+<span class="sd">            If True, searches for queries in the indexed title text. Default=True.</span>
+<span class="sd">            NOTE: If in_title and in_abstract are both True, the union between these</span>
+<span class="sd">                  two query searches is returned</span>
+<span class="sd">        in_abstract: bool, optional</span>
+<span class="sd">            If True, searches for queries in the indexed abstract text. Default=True.</span>
+<span class="sd">            NOTE: If in_title and in_abstract are both True, the union between these</span>
+<span class="sd">                  two query searches is returned</span>
+<span class="sd">        save_path: str, optional</span>
+<span class="sd">            The path at which to save the resulting subset DataFrame. If the path is not defined, the result</span>
+<span class="sd">            of the search is returned. The default is None.  </span>
+<span class="sd">        author_filter: list, optional</span>
+<span class="sd">            List of author ids that papers should be affiliated with. The default is [].</span>
+<span class="sd">        affiliation_filter: list, optional</span>
+<span class="sd">            List of affiliation ids that papers should be affiliated with. The default is [].</span>
+<span class="sd">        country_filter: list, optional</span>
+<span class="sd">            List of countries that papers should be affiliated with. The default is [].</span>
+<span class="sd">        year_filter: list, optional</span>
+<span class="sd">            List of years that papers should be published in. The default is [].</span>
+<span class="sd">        ngram_window_size: int, optional</span>
+<span class="sd">            The size of the window used in Cheetah.find_ngram(). This function is called if one or more</span>
+<span class="sd">            entries in query are n-grams for n&gt;1. ngram_window_size determines how many tokens can be </span>
+<span class="sd">            examined at a time.  For example for the text [&#39;aa bb bb cc cc dd&#39;], the query &#39;aa cc&#39; will </span>
+<span class="sd">            be found if the window size is &gt;= 4. Default=5. This value should be greater than the length </span>
+<span class="sd">            of the n-gram.</span>
+<span class="sd">        ngram_ordered: bool</span>
+<span class="sd">            The order used in Cheetah.find_ngram(). This function is called if one or more entries in </span>
+<span class="sd">            query are n-grams for n&gt;1. ngram_ordered determines if the order of tokens in ngram should</span>
+<span class="sd">            be preserved while looking for a match. Default=True.</span>
+<span class="sd">        do_results_table: bool, optional</span>
+<span class="sd">            Flag that determines if a results table should be generated for the search. If True, this table</span>
+<span class="sd">            will provide explainability for why certain documents were selected by Cheetah. If False, None </span>
+<span class="sd">            is returned as the second argument. Default=False</span>
+<span class="sd">        link_search: bool, optional</span>
+<span class="sd">            A flag that controls if the queries should be linked in the positive/negative inclusion</span>
+<span class="sd">            step. For example, take a document that contains the queried text &quot;A&quot; and &quot;B&quot;. However </span>
+<span class="sd">            positive or negative inclusion partnered with &quot;B&quot; overrides the selection. If this flag</span>
+<span class="sd">            is set to True then the inclusion step will be ignored since another query, &quot;A&quot;, had </span>
+<span class="sd">            already selected the document as being on-topic (hence linking the search). Default=False</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        return_data: None, pd.DataFrame</span>
+<span class="sd">            If save_path is not defined, return the search result (pd.DataFrame object). However, if save_path </span>
+<span class="sd">            is defined, return None and save result at save_path as a CSV file.</span>
+<span class="sd">        results_table: None, pd.DataFrame</span>
+<span class="sd">            If do_results_table is True then this argument will provide explainability for Cheetah filtering. </span>
+<span class="sd">            Otherwise this argument is None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># validate that data has been loaded and indexed</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexed</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No index found! Call Cheetah.index() first!&#39;</span><span class="p">)</span>
+
+        <span class="c1"># validate input to the function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="n">query</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ngram_ordered</span> <span class="o">=</span> <span class="n">ngram_ordered</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ngram_window_size</span> <span class="o">=</span> <span class="n">ngram_window_size</span>
+
+        <span class="c1"># begin timing the search</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="c1"># unite all possible filters into a data structure that will allow easy filtering</span>
+        <span class="n">filters</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="n">year_filter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">year_index</span><span class="p">),</span>
+                   <span class="p">(</span><span class="s1">&#39;affiliations&#39;</span><span class="p">,</span> <span class="n">country_filter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">country_index</span><span class="p">),</span>
+                   <span class="p">(</span><span class="s1">&#39;author_ids&#39;</span><span class="p">,</span> <span class="n">author_filter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">author_index</span><span class="p">),</span>
+                   <span class="p">(</span><span class="s1">&#39;affiliations&#39;</span><span class="p">,</span> <span class="n">affiliation_filter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">affiliation_index</span><span class="p">)]</span>
+        
+        <span class="c1">## 1. Filter the data</span>
+        <span class="c1"># use the filters to generate a set of desirable document ids</span>
+        <span class="c1"># if the filters exclude all documents, an empty set will be used</span>
+        <span class="n">filter_indices_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">using_filter_flag</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">col_filter</span><span class="p">,</span> <span class="n">filter_values</span><span class="p">,</span> <span class="n">filter_index</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">filter_values</span><span class="p">:</span>  <span class="c1"># filter values are None or empty list</span>
+                <span class="k">assert</span> <span class="n">col_filter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Attempted </span><span class="si">{</span><span class="n">col_filter</span><span class="si">}</span><span class="s2"> search but </span><span class="si">{</span><span class="n">col_filter</span><span class="si">}</span><span class="s2"> column does not exist!&quot;</span>
+                <span class="n">filter_indices_map</span><span class="p">[(</span><span class="n">col_filter</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">filter_values</span><span class="p">]))]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_search</span><span class="p">(</span><span class="n">col_filter</span><span class="p">,</span> <span class="n">filter_values</span><span class="p">,</span> <span class="n">filter_index</span><span class="p">)</span>
+                <span class="n">using_filter_flag</span> <span class="o">=</span> <span class="kc">True</span>
+        
+        <span class="c1"># intersect the results from each filter</span>
+        <span class="k">if</span> <span class="n">filter_indices_map</span><span class="p">:</span>
+            <span class="n">filter_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">filter_indices_map</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">filter_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">using_filter_flag</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">filter_indices</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Selected filters returned an empty set&#39;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+
+
+        <span class="c1">## 2. Search by query</span>
+        <span class="c1"># if a query (or several) queries are given, produce the search results for</span>
+        <span class="c1"># these querie(s) in all documents: with no respect for the filters</span>
+        <span class="n">query_indices_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">:</span>
+            <span class="c1"># use reverse index map to quickly lookup 1grams and limit search space for ngrams</span>
+            <span class="n">query_indices_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query_search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">in_abstract</span><span class="p">,</span> <span class="n">in_title</span><span class="p">,</span> <span class="n">link_search</span><span class="p">)</span>
+
+            <span class="c1"># deal with n_grams</span>
+            <span class="n">query_indices_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ngram_check</span><span class="p">(</span><span class="n">query_indices_map</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">in_abstract</span><span class="p">,</span> <span class="n">in_title</span><span class="p">)</span>
+
+            <span class="c1"># unite the search results inclusively or exclusively depening on and_search value</span>
+            <span class="k">if</span> <span class="n">and_search</span><span class="p">:</span>  <span class="c1"># intersect list of sets to form single set</span>
+                <span class="n">query_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">query_indices_map</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># union list of sets to form single set</span>
+                <span class="n">query_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">query_indices_map</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+
+            <span class="c1"># intersect results of query search with filter results (if using filtering)</span>
+            <span class="n">return_indices</span> <span class="o">=</span> <span class="n">query_indices</span>
+            <span class="k">if</span> <span class="n">using_filter_flag</span><span class="p">:</span>
+                <span class="n">return_indices</span> <span class="o">&amp;=</span> <span class="n">filter_indices</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">return_indices</span> <span class="o">=</span> <span class="n">filter_indices</span>
+
+        <span class="c1"># use the determined indices to select subset of papers from whole data</span>
+        <span class="n">return_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">return_indices</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">return_data</span> <span class="o">=</span> <span class="n">return_data</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;slic_index&#39;</span><span class="p">)</span>
+        <span class="n">return_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_search_result</span> <span class="o">=</span> <span class="n">return_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># update object&#39;s last search</span>
+
+        <span class="c1"># end timing of search</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="c1"># print computation time if verbose</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">return_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> papers in </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+
+        <span class="n">results_table</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">do_results_table</span><span class="p">:</span>
+            <span class="n">results_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_results_table</span><span class="p">(</span><span class="n">filter_indices_map</span><span class="p">,</span> <span class="n">query_indices_map</span><span class="p">)</span>
+            
+        <span class="c1"># return results of search if no save_path passed, otherwise save</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">save_path</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">return_data</span><span class="p">,</span> <span class="n">results_table</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">return_data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">results_table</span></div>
+
+
+        
+    <span class="k">def</span> <span class="nf">_create_results_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_results</span><span class="p">,</span> <span class="n">query_results</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a DataFrame that explains why and how documents were selected by Cheetah filters</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filter_results: dict</span>
+<span class="sd">            Map of filters and their associated paper indices</span>
+<span class="sd">        query_results: list</span>
+<span class="sd">            Map of queries and their associated paper indices</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            DataFrame that has filters and the papers that they included/excluded</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;filter_type&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;filter_value&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;num_papers&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;included_ids&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="p">}</span>
+        
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">filter_results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">filter_type</span><span class="p">,</span> <span class="n">filter_value</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="n">num_included</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">indices</span><span class="p">:</span>
+                <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+                <span class="n">included_ids</span> <span class="o">=</span> <span class="s1">&#39;;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">indices</span><span class="p">][</span><span class="s1">&#39;slic_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">included_ids</span> <span class="o">=</span> <span class="kc">None</span>
+            
+            <span class="c1">#included_ids = &#39;;&#39;.join([str(x) for x in indices]) if indices else None</span>
+            
+            <span class="c1"># add to DataFrame</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;filter_type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filter_type</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;filter_value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filter_value</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_papers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num_included</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;included_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">included_ids</span><span class="p">)</span>
+            
+        <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">query_results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">num_included</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">indices</span><span class="p">:</span>
+                <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+                <span class="n">included_ids</span> <span class="o">=</span> <span class="s1">&#39;;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">indices</span><span class="p">][</span><span class="s1">&#39;slic_index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">included_ids</span> <span class="o">=</span> <span class="kc">None</span>
+            
+            <span class="c1"># add to DataFrame</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;filter_type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;query&#39;</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;filter_value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_papers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num_included</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;included_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">included_ids</span><span class="p">)</span>         
+        
+        <span class="n">results_table_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">results_table_df</span> <span class="o">=</span> <span class="n">results_table_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;filter_type&#39;</span><span class="p">,</span> <span class="s1">&#39;filter_value&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">results_table_df</span>
+            
+            
+    <span class="k">def</span> <span class="nf">_filter_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">filters</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">indexing</span><span class="p">:</span><span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Searches the index for the given filters in the specified column.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        col: str</span>
+<span class="sd">            The name of the column to be searched.</span>
+<span class="sd">        filters: list</span>
+<span class="sd">            A list representing the filters to be applied </span>
+<span class="sd">        indexing: dict</span>
+<span class="sd">            A dictionary representing the index of the text data. </span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        set</span>
+<span class="sd">            A set of record IDs that match the specified filters </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pre-process input</span>
+        <span class="n">filters</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">]</span>
+
+        <span class="c1"># get the indices matching filters</span>
+        <span class="n">filter_indices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
+            <span class="n">filter_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indexing</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="nb">set</span><span class="p">()))</span>
+        
+        <span class="c1"># take the union of the filter results</span>
+        <span class="c1"># if multiple values in a filter are given, we combine the results. </span>
+        <span class="c1"># EX filters=[2018, 2019, 2020] -&gt; get documents published in this 3 year range</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="n">filter_indices</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_query_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queries</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">in_abstract</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">in_title</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">link_search</span><span class="p">:</span><span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Searches the text data for the given queries in the specified columns.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        queries: list</span>
+<span class="sd">            A list of strings representing the queries to be searched. </span>
+<span class="sd">        in_abstract: bool</span>
+<span class="sd">            A boolean value indicating whether to search for queries in the abstract column.</span>
+<span class="sd">        in_title: bool</span>
+<span class="sd">            A boolean value indicating whether to search for queries in the title column.</span>
+<span class="sd">        link_search: bool</span>
+<span class="sd">            A flag that controls if the queries should be linked in the positive/negative inclusion</span>
+<span class="sd">            step. For example, take a document that contains the queried text &quot;A&quot; and &quot;B&quot;. However </span>
+<span class="sd">            positive or negative inclusion partnered with &quot;B&quot; overrides the selection. If this flag</span>
+<span class="sd">            is set to True then the inclusion step will be ignored since another query, &quot;A&quot;, had </span>
+<span class="sd">            already selected the document as being on-topic (hence linking the search).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        index_map: dict</span>
+<span class="sd">            A dict of query to record IDs that match the specified queries. Each record ID is a string representing </span>
+<span class="sd">            the key in the original data dictionary for the record.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the `in_abstract` and `in_title` parameter are true and not in the data or if both `in_abstract` and </span>
+<span class="sd">            `in_title` are False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># validate input</span>
+        <span class="k">if</span> <span class="n">in_abstract</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="s2">&quot;abstract&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="s2">&quot;Attempted abstract search but abstract column does not exist!&quot;</span>
+        <span class="k">if</span> <span class="n">in_title</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="s2">&quot;title&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="s2">&quot;Attempted title search but title column does not exist!&quot;</span>
+
+        <span class="c1"># warn user if they attempt to search without selecting any search data</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">in_abstract</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">in_title</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Attempting to search a query without any data source. &#39;</span> \
+                          <span class="s1">&#39;Enable search in abstracts and/or title.&#39;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+
+        <span class="c1"># init the search results list. each entry in this list will be a set of ids </span>
+        <span class="c1"># corresponding to the searched query. </span>
+        <span class="c1">#</span>
+        <span class="c1"># NOTE: n-gram search will be performed later. For now, search results for n-grams just</span>
+        <span class="c1">#       mean that each document id in the set contains all tokens from the query</span>
+        <span class="n">index_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">:</span>
+            <span class="n">query_indices</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">query</span><span class="p">:</span>
+                <span class="n">term</span><span class="p">,</span> <span class="n">negatives</span><span class="p">,</span> <span class="n">positives</span> <span class="o">=</span> <span class="n">q</span>
+                <span class="n">q_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                
+                <span class="k">if</span> <span class="n">in_title</span><span class="p">:</span>
+                    <span class="n">q_indices</span> <span class="o">|=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+                    <span class="n">q_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inclusion_search</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="n">q_indices</span><span class="p">,</span> <span class="n">positives</span><span class="p">,</span> <span class="n">negatives</span><span class="p">)</span>
+                    
+                <span class="k">if</span> <span class="n">in_abstract</span><span class="p">:</span>
+                    <span class="n">q_indices</span> <span class="o">|=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+                    <span class="n">q_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inclusion_search</span><span class="p">(</span><span class="s1">&#39;abstract&#39;</span><span class="p">,</span> <span class="n">q_indices</span><span class="p">,</span> <span class="n">positives</span><span class="p">,</span> <span class="n">negatives</span><span class="p">)</span>
+                
+                <span class="n">query_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q_indices</span><span class="p">)</span>  <span class="c1"># update results for query</span>
+            
+            <span class="c1"># add set of matching ids for a single query to the output list</span>
+            <span class="n">query_proc</span> <span class="o">=</span> <span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">query</span><span class="p">]</span>
+            <span class="n">index_map</span><span class="p">[</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">query_proc</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">*</span><span class="n">query_indices</span><span class="p">)</span>
+
+            
+        <span class="k">if</span> <span class="n">link_search</span><span class="p">:</span>
+            <span class="n">old_index_map</span> <span class="o">=</span> <span class="n">index_map</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">index_map</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">:</span>
+
+                <span class="n">query_indices</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">query</span><span class="p">:</span>
+                    <span class="n">term</span><span class="p">,</span> <span class="n">negatives</span><span class="p">,</span> <span class="n">positives</span> <span class="o">=</span> <span class="n">q</span>
+
+                    <span class="n">q_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">in_title</span><span class="p">:</span> 
+                        <span class="n">q_indices</span> <span class="o">|=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+                    <span class="k">if</span> <span class="n">in_abstract</span><span class="p">:</span>
+                        <span class="n">q_indices</span> <span class="o">|=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+
+                    <span class="n">query_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q_indices</span><span class="p">)</span>  <span class="c1"># update results for query</span>
+                
+                <span class="n">query_proc</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">query</span><span class="p">])</span>
+                <span class="n">query_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">*</span><span class="n">query_indices</span><span class="p">)</span>
+                <span class="n">linked_indices</span> <span class="o">=</span> <span class="n">add_with_union_of_others</span><span class="p">(</span><span class="n">old_index_map</span><span class="p">,</span> <span class="n">query_indices</span><span class="p">,</span> <span class="n">query_proc</span><span class="p">)</span>
+                <span class="n">index_map</span><span class="p">[</span><span class="n">query_proc</span><span class="p">]</span> <span class="o">=</span> <span class="n">linked_indices</span>
+            
+        <span class="k">return</span> <span class="n">index_map</span>
+
+    
+    <span class="k">def</span> <span class="nf">_inclusion_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text_index</span><span class="p">,</span> <span class="n">q_indices</span><span class="p">,</span> <span class="n">positives</span><span class="p">,</span> <span class="n">negatives</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">text_index</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;abstract&#39;</span><span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;Invalid text_index </span><span class="si">{</span><span class="n">text_index</span><span class="si">!r}</span><span class="s1">&#39;</span>
+        <span class="k">if</span> <span class="n">text_index</span> <span class="o">==</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title_index</span>
+        <span class="k">if</span> <span class="n">text_index</span> <span class="o">==</span> <span class="s1">&#39;abstract&#39;</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_index</span>
+        
+        <span class="c1"># remove any terms that are being negated</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">negatives</span><span class="p">:</span>
+            <span class="n">q_indices</span> <span class="o">-=</span> <span class="n">index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+
+        <span class="c1"># union the current set of terms with positively included terms</span>
+        <span class="k">if</span> <span class="n">positives</span><span class="p">:</span>
+            <span class="n">pos_q_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">positives</span><span class="p">])</span>
+            <span class="n">q_indices</span> <span class="o">&amp;=</span> <span class="n">pos_q_indices</span>
+        
+        <span class="k">return</span> <span class="n">q_indices</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_ngram_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">all_indices</span><span class="p">,</span> <span class="n">all_queries</span><span class="p">,</span> <span class="n">in_abstract</span><span class="p">,</span> <span class="n">in_title</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check for the occurrence of n-grams in a text or document based on some criteria.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        all_indices: dict</span>
+<span class="sd">            A map of query keys and index set values</span>
+<span class="sd">        all_queries: list</span>
+<span class="sd">            List of queries by which documents were filtered</span>
+<span class="sd">        in_abstract: bool</span>
+<span class="sd">            If True, check for the occurrence of n-grams in the abstract of the document.</span>
+<span class="sd">        in_title: bool</span>
+<span class="sd">            If True, check for the occurrence of n-grams in the title of the document.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            True if the specified n-grams are found in the text or document based on the specified criteria, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># validate input</span>
+        <span class="k">if</span> <span class="n">in_abstract</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="s2">&quot;abstract&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="s2">&quot;Attempted abstract search but abstract column does not exist!&quot;</span>
+        <span class="k">if</span> <span class="n">in_title</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="s2">&quot;title&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="s2">&quot;Attempted title search but title column does not exist!&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_indices</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_queries</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Attempted to use </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_indices</span><span class="p">)</span><span class="si">}</span><span class="s2"> indices for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_queries</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_queries</span><span class="p">):</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">q</span><span class="p">]</span>
+            <span class="n">joined_query</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+            <span class="n">index</span><span class="p">,</span> <span class="n">query</span> <span class="o">=</span> <span class="n">all_indices</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">joined_query</span><span class="p">,</span> <span class="nb">set</span><span class="p">()),</span> <span class="n">q</span>
+            <span class="n">index_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">index</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">query</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">index_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">query_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">in_abstract</span><span class="p">:</span>  <span class="c1"># Join results for title and abstract</span>
+                    <span class="n">query_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ngram_check_helper</span><span class="p">(</span><span class="n">index_data</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="s1">&#39;abstract&#39;</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">in_title</span><span class="p">:</span>
+                    <span class="n">query_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ngram_check_helper</span><span class="p">(</span><span class="n">index_data</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">))</span>
+
+                <span class="n">query_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">*</span><span class="n">query_indices</span><span class="p">)</span>
+                <span class="n">all_indices</span><span class="p">[</span><span class="n">joined_query</span><span class="p">]</span> <span class="o">-=</span> <span class="n">query_indices</span>
+
+        <span class="k">return</span> <span class="n">all_indices</span>
+
+
+    <span class="k">def</span> <span class="nf">_ngram_check_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_data</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">col</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform an n-gram check on the specified DataFrame, query string, and column name.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        index_data : pd.DataFrame</span>
+<span class="sd">            The DataFrame containing the indexed data.</span>
+<span class="sd">        query : str</span>
+<span class="sd">            The query string to check for n-grams.</span>
+<span class="sd">        col : str</span>
+<span class="sd">            The name of the column to check for n-grams.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        set</span>
+<span class="sd">            A set of indices of the rows in the DataFrame that contain the specified n-grams.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># validate input</span>
+        <span class="k">assert</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Attempted abstract search but </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> column does not exist!&quot;</span>
+        
+        <span class="c1"># warn user if window size is too small</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">query</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">ngram_window_size</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attempting to find a </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="si">}</span><span class="s2">-token query with a window of size </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ngram_window_size</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+
+        <span class="c1"># check if ngram is found in each id</span>
+        <span class="n">to_remove</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">index_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">index_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">col</span><span class="p">]]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_ngram</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ngram_window_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ngram_ordered</span><span class="p">):</span>
+                <span class="n">to_remove</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">to_remove</span>
+
+
+    <span class="k">def</span> <span class="nf">_index_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span><span class="nb">dict</span><span class="p">,</span> <span class="n">column</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Indexes the text data in the specified column of a dictionary of records.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            A dictionary containing records of data to be indexed. </span>
+<span class="sd">        column : str</span>
+<span class="sd">            The name of the column containing text data to be indexed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            A dictionary representing the mapping.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the `col` parameter is None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Indexing </span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid column name for &#39;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2">&#39; provided&quot;</span><span class="p">)</span>
+
+        <span class="n">index_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">text_list</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">paper_idx</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">text_list</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">text_list</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">tokens</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">:</span>
+                <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>  <span class="c1"># remove newlines, empty space</span>
+                <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># convert to lowercase</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">word</span><span class="p">:</span>  <span class="c1"># word is an empty string</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">index_map</span><span class="p">:</span>
+                    <span class="n">index_map</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                <span class="n">index_map</span><span class="p">[</span><span class="n">word</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">paper_idx</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">index_map</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">index_map</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
+            <span class="n">index_map</span><span class="p">[</span><span class="n">token</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">index_map</span>
+
+
+    <span class="k">def</span> <span class="nf">_index_year</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span><span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Indexes the year data of a dictionary of records.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            A dictionary containing records of data to be indexed. </span>
+<span class="sd">       </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            A dictionary representing the year index.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the `col` parameter is None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Indexing years&quot;</span><span class="p">)</span>
+        
+        <span class="n">col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid column name for &#39;year&#39; provided&quot;</span><span class="p">)</span>
+
+        <span class="n">year_index</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">year_list</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">paper_idx</span><span class="p">,</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">year_list</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">year_list</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">year</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">year</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">year</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">year</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">year_index</span><span class="p">:</span>
+                <span class="n">year_index</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="n">year_index</span><span class="p">[</span><span class="n">year</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">paper_idx</span><span class="p">)</span>
+
+        <span class="c1"># for year, indices in tqdm(year_index.items(), total=len(year_index), disable=not self.verbose):</span>
+        <span class="c1">#     year_index[year] = set(indices)</span>
+        <span class="k">return</span> <span class="n">year_index</span>
+
+    
+    <span class="k">def</span> <span class="nf">_index_author</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span><span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Indexes the author data of a dictionary of records.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            A dictionary containing records of data to be indexed. </span>
+<span class="sd">       </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            A dictionary representing the author index.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the `col` object parameter is None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Indexing author IDs&quot;</span><span class="p">)</span>
+        
+        <span class="n">col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;author_ids&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid column name for &#39;author_ids&#39; provided&quot;</span><span class="p">)</span>
+
+        <span class="n">author_index</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">author_IDs</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="n">author_index_tmp</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">paper_idx</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">author_IDs</span><span class="p">)),</span> <span class="n">disable</span><span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
+            <span class="n">curr_info</span> <span class="o">=</span> <span class="n">author_IDs</span><span class="p">[</span><span class="n">paper_idx</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">curr_info</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">author_id</span> <span class="ow">in</span> <span class="n">curr_info</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">):</span>
+                <span class="n">author_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">author_id</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">author_id</span> <span class="ow">in</span> <span class="n">author_index_tmp</span><span class="p">:</span>
+                    <span class="n">author_index_tmp</span><span class="p">[</span><span class="n">author_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper_idx</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">author_index_tmp</span><span class="p">[</span><span class="n">author_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">paper_idx</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+            <span class="n">author_index_tmp</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">author_index_tmp</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span>
+        <span class="p">):</span>
+            <span class="n">author_index</span><span class="p">[</span><span class="n">token</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">author_index</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_index_affiliation_country</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span><span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Indexes the country affiliation data of a dictionary of records.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            A dictionary containing records of data to be indexed. </span>
+<span class="sd">       </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            A dictionary representing the country affiliation index.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the `col` object parameter is None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Indexing affiliations and countries&quot;</span><span class="p">)</span>
+        
+        <span class="n">col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;affiliations&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid column name for &#39;affiliations&#39; provided&quot;</span><span class="p">)</span>
+
+        <span class="n">country_index</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">affiliation_index</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="n">affiliation_information_str</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="n">affiliation_index_tmp</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">country_index_tmp</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">paper_idx</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">affiliation_information_str</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">affiliation_information_str</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">info</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">curr_info_dict</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">curr_info_dict</span> <span class="o">=</span> <span class="n">info</span>
+            
+            <span class="k">for</span> <span class="n">affil_id</span><span class="p">,</span> <span class="n">affil_info_dict</span> <span class="ow">in</span> <span class="n">curr_info_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">affil_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">affil_id</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="n">country</span> <span class="o">=</span> <span class="n">affil_info_dict</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                
+                <span class="c1"># affiliation</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">affil_id</span><span class="p">)</span> <span class="ow">in</span> <span class="n">affiliation_index_tmp</span><span class="p">:</span>
+                    <span class="n">affiliation_index_tmp</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">affil_id</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper_idx</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">affiliation_index_tmp</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">affil_id</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[</span><span class="n">paper_idx</span><span class="p">]</span>
+                
+                <span class="c1"># country</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">country</span><span class="p">)</span> <span class="ow">in</span> <span class="n">country_index_tmp</span><span class="p">:</span>
+                    <span class="n">country_index_tmp</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">country</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">paper_idx</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">country_index_tmp</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">country</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[</span><span class="n">paper_idx</span><span class="p">]</span>
+        
+        <span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+            <span class="n">country_index_tmp</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">country_index_tmp</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span>
+        <span class="p">):</span>
+            <span class="n">country_index</span><span class="p">[</span><span class="n">token</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        
+                
+        <span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+            <span class="n">affiliation_index_tmp</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">affiliation_index_tmp</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span>
+        <span class="p">):</span>
+            <span class="n">affiliation_index</span><span class="p">[</span><span class="n">token</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        
+        
+        <span class="k">return</span> <span class="n">affiliation_index</span><span class="p">,</span> <span class="n">country_index</span>
+        
+
+    <span class="k">def</span> <span class="nf">_index_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span><span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"> </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        </span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;abstract&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">abstract_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_text</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;abstract&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">abstract_index</span> <span class="o">=</span> <span class="p">{}</span>
+            
+        <span class="k">if</span> <span class="s2">&quot;title&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">title_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_text</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">title_index</span> <span class="o">=</span> <span class="p">{}</span>
+            
+        <span class="k">if</span> <span class="s2">&quot;year&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">year_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_year</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">year_index</span> <span class="o">=</span> <span class="p">{}</span>
+            
+        <span class="k">if</span> <span class="s2">&quot;author_ids&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">author_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_author</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">author_index</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="k">if</span> <span class="s2">&quot;affiliations&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">affiliation_index</span><span class="p">,</span> <span class="n">country_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_affiliation_country</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">affiliation_index</span><span class="p">,</span> <span class="n">country_index</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">{}</span>
+        
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">abstract_index</span><span class="p">,</span>
+            <span class="n">title_index</span><span class="p">,</span>
+            <span class="n">year_index</span><span class="p">,</span>
+            <span class="n">country_index</span><span class="p">,</span>
+            <span class="n">author_index</span><span class="p">,</span>
+            <span class="n">affiliation_index</span><span class="p">,</span>
+        <span class="p">)</span>
+
+
+    <span class="c1"># GETTERS </span>
+
+    <span class="nd">@property</span> 
+    <span class="k">def</span> <span class="nf">ngram_window_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the numeric size of the ngram window. </span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int </span>
+<span class="sd">            ngram window size</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ngram_window_size</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ngram_ordered</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the status of ngram_ordered.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool    </span>
+<span class="sd">            Status of ngram ordering</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ngram_ordered</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the last query of the object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Union[list, str, None]</span>
+<span class="sd">            The last query of the object, which can be either a list or a string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">columns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve the columns.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            A dictionary containing column names as keys and column values as values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span>
+
+    <span class="c1"># SETTERS</span>
+
+    <span class="nd">@ngram_window_size</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">ngram_window_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngram_window_size</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set or update the size of the n-gram window of the object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ngram_window_size : int</span>
+<span class="sd">            The new value for the size of the n-gram window of the object.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ngram_window_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__error_unexpected_type</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">ngram_window_size</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ngram_window_size</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ngram_window_size cannot be less than 1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ngram_window_size</span> <span class="o">=</span> <span class="n">ngram_window_size</span>
+
+    <span class="nd">@ngram_ordered</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">ngram_ordered</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngram_ordered</span><span class="p">:</span><span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set or update a flag that controls whether n-grams should be ordered or not.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ngram_ordered : bool</span>
+<span class="sd">            If True, n-grams will be ordered; if False, n-grams will be unordered.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ngram_ordered</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__error_unexpected_type</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="n">ngram_ordered</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ngram_ordered</span> <span class="o">=</span> <span class="n">ngram_ordered</span>
+        
+        
+    <span class="nd">@query</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set or update the query of the object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query : list, dict, str, None</span>
+<span class="sd">            The new value for the query of the object.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">process_entry</span><span class="p">(</span><span class="n">entry</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">validate_dependent_terms</span><span class="p">(</span><span class="n">terms</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">terms</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">term</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected single token in dependent term, but got </span><span class="si">{</span><span class="n">term</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">return</span> <span class="p">[(</span><span class="n">word</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[])</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected query dict to only contain 1 element&#39;</span><span class="p">)</span>
+                <span class="n">term</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">entry</span><span class="p">))</span>
+                <span class="n">dependents</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="n">term</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dependents</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="n">validate_dependent_terms</span><span class="p">([</span><span class="n">dependents</span><span class="p">])</span>
+                    <span class="n">dependents</span> <span class="o">=</span> <span class="p">[</span><span class="n">dependents</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dependents</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">validate_dependent_terms</span><span class="p">(</span><span class="n">dependents</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__error_unexpected_type</span><span class="p">({</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">},</span> <span class="n">dependents</span><span class="p">)</span>
+                
+                <span class="c1"># process the dependent term(s) to determine which are being </span>
+                <span class="c1"># negated and which are being included</span>
+                <span class="n">negatives</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">positives</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">dependents</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">dep</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">):</span>  <span class="c1"># positive terms are expected to start with &#39;+&#39;</span>
+                        <span class="n">positives</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dep</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>  <span class="c1"># take off the plus sign</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">negatives</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dep</span><span class="p">)</span>  <span class="c1"># negative terms are just the term with no symbols</span>
+                
+                <span class="k">return</span> <span class="p">[(</span><span class="n">word</span><span class="p">,</span> <span class="n">negatives</span><span class="p">,</span> <span class="n">positives</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">term</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__error_unexpected_type</span><span class="p">({</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">},</span> <span class="n">entry</span><span class="p">)</span>
+        
+        <span class="c1"># query is None, an empty string, empty dict, or an empty list</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">query</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_query</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">processed</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">processed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process_entry</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">query</span><span class="p">:</span>
+                    <span class="n">processed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process_entry</span><span class="p">(</span><span class="n">entry</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__error_unexpected_type</span><span class="p">({</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)},</span> <span class="n">query</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_query</span> <span class="o">=</span> <span class="n">processed</span>
+
+
+    <span class="nd">@columns</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span><span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set or update the columns of a data structure or object.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        columns : dict</span>
+<span class="sd">            A dictionary containing column names as keys and column values as values.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="n">Cheetah</span><span class="o">.</span><span class="n">COLUMNS</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__error_unexpected_type</span><span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
+
+        <span class="n">del_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">data_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">col_value</span> <span class="ow">in</span> <span class="n">columns</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">col_value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data_columns</span><span class="p">:</span>
+                <span class="n">del_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col_name</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">del_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">columns</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39; not found in DataFrame. Removing the </span><span class="si">{</span><span class="n">d</span><span class="si">}</span><span class="s2"> index&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">columns</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">columns</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No valid columns remain to be indexed&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span> <span class="o">=</span> <span class="n">columns</span>
+
+    <span class="c1"># UTIL</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__error_unexpected_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="ne">ValueError</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raises an ValueError exception</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cls:</span>
+
+<span class="sd">        expected_type:</span>
+<span class="sd">        </span>
+<span class="sd">        var:</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected </span><span class="si">{</span><span class="n">expected_type</span><span class="si">}</span><span class="s2"> but instead got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">var</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
