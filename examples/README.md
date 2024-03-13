@@ -5,3 +5,4 @@
 - **TriNMFk:** NMF with Automatic Model Determination for Clusters and Patterns. 
 - **SymNMFk:** NMFk with symmetric clustering.
 - **WNMFk:** NMFk with weighting - used for recommendation system
+- **Cheetah:** Fast search by keywords and phrases

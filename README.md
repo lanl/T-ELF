@@ -138,13 +138,17 @@ conda install cudnn
 |:----------:|:----------------------------------------------------------:|:-----------:|:------------------:|
 |   Peacock  | Data visualization and generation of actionable statistics |             |       :soon:       |
 |    Wolf    |              Graph centrality and ranking tool             |             |       :soon:       |
+|    Fox    |              Report generation tool for text data            |             |       :soon:       |
+|    SeaLion    |              Generic report generation tool            |             |       :soon:       |
 
 ### TELF.applications
 
 | **Method** |                            **Description**                           | **Example** | **Release Status** |
 |:----------:|:--------------------------------------------------------------------:|:-----------:|:------------------:|
-|   Cheetah  |                        Fast search by keywords                       |             |       :soon:       |
+|   Cheetah  |                        Fast search by keywords and phrases                       |    [Link](examples/Cheetah)         |       :white_check_mark:      |
 |    Bunny   | Dataset generation tool for documents and their citations/references |             |       :soon:       |
+|    Termite   | Knowladge graph building tool |             |       :soon:       |
+
 
 
 ## How to Cite T-ELF?
@@ -152,7 +156,7 @@ If you use T-ELF please cite.
 
 **APA:**
 ```latex
-Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.9) [Computer software]. https://doi.org/10.5281/zenodo.10257897
+Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.010) [Computer software]. https://doi.org/10.5281/zenodo.10257897
 ```
 
 **BibTeX:**
