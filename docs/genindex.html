@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; TELF 0.0.9 documentation</title>
+    <title>Index &#8212; TELF 0.0.10 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="_static/documentation_options.js?v=39f6cbd5"></script>
+    <script src="_static/documentation_options.js?v=94452c26"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.9 documentation</p>
+    <p class="title logo__title">TELF 0.0.10 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -151,6 +151,10 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
 
 
 
@@ -281,11 +285,13 @@ document.write(`
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
@@ -304,6 +310,8 @@ document.write(`
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.bool_noise.add_Bool_posneg_noise">add_Bool_posneg_noise() (in module TELF.factorization.decompositions.utilities.bool_noise)</a>
+</li>
+      <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.add_with_union_of_others">add_with_union_of_others() (in module TELF.applications.Cheetah.cheetah)</a>
 </li>
       <li><a href="TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.append_to_note">append_to_note() (in module TELF.factorization.utilities.take_note)</a>
 </li>
@@ -329,6 +337,8 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.cache">cache (TELF.pre_processing.Vulture.vulture.Vulture property)</a>, <a href="Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.cache">[1]</a>
 </li>
+      <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah">Cheetah (class in TELF.applications.Cheetah.cheetah)</a>
+</li>
       <li><a href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.chunk_tuple_list">chunk_tuple_list() (in module TELF.pre_processing.Vulture.vulture)</a>, <a href="Vulture.html#TELF.pre_processing.Vulture.vulture.chunk_tuple_list">[1]</a>
 </li>
       <li><a href="Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.citation_tensor">citation_tensor() (TELF.pre_processing.Beaver.beaver.Beaver method)</a>, <a href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.citation_tensor">[1]</a>
@@ -347,8 +357,12 @@ document.write(`
 </li>
       <li><a href="Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.cocitation_tensor">cocitation_tensor() (TELF.pre_processing.Beaver.beaver.Beaver method)</a>, <a href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.cocitation_tensor">[1]</a>
 </li>
+      <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.COLUMNS">COLUMNS (TELF.applications.Cheetah.cheetah.Cheetah attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.columns">columns (TELF.applications.Cheetah.cheetah.Cheetah property)</a>
+</li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.concensus_matrix.compute_connectivity_mat">compute_connectivity_mat() (in module TELF.factorization.decompositions.utilities.concensus_matrix)</a>
 </li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.concensus_matrix.compute_consensus_matrix">compute_consensus_matrix() (in module TELF.factorization.decompositions.utilities.concensus_matrix)</a>
@@ -391,6 +405,8 @@ document.write(`
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.find_ngram">find_ngram() (TELF.applications.Cheetah.cheetah.Cheetah class method)</a>
+</li>
       <li><a href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.find_thres_WH">find_thres_WH() (in module TELF.factorization.decompositions.nmf_mc_fro_mu)</a>
 </li>
       <li><a href="NMFk.html#TELF.factorization.NMFk.NMFk.fit">fit() (TELF.factorization.NMFk.NMFk method)</a>, <a href="TELF.factorization.html#TELF.factorization.NMFk.NMFk.fit">[1]</a>
@@ -401,10 +417,10 @@ document.write(`
         <li><a href="SymNMFk.html#TELF.factorization.SymNMFk.SymNMFk.fit">(TELF.factorization.SymNMFk.SymNMFk method)</a>
 </li>
       </ul></li>
-      <li><a href="TELF.factorization.html#TELF.factorization.TriNMFk.TriNMFk.fit_nmfk">fit_nmfk() (TELF.factorization.TriNMFk.TriNMFk method)</a>, <a href="TriNMFk.html#TELF.factorization.TriNMFk.TriNMFk.fit_nmfk">[1]</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="TELF.factorization.html#TELF.factorization.TriNMFk.TriNMFk.fit_nmfk">fit_nmfk() (TELF.factorization.TriNMFk.TriNMFk method)</a>, <a href="TriNMFk.html#TELF.factorization.TriNMFk.TriNMFk.fit_nmfk">[1]</a>
+</li>
       <li><a href="TELF.factorization.html#TELF.factorization.TriNMFk.TriNMFk.fit_tri_nmfk">fit_tri_nmfk() (TELF.factorization.TriNMFk.TriNMFk method)</a>, <a href="TriNMFk.html#TELF.factorization.TriNMFk.TriNMFk.fit_tri_nmfk">[1]</a>
 </li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.data_reshaping.fold">fold() (in module TELF.factorization.decompositions.utilities.data_reshaping)</a>
@@ -470,6 +486,14 @@ document.write(`
   </ul></td>
 </tr></table>
 
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.index">index() (TELF.applications.Cheetah.cheetah.Cheetah method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -488,6 +512,8 @@ document.write(`
 
       <ul>
         <li><a href="TELF.html#module-TELF">TELF</a>
+</li>
+        <li><a href="Cheetah.html#module-TELF.applications.Cheetah.cheetah">TELF.applications.Cheetah.cheetah</a>
 </li>
         <li><a href="TELF.factorization.html#module-TELF.factorization">TELF.factorization</a>
 </li>
@@ -571,6 +597,8 @@ document.write(`
 </li>
         <li><a href="TELF.pre_processing.Vulture.html#module-TELF.pre_processing.Vulture">TELF.pre_processing.Vulture</a>
 </li>
+        <li><a href="TELF.pre_processing.Vulture.html#module-TELF.pre_processing.Vulture.modules">TELF.pre_processing.Vulture.modules</a>
+</li>
         <li><a href="TELF.pre_processing.Vulture.tokens_analysis.html#module-TELF.pre_processing.Vulture.tokens_analysis">TELF.pre_processing.Vulture.tokens_analysis</a>
 </li>
         <li><a href="TELF.pre_processing.Vulture.tokens_analysis.html#module-TELF.pre_processing.Vulture.tokens_analysis.top_words">TELF.pre_processing.Vulture.tokens_analysis.top_words</a>
@@ -603,6 +631,10 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.nan_to_num">nan_to_num() (in module TELF.factorization.decompositions.utilities.math_utils)</a>
+</li>
+      <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.ngram_ordered">ngram_ordered (TELF.applications.Cheetah.cheetah.Cheetah property)</a>
+</li>
+      <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.ngram_window_size">ngram_window_size (TELF.applications.Cheetah.cheetah.Cheetah property)</a>
 </li>
       <li><a href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_admm.nmf">nmf() (in module TELF.factorization.decompositions.nmf_fro_admm)</a>
 
@@ -679,6 +711,14 @@ document.write(`
   </ul></td>
 </tr></table>
 
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.query">query (TELF.applications.Cheetah.cheetah.Cheetah property)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -709,6 +749,8 @@ document.write(`
       <li><a href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.tri_nmf_fro_mu.S_update">S_update() (in module TELF.factorization.decompositions.tri_nmf_fro_mu)</a>
 </li>
       <li><a href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.save_path">save_path (TELF.pre_processing.Vulture.vulture.Vulture property)</a>, <a href="Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.save_path">[1]</a>
+</li>
+      <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.search">search() (TELF.applications.Cheetah.cheetah.Cheetah method)</a>
 </li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.clustering.silhouettes">silhouettes() (in module TELF.factorization.decompositions.utilities.clustering)</a>
 </li>
@@ -747,6 +789,13 @@ document.write(`
 
       <ul>
         <li><a href="TELF.html#module-TELF">module</a>
+</li>
+      </ul></li>
+      <li>
+    TELF.applications.Cheetah.cheetah
+
+      <ul>
+        <li><a href="Cheetah.html#module-TELF.applications.Cheetah.cheetah">module</a>
 </li>
       </ul></li>
       <li>
@@ -1036,6 +1085,13 @@ document.write(`
 
       <ul>
         <li><a href="TELF.pre_processing.Vulture.html#module-TELF.pre_processing.Vulture">module</a>
+</li>
+      </ul></li>
+      <li>
+    TELF.pre_processing.Vulture.modules
+
+      <ul>
+        <li><a href="TELF.pre_processing.Vulture.html#module-TELF.pre_processing.Vulture.modules">module</a>
 </li>
       </ul></li>
       <li>

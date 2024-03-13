@@ -12,10 +12,10 @@ Subpackages
 Submodules
 ----------
 
-TELF.pre\_processing.Vulture.pre\_process module
+TELF.pre\_processing.Vulture.modules module
 ------------------------------------------------
 
-.. automodule:: TELF.pre_processing.Vulture.pre_process
+.. automodule:: TELF.pre_processing.Vulture.modules
    :members:
    :undoc-members:
    :show-inheritance:
