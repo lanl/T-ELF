@@ -22,3 +22,4 @@ dependencies:
   - networkx
   - spacy==3.7.2
   - mat73
+  - spacy-transformers

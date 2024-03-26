@@ -48,20 +48,20 @@ Installation
 
 .. code-block:: shell
 
-	git clone https://github.com/lanl/T-ELF.git
-	cd T-ELF
-	conda env create --file environment_gpu.yml # use <conda env create --file environment_cpu.yml> for CPU only
-	conda activate TELF_conda
-	conda develop .
+   git clone https://github.com/lanl/T-ELF.git
+   cd T-ELF
+   conda env create --file environment_gpu.yml # use <conda env create --file environment_cpu.yml> for CPU only
+   conda activate TELF_conda
+   conda develop .
 
 
 **Step 2: Install Spacy NLP model and NLTK Packages**
 
 .. code-block:: shell
 
-	python -m spacy download en_core_web_lg
+   python -m spacy download en_core_web_lg
    python -m spacy download en_core_web_trf
-	python -m nltk.downloader wordnet omw-1.4
+   python -m nltk.downloader wordnet omw-1.4
 
 
 **Step 3: Install Cupy if using GPU (*Optional* - Skip if used Option 3 in Step 1)**
@@ -104,7 +104,7 @@ How to Cite T-ELF?
 
 .. code-block:: console
 
-   Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.10) [Computer software]. https://doi.org/10.5281/zenodo.10257897
+   Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.11) [Computer software]. https://doi.org/10.5281/zenodo.10257897
 
 **BibTeX:**
 
