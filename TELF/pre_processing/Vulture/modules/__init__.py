@@ -4,3 +4,4 @@ from .lemmatize import LemmatizeCleaner
 from .substitute import SubstitutionCleaner
 from .detect_nonenglish import RemoveNonEnglishCleaner
 from .ner import NEDetector
+from .acronym import AcronymDetector

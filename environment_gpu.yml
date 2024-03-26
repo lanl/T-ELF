@@ -23,3 +23,4 @@ dependencies:
   - mat73
   - cupy
   - networkx
+  - spacy-transformers
