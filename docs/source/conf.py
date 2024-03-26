@@ -9,7 +9,7 @@
 project = 'TELF'
 copyright = '2022, LANL'
 author = 'Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov'
-release = '0.0.10'
+release = '0.0.11'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
