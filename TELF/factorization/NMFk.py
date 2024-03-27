@@ -260,9 +260,10 @@ def _nmf_parallel_wrapper(
 
     #
     # cluster the solutions
-    #        
+    # 
     W, W_clust = custom_k_means(W_all, use_gpu=False)
-    sils_all = silhouettes(W_clust)
+    sils_all_W = silhouettes(W_clust)
+    sils_all_H = silhouettes(np.array(H_all).transpose((1, 0, 2)))
 
     #
     # concensus matrix
@@ -320,7 +321,8 @@ def _nmf_parallel_wrapper(
         save_data = {
             "W": W,
             "H": H,
-            "sils_all": sils_all,
+            "sils_all_W": sils_all_W,
+            "sils_all_H": sils_all_H,
             "error_reg": error_reg,
             "errors": errors,
             "reordered_con_mat": reordered_con_mat,
@@ -341,12 +343,18 @@ def _nmf_parallel_wrapper(
         for key in logging_stats:
             if key == 'k':
                 plot_data["k"] = k
-            elif key ==  'sils_min':
-                sils_min = np.min(np.mean(sils_all, 1))
-                plot_data["sils_min"] = '{0:.3f}'.format(sils_min)
-            elif key == 'sils_mean':
-                sils_mean = np.mean(np.mean(sils_all, 1))
-                plot_data["sils_mean"] = '{0:.3f}'.format(sils_mean)
+            elif key ==  'sils_min_W':
+                sils_min_W = np.min(np.mean(sils_all_W, 1))
+                plot_data["sils_min_W"] = '{0:.3f}'.format(sils_min_W)
+            elif key == 'sils_mean_W':
+                sils_mean_W = np.mean(np.mean(sils_all_W, 1))
+                plot_data["sils_mean_W"] = '{0:.3f}'.format(sils_mean_W)
+            elif key ==  'sils_min_H':
+                sils_min_H = np.min(np.mean(sils_all_H, 1))
+                plot_data["sils_min_H"] = '{0:.3f}'.format(sils_min_H)
+            elif key == 'sils_mean_H':
+                sils_mean_H = np.mean(np.mean(sils_all_H, 1))
+                plot_data["sils_mean_H"] = '{0:.3f}'.format(sils_mean_H)
             elif key == 'err_mean':
                 err_mean = np.mean(errors)
                 plot_data["err_mean"] = '{0:.3f}'.format(err_mean)
@@ -373,10 +381,17 @@ def _nmf_parallel_wrapper(
         "err_mean":np.mean(errors),
         "err_std":np.std(errors),
         "err_reg":error_reg,
-        "sils_min":np.min(np.mean(sils_all, 1)),
-        "sils_mean":np.mean(np.mean(sils_all, 1)),
-        "sils_std":np.std(np.mean(sils_all, 1)),
-        "sils_all":sils_all,
+
+        "sils_min_W":np.min(np.mean(sils_all_W, 1)),
+        "sils_mean_W":np.mean(np.mean(sils_all_W, 1)),
+        "sils_std_W":np.std(np.mean(sils_all_W, 1)),
+        "sils_all_W":sils_all_W,
+
+        "sils_min_H":np.min(np.mean(sils_all_H, 1)),
+        "sils_mean_H":np.mean(np.mean(sils_all_H, 1)),
+        "sils_std_H":np.std(np.mean(sils_all_H, 1)),
+        "sils_all_H":sils_all_H,
+
         "cophenetic_coeff":coeff_k,
         "col_err":curr_col_err,
     }
@@ -404,7 +419,7 @@ class NMFk:
             save_output=True,
             collect_output=False,
             predict_k=False,
-            predict_k_method="pvalue",
+            predict_k_method="sill",
             verbose=True,
             nmf_verbose=False,
             perturb_verbose=False,
@@ -462,13 +477,13 @@ class NMFk:
                 Even when ``predict_k=False``, number of latent factors can be estimated using the figures saved in ``save_path``.
 
         predict_k_method : str, optional
-            Method to use when performing automatic k prediction. Default is "pvalue".\n
+            Method to use when performing automatic k prediction. Default is "sill".\n
             * ``predict_k_method='pvalue'`` will use L-Statistics with column-wise error for automatically estimating the number of latent factors.\n
             * ``predict_k_method='sill'`` will use Silhouette score for estimating the number of latent factors.
 
             .. warning::
 
-                ``predict_k_method='pvalue'`` prediction will result in significantly longer processing time! ``predict_k_method='sill'``, on the other hand, will be much faster.
+                ``predict_k_method='pvalue'`` prediction will result in significantly longer processing time, altough it is more accurate! ``predict_k_method='sill'``, on the other hand, will be much faster.
 
         verbose : bool, optional
             If True, shows progress in each k. The default is True.
@@ -789,8 +804,11 @@ class NMFk:
         # init the stats header 
         # this will setup the logging for all configurations of nmfk
         stats_header = {'k': 'k', 
-                        'sils_min': 'Min. Silhouette', 
-                        'sils_mean': 'Mean Silhouette'}
+                        'sils_min_W': 'W Min. Silhouette', 
+                        'sils_mean_W': 'W Mean Silhouette',
+                        'sils_min_H': 'H Min. Silhouette', 
+                        'sils_mean_H': 'H Mean Silhouette',
+                        }
         if self.calculate_error:
             stats_header['err_mean'] = 'Mean Error'
             stats_header['err_std'] = 'STD Error'
@@ -950,11 +968,14 @@ class NMFk:
             if self.predict_k:
                 if self.predict_k_method == "pvalue":
                     k_predict = pvalue_analysis(
-                        combined_result["col_err"], Ks, combined_result["sils_min"], SILL_thr=self.sill_thresh
+                        combined_result["col_err"], Ks, combined_result["sils_min_W"], SILL_thr=self.sill_thresh
                     )[0]
                 elif self.predict_k_method == "sill":
-                    k_predict = Ks[np.max(np.argwhere(
-                        np.array(combined_result["sils_min"]) >= self.sill_thresh).flatten())]
+                    k_predict_W = Ks[np.max(np.argwhere(
+                        np.array(combined_result["sils_min_W"]) >= self.sill_thresh).flatten())]
+                    k_predict_H = Ks[np.max(np.argwhere(
+                        np.array(combined_result["sils_min_H"]) >= self.sill_thresh).flatten())]
+                    k_predict = min(k_predict_W, k_predict_H)
             else:
                 k_predict = 0
                 
@@ -998,7 +1019,8 @@ class NMFk:
                     self.save_path_full, 
                     plot_predict=self.predict_k,
                     plot_final=True,
-                    simple_plot=self.simple_plot
+                    simple_plot=self.simple_plot,
+                    calculate_error=self.calculate_error
                 )
                 append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
                 append_to_note(["end_time= "+str(datetime.now())], self.save_path_full, name=note_name, lock=self.lock)
