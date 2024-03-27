@@ -113,7 +113,7 @@ def plot_BNMFk(Ks, sils, bool_err, path=None, name=None):
     return None
 
 
-def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False, simple_plot=False):
+def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False, simple_plot=False, calculate_error=True):
     """
 
 
@@ -144,7 +144,7 @@ def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False,
     ax1.set_xlabel("latent dimension")
     
     if pac:
-        ax1.set_ylabel("silhouette - pac", color=color)
+        ax1.set_ylabel("silhouette - pac", color="black")
     else:
         ax1.set_ylabel("silhouette", color=color)
 
@@ -162,7 +162,7 @@ def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False,
         list(data["Ks"]),
         data["sils_min_H"],
         "o-.",
-        color=color,
+        color="purple",
         label="H minimum silhouette",
     )
     
@@ -171,7 +171,7 @@ def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False,
         for xtick in ax1.get_xticks():
             if xtick in data["Ks"]:
                 y = data["sils_min_W"][np.where(data["Ks"] == xtick)[0][0]]  # get the y value that corresponds to xtick
-                plt.vlines(xtick, min(data["sils_min_W"] + [0]), y, colors='black', alpha=0.4)
+                plt.vlines(xtick, min([0, np.min(data["sils_min_H"]), np.min(data["sils_min_W"])]), y, colors='black', alpha=0.4)
 
     if not simple_plot:
         ax1.errorbar(
@@ -229,28 +229,37 @@ def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False,
     )
     
     # relative error
-    ax2 = ax1.twinx()
-    color = "tab:blue"
-    ax2.set_ylabel("relative error", color=color)
-    ax2.plot(
-        list(data["Ks"]),
-        data["err_reg"],
-        "o-",
-        color=color,
-        label="regression relative error",
-    )
-    
-    if not simple_plot:
-        ax2.errorbar(
+    if calculate_error:
+        ax2 = ax1.twinx()
+        color = "tab:blue"
+        ax2.set_ylabel("relative error", color=color)
+        ax2.plot(
             list(data["Ks"]),
-            data["err_mean"],
-            yerr=data["err_std"],
-            fmt="^:",
-            color="tab:orange",
-            label="perturbation relative error mean +- std",
+            data["err_reg"],
+            "o-",
+            color=color,
+            label="regression relative error",
+        )
+        
+        if not simple_plot:
+            ax2.errorbar(
+                list(data["Ks"]),
+                data["err_mean"],
+                yerr=data["err_std"],
+                fmt="^:",
+                color="tab:orange",
+                label="perturbation relative error mean +- std",
+            )
+
+        ax2.tick_params(axis="y", labelcolor=color)
+        ax2.legend(
+            loc="upper right",
+            bbox_to_anchor=(0.5, -0.07),
+            fancybox=True,
+            shadow=True,
+            handlelength=4,
         )
 
-    ax2.tick_params(axis="y", labelcolor=color)
     ax1.legend(
         loc="upper right",
         bbox_to_anchor=(.9, -0.07),
@@ -258,13 +267,7 @@ def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False,
         shadow=True,
         handlelength=4,
     )
-    ax2.legend(
-        loc="upper right",
-        bbox_to_anchor=(0.5, -0.07),
-        fancybox=True,
-        shadow=True,
-        handlelength=4,
-    )
+    
     
     
     # finalize

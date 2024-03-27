@@ -1019,7 +1019,8 @@ class NMFk:
                     self.save_path_full, 
                     plot_predict=self.predict_k,
                     plot_final=True,
-                    simple_plot=self.simple_plot
+                    simple_plot=self.simple_plot,
+                    calculate_error=self.calculate_error
                 )
                 append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
                 append_to_note(["end_time= "+str(datetime.now())], self.save_path_full, name=note_name, lock=self.lock)
