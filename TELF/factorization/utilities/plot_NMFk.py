@@ -147,30 +147,49 @@ def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False,
         ax1.set_ylabel("silhouette - pac", color=color)
     else:
         ax1.set_ylabel("silhouette", color=color)
-        
+
+    # W sill  
     ax1.plot(
         list(data["Ks"]),
-        data["sils_min"],
+        data["sils_min_W"],
         "o-",
         color=color,
-        label="minimum silhouette",
+        label="W minimum silhouette",
+    )
+
+    # H sill
+    ax1.plot(
+        list(data["Ks"]),
+        data["sils_min_H"],
+        "o-.",
+        color=color,
+        label="H minimum silhouette",
     )
     
     # add a vertical line for xtick k-values to make it easier to see which point corresponds to which k
-    if not isinstance(data["sils_min"], np.float64):  # if plot contains more than one k-value
+    if not isinstance(data["sils_min_W"], np.float64):  # if plot contains more than one k-value
         for xtick in ax1.get_xticks():
             if xtick in data["Ks"]:
-                y = data["sils_min"][np.where(data["Ks"] == xtick)[0][0]]  # get the y value that corresponds to xtick
-                plt.vlines(xtick, min(data["sils_min"] + [0]), y, colors='black', alpha=0.4)
+                y = data["sils_min_W"][np.where(data["Ks"] == xtick)[0][0]]  # get the y value that corresponds to xtick
+                plt.vlines(xtick, min(data["sils_min_W"] + [0]), y, colors='black', alpha=0.4)
 
     if not simple_plot:
         ax1.errorbar(
             list(data["Ks"]),
-            data["sils_mean"],
-            yerr=data["sils_std"],
+            data["sils_mean_W"],
+            yerr=data["sils_std_W"],
             fmt="^:",
             color="tab:green",
-            label=r"mean +- std silhouette",
+            label=r"W mean +- std silhouette",
+        )
+
+        ax1.errorbar(
+            list(data["Ks"]),
+            data["sils_mean_H"],
+            yerr=data["sils_std_H"],
+            fmt="^-.",
+            color="tab:green",
+            label=r"H mean +- std silhouette",
         )
 
     # pac
@@ -184,9 +203,10 @@ def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False,
             color=color,
             label="PAC",
         )
-        ax1.set_ylim(min(0, min(np.min(data["sils_min"]), np.min(data["pac"]))), 1)
+        
+        ax1.set_ylim(min([0, np.min(data["sils_min_H"]), np.min(data["sils_min_W"]), np.min(data["pac"])]), 1)
     else:
-        ax1.set_ylim(min(0, np.min(data["sils_min"])), 1)
+        ax1.set_ylim(min([0, np.min(data["sils_min_H"]), np.min(data["sils_min_W"])]), 1)
     
     ax1.tick_params(axis="y", labelcolor=color)
     
@@ -231,12 +251,21 @@ def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False,
         )
 
     ax2.tick_params(axis="y", labelcolor=color)
+    ax1.legend(
+        loc="upper right",
+        bbox_to_anchor=(.9, -0.07),
+        fancybox=True,
+        shadow=True,
+        handlelength=4,
+    )
     ax2.legend(
         loc="upper right",
         bbox_to_anchor=(0.5, -0.07),
         fancybox=True,
         shadow=True,
+        handlelength=4,
     )
+    
     
     # finalize
     fig.tight_layout()
