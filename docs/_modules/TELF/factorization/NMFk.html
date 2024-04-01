@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.NMFk &#8212; TELF 0.0.11 documentation</title>
+    <title>TELF.factorization.NMFk &#8212; TELF 0.0.12 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../../../_static/documentation_options.js?v=2fb9ae3b"></script>
+    <script src="../../../_static/documentation_options.js?v=38cd2e5d"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.11 documentation</p>
+    <p class="title logo__title">TELF 0.0.12 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -537,9 +537,10 @@ document.write(`
 
     <span class="c1">#</span>
     <span class="c1"># cluster the solutions</span>
-    <span class="c1">#        </span>
+    <span class="c1"># </span>
     <span class="n">W</span><span class="p">,</span> <span class="n">W_clust</span> <span class="o">=</span> <span class="n">custom_k_means</span><span class="p">(</span><span class="n">W_all</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">sils_all</span> <span class="o">=</span> <span class="n">silhouettes</span><span class="p">(</span><span class="n">W_clust</span><span class="p">)</span>
+    <span class="n">sils_all_W</span> <span class="o">=</span> <span class="n">silhouettes</span><span class="p">(</span><span class="n">W_clust</span><span class="p">)</span>
+    <span class="n">sils_all_H</span> <span class="o">=</span> <span class="n">silhouettes</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">H_all</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
 
     <span class="c1">#</span>
     <span class="c1"># concensus matrix</span>
@@ -597,7 +598,8 @@ document.write(`
         <span class="n">save_data</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="n">W</span><span class="p">,</span>
             <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="n">H</span><span class="p">,</span>
-            <span class="s2">&quot;sils_all&quot;</span><span class="p">:</span> <span class="n">sils_all</span><span class="p">,</span>
+            <span class="s2">&quot;sils_all_W&quot;</span><span class="p">:</span> <span class="n">sils_all_W</span><span class="p">,</span>
+            <span class="s2">&quot;sils_all_H&quot;</span><span class="p">:</span> <span class="n">sils_all_H</span><span class="p">,</span>
             <span class="s2">&quot;error_reg&quot;</span><span class="p">:</span> <span class="n">error_reg</span><span class="p">,</span>
             <span class="s2">&quot;errors&quot;</span><span class="p">:</span> <span class="n">errors</span><span class="p">,</span>
             <span class="s2">&quot;reordered_con_mat&quot;</span><span class="p">:</span> <span class="n">reordered_con_mat</span><span class="p">,</span>
@@ -618,12 +620,18 @@ document.write(`
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">logging_stats</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;k&#39;</span><span class="p">:</span>
                 <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
-            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span>  <span class="s1">&#39;sils_min&#39;</span><span class="p">:</span>
-                <span class="n">sils_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_min</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;sils_mean&#39;</span><span class="p">:</span>
-                <span class="n">sils_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_mean</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span>  <span class="s1">&#39;sils_min_W&#39;</span><span class="p">:</span>
+                <span class="n">sils_min_W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_W</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_min_W</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;sils_mean_W&#39;</span><span class="p">:</span>
+                <span class="n">sils_mean_W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_W</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_mean_W&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_mean_W</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span>  <span class="s1">&#39;sils_min_H&#39;</span><span class="p">:</span>
+                <span class="n">sils_min_H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_H</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_min_H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_min_H</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;sils_mean_H&#39;</span><span class="p">:</span>
+                <span class="n">sils_mean_H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_H</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_mean_H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_mean_H</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;err_mean&#39;</span><span class="p">:</span>
                 <span class="n">err_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
                 <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;err_mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err_mean</span><span class="p">)</span>
@@ -650,10 +658,17 @@ document.write(`
         <span class="s2">&quot;err_mean&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">errors</span><span class="p">),</span>
         <span class="s2">&quot;err_std&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">errors</span><span class="p">),</span>
         <span class="s2">&quot;err_reg&quot;</span><span class="p">:</span><span class="n">error_reg</span><span class="p">,</span>
-        <span class="s2">&quot;sils_min&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
-        <span class="s2">&quot;sils_mean&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
-        <span class="s2">&quot;sils_std&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
-        <span class="s2">&quot;sils_all&quot;</span><span class="p">:</span><span class="n">sils_all</span><span class="p">,</span>
+
+        <span class="s2">&quot;sils_min_W&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_W</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="s2">&quot;sils_mean_W&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_W</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="s2">&quot;sils_std_W&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_W</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="s2">&quot;sils_all_W&quot;</span><span class="p">:</span><span class="n">sils_all_W</span><span class="p">,</span>
+
+        <span class="s2">&quot;sils_min_H&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="s2">&quot;sils_mean_H&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="s2">&quot;sils_std_H&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="s2">&quot;sils_all_H&quot;</span><span class="p">:</span><span class="n">sils_all_H</span><span class="p">,</span>
+
         <span class="s2">&quot;cophenetic_coeff&quot;</span><span class="p">:</span><span class="n">coeff_k</span><span class="p">,</span>
         <span class="s2">&quot;col_err&quot;</span><span class="p">:</span><span class="n">curr_col_err</span><span class="p">,</span>
     <span class="p">}</span>
@@ -683,7 +698,7 @@ document.write(`
             <span class="n">save_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">collect_output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">predict_k</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">predict_k_method</span><span class="o">=</span><span class="s2">&quot;pvalue&quot;</span><span class="p">,</span>
+            <span class="n">predict_k_method</span><span class="o">=</span><span class="s2">&quot;sill&quot;</span><span class="p">,</span>
             <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">nmf_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">perturb_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -741,13 +756,13 @@ document.write(`
 <span class="sd">                Even when ``predict_k=False``, number of latent factors can be estimated using the figures saved in ``save_path``.</span>
 
 <span class="sd">        predict_k_method : str, optional</span>
-<span class="sd">            Method to use when performing automatic k prediction. Default is &quot;pvalue&quot;.\n</span>
+<span class="sd">            Method to use when performing automatic k prediction. Default is &quot;sill&quot;.\n</span>
 <span class="sd">            * ``predict_k_method=&#39;pvalue&#39;`` will use L-Statistics with column-wise error for automatically estimating the number of latent factors.\n</span>
 <span class="sd">            * ``predict_k_method=&#39;sill&#39;`` will use Silhouette score for estimating the number of latent factors.</span>
 
 <span class="sd">            .. warning::</span>
 
-<span class="sd">                ``predict_k_method=&#39;pvalue&#39;`` prediction will result in significantly longer processing time! ``predict_k_method=&#39;sill&#39;``, on the other hand, will be much faster.</span>
+<span class="sd">                ``predict_k_method=&#39;pvalue&#39;`` prediction will result in significantly longer processing time, altough it is more accurate! ``predict_k_method=&#39;sill&#39;``, on the other hand, will be much faster.</span>
 
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            If True, shows progress in each k. The default is True.</span>
@@ -1070,8 +1085,11 @@ document.write(`
         <span class="c1"># init the stats header </span>
         <span class="c1"># this will setup the logging for all configurations of nmfk</span>
         <span class="n">stats_header</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> 
-                        <span class="s1">&#39;sils_min&#39;</span><span class="p">:</span> <span class="s1">&#39;Min. Silhouette&#39;</span><span class="p">,</span> 
-                        <span class="s1">&#39;sils_mean&#39;</span><span class="p">:</span> <span class="s1">&#39;Mean Silhouette&#39;</span><span class="p">}</span>
+                        <span class="s1">&#39;sils_min_W&#39;</span><span class="p">:</span> <span class="s1">&#39;W Min. Silhouette&#39;</span><span class="p">,</span> 
+                        <span class="s1">&#39;sils_mean_W&#39;</span><span class="p">:</span> <span class="s1">&#39;W Mean Silhouette&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;sils_min_H&#39;</span><span class="p">:</span> <span class="s1">&#39;H Min. Silhouette&#39;</span><span class="p">,</span> 
+                        <span class="s1">&#39;sils_mean_H&#39;</span><span class="p">:</span> <span class="s1">&#39;H Mean Silhouette&#39;</span><span class="p">,</span>
+                        <span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_error</span><span class="p">:</span>
             <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;err_mean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Mean Error&#39;</span>
             <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;err_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;STD Error&#39;</span>
@@ -1231,11 +1249,14 @@ document.write(`
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="o">==</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">:</span>
                     <span class="n">k_predict</span> <span class="o">=</span> <span class="n">pvalue_analysis</span><span class="p">(</span>
-                        <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;col_err&quot;</span><span class="p">],</span> <span class="n">Ks</span><span class="p">,</span> <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min&quot;</span><span class="p">],</span> <span class="n">SILL_thr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span>
+                        <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;col_err&quot;</span><span class="p">],</span> <span class="n">Ks</span><span class="p">,</span> <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">],</span> <span class="n">SILL_thr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span>
                     <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="o">==</span> <span class="s2">&quot;sill&quot;</span><span class="p">:</span>
-                    <span class="n">k_predict</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span>
-                        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min&quot;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())]</span>
+                    <span class="n">k_predict_W</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())]</span>
+                    <span class="n">k_predict_H</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_H&quot;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())]</span>
+                    <span class="n">k_predict</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">k_predict_W</span><span class="p">,</span> <span class="n">k_predict_H</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">k_predict</span> <span class="o">=</span> <span class="mi">0</span>
                 
@@ -1279,7 +1300,8 @@ document.write(`
                     <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> 
                     <span class="n">plot_predict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_k</span><span class="p">,</span>
                     <span class="n">plot_final</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                    <span class="n">simple_plot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">simple_plot</span>
+                    <span class="n">simple_plot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">simple_plot</span><span class="p">,</span>
+                    <span class="n">calculate_error</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">calculate_error</span>
                 <span class="p">)</span>
                 <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
                 <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;end_time= &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
