@@ -1,6 +1,7 @@
 - **Beaver:** Matrix and tensor creation tool with HPC and multi-processing capabilities.
 - **Vulture:** Advanced and customizable text pre-processing tool with HPC and multi-processing capabilities.
 - **NMFk:** Non-negative matrix factorization with automatic model determination with custom settings including missing value prediction. NMFk has HPC and multi-processing capabilities for both CPU and GPU systems.
+- **HNMFk:** Hierarchical Non-negative matrix factorization with automatic model determination with custom settings including missing value prediction. HNMFk has HPC and multi-processing capabilities for both CPU and GPU systems.
 - **RESCALk:** RESCAL with Automatic Model Determination. RESCALk has HPC and multi-processing capabilities for both CPU and GPU systems.
 - **TriNMFk:** NMF with Automatic Model Determination for Clusters and Patterns. 
 - **SymNMFk:** NMFk with symmetric clustering.
