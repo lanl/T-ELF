@@ -4,6 +4,7 @@ sys.path += ["utilities/"]
 sys.path += ["decompositions/"]
 
 from .NMFk import NMFk
+from .HNMFk import HNMFk
 from .RESCALk import RESCALk
 from .SymNMFk import SymNMFk
 from .TriNMFk import TriNMFk

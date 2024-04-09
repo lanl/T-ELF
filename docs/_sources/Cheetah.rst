@@ -3,10 +3,6 @@
 
 Cheetah is a tool for performing custom fast searches for keywords and phrases in text.
 
-Example
----------------------
-
-
 
 Available Functions
 ---------------------
