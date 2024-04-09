@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Tensor Extraction of Latent Features (T-ELF) &#8212; TELF 0.0.12 documentation</title>
+    <title>Tensor Extraction of Latent Features (T-ELF) &#8212; TELF 0.0.13 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="_static/documentation_options.js?v=38cd2e5d"></script>
+    <script src="_static/documentation_options.js?v=8331ac40"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.12 documentation</p>
+    <p class="title logo__title">TELF 0.0.13 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -135,6 +135,9 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
 
+
+
+<li class="toctree-l1"><a class="reference internal" href="HNMFk.html"><strong>TELF.factorization.HNMFk:</strong> Hierarchical Non-negative Matrix Factorization with Automatic Model Determination</a></li>
 
 
 <li class="toctree-l1"><a class="reference internal" href="RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
@@ -157,7 +160,6 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
-
 
 
 <li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">TELF</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -420,7 +422,7 @@ conda<span class="w"> </span>install<span class="w"> </span>cudnn
 <section id="how-to-cite-t-elf">
 <h1>How to Cite T-ELF?<a class="headerlink" href="#how-to-cite-t-elf" title="Link to this heading">#</a></h1>
 <p><strong>APA:</strong></p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., &amp; Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.12) [Computer software]. https://doi.org/10.5281/zenodo.10257897</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., &amp; Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.13) [Computer software]. https://doi.org/10.5281/zenodo.10257897</span>
 </pre></div>
 </div>
 <p><strong>BibTeX:</strong></p>
@@ -500,6 +502,13 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 <li class="toctree-l2"><a class="reference internal" href="NMFk.html#TELF.factorization.NMFk.NMFk"><code class="docutils literal notranslate"><span class="pre">NMFk</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="HNMFk.html"><strong>TELF.factorization.HNMFk:</strong> Hierarchical Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HNMFk.html#available-functions">Available Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HNMFk.html#module-TELF.factorization.HNMFk">Module Contents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="HNMFk.html#TELF.factorization.HNMFk.HNMFk"><code class="docutils literal notranslate"><span class="pre">HNMFk</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="HNMFk.html#TELF.factorization.HNMFk.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
 <li class="toctree-l1"><a class="reference internal" href="RESCALk.html#example">Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="RESCALk.html#available-functions">Available Functions</a></li>
@@ -536,7 +545,6 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Cheetah.html#example">Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Cheetah.html#available-functions">Available Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Cheetah.html#module-TELF.applications.Cheetah.cheetah">Module Contents</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah"><code class="docutils literal notranslate"><span class="pre">Cheetah</span></code></a></li>

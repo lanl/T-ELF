@@ -17,6 +17,7 @@ def main():
     params = {
         "n_perturbs":12,
         "n_iters":100,
+        "n_nodes":2,
         "epsilon":0.015,
         "n_jobs":1,
         "init":"nnsvd", 
