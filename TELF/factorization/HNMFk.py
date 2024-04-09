@@ -413,6 +413,7 @@ class HNMFk():
         #
         params["collect_output"] = False
         params["save_output"] = True
+        params["n_nodes"] = 1
         
         if not self.K2:
             params["predict_k"] = True
