@@ -326,6 +326,7 @@ document.write(`
                  <span class="n">depth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">sample_thresh</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">Ks_deep_min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">Ks_deep_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">Ks_deep_step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">K2</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">experiment_name</span><span class="o">=</span><span class="s2">&quot;HNMFk_Output&quot;</span><span class="p">,</span>
@@ -352,6 +353,10 @@ document.write(`
 <span class="sd">            The default is -1.</span>
 <span class="sd">        Ks_deep_min : int, optional</span>
 <span class="sd">            After first nmfk, when selecting Ks search range, minimum k to start. The default is 1.</span>
+<span class="sd">        Ks_deep_max : int, optinal</span>
+<span class="sd">            After first nmfk, when selecting Ks search range, maximum k to try.\\</span>
+<span class="sd">            When None, maximum k will be same as k selected for parent node.\\</span>
+<span class="sd">            The default is None.</span>
 <span class="sd">        Ks_deep_step : int, optional</span>
 <span class="sd">            After first nmfk, when selecting Ks search range, k step size. The default is 1.</span>
 <span class="sd">        K2 : bool, optional</span>
@@ -373,6 +378,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">depth</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">=</span> <span class="n">cluster_on</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_min</span> <span class="o">=</span> <span class="n">Ks_deep_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_max</span> <span class="o">=</span> <span class="n">Ks_deep_max</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_step</span> <span class="o">=</span> <span class="n">Ks_deep_step</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">K2</span> <span class="o">=</span> <span class="n">K2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">=</span> <span class="n">experiment_name</span>
@@ -565,7 +571,12 @@ document.write(`
 
             <span class="c1"># prepare to go to the next depth</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="p">:</span>
-                <span class="n">new_max_K</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">child_node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">k_max</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">k_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_max</span> <span class="o">+</span> <span class="mi">1</span>
+
+                <span class="n">new_max_K</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">k_max</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">child_node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span><span class="p">))</span>
                 <span class="n">new_Ks</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_min</span><span class="p">,</span> <span class="n">new_max_K</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_step</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">new_Ks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span>

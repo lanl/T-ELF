@@ -42,6 +42,7 @@ class HNMFk():
                  depth=1,
                  sample_thresh=-1,
                  Ks_deep_min=1,
+                 Ks_deep_max=None,
                  Ks_deep_step=1,
                  K2=False,
                  experiment_name="HNMFk_Output",
@@ -68,6 +69,10 @@ class HNMFk():
             The default is -1.
         Ks_deep_min : int, optional
             After first nmfk, when selecting Ks search range, minimum k to start. The default is 1.
+        Ks_deep_max : int, optinal
+            After first nmfk, when selecting Ks search range, maximum k to try.\\
+            When None, maximum k will be same as k selected for parent node.\\
+            The default is None.
         Ks_deep_step : int, optional
             After first nmfk, when selecting Ks search range, k step size. The default is 1.
         K2 : bool, optional
@@ -89,6 +94,7 @@ class HNMFk():
         self.depth = depth
         self.cluster_on = cluster_on
         self.Ks_deep_min = Ks_deep_min
+        self.Ks_deep_max = Ks_deep_max
         self.Ks_deep_step = Ks_deep_step
         self.K2 = K2
         self.experiment_name = experiment_name
@@ -278,7 +284,12 @@ class HNMFk():
 
             # prepare to go to the next depth
             if not self.K2:
-                new_max_K = min(node.k + 1, min(len(child_node.original_indices), self.num_features))
+                if self.Ks_deep_max is None:
+                    k_max = node.k + 1
+                else:
+                    k_max = self.Ks_deep_max + 1
+
+                new_max_K = min(k_max, min(len(child_node.original_indices), self.num_features))
                 new_Ks = range(self.Ks_deep_min, new_max_K, self.Ks_deep_step)
             else:
                 new_Ks = [2]
