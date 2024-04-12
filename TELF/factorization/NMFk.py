@@ -864,6 +864,12 @@ class NMFk:
         #
         if self.pruned:
             X, perturb_rows, perturb_cols = prune(X, use_gpu=self.use_gpu)
+
+            # check for K after prune and adjust if needed
+            if max(Ks) >= min(X.shape):
+                Ks = np.arange(min(Ks), min(X.shape), 1)
+                warnings.warn(f'Ks range re-adjusted after pruning. New Ks range: {Ks}')
+
         else:
             perturb_rows, perturb_cols = None, None
 

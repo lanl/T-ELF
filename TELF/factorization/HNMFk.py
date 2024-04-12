@@ -220,21 +220,20 @@ class HNMFk():
             folder_name = node.name+"-parent-"+str(node.parent_node.name)
 
         results = model.fit(curr_X, Ks, name=folder_name)
+        
         if self.K2:
+            factors_data = np.load(f'{model.save_path_full}/WH_k=2.npz')
+            node.W = factors_data["W"]
+            node.H = factors_data["H"]
+            node.k = 2
+        
+        else:
             predict_k = results["k_predict"]
             factors_data = np.load(f'{model.save_path_full}/WH_k={predict_k}.npz')
             node.W = factors_data["W"]
             node.H = factors_data["H"]
-        
-        else:
-            factors_data = np.load(f'{model.save_path_full}/WH_k=2.npz')
-            node.W = factors_data["W"]
-            node.H = factors_data["H"]
-
-        if not self.K2:
-            node.k = results["k_predict"]
-        else:
-            node.k = 2
+            node.k = predict_k
+            
 
         # obtain the clusters
         if self.cluster_on == "W":
