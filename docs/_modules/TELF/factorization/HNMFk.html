@@ -278,7 +278,7 @@ document.write(`
                   
   <h1>Source code for TELF.factorization.HNMFk</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">.NMFk</span> <span class="kn">import</span> <span class="n">NMFk</span>
-
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -340,8 +340,8 @@ document.write(`
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        nmfk_params : list of dicts, optional</span>
-<span class="sd">            We can specify NMFk parameters for each depth, or use same for all depth.\\</span>
-<span class="sd">            If there is single items in ``nmfk_params``, HMMFk will use the same NMFk parameters for all depths.\\</span>
+<span class="sd">            We can specify NMFk parameters for each depth, or use same for all depth.\n</span>
+<span class="sd">            If there is single items in ``nmfk_params``, HMMFk will use the same NMFk parameters for all depths.\n</span>
 <span class="sd">            When using for each depth, append to the list. For example, [nmfk_params0, nmfk_params1, nmfk_params2] for depth of 2</span>
 <span class="sd">            The default is ``[{}]``, which defaults to NMFk with defaults with required ``params[&quot;collect_output&quot;] = False``, ``params[&quot;save_output&quot;] = True``, and ``params[&quot;predict_k&quot;] = True`` when ``K2=False``.</span>
 <span class="sd">        cluster_on : str, optional</span>
@@ -356,8 +356,8 @@ document.write(`
 <span class="sd">        Ks_deep_min : int, optional</span>
 <span class="sd">            After first nmfk, when selecting Ks search range, minimum k to start. The default is 1.</span>
 <span class="sd">        Ks_deep_max : int, optinal</span>
-<span class="sd">            After first nmfk, when selecting Ks search range, maximum k to try.\\</span>
-<span class="sd">            When None, maximum k will be same as k selected for parent node.\\</span>
+<span class="sd">            After first nmfk, when selecting Ks search range, maximum k to try.\n</span>
+<span class="sd">            When None, maximum k will be same as k selected for parent node.\n</span>
 <span class="sd">            The default is None.</span>
 <span class="sd">        Ks_deep_step : int, optional</span>
 <span class="sd">            After first nmfk, when selecting Ks search range, k step size. The default is 1.</span>
@@ -366,9 +366,9 @@ document.write(`
 <span class="sd">        experiment_name : str, optional</span>
 <span class="sd">            Where to save the results.</span>
 <span class="sd">        generate_X_callback : object, optional</span>
-<span class="sd">            This can be used to re-generate the data matrix X before each NMFk operation. When not used, slice of original X is taken, which is equal to serial decomposition.\\</span>
-<span class="sd">            ``generate_X_callback`` object should be a class with ``def __call__(original_indices)`` defined so that ``new_X, save_at_node=generate_X_callback(original_indices)`` can be done.\\</span>
-<span class="sd">            ``original_indices`` hyper-parameter is the indices of samples (columns of original X when clustering on H).\\</span>
+<span class="sd">            This can be used to re-generate the data matrix X before each NMFk operation. When not used, slice of original X is taken, which is equal to serial decomposition.\n</span>
+<span class="sd">            ``generate_X_callback`` object should be a class with ``def __call__(original_indices)`` defined so that ``new_X, save_at_node=generate_X_callback(original_indices)`` can be done.\n</span>
+<span class="sd">            ``original_indices`` hyper-parameter is the indices of samples (columns of original X when clustering on H).\n</span>
 <span class="sd">            Here ``save_at_node`` is a dictionary that can be used to save additional information in each node&#39;s ``user_node_data`` variable. </span>
 <span class="sd">            The default is None.</span>
 <span class="sd">        Returns</span>
@@ -421,7 +421,8 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+                <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
@@ -477,8 +478,11 @@ document.write(`
         <span class="c1"># where to save current depth</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">depth_save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="s2">&quot;depth_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">depth</span><span class="p">))</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">depth_save_path</span><span class="p">):</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">depth_save_path</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">depth_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+                    <span class="n">Path</span><span class="p">(</span><span class="n">depth_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
@@ -513,6 +517,11 @@ document.write(`
 
         <span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">curr_X</span><span class="p">,</span> <span class="n">Ks</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">folder_name</span><span class="p">)</span>
         
+        <span class="c1"># Check if decomposition was not possible</span>
+        <span class="k">if</span> <span class="n">results</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">return</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="p">:</span>
             <span class="n">factors_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">save_path_full</span><span class="si">}</span><span class="s1">/WH_k=2.npz&#39;</span><span class="p">)</span>
             <span class="n">node</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">factors_data</span><span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">]</span>

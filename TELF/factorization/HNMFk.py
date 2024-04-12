@@ -56,8 +56,8 @@ class HNMFk():
         Parameters
         ----------
         nmfk_params : list of dicts, optional
-            We can specify NMFk parameters for each depth, or use same for all depth.\\
-            If there is single items in ``nmfk_params``, HMMFk will use the same NMFk parameters for all depths.\\
+            We can specify NMFk parameters for each depth, or use same for all depth.\n
+            If there is single items in ``nmfk_params``, HMMFk will use the same NMFk parameters for all depths.\n
             When using for each depth, append to the list. For example, [nmfk_params0, nmfk_params1, nmfk_params2] for depth of 2
             The default is ``[{}]``, which defaults to NMFk with defaults with required ``params["collect_output"] = False``, ``params["save_output"] = True``, and ``params["predict_k"] = True`` when ``K2=False``.
         cluster_on : str, optional
@@ -72,8 +72,8 @@ class HNMFk():
         Ks_deep_min : int, optional
             After first nmfk, when selecting Ks search range, minimum k to start. The default is 1.
         Ks_deep_max : int, optinal
-            After first nmfk, when selecting Ks search range, maximum k to try.\\
-            When None, maximum k will be same as k selected for parent node.\\
+            After first nmfk, when selecting Ks search range, maximum k to try.\n
+            When None, maximum k will be same as k selected for parent node.\n
             The default is None.
         Ks_deep_step : int, optional
             After first nmfk, when selecting Ks search range, k step size. The default is 1.
@@ -82,9 +82,9 @@ class HNMFk():
         experiment_name : str, optional
             Where to save the results.
         generate_X_callback : object, optional
-            This can be used to re-generate the data matrix X before each NMFk operation. When not used, slice of original X is taken, which is equal to serial decomposition.\\
-            ``generate_X_callback`` object should be a class with ``def __call__(original_indices)`` defined so that ``new_X, save_at_node=generate_X_callback(original_indices)`` can be done.\\
-            ``original_indices`` hyper-parameter is the indices of samples (columns of original X when clustering on H).\\
+            This can be used to re-generate the data matrix X before each NMFk operation. When not used, slice of original X is taken, which is equal to serial decomposition.\n
+            ``generate_X_callback`` object should be a class with ``def __call__(original_indices)`` defined so that ``new_X, save_at_node=generate_X_callback(original_indices)`` can be done.\n
+            ``original_indices`` hyper-parameter is the indices of samples (columns of original X when clustering on H).\n
             Here ``save_at_node`` is a dictionary that can be used to save additional information in each node's ``user_node_data`` variable. 
             The default is None.
         Returns
@@ -230,6 +230,11 @@ class HNMFk():
 
         results = model.fit(curr_X, Ks, name=folder_name)
         
+        # Check if decomposition was not possible
+        if results is None:
+            node.leaf = True
+            return
+
         if self.K2:
             factors_data = np.load(f'{model.save_path_full}/WH_k=2.npz')
             node.W = factors_data["W"]

@@ -379,8 +379,11 @@ document.write(`
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nmfk_params</strong> (<em>list</em><em> of </em><em>dicts</em><em>, </em><em>optional</em>) – We can specify NMFk parameters for each depth, or use same for all depth.If there is single items in <code class="docutils literal notranslate"><span class="pre">nmfk_params</span></code>, HMMFk will use the same NMFk parameters for all depths.When using for each depth, append to the list. For example, [nmfk_params0, nmfk_params1, nmfk_params2] for depth of 2
-The default is <code class="docutils literal notranslate"><span class="pre">[{}]</span></code>, which defaults to NMFk with defaults with required <code class="docutils literal notranslate"><span class="pre">params[&quot;collect_output&quot;]</span> <span class="pre">=</span> <span class="pre">False</span></code>, <code class="docutils literal notranslate"><span class="pre">params[&quot;save_output&quot;]</span> <span class="pre">=</span> <span class="pre">True</span></code>, and <code class="docutils literal notranslate"><span class="pre">params[&quot;predict_k&quot;]</span> <span class="pre">=</span> <span class="pre">True</span></code> when <code class="docutils literal notranslate"><span class="pre">K2=False</span></code>.</p></li>
+<li><p><strong>nmfk_params</strong> (<em>list</em><em> of </em><em>dicts</em><em>, </em><em>optional</em>) – <p>We can specify NMFk parameters for each depth, or use same for all depth.</p>
+<p>If there is single items in <code class="docutils literal notranslate"><span class="pre">nmfk_params</span></code>, HMMFk will use the same NMFk parameters for all depths.</p>
+<p>When using for each depth, append to the list. For example, [nmfk_params0, nmfk_params1, nmfk_params2] for depth of 2
+The default is <code class="docutils literal notranslate"><span class="pre">[{}]</span></code>, which defaults to NMFk with defaults with required <code class="docutils literal notranslate"><span class="pre">params[&quot;collect_output&quot;]</span> <span class="pre">=</span> <span class="pre">False</span></code>, <code class="docutils literal notranslate"><span class="pre">params[&quot;save_output&quot;]</span> <span class="pre">=</span> <span class="pre">True</span></code>, and <code class="docutils literal notranslate"><span class="pre">params[&quot;predict_k&quot;]</span> <span class="pre">=</span> <span class="pre">True</span></code> when <code class="docutils literal notranslate"><span class="pre">K2=False</span></code>.</p>
+</p></li>
 <li><p><strong>cluster_on</strong> (<em>str</em><em>, </em><em>optional</em>) – Where to perform clustering, can be W or H. Ff W, row of X should be samples, and if H, columns of X should be samples.
 The default is “H”.</p></li>
 <li><p><strong>depth</strong> (<em>int</em><em>, </em><em>optional</em>) – How deep to go in each topic after root node. if -1, it goes until samples cannot be seperated further. The default is 1.</p></li>
@@ -388,12 +391,19 @@ The default is “H”.</p></li>
 When -1, this criteria is not used.
 The default is -1.</p></li>
 <li><p><strong>Ks_deep_min</strong> (<em>int</em><em>, </em><em>optional</em>) – After first nmfk, when selecting Ks search range, minimum k to start. The default is 1.</p></li>
-<li><p><strong>Ks_deep_max</strong> (<em>int</em><em>, </em><em>optinal</em>) – After first nmfk, when selecting Ks search range, maximum k to try.When None, maximum k will be same as k selected for parent node.The default is None.</p></li>
+<li><p><strong>Ks_deep_max</strong> (<em>int</em><em>, </em><em>optinal</em>) – <p>After first nmfk, when selecting Ks search range, maximum k to try.</p>
+<p>When None, maximum k will be same as k selected for parent node.</p>
+<p>The default is None.</p>
+</p></li>
 <li><p><strong>Ks_deep_step</strong> (<em>int</em><em>, </em><em>optional</em>) – After first nmfk, when selecting Ks search range, k step size. The default is 1.</p></li>
 <li><p><strong>K2</strong> (<em>bool</em><em>, </em><em>optional</em>) – If K2=True, decomposition is done only for k=2 instead of finding and predicting the number of stable latent features. The default is False.</p></li>
 <li><p><strong>experiment_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Where to save the results.</p></li>
-<li><p><strong>generate_X_callback</strong> (<em>object</em><em>, </em><em>optional</em>) – This can be used to re-generate the data matrix X before each NMFk operation. When not used, slice of original X is taken, which is equal to serial decomposition.<code class="docutils literal notranslate"><span class="pre">generate_X_callback</span></code> object should be a class with <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">__call__(original_indices)</span></code> defined so that <code class="docutils literal notranslate"><span class="pre">new_X,</span> <span class="pre">save_at_node=generate_X_callback(original_indices)</span></code> can be done.<code class="docutils literal notranslate"><span class="pre">original_indices</span></code> hyper-parameter is the indices of samples (columns of original X when clustering on H).Here <code class="docutils literal notranslate"><span class="pre">save_at_node</span></code> is a dictionary that can be used to save additional information in each node’s <code class="docutils literal notranslate"><span class="pre">user_node_data</span></code> variable.
-The default is None.</p></li>
+<li><p><strong>generate_X_callback</strong> (<em>object</em><em>, </em><em>optional</em>) – <p>This can be used to re-generate the data matrix X before each NMFk operation. When not used, slice of original X is taken, which is equal to serial decomposition.</p>
+<p><code class="docutils literal notranslate"><span class="pre">generate_X_callback</span></code> object should be a class with <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">__call__(original_indices)</span></code> defined so that <code class="docutils literal notranslate"><span class="pre">new_X,</span> <span class="pre">save_at_node=generate_X_callback(original_indices)</span></code> can be done.</p>
+<p><code class="docutils literal notranslate"><span class="pre">original_indices</span></code> hyper-parameter is the indices of samples (columns of original X when clustering on H).</p>
+<p>Here <code class="docutils literal notranslate"><span class="pre">save_at_node</span></code> is a dictionary that can be used to save additional information in each node’s <code class="docutils literal notranslate"><span class="pre">user_node_data</span></code> variable.
+The default is None.</p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>

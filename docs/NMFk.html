@@ -493,7 +493,10 @@ others to do so.</p>
 <dt>pruned<span class="classifier">bool, optional</span></dt><dd><p>When True, removes columns and rows from the input matrix that has only 0 values. The default is True.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Pruning should not be used with <code class="docutils literal notranslate"><span class="pre">nmf_method='nmf_recommender'</span></code>.</p>
+<ul class="simple">
+<li><p>Pruning should not be used with <code class="docutils literal notranslate"><span class="pre">nmf_method='nmf_recommender'</span></code>.</p></li>
+<li><p>If after pruning decomposition is not possible (for example if the number of samples left is 1, or K range is empty based on the rule <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&lt;</span> <span class="pre">min(X.shape)</span></code>, <code class="docutils literal notranslate"><span class="pre">fit()</span></code> will return <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
 </div>
 </dd>
 <dt>calculate_error<span class="classifier">bool, optional</span></dt><dd><p>When True, calculates the relative reconstruction error. The default is True.</p>

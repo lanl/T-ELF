@@ -804,7 +804,8 @@ document.write(`
 <span class="sd">            When True, removes columns and rows from the input matrix that has only 0 values. The default is True.</span>
 
 <span class="sd">            .. warning::</span>
-<span class="sd">                Pruning should not be used with ``nmf_method=&#39;nmf_recommender&#39;``.</span>
+<span class="sd">                * Pruning should not be used with ``nmf_method=&#39;nmf_recommender&#39;``.\n</span>
+<span class="sd">                * If after pruning decomposition is not possible (for example if the number of samples left is 1, or K range is empty based on the rule ``k &lt; min(X.shape)``, ``fit()`` will return ``None``.</span>
 
 <span class="sd">        calculate_error : bool, optional</span>
 <span class="sd">            When True, calculates the relative reconstruction error. The default is True.</span>
@@ -1152,6 +1153,18 @@ document.write(`
             <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">min</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
                 <span class="n">Ks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">Ks</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ks range re-adjusted after pruning. New Ks range: </span><span class="si">{</span><span class="n">Ks</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">:</span>
+                <span class="n">prune_notes</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">prune_notes</span><span class="p">[</span><span class="s2">&quot;Ks_pruned&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ks</span>
+                <span class="n">prune_notes</span><span class="p">[</span><span class="s2">&quot;X_shape_pruned&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+                <span class="n">take_note</span><span class="p">(</span><span class="n">prune_notes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
+                <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
+
+            <span class="c1"># Check if we can decompose after pruning</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">min</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Decomposition is not possible after pruning. X shape is </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1"> and Ks is </span><span class="si">{</span><span class="n">Ks</span><span class="si">}</span><span class="s1"> after pruning. Returning None.&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="n">perturb_rows</span><span class="p">,</span> <span class="n">perturb_cols</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>

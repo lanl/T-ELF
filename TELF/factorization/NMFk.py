@@ -523,7 +523,8 @@ class NMFk:
             When True, removes columns and rows from the input matrix that has only 0 values. The default is True.
 
             .. warning::
-                Pruning should not be used with ``nmf_method='nmf_recommender'``.
+                * Pruning should not be used with ``nmf_method='nmf_recommender'``.\n
+                * If after pruning decomposition is not possible (for example if the number of samples left is 1, or K range is empty based on the rule ``k < min(X.shape)``, ``fit()`` will return ``None``.
 
         calculate_error : bool, optional
             When True, calculates the relative reconstruction error. The default is True.
@@ -876,6 +877,12 @@ class NMFk:
                 prune_notes["X_shape_pruned"] = X.shape
                 take_note(prune_notes, self.save_path_full, name=note_name, lock=self.lock)
                 append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
+
+            # Check if we can decompose after pruning
+            if len(Ks) == 0 or min(X.shape) <= 1:
+                warnings.warn(f'Decomposition is not possible after pruning. X shape is {X.shape} and Ks is {Ks} after pruning. Returning None.')
+                return None
+
         else:
             perturb_rows, perturb_cols = None, None
 
