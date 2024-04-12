@@ -868,7 +868,7 @@ class NMFk:
 
             # check for K after prune and adjust if needed
             if max(Ks) >= min(X.shape):
-                Ks = np.arange(min(Ks), min(X.shape), 1)
+                Ks = range(min(Ks), min(X.shape), 1)
                 warnings.warn(f'Ks range re-adjusted after pruning. New Ks range: {Ks}')
 
             if self.save_output:
@@ -876,12 +876,21 @@ class NMFk:
                 prune_notes["Ks_pruned"] = Ks
                 prune_notes["X_shape_pruned"] = X.shape
                 take_note(prune_notes, self.save_path_full, name=note_name, lock=self.lock)
-                append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
-
+            
             # Check if we can decompose after pruning
             if len(Ks) == 0 or min(X.shape) <= 1:
+
+                if self.save_output:
+                    take_note({"Prune_status":"Decomposition not possible."}, self.save_path_full, name=note_name, lock=self.lock)
+                    append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
+                
                 warnings.warn(f'Decomposition is not possible after pruning. X shape is {X.shape} and Ks is {Ks} after pruning. Returning None.')
                 return None
+            
+            else:
+                if self.save_output:
+                    take_note({"Prune_status":"Decomposition possible."}, self.save_path_full, name=note_name, lock=self.lock)
+                    append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
 
         else:
             perturb_rows, perturb_cols = None, None
