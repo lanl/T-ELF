@@ -15,7 +15,8 @@ class Node():
                  child_nodes: list, child_node_names: list,
                  original_indices: np.ndarray,
                  num_samples:int,
-                 leaf:bool
+                 leaf:bool,
+                 user_node_data:dict
                  ):
         self.node_num = node_num
         self.name = "node"+str(node_num)
@@ -32,6 +33,7 @@ class Node():
         self.original_indices = original_indices
         self.num_samples = num_samples
         self.leaf = leaf
+        self.user_node_data = user_node_data
 
 
 class HNMFk():
@@ -81,8 +83,9 @@ class HNMFk():
             Where to save the results.
         generate_X_callback : object, optional
             This can be used to re-generate the data matrix X before each NMFk operation. When not used, slice of original X is taken, which is equal to serial decomposition.\\
-            ``generate_X_callback`` object should be a class with ``def __call__(original_indices)`` defined so that ``new_X=generate_X_callback(original_indices)`` can be done.\\
-            ``original_indices`` hyper-parameter is the indices of samples (columns of original X when clustering on H).
+            ``generate_X_callback`` object should be a class with ``def __call__(original_indices)`` defined so that ``new_X, save_at_node=generate_X_callback(original_indices)`` can be done.\\
+            ``original_indices`` hyper-parameter is the indices of samples (columns of original X when clustering on H).\\
+            Here ``save_at_node`` is a dictionary that can be used to save additional information in each node's ``user_node_data`` variable. 
             The default is None.
         Returns
         -------
@@ -126,6 +129,7 @@ class HNMFk():
             original_indices=None,
             num_samples=0,
             leaf=False,
+            user_node_data={}
         )
         self.iterator = self.root
 
@@ -182,25 +186,8 @@ class HNMFk():
         if (self.sample_thresh > 0 and (node.num_samples <= self.sample_thresh)):
             node.leaf = True
             return
-
-        # obtain the current X using the original X
-        if self.generate_X_callback is None or node.depth == 0:
-            if self.cluster_on == "W":
-                curr_X = self.X[node.original_indices]
-
-            elif self.cluster_on == "H":
-                curr_X = self.X[:, node.original_indices]
-        # obtain the current X using the callback function
-        else:
-            curr_X = self.generate_X_callback(node.original_indices)
-
-        # prepare directory to save the results
-        if node.depth >= len(self.nmfk_params):
-            select_params = -1
-        else:
-            select_params = node.depth 
-        curr_nmfk_params = self.nmfk_params[select_params]
-
+        
+        # where to save current depth
         try:
             depth_save_path = os.path.join(self.experiment_name, "depth_"+str(node.depth))
             if not os.path.isdir(depth_save_path):
@@ -208,6 +195,24 @@ class HNMFk():
         except Exception as e:
             print(e)
 
+        # obtain the current X using the original X
+        if self.generate_X_callback is None or node.depth == 0:
+            save_at_node = {}
+            if self.cluster_on == "W":
+                curr_X = self.X[node.original_indices]
+
+            elif self.cluster_on == "H":
+                curr_X = self.X[:, node.original_indices]
+        # obtain the current X using the callback function
+        else:
+            curr_X, save_at_node = self.generate_X_callback(node.original_indices)
+
+        # prepare directory to save the results
+        if node.depth >= len(self.nmfk_params):
+            select_params = -1
+        else:
+            select_params = node.depth 
+        curr_nmfk_params = self.nmfk_params[select_params % len(self.nmfk_params)]
         curr_nmfk_params["save_path"] = depth_save_path
 
         # apply nmfk
@@ -276,7 +281,8 @@ class HNMFk():
                 child_node_names=[],
                 original_indices=node.original_indices[cluster_c_indices],
                 num_samples=len(cluster_c_indices),
-                leaf=False
+                leaf=False,
+                user_node_data=save_at_node
             )
             node.child_nodes.append(child_node)
             node.child_node_names.append(child_node.name)
