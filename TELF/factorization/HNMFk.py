@@ -1,5 +1,5 @@
 from .NMFk import NMFk
-
+from pathlib import Path
 import numpy as np
 import uuid
 import os
@@ -137,7 +137,8 @@ class HNMFk():
 
         self.experiment_save_path = os.path.join(self.experiment_name)
         try:
-            os.mkdir(self.experiment_save_path)
+            if not Path(self.experiment_save_path).is_dir():
+                Path(self.experiment_save_path).mkdir(parents=True)
         except Exception as e:
             print(e)
 
@@ -190,8 +191,11 @@ class HNMFk():
         # where to save current depth
         try:
             depth_save_path = os.path.join(self.experiment_name, "depth_"+str(node.depth))
-            if not os.path.isdir(depth_save_path):
-                os.mkdir(depth_save_path)
+            try:
+                if not Path(depth_save_path).is_dir():
+                    Path(depth_save_path).mkdir(parents=True)
+            except Exception as e:
+                print(e)
         except Exception as e:
             print(e)
 

@@ -870,6 +870,12 @@ class NMFk:
                 Ks = np.arange(min(Ks), min(X.shape), 1)
                 warnings.warn(f'Ks range re-adjusted after pruning. New Ks range: {Ks}')
 
+            if self.save_output:
+                prune_notes = {}
+                prune_notes["Ks_pruned"] = Ks
+                prune_notes["X_shape_pruned"] = X
+                take_note(prune_notes, self.save_path_full, name=note_name, lock=self.lock)
+                append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
         else:
             perturb_rows, perturb_cols = None, None
 
