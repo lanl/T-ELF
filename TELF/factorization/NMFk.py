@@ -873,7 +873,7 @@ class NMFk:
             if self.save_output:
                 prune_notes = {}
                 prune_notes["Ks_pruned"] = Ks
-                prune_notes["X_shape_pruned"] = X
+                prune_notes["X_shape_pruned"] = X.shape
                 take_note(prune_notes, self.save_path_full, name=note_name, lock=self.lock)
                 append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
         else:
