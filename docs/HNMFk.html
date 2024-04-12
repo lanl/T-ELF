@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF.factorization.HNMFk: Hierarchical Non-negative Matrix Factorization with Automatic Model Determination &#8212; TELF 0.0.13 documentation</title>
+    <title>TELF.factorization.HNMFk: Hierarchical Non-negative Matrix Factorization with Automatic Model Determination &#8212; TELF 0.0.14 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="_static/documentation_options.js?v=8331ac40"></script>
+    <script src="_static/documentation_options.js?v=16242e91"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -127,7 +127,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.13 documentation</p>
+    <p class="title logo__title">TELF 0.0.14 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -373,14 +373,14 @@ document.write(`
 <span id="module-contents"></span><h1>Module Contents<a class="headerlink" href="#module-TELF.factorization.HNMFk" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="TELF.factorization.HNMFk.HNMFk">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.factorization.HNMFk.</span></span><span class="sig-name descname"><span class="pre">HNMFk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nmfk_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[{}]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'H'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ks_deep_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ks_deep_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'HNMFk_Output'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#HNMFk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.HNMFk" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.factorization.HNMFk.</span></span><span class="sig-name descname"><span class="pre">HNMFk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nmfk_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[{}]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'H'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ks_deep_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ks_deep_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'HNMFk_Output'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_X_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#HNMFk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.HNMFk" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nmfk_params</strong> (<em>list</em><em> of </em><em>dicts</em><em>, </em><em>optional</em>) – We can specify NMFk parameters for each depth, or use same for all depth.If there is single items in <code class="docutils literal notranslate"><span class="pre">`nmfk_params`</span></code>, HMMFk will use the same NMFk parameters for all depths.When using for each depth, append to the list. For example, [nmfk_params0, nmfk_params1, nmfk_params2] for depth of 2
-The default is [{}], which defaults to NMFk with defaults with required params[“collect_output”] = False, params[“save_output”] = True, and params[“predict_k”] = True when <code class="docutils literal notranslate"><span class="pre">`K2=False`</span></code>.</p></li>
+<li><p><strong>nmfk_params</strong> (<em>list</em><em> of </em><em>dicts</em><em>, </em><em>optional</em>) – We can specify NMFk parameters for each depth, or use same for all depth.If there is single items in <code class="docutils literal notranslate"><span class="pre">nmfk_params</span></code>, HMMFk will use the same NMFk parameters for all depths.When using for each depth, append to the list. For example, [nmfk_params0, nmfk_params1, nmfk_params2] for depth of 2
+The default is <code class="docutils literal notranslate"><span class="pre">[{}]</span></code>, which defaults to NMFk with defaults with required <code class="docutils literal notranslate"><span class="pre">params[&quot;collect_output&quot;]</span> <span class="pre">=</span> <span class="pre">False</span></code>, <code class="docutils literal notranslate"><span class="pre">params[&quot;save_output&quot;]</span> <span class="pre">=</span> <span class="pre">True</span></code>, and <code class="docutils literal notranslate"><span class="pre">params[&quot;predict_k&quot;]</span> <span class="pre">=</span> <span class="pre">True</span></code> when <code class="docutils literal notranslate"><span class="pre">K2=False</span></code>.</p></li>
 <li><p><strong>cluster_on</strong> (<em>str</em><em>, </em><em>optional</em>) – Where to perform clustering, can be W or H. Ff W, row of X should be samples, and if H, columns of X should be samples.
 The default is “H”.</p></li>
 <li><p><strong>depth</strong> (<em>int</em><em>, </em><em>optional</em>) – How deep to go in each topic after root node. if -1, it goes until samples cannot be seperated further. The default is 1.</p></li>
@@ -391,6 +391,8 @@ The default is -1.</p></li>
 <li><p><strong>Ks_deep_step</strong> (<em>int</em><em>, </em><em>optional</em>) – After first nmfk, when selecting Ks search range, k step size. The default is 1.</p></li>
 <li><p><strong>K2</strong> (<em>bool</em><em>, </em><em>optional</em>) – If K2=True, decomposition is done only for k=2 instead of finding and predicting the number of stable latent features. The default is False.</p></li>
 <li><p><strong>experiment_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Where to save the results.</p></li>
+<li><p><strong>generate_X_callback</strong> (<em>object</em><em>, </em><em>optional</em>) – This can be used to re-generate the data matrix X before each NMFk operation. When not used, slice of original X is taken, which is equal to serial decomposition.<code class="docutils literal notranslate"><span class="pre">generate_X_callback</span></code> object should be a class with <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">__call__(original_indices)</span></code> defined so that <code class="docutils literal notranslate"><span class="pre">new_X=generate_X_callback(original_indices)</span></code> can be done.<code class="docutils literal notranslate"><span class="pre">original_indices</span></code> hyper-parameter is the indices of samples (columns of original X when clustering on H).
+The default is None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>

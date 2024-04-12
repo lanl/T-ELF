@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.13 documentation</title>
+    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.14 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../../../_static/documentation_options.js?v=8331ac40"></script>
+    <script src="../../../_static/documentation_options.js?v=16242e91"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.13 documentation</p>
+    <p class="title logo__title">TELF 0.0.14 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -328,7 +328,8 @@ document.write(`
                  <span class="n">Ks_deep_min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">Ks_deep_step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">K2</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">experiment_name</span><span class="o">=</span><span class="s2">&quot;HNMFk_Output&quot;</span>
+                 <span class="n">experiment_name</span><span class="o">=</span><span class="s2">&quot;HNMFk_Output&quot;</span><span class="p">,</span>
+                 <span class="n">generate_X_callback</span><span class="o">=</span><span class="kc">None</span>
                  <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.</span>
@@ -337,9 +338,9 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        nmfk_params : list of dicts, optional</span>
 <span class="sd">            We can specify NMFk parameters for each depth, or use same for all depth.\\</span>
-<span class="sd">            If there is single items in ```nmfk_params```, HMMFk will use the same NMFk parameters for all depths.\\</span>
+<span class="sd">            If there is single items in ``nmfk_params``, HMMFk will use the same NMFk parameters for all depths.\\</span>
 <span class="sd">            When using for each depth, append to the list. For example, [nmfk_params0, nmfk_params1, nmfk_params2] for depth of 2</span>
-<span class="sd">            The default is [{}], which defaults to NMFk with defaults with required params[&quot;collect_output&quot;] = False, params[&quot;save_output&quot;] = True, and params[&quot;predict_k&quot;] = True when ```K2=False```.</span>
+<span class="sd">            The default is ``[{}]``, which defaults to NMFk with defaults with required ``params[&quot;collect_output&quot;] = False``, ``params[&quot;save_output&quot;] = True``, and ``params[&quot;predict_k&quot;] = True`` when ``K2=False``.</span>
 <span class="sd">        cluster_on : str, optional</span>
 <span class="sd">            Where to perform clustering, can be W or H. Ff W, row of X should be samples, and if H, columns of X should be samples.</span>
 <span class="sd">            The default is &quot;H&quot;.</span>
@@ -357,7 +358,11 @@ document.write(`
 <span class="sd">            If K2=True, decomposition is done only for k=2 instead of finding and predicting the number of stable latent features. The default is False.</span>
 <span class="sd">        experiment_name : str, optional</span>
 <span class="sd">            Where to save the results.</span>
-
+<span class="sd">        generate_X_callback : object, optional</span>
+<span class="sd">            This can be used to re-generate the data matrix X before each NMFk operation. When not used, slice of original X is taken, which is equal to serial decomposition.\\</span>
+<span class="sd">            ``generate_X_callback`` object should be a class with ``def __call__(original_indices)`` defined so that ``new_X=generate_X_callback(original_indices)`` can be done.\\</span>
+<span class="sd">            ``original_indices`` hyper-parameter is the indices of samples (columns of original X when clustering on H).</span>
+<span class="sd">            The default is None.</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None.</span>
@@ -371,6 +376,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_step</span> <span class="o">=</span> <span class="n">Ks_deep_step</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">K2</span> <span class="o">=</span> <span class="n">K2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">=</span> <span class="n">experiment_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_X_callback</span> <span class="o">=</span> <span class="n">generate_X_callback</span>
 
         <span class="n">organized_nmfk_params</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">nmfk_params</span><span class="p">:</span>
@@ -458,12 +464,16 @@ document.write(`
             <span class="n">node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">return</span>
 
-        <span class="c1"># obtain the current X</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">==</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span>
-            <span class="n">curr_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">]</span>
+        <span class="c1"># obtain the current X using the original X</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_X_callback</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">node</span><span class="o">.</span><span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">==</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span>
+                <span class="n">curr_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">]</span>
 
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span>
-            <span class="n">curr_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[:,</span> <span class="n">node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span>
+                <span class="n">curr_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[:,</span> <span class="n">node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">]</span>
+        <span class="c1"># obtain the current X using the callback function</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">curr_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_X_callback</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">)</span>
 
         <span class="c1"># prepare directory to save the results</span>
         <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params</span><span class="p">):</span>
@@ -715,6 +725,7 @@ document.write(`
         <span class="c1">#</span>
         <span class="n">params</span><span class="p">[</span><span class="s2">&quot;collect_output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">params</span><span class="p">[</span><span class="s2">&quot;save_output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;n_nodes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
         
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;predict_k&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
