@@ -44,7 +44,8 @@ class HNMFk():
                  Ks_deep_min=1,
                  Ks_deep_step=1,
                  K2=False,
-                 experiment_name="HNMFk_Output"
+                 experiment_name="HNMFk_Output",
+                 generate_X_callback=None
                  ):
         """
         HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.
@@ -53,9 +54,9 @@ class HNMFk():
         ----------
         nmfk_params : list of dicts, optional
             We can specify NMFk parameters for each depth, or use same for all depth.\\
-            If there is single items in ```nmfk_params```, HMMFk will use the same NMFk parameters for all depths.\\
+            If there is single items in ``nmfk_params``, HMMFk will use the same NMFk parameters for all depths.\\
             When using for each depth, append to the list. For example, [nmfk_params0, nmfk_params1, nmfk_params2] for depth of 2
-            The default is [{}], which defaults to NMFk with defaults with required params["collect_output"] = False, params["save_output"] = True, and params["predict_k"] = True when ```K2=False```.
+            The default is ``[{}]``, which defaults to NMFk with defaults with required ``params["collect_output"] = False``, ``params["save_output"] = True``, and ``params["predict_k"] = True`` when ``K2=False``.
         cluster_on : str, optional
             Where to perform clustering, can be W or H. Ff W, row of X should be samples, and if H, columns of X should be samples.
             The default is "H".
@@ -73,7 +74,11 @@ class HNMFk():
             If K2=True, decomposition is done only for k=2 instead of finding and predicting the number of stable latent features. The default is False.
         experiment_name : str, optional
             Where to save the results.
-
+        generate_X_callback : object, optional
+            This can be used to re-generate the data matrix X before each NMFk operation. When not used, slice of original X is taken, which is equal to serial decomposition.\\
+            ``generate_X_callback`` object should be a class with ``def __call__(original_indices)`` defined so that ``new_X=generate_X_callback(original_indices)`` can be done.\\
+            ``original_indices`` hyper-parameter is the indices of samples (columns of original X when clustering on H).
+            The default is None.
         Returns
         -------
         None.
@@ -87,6 +92,7 @@ class HNMFk():
         self.Ks_deep_step = Ks_deep_step
         self.K2 = K2
         self.experiment_name = experiment_name
+        self.generate_X_callback = generate_X_callback
 
         organized_nmfk_params = []
         for params in nmfk_params:
@@ -171,12 +177,16 @@ class HNMFk():
             node.leaf = True
             return
 
-        # obtain the current X
-        if self.cluster_on == "W":
-            curr_X = self.X[node.original_indices]
+        # obtain the current X using the original X
+        if self.generate_X_callback is None or node.depth == 0:
+            if self.cluster_on == "W":
+                curr_X = self.X[node.original_indices]
 
-        elif self.cluster_on == "H":
-            curr_X = self.X[:, node.original_indices]
+            elif self.cluster_on == "H":
+                curr_X = self.X[:, node.original_indices]
+        # obtain the current X using the callback function
+        else:
+            curr_X = self.generate_X_callback(node.original_indices)
 
         # prepare directory to save the results
         if node.depth >= len(self.nmfk_params):
