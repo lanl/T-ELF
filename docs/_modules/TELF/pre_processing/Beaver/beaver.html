@@ -304,7 +304,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">multiprocessing</span>
 <span class="kn">from</span> <span class="nn">operator</span> <span class="kn">import</span> <span class="n">itemgetter</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">Counter</span>
-
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Integral</span>
 <span class="kn">import</span> <span class="nn">sparse</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 <span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">ss</span>
@@ -317,6 +318,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.cooccurrence</span> <span class="kn">import</span> <span class="n">co_occurrence</span>
 <span class="kn">from</span> <span class="nn">.sppmi</span> <span class="kn">import</span> <span class="n">sppmi</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
 
 
 <div class="viewcode-block" id="Beaver">
@@ -354,15 +356,11 @@ document.write(`
     <span class="k">def</span> <span class="nf">get_vocabulary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                        <span class="n">dataset</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                        <span class="n">target_column</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">split_with</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">max_df</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
                        <span class="n">min_df</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                        <span class="n">max_features</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                       <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">parallel_backend</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;multiprocessing&quot;</span><span class="p">,</span>
                        <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">sort_alphabetical</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+                       <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Builds the vocabulary</span>
 
@@ -372,8 +370,6 @@ document.write(`
 <span class="sd">            Dataframe containing the target columns.</span>
 <span class="sd">        target_column : str, optional</span>
 <span class="sd">            Target column name in dataset DataFrame.  </span>
-<span class="sd">        split_with : str, optional</span>
-<span class="sd">            Delimeter to use in tokenization, if None split in whitespace. The default is None.</span>
 <span class="sd">        max_df : int or float, optional</span>
 <span class="sd">            When building the vocabulary ignore terms that have a document frequency strictly higher </span>
 <span class="sd">            than the given threshold (corpus-specific stop words). If float in range [0.0, 1.0], </span>
@@ -387,16 +383,8 @@ document.write(`
 <span class="sd">        max_features : int, optional</span>
 <span class="sd">            If not None, build a vocabulary that only consider the top max_features ordered by term frequency across the corpus. </span>
 <span class="sd">            The default is None.</span>
-<span class="sd">        verbose : bool, optional</span>
-<span class="sd">            Vebosity flag. The default is False.</span>
-<span class="sd">        n_jobs : int, optional</span>
-<span class="sd">            Number of parallel processes. The default is the Beaver default.</span>
-<span class="sd">        parallel_backend : str, optional</span>
-<span class="sd">            Which backend Joblib should use.</span>
 <span class="sd">        save_path : str, optional</span>
 <span class="sd">            If not None, saves the outputs. The default is None.</span>
-<span class="sd">        sort_alphabetical : bool, optional</span>
-<span class="sd">            If True, sorts the output vocabulary alphabetically. Otherwise the vocabulary is sorted by document frequency.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -409,74 +397,10 @@ document.write(`
         <span class="c1"># get the target data</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">target_column</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
-        <span class="c1"># organize parameters</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">max_df</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
-            <span class="n">max_df</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">*</span> <span class="n">max_df</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">min_df</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
-            <span class="n">min_df</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">*</span> <span class="n">min_df</span><span class="p">)</span>
+        <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;max_df&quot;</span><span class="p">:</span><span class="n">max_df</span><span class="p">,</span> <span class="s2">&quot;min_df&quot;</span><span class="p">:</span><span class="n">min_df</span><span class="p">,</span> <span class="s2">&quot;max_features&quot;</span><span class="p">:</span><span class="n">max_features</span><span class="p">},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">vocabulary</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">()</span>
 
-        <span class="k">assert</span> <span class="n">max_df</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="s2">&quot;max_df must be &lt;= data&quot;</span>
-        <span class="k">assert</span> <span class="n">min_df</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;min_df must be &gt; 0&quot;</span>
-
-
-        <span class="k">if</span> <span class="n">n_jobs</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">n_chunks</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
-            <span class="n">n_chunks</span> <span class="o">-=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">n_chunks</span> <span class="o">=</span> <span class="n">n_jobs</span>
-
-        <span class="c1"># chunk the documents to get list of jobs</span>
-        <span class="k">if</span> <span class="n">n_jobs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
-        <span class="n">n_chunks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span>
-        <span class="n">data_chunks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_chunk_list</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_chunks</span><span class="p">))</span>
-
-        <span class="k">if</span> <span class="n">split_with</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
-            <span class="n">split_with</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="c1"># get the stats for the tokens in parallel</span>
-        <span class="n">list_results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">n_chunks</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">parallel_backend</span><span class="p">)(</span>
-            <span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_vocabulary_helper</span><span class="p">)(</span><span class="n">data</span><span class="o">=</span><span class="n">chunk</span><span class="p">,</span> <span class="n">split_with</span><span class="o">=</span><span class="n">split_with</span><span class="p">)</span> <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">data_chunks</span><span class="p">)</span>
-
-        <span class="c1"># combine the stats</span>
-        <span class="n">token_stats</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">curr_token_stats</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">list_results</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">list_results</span><span class="p">)):</span>
-            <span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">stats</span> <span class="ow">in</span> <span class="n">curr_token_stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">token_stats</span><span class="p">:</span>
-                    <span class="n">token_stats</span><span class="p">[</span><span class="n">token</span><span class="p">][</span><span class="s2">&quot;df&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">]</span>
-                    <span class="n">token_stats</span><span class="p">[</span><span class="n">token</span><span class="p">][</span><span class="s2">&quot;tf&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;tf&quot;</span><span class="p">]</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">token_stats</span><span class="p">[</span><span class="n">token</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;tf&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
-                    <span class="n">token_stats</span><span class="p">[</span><span class="n">token</span><span class="p">][</span><span class="s2">&quot;df&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">]</span>
-                    <span class="n">token_stats</span><span class="p">[</span><span class="n">token</span><span class="p">][</span><span class="s2">&quot;tf&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;tf&quot;</span><span class="p">]</span>
-                    
-        <span class="c1"># filter for document frequencies when selecting the tokens in vocabulary</span>
-        <span class="n">vocabulary</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">stats</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">token_stats</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">token_stats</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">verbose</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">max_df</span> <span class="ow">and</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">min_df</span><span class="p">:</span>
-                <span class="n">vocabulary</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-
-        <span class="c1"># max features</span>
-        <span class="k">if</span> <span class="n">max_features</span><span class="p">:</span>
-            <span class="n">max_token_tf_stat</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">vocabulary</span><span class="p">:</span>
-                <span class="n">max_token_tf_stat</span><span class="p">[</span><span class="n">token</span><span class="p">]</span> <span class="o">=</span> <span class="n">token_stats</span><span class="p">[</span><span class="n">token</span><span class="p">][</span><span class="s2">&quot;tf&quot;</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="n">max_features</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">token_stats</span><span class="p">):</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="s2">&quot;More features requested than available number of tokens... Reverting to max tokens.&quot;</span><span class="p">)</span>
-                <span class="n">max_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">token_stats</span><span class="p">)</span>
-
-            <span class="n">max_token_tf_stat</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">max_token_tf_stat</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
-                                            <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="n">max_features</span><span class="p">])</span>
-
-            <span class="n">vocabulary</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">max_token_tf_stat</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-
-        <span class="k">if</span> <span class="n">sort_alphabetical</span><span class="p">:</span>
-            <span class="n">vocabulary</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">vocabulary</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>  <span class="c1"># sort the vocabulary by the document frequency</span>
-            <span class="n">vocabulary</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">vocabulary</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">token_stats</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;df&#39;</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            
         <span class="k">if</span> <span class="n">save_path</span><span class="p">:</span>
             <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s2">&quot;Vocabulary.txt&quot;</span><span class="p">),</span> <span class="n">vocabulary</span><span class="p">,</span>  <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">vocabulary</span></div>
@@ -1894,35 +1818,6 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">::</span><span class="n">n</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">_get_vocabulary_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">split_with</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the token statistics from a given list of documents.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        data : list</span>
-<span class="sd">            List of documents.</span>
-<span class="sd">        split_with : str, optional</span>
-<span class="sd">            Delimeter to use in tokenization, if None split in whitespace. The default is None.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        dict</span>
-<span class="sd">            DESCRIPTION.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">token_stats</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;tf&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
-        <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">tokens</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">split_with</span><span class="p">)</span>
-            <span class="n">unique_tokens</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">tt</span> <span class="ow">in</span> <span class="n">unique_tokens</span><span class="p">:</span>
-                <span class="c1"># token_stats[tt][&quot;tf&quot;] += tokens.count(tt) not using this for now, may add back later</span>
-                <span class="n">token_stats</span><span class="p">[</span><span class="n">tt</span><span class="p">][</span><span class="s2">&quot;df&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">token_stats</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">token_stats</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">token_stats</span>
-
 
     <span class="k">def</span> <span class="nf">_output_pydata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
