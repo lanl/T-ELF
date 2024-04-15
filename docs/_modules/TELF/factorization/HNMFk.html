@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.13 documentation</title>
+    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.14 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../../../_static/documentation_options.js?v=8331ac40"></script>
+    <script src="../../../_static/documentation_options.js?v=16242e91"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.13 documentation</p>
+    <p class="title logo__title">TELF 0.0.14 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -278,10 +278,15 @@ document.write(`
                   
   <h1>Source code for TELF.factorization.HNMFk</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">.NMFk</span> <span class="kn">import</span> <span class="n">NMFk</span>
-
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">MPI</span> <span class="o">=</span> <span class="kc">None</span>
 
 
 <div class="viewcode-block" id="Node">
@@ -296,7 +301,8 @@ document.write(`
                  <span class="n">child_nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">child_node_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
                  <span class="n">original_indices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                  <span class="n">num_samples</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
-                 <span class="n">leaf</span><span class="p">:</span><span class="nb">bool</span>
+                 <span class="n">leaf</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span>
+                 <span class="n">user_node_data</span><span class="p">:</span><span class="nb">dict</span>
                  <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_num</span> <span class="o">=</span> <span class="n">node_num</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;node&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">node_num</span><span class="p">)</span>
@@ -312,7 +318,8 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">child_node_names</span> <span class="o">=</span> <span class="n">child_node_names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">original_indices</span> <span class="o">=</span> <span class="n">original_indices</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">=</span> <span class="n">num_samples</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="n">leaf</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="n">leaf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_node_data</span> <span class="o">=</span> <span class="n">user_node_data</span></div>
 
 
 
@@ -326,9 +333,12 @@ document.write(`
                  <span class="n">depth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">sample_thresh</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">Ks_deep_min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">Ks_deep_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">Ks_deep_step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">K2</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">experiment_name</span><span class="o">=</span><span class="s2">&quot;HNMFk_Output&quot;</span>
+                 <span class="n">experiment_name</span><span class="o">=</span><span class="s2">&quot;HNMFk_Output&quot;</span><span class="p">,</span>
+                 <span class="n">generate_X_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">n_nodes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.</span>
@@ -336,10 +346,10 @@ document.write(`
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        nmfk_params : list of dicts, optional</span>
-<span class="sd">            We can specify NMFk parameters for each depth, or use same for all depth.\\</span>
-<span class="sd">            If there is single items in ```nmfk_params```, HMMFk will use the same NMFk parameters for all depths.\\</span>
+<span class="sd">            We can specify NMFk parameters for each depth, or use same for all depth.\n</span>
+<span class="sd">            If there is single items in ``nmfk_params``, HMMFk will use the same NMFk parameters for all depths.\n</span>
 <span class="sd">            When using for each depth, append to the list. For example, [nmfk_params0, nmfk_params1, nmfk_params2] for depth of 2</span>
-<span class="sd">            The default is [{}], which defaults to NMFk with defaults with required params[&quot;collect_output&quot;] = False, params[&quot;save_output&quot;] = True, and params[&quot;predict_k&quot;] = True when ```K2=False```.</span>
+<span class="sd">            The default is ``[{}]``, which defaults to NMFk with defaults with required ``params[&quot;collect_output&quot;] = False``, ``params[&quot;save_output&quot;] = True``, and ``params[&quot;predict_k&quot;] = True`` when ``K2=False``.</span>
 <span class="sd">        cluster_on : str, optional</span>
 <span class="sd">            Where to perform clustering, can be W or H. Ff W, row of X should be samples, and if H, columns of X should be samples.</span>
 <span class="sd">            The default is &quot;H&quot;.</span>
@@ -351,40 +361,54 @@ document.write(`
 <span class="sd">            The default is -1.</span>
 <span class="sd">        Ks_deep_min : int, optional</span>
 <span class="sd">            After first nmfk, when selecting Ks search range, minimum k to start. The default is 1.</span>
+<span class="sd">        Ks_deep_max : int, optinal</span>
+<span class="sd">            After first nmfk, when selecting Ks search range, maximum k to try.\n</span>
+<span class="sd">            When None, maximum k will be same as k selected for parent node.\n</span>
+<span class="sd">            The default is None.</span>
 <span class="sd">        Ks_deep_step : int, optional</span>
 <span class="sd">            After first nmfk, when selecting Ks search range, k step size. The default is 1.</span>
 <span class="sd">        K2 : bool, optional</span>
 <span class="sd">            If K2=True, decomposition is done only for k=2 instead of finding and predicting the number of stable latent features. The default is False.</span>
 <span class="sd">        experiment_name : str, optional</span>
 <span class="sd">            Where to save the results.</span>
-
+<span class="sd">        generate_X_callback : object, optional</span>
+<span class="sd">            This can be used to re-generate the data matrix X before each NMFk operation. When not used, slice of original X is taken, which is equal to serial decomposition.\n</span>
+<span class="sd">            ``generate_X_callback`` object should be a class with ``def __call__(original_indices)`` defined so that ``new_X, save_at_node=generate_X_callback(original_indices)`` can be done.\n</span>
+<span class="sd">            ``original_indices`` hyper-parameter is the indices of samples (columns of original X when clustering on H).\n</span>
+<span class="sd">            Here ``save_at_node`` is a dictionary that can be used to save additional information in each node&#39;s ``user_node_data`` variable. </span>
+<span class="sd">            The default is None.</span>
+<span class="sd">        n_nodes : int, optional</span>
+<span class="sd">            Number of HPC nodes. The default is 1.</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="c1"># user defined settings</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_thresh</span> <span class="o">=</span> <span class="n">sample_thresh</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">depth</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">=</span> <span class="n">cluster_on</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_min</span> <span class="o">=</span> <span class="n">Ks_deep_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_max</span> <span class="o">=</span> <span class="n">Ks_deep_max</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_step</span> <span class="o">=</span> <span class="n">Ks_deep_step</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">K2</span> <span class="o">=</span> <span class="n">K2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">=</span> <span class="n">experiment_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_X_callback</span> <span class="o">=</span> <span class="n">generate_X_callback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">=</span> <span class="n">n_nodes</span>
 
         <span class="n">organized_nmfk_params</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">nmfk_params</span><span class="p">:</span>
             <span class="n">organized_nmfk_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_organize_nmfk_params</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params</span> <span class="o">=</span> <span class="n">organized_nmfk_params</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">target_clusters</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">target_Ks</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">curr_original_indices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># object variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_all_nodes</span> <span class="o">=</span> <span class="p">[]</span>
 
+        <span class="c1"># root node</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span>
             <span class="n">node_num</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_count</span><span class="p">,</span>
             <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -398,16 +422,28 @@ document.write(`
             <span class="n">original_indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">num_samples</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
             <span class="n">leaf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">user_node_data</span><span class="o">=</span><span class="p">{}</span>
         <span class="p">)</span>
+
+        <span class="c1"># iterator object pointer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span>
 
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">],</span> <span class="s2">&quot;Unknown clustering method!&quot;</span>
-
+        <span class="c1"># path to save </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+                <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+        <span class="c1"># HPC job management variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">],</span> <span class="s2">&quot;Unknown clustering method!&quot;</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">MPI</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">==</span>
+                                                          <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;n_nodes was greater than 1 but MPI is not installed!&quot;</span>
+
 
 <div class="viewcode-block" id="HNMFk.fit">
 <a class="viewcode-back" href="../../../HNMFk.html#TELF.factorization.HNMFk.HNMFk.fit">[docs]</a>
@@ -457,56 +493,68 @@ document.write(`
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_thresh</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_thresh</span><span class="p">)):</span>
             <span class="n">node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">return</span>
+        
+        <span class="c1"># where to save current depth</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">depth_save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="s2">&quot;depth_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">depth</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">depth_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+                    <span class="n">Path</span><span class="p">(</span><span class="n">depth_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
-        <span class="c1"># obtain the current X</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">==</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span>
-            <span class="n">curr_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">]</span>
+        <span class="c1"># obtain the current X using the original X</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_X_callback</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">node</span><span class="o">.</span><span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">save_at_node</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">==</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span>
+                <span class="n">curr_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">]</span>
 
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span>
-            <span class="n">curr_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[:,</span> <span class="n">node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span>
+                <span class="n">curr_X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="p">[:,</span> <span class="n">node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">]</span>
+        <span class="c1"># obtain the current X using the callback function</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">curr_X</span><span class="p">,</span> <span class="n">save_at_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_X_callback</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">)</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">user_node_data</span> <span class="o">=</span> <span class="n">save_at_node</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
         <span class="c1"># prepare directory to save the results</span>
         <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params</span><span class="p">):</span>
             <span class="n">select_params</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">select_params</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">depth</span> 
-        <span class="n">curr_nmfk_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params</span><span class="p">[</span><span class="n">select_params</span><span class="p">]</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">depth_save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="s2">&quot;depth_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">depth</span><span class="p">))</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">depth_save_path</span><span class="p">):</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">depth_save_path</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-
+        <span class="n">curr_nmfk_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params</span><span class="p">[</span><span class="n">select_params</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params</span><span class="p">)]</span>
         <span class="n">curr_nmfk_params</span><span class="p">[</span><span class="s2">&quot;save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">depth_save_path</span>
 
         <span class="c1"># apply nmfk</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">NMFk</span><span class="p">(</span><span class="o">**</span><span class="n">curr_nmfk_params</span><span class="p">)</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">parent_node</span>
-        
+
         <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">folder_name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">folder_name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="o">+</span><span class="s2">&quot;-parent-&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">parent_node</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">curr_X</span><span class="p">,</span> <span class="n">Ks</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">folder_name</span><span class="p">)</span>
+        
+        <span class="c1"># Check if decomposition was not possible</span>
+        <span class="k">if</span> <span class="n">results</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">return</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="p">:</span>
+            <span class="n">factors_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">save_path_full</span><span class="si">}</span><span class="s1">/WH_k=2.npz&#39;</span><span class="p">)</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">factors_data</span><span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">]</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">factors_data</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="mi">2</span>
+        
+        <span class="k">else</span><span class="p">:</span>
             <span class="n">predict_k</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;k_predict&quot;</span><span class="p">]</span>
             <span class="n">factors_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">save_path_full</span><span class="si">}</span><span class="s1">/WH_k=</span><span class="si">{</span><span class="n">predict_k</span><span class="si">}</span><span class="s1">.npz&#39;</span><span class="p">)</span>
             <span class="n">node</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">factors_data</span><span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">]</span>
             <span class="n">node</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">factors_data</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]</span>
-        
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">factors_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">save_path_full</span><span class="si">}</span><span class="s1">/WH_k=2.npz&#39;</span><span class="p">)</span>
-            <span class="n">node</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">factors_data</span><span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">]</span>
-            <span class="n">node</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">factors_data</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="p">:</span>
-            <span class="n">node</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;k_predict&quot;</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">node</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="mi">2</span>
-
+            <span class="n">node</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">predict_k</span>
+            
         <span class="c1"># obtain the clusters</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">==</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span>
             <span class="n">cluster_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">W</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -523,7 +571,7 @@ document.write(`
         <span class="k">if</span> <span class="p">((</span><span class="n">node</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">node</span><span class="o">.</span><span class="n">k</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n_clusters</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">return</span>
-
+        
         <span class="c1"># go through each topic</span>
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">clusters</span><span class="p">:</span>
 
@@ -548,14 +596,20 @@ document.write(`
                 <span class="n">child_node_names</span><span class="o">=</span><span class="p">[],</span>
                 <span class="n">original_indices</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">[</span><span class="n">cluster_c_indices</span><span class="p">],</span>
                 <span class="n">num_samples</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">cluster_c_indices</span><span class="p">),</span>
-                <span class="n">leaf</span><span class="o">=</span><span class="kc">False</span>
+                <span class="n">leaf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">user_node_data</span><span class="o">=</span><span class="p">{}</span>
             <span class="p">)</span>
             <span class="n">node</span><span class="o">.</span><span class="n">child_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child_node</span><span class="p">)</span>
             <span class="n">node</span><span class="o">.</span><span class="n">child_node_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child_node</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
             <span class="c1"># prepare to go to the next depth</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="p">:</span>
-                <span class="n">new_max_K</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">child_node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">k_max</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">k_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_max</span> <span class="o">+</span> <span class="mi">1</span>
+
+                <span class="n">new_max_K</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">k_max</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">child_node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span><span class="p">))</span>
                 <span class="n">new_Ks</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_min</span><span class="p">,</span> <span class="n">new_max_K</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_step</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">new_Ks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span>
@@ -684,37 +738,11 @@ document.write(`
     <span class="k">def</span> <span class="nf">_organize_nmfk_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
 
         <span class="c1">#</span>
-        <span class="c1"># Defaults</span>
-        <span class="c1">#</span>
-        <span class="k">if</span> <span class="s2">&quot;n_perturbs&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;n_perturbs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">20</span>
-
-        <span class="k">if</span> <span class="s2">&quot;n_iters&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;n_iters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">250</span>
-
-        <span class="k">if</span> <span class="s2">&quot;epsilon&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;epsilon&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.005</span>
-
-        <span class="k">if</span> <span class="s2">&quot;n_jobs&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;n_jobs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-
-        <span class="k">if</span> <span class="s2">&quot;use_gpu&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;use_gpu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-
-        <span class="k">if</span> <span class="s2">&quot;init&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;init&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;nnsvd&quot;</span>
-
-        <span class="k">if</span> <span class="s2">&quot;nmf_method&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;nmf_method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;nmf_fro_mu&quot;</span>
-
-        <span class="k">if</span> <span class="s2">&quot;sill_thresh&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sill_thresh&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.8</span>
-
-        <span class="c1">#</span>
         <span class="c1"># Required</span>
         <span class="c1">#</span>
         <span class="n">params</span><span class="p">[</span><span class="s2">&quot;collect_output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">params</span><span class="p">[</span><span class="s2">&quot;save_output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;n_nodes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
         
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;predict_k&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>

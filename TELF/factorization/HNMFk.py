@@ -1,8 +1,13 @@
 from .NMFk import NMFk
-
+from pathlib import Path
 import numpy as np
 import uuid
 import os
+
+try:
+    from mpi4py import MPI
+except:
+    MPI = None
 
 
 class Node():
@@ -15,7 +20,8 @@ class Node():
                  child_nodes: list, child_node_names: list,
                  original_indices: np.ndarray,
                  num_samples:int,
-                 leaf:bool
+                 leaf:bool,
+                 user_node_data:dict
                  ):
         self.node_num = node_num
         self.name = "node"+str(node_num)
@@ -32,6 +38,7 @@ class Node():
         self.original_indices = original_indices
         self.num_samples = num_samples
         self.leaf = leaf
+        self.user_node_data = user_node_data
 
 
 class HNMFk():
@@ -42,9 +49,12 @@ class HNMFk():
                  depth=1,
                  sample_thresh=-1,
                  Ks_deep_min=1,
+                 Ks_deep_max=None,
                  Ks_deep_step=1,
                  K2=False,
-                 experiment_name="HNMFk_Output"
+                 experiment_name="HNMFk_Output",
+                 generate_X_callback=None,
+                 n_nodes=1,
                  ):
         """
         HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.
@@ -52,10 +62,10 @@ class HNMFk():
         Parameters
         ----------
         nmfk_params : list of dicts, optional
-            We can specify NMFk parameters for each depth, or use same for all depth.\\
-            If there is single items in ```nmfk_params```, HMMFk will use the same NMFk parameters for all depths.\\
+            We can specify NMFk parameters for each depth, or use same for all depth.\n
+            If there is single items in ``nmfk_params``, HMMFk will use the same NMFk parameters for all depths.\n
             When using for each depth, append to the list. For example, [nmfk_params0, nmfk_params1, nmfk_params2] for depth of 2
-            The default is [{}], which defaults to NMFk with defaults with required params["collect_output"] = False, params["save_output"] = True, and params["predict_k"] = True when ```K2=False```.
+            The default is ``[{}]``, which defaults to NMFk with defaults with required ``params["collect_output"] = False``, ``params["save_output"] = True``, and ``params["predict_k"] = True`` when ``K2=False``.
         cluster_on : str, optional
             Where to perform clustering, can be W or H. Ff W, row of X should be samples, and if H, columns of X should be samples.
             The default is "H".
@@ -67,40 +77,54 @@ class HNMFk():
             The default is -1.
         Ks_deep_min : int, optional
             After first nmfk, when selecting Ks search range, minimum k to start. The default is 1.
+        Ks_deep_max : int, optinal
+            After first nmfk, when selecting Ks search range, maximum k to try.\n
+            When None, maximum k will be same as k selected for parent node.\n
+            The default is None.
         Ks_deep_step : int, optional
             After first nmfk, when selecting Ks search range, k step size. The default is 1.
         K2 : bool, optional
             If K2=True, decomposition is done only for k=2 instead of finding and predicting the number of stable latent features. The default is False.
         experiment_name : str, optional
             Where to save the results.
-
+        generate_X_callback : object, optional
+            This can be used to re-generate the data matrix X before each NMFk operation. When not used, slice of original X is taken, which is equal to serial decomposition.\n
+            ``generate_X_callback`` object should be a class with ``def __call__(original_indices)`` defined so that ``new_X, save_at_node=generate_X_callback(original_indices)`` can be done.\n
+            ``original_indices`` hyper-parameter is the indices of samples (columns of original X when clustering on H).\n
+            Here ``save_at_node`` is a dictionary that can be used to save additional information in each node's ``user_node_data`` variable. 
+            The default is None.
+        n_nodes : int, optional
+            Number of HPC nodes. The default is 1.
         Returns
         -------
         None.
 
         """
 
+        # user defined settings
         self.sample_thresh = sample_thresh
         self.depth = depth
         self.cluster_on = cluster_on
         self.Ks_deep_min = Ks_deep_min
+        self.Ks_deep_max = Ks_deep_max
         self.Ks_deep_step = Ks_deep_step
         self.K2 = K2
         self.experiment_name = experiment_name
+        self.generate_X_callback = generate_X_callback
+        self.n_nodes = n_nodes
 
         organized_nmfk_params = []
         for params in nmfk_params:
             organized_nmfk_params.append(self._organize_nmfk_params(params))
         self.nmfk_params = organized_nmfk_params
 
-        self.target_clusters = []
-        self.target_Ks = []
-        self.curr_original_indices = []
+        # object variables
         self.X = None
         self.num_features = 0
         self.node_count = 0
         self._all_nodes = []
 
+        # root node
         self.root = Node(
             node_num=self.node_count,
             depth=0,
@@ -114,16 +138,28 @@ class HNMFk():
             original_indices=None,
             num_samples=0,
             leaf=False,
+            user_node_data={}
         )
+
+        # iterator object pointer
         self.iterator = self.root
 
-        assert self.cluster_on in ["W", "H"], "Unknown clustering method!"
-
+        # path to save 
         self.experiment_save_path = os.path.join(self.experiment_name)
         try:
-            os.mkdir(self.experiment_save_path)
+            if not Path(self.experiment_save_path).is_dir():
+                Path(self.experiment_save_path).mkdir(parents=True)
         except Exception as e:
             print(e)
+
+        # HPC job management variables
+        self.target_jobs = {}
+        self.node_status = {}
+
+        assert self.cluster_on in ["W", "H"], "Unknown clustering method!"
+        assert (self.n_nodes > 1 and MPI is not None) or (self.n_nodes ==
+                                                          1), "n_nodes was greater than 1 but MPI is not installed!"
+
 
     def fit(self, X, Ks):
         """
@@ -170,56 +206,68 @@ class HNMFk():
         if (self.sample_thresh > 0 and (node.num_samples <= self.sample_thresh)):
             node.leaf = True
             return
+        
+        # where to save current depth
+        try:
+            depth_save_path = os.path.join(self.experiment_name, "depth_"+str(node.depth))
+            try:
+                if not Path(depth_save_path).is_dir():
+                    Path(depth_save_path).mkdir(parents=True)
+            except Exception as e:
+                print(e)
+        except Exception as e:
+            print(e)
 
-        # obtain the current X
-        if self.cluster_on == "W":
-            curr_X = self.X[node.original_indices]
+        # obtain the current X using the original X
+        if self.generate_X_callback is None or node.depth == 0:
+            save_at_node = {}
+            if self.cluster_on == "W":
+                curr_X = self.X[node.original_indices]
 
-        elif self.cluster_on == "H":
-            curr_X = self.X[:, node.original_indices]
+            elif self.cluster_on == "H":
+                curr_X = self.X[:, node.original_indices]
+        # obtain the current X using the callback function
+        else:
+            curr_X, save_at_node = self.generate_X_callback(node.original_indices)
+            node.user_node_data = save_at_node.copy()
 
         # prepare directory to save the results
         if node.depth >= len(self.nmfk_params):
             select_params = -1
         else:
             select_params = node.depth 
-        curr_nmfk_params = self.nmfk_params[select_params]
-
-        try:
-            depth_save_path = os.path.join(self.experiment_name, "depth_"+str(node.depth))
-            if not os.path.isdir(depth_save_path):
-                os.mkdir(depth_save_path)
-        except Exception as e:
-            print(e)
-
+        curr_nmfk_params = self.nmfk_params[select_params % len(self.nmfk_params)]
         curr_nmfk_params["save_path"] = depth_save_path
 
         # apply nmfk
         model = NMFk(**curr_nmfk_params)
         parent = node.parent_node
-        
+
         if parent is None:
             folder_name = node.name
         else:
             folder_name = node.name+"-parent-"+str(node.parent_node.name)
 
         results = model.fit(curr_X, Ks, name=folder_name)
+        
+        # Check if decomposition was not possible
+        if results is None:
+            node.leaf = True
+            return
+
         if self.K2:
+            factors_data = np.load(f'{model.save_path_full}/WH_k=2.npz')
+            node.W = factors_data["W"]
+            node.H = factors_data["H"]
+            node.k = 2
+        
+        else:
             predict_k = results["k_predict"]
             factors_data = np.load(f'{model.save_path_full}/WH_k={predict_k}.npz')
             node.W = factors_data["W"]
             node.H = factors_data["H"]
-        
-        else:
-            factors_data = np.load(f'{model.save_path_full}/WH_k=2.npz')
-            node.W = factors_data["W"]
-            node.H = factors_data["H"]
-
-        if not self.K2:
-            node.k = results["k_predict"]
-        else:
-            node.k = 2
-
+            node.k = predict_k
+            
         # obtain the clusters
         if self.cluster_on == "W":
             cluster_labels = np.argmax(node.W, axis=1)
@@ -236,7 +284,7 @@ class HNMFk():
         if ((node.depth >= self.depth) and self.depth > 0) or node.k == 1 or n_clusters == 1:
             node.leaf = True
             return
-
+        
         # go through each topic
         for c in clusters:
 
@@ -261,14 +309,20 @@ class HNMFk():
                 child_node_names=[],
                 original_indices=node.original_indices[cluster_c_indices],
                 num_samples=len(cluster_c_indices),
-                leaf=False
+                leaf=False,
+                user_node_data={}
             )
             node.child_nodes.append(child_node)
             node.child_node_names.append(child_node.name)
 
             # prepare to go to the next depth
             if not self.K2:
-                new_max_K = min(node.k + 1, min(len(child_node.original_indices), self.num_features))
+                if self.Ks_deep_max is None:
+                    k_max = node.k + 1
+                else:
+                    k_max = self.Ks_deep_max + 1
+
+                new_max_K = min(k_max, min(len(child_node.original_indices), self.num_features))
                 new_Ks = range(self.Ks_deep_min, new_max_K, self.Ks_deep_step)
             else:
                 new_Ks = [2]
@@ -380,33 +434,6 @@ class HNMFk():
             print("Children at index "+str(idx)+" from the current does not exist!")
 
     def _organize_nmfk_params(self, params):
-
-        #
-        # Defaults
-        #
-        if "n_perturbs" not in params:
-            params["n_perturbs"] = 20
-
-        if "n_iters" not in params:
-            params["n_iters"] = 250
-
-        if "epsilon" not in params:
-            params["epsilon"] = 0.005
-
-        if "n_jobs" not in params:
-            params["n_jobs"] = -1
-
-        if "use_gpu" not in params:
-            params["use_gpu"] = False
-
-        if "init" not in params:
-            params["init"] = "nnsvd"
-
-        if "nmf_method" not in params:
-            params["nmf_method"] = "nmf_fro_mu"
-
-        if "sill_thresh" not in params:
-            params["sill_thresh"] = 0.8
 
         #
         # Required

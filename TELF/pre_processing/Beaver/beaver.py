@@ -25,7 +25,8 @@ import pandas as pd
 import multiprocessing
 from operator import itemgetter
 from collections import defaultdict, Counter
-
+from sklearn.feature_extraction.text import TfidfVectorizer
+from numbers import Integral
 import sparse
 from tqdm import tqdm
 import scipy.sparse as ss
@@ -38,6 +39,7 @@ from .vectorize import count
 from .cooccurrence import co_occurrence
 from .sppmi import sppmi
 from typing import Union
+
 
 
 class Beaver():
@@ -71,15 +73,11 @@ class Beaver():
     def get_vocabulary(self,
                        dataset: pd.DataFrame,
                        target_column: str=None,
-                       split_with: str=None,
                        max_df: Union[int, float]=1.0,
                        min_df: int=1,
                        max_features: int=None,
-                       verbose: bool=False,
-                       n_jobs: int=None,
-                       parallel_backend: str="multiprocessing",
                        save_path: str=None,
-                       sort_alphabetical: bool=True,) -> list:
+                       **kwargs) -> list:
         """
         Builds the vocabulary
 
@@ -89,8 +87,6 @@ class Beaver():
             Dataframe containing the target columns.
         target_column : str, optional
             Target column name in dataset DataFrame.  
-        split_with : str, optional
-            Delimeter to use in tokenization, if None split in whitespace. The default is None.
         max_df : int or float, optional
             When building the vocabulary ignore terms that have a document frequency strictly higher 
             than the given threshold (corpus-specific stop words). If float in range [0.0, 1.0], 
@@ -104,16 +100,8 @@ class Beaver():
         max_features : int, optional
             If not None, build a vocabulary that only consider the top max_features ordered by term frequency across the corpus. 
             The default is None.
-        verbose : bool, optional
-            Vebosity flag. The default is False.
-        n_jobs : int, optional
-            Number of parallel processes. The default is the Beaver default.
-        parallel_backend : str, optional
-            Which backend Joblib should use.
         save_path : str, optional
             If not None, saves the outputs. The default is None.
-        sort_alphabetical : bool, optional
-            If True, sorts the output vocabulary alphabetically. Otherwise the vocabulary is sorted by document frequency.
 
         Returns
         -------
@@ -126,74 +114,10 @@ class Beaver():
         # get the target data
         data = dataset[target_column].values.tolist()
 
-        # organize parameters
-        if isinstance(max_df, float):
-            max_df = int(len(data) * max_df)
-        if isinstance(min_df, float):
-            min_df = int(len(data) * min_df)
+        vectorizer = TfidfVectorizer(**{"max_df":max_df, "min_df":min_df, "max_features":max_features}, **kwargs)
+        X = vectorizer.fit_transform(data)
+        vocabulary = vectorizer.get_feature_names_out()
 
-        assert max_df <= len(data), "max_df must be <= data"
-        assert min_df > 0, "min_df must be > 0"
-
-
-        if n_jobs <= 0:
-            n_chunks = multiprocessing.cpu_count()
-            n_chunks -= (np.abs(n_jobs) + 1)
-        else:
-            n_chunks = n_jobs
-
-        # chunk the documents to get list of jobs
-        if n_jobs is not None:
-            self.n_jobs = n_jobs
-        n_chunks = self.n_jobs
-        data_chunks = list(self._chunk_list(data, n_chunks))
-
-        if split_with == '':
-            split_with = None
-
-        # get the stats for the tokens in parallel
-        list_results = Parallel(n_jobs=n_chunks, verbose=verbose, backend=parallel_backend)(
-            delayed(self._get_vocabulary_helper)(data=chunk, split_with=split_with) for chunk in data_chunks)
-
-        # combine the stats
-        token_stats = {}
-        for curr_token_stats in tqdm(list_results, disable=not verbose, total=len(list_results)):
-            for token, stats in curr_token_stats.items():
-                if token in token_stats:
-                    token_stats[token]["df"] += stats["df"]
-                    token_stats[token]["tf"] += stats["tf"]
-                else:
-                    token_stats[token] = {"df": 0, "tf": 0}
-                    token_stats[token]["df"] += stats["df"]
-                    token_stats[token]["tf"] += stats["tf"]
-                    
-        # filter for document frequencies when selecting the tokens in vocabulary
-        vocabulary = set()
-        for token, stats in tqdm(token_stats.items(), total=len(token_stats), disable=not verbose):
-            if stats["df"] <= max_df and stats["df"] >= min_df:
-                vocabulary.add(token)
-
-        # max features
-        if max_features:
-            max_token_tf_stat = {}
-            for token in vocabulary:
-                max_token_tf_stat[token] = token_stats[token]["tf"]
-
-            if max_features > len(token_stats):
-                warnings.warn(
-                    "More features requested than available number of tokens... Reverting to max tokens.")
-                max_features = len(token_stats)
-
-            max_token_tf_stat = dict(sorted(max_token_tf_stat.items(), key=itemgetter(1),
-                                            reverse=True)[:max_features])
-
-            vocabulary = list(max_token_tf_stat.keys())
-
-        if sort_alphabetical:
-            vocabulary = sorted(vocabulary)
-        else:  # sort the vocabulary by the document frequency
-            vocabulary = sorted(vocabulary, key=lambda x: token_stats[x]['df'], reverse=True)
-            
         if save_path:
             np.savetxt(os.path.join(save_path, "Vocabulary.txt"), vocabulary,  fmt="%s", encoding="utf-8")
         return vocabulary
@@ -1586,35 +1510,6 @@ class Beaver():
         """
         for i in range(0, n):
             yield l[i::n]
-
-    def _get_vocabulary_helper(self, data: list, split_with: str=None) -> dict:
-        """
-        Gets the token statistics from a given list of documents.
-
-        Parameters
-        ----------
-        data : list
-            List of documents.
-        split_with : str, optional
-            Delimeter to use in tokenization, if None split in whitespace. The default is None.
-
-        Returns
-        -------
-        dict
-            DESCRIPTION.
-
-        """
-
-        token_stats = defaultdict(lambda: {"df": 0, "tf": 0})
-        for doc in data:
-            tokens = doc.split(split_with)
-            unique_tokens = set(tokens)
-            for tt in unique_tokens:
-                # token_stats[tt]["tf"] += tokens.count(tt) not using this for now, may add back later
-                token_stats[tt]["df"] += 1
-        token_stats = dict(token_stats)
-        return token_stats
-
 
     def _output_pydata(self, x):
         """

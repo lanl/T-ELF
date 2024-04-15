@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF.factorization.NMFk: Non-negative Matrix Factorization with Automatic Model Determination &#8212; TELF 0.0.13 documentation</title>
+    <title>TELF.factorization.NMFk: Non-negative Matrix Factorization with Automatic Model Determination &#8212; TELF 0.0.14 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="_static/documentation_options.js?v=8331ac40"></script>
+    <script src="_static/documentation_options.js?v=16242e91"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -127,7 +127,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.13 documentation</p>
+    <p class="title logo__title">TELF 0.0.14 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -493,7 +493,10 @@ others to do so.</p>
 <dt>pruned<span class="classifier">bool, optional</span></dt><dd><p>When True, removes columns and rows from the input matrix that has only 0 values. The default is True.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Pruning should not be used with <code class="docutils literal notranslate"><span class="pre">nmf_method='nmf_recommender'</span></code>.</p>
+<ul class="simple">
+<li><p>Pruning should not be used with <code class="docutils literal notranslate"><span class="pre">nmf_method='nmf_recommender'</span></code>.</p></li>
+<li><p>If after pruning decomposition is not possible (for example if the number of samples left is 1, or K range is empty based on the rule <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&lt;</span> <span class="pre">min(X.shape)</span></code>, <code class="docutils literal notranslate"><span class="pre">fit()</span></code> will return <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
 </div>
 </dd>
 <dt>calculate_error<span class="classifier">bool, optional</span></dt><dd><p>When True, calculates the relative reconstruction error. The default is True.</p>
