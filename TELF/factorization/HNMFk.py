@@ -4,6 +4,11 @@ import numpy as np
 import uuid
 import os
 
+try:
+    from mpi4py import MPI
+except:
+    MPI = None
+
 
 class Node():
     def __init__(self,
@@ -48,7 +53,8 @@ class HNMFk():
                  Ks_deep_step=1,
                  K2=False,
                  experiment_name="HNMFk_Output",
-                 generate_X_callback=None
+                 generate_X_callback=None,
+                 n_nodes=1,
                  ):
         """
         HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.
@@ -87,12 +93,15 @@ class HNMFk():
             ``original_indices`` hyper-parameter is the indices of samples (columns of original X when clustering on H).\n
             Here ``save_at_node`` is a dictionary that can be used to save additional information in each node's ``user_node_data`` variable. 
             The default is None.
+        n_nodes : int, optional
+            Number of HPC nodes. The default is 1.
         Returns
         -------
         None.
 
         """
 
+        # user defined settings
         self.sample_thresh = sample_thresh
         self.depth = depth
         self.cluster_on = cluster_on
@@ -102,20 +111,20 @@ class HNMFk():
         self.K2 = K2
         self.experiment_name = experiment_name
         self.generate_X_callback = generate_X_callback
+        self.n_nodes = n_nodes
 
         organized_nmfk_params = []
         for params in nmfk_params:
             organized_nmfk_params.append(self._organize_nmfk_params(params))
         self.nmfk_params = organized_nmfk_params
 
-        self.target_clusters = []
-        self.target_Ks = []
-        self.curr_original_indices = []
+        # object variables
         self.X = None
         self.num_features = 0
         self.node_count = 0
         self._all_nodes = []
 
+        # root node
         self.root = Node(
             node_num=self.node_count,
             depth=0,
@@ -131,16 +140,26 @@ class HNMFk():
             leaf=False,
             user_node_data={}
         )
+
+        # iterator object pointer
         self.iterator = self.root
 
-        assert self.cluster_on in ["W", "H"], "Unknown clustering method!"
-
+        # path to save 
         self.experiment_save_path = os.path.join(self.experiment_name)
         try:
             if not Path(self.experiment_save_path).is_dir():
                 Path(self.experiment_save_path).mkdir(parents=True)
         except Exception as e:
             print(e)
+
+        # HPC job management variables
+        self.target_jobs = {}
+        self.node_status = {}
+
+        assert self.cluster_on in ["W", "H"], "Unknown clustering method!"
+        assert (self.n_nodes > 1 and MPI is not None) or (self.n_nodes ==
+                                                          1), "n_nodes was greater than 1 but MPI is not installed!"
+
 
     def fit(self, X, Ks):
         """
@@ -210,6 +229,7 @@ class HNMFk():
         # obtain the current X using the callback function
         else:
             curr_X, save_at_node = self.generate_X_callback(node.original_indices)
+            node.user_node_data = save_at_node.copy()
 
         # prepare directory to save the results
         if node.depth >= len(self.nmfk_params):
@@ -222,7 +242,7 @@ class HNMFk():
         # apply nmfk
         model = NMFk(**curr_nmfk_params)
         parent = node.parent_node
-        
+
         if parent is None:
             folder_name = node.name
         else:
@@ -248,7 +268,6 @@ class HNMFk():
             node.H = factors_data["H"]
             node.k = predict_k
             
-
         # obtain the clusters
         if self.cluster_on == "W":
             cluster_labels = np.argmax(node.W, axis=1)
@@ -265,7 +284,7 @@ class HNMFk():
         if ((node.depth >= self.depth) and self.depth > 0) or node.k == 1 or n_clusters == 1:
             node.leaf = True
             return
-
+        
         # go through each topic
         for c in clusters:
 
@@ -291,7 +310,7 @@ class HNMFk():
                 original_indices=node.original_indices[cluster_c_indices],
                 num_samples=len(cluster_c_indices),
                 leaf=False,
-                user_node_data=save_at_node
+                user_node_data={}
             )
             node.child_nodes.append(child_node)
             node.child_node_names.append(child_node.name)
@@ -415,33 +434,6 @@ class HNMFk():
             print("Children at index "+str(idx)+" from the current does not exist!")
 
     def _organize_nmfk_params(self, params):
-
-        #
-        # Defaults
-        #
-        if "n_perturbs" not in params:
-            params["n_perturbs"] = 20
-
-        if "n_iters" not in params:
-            params["n_iters"] = 250
-
-        if "epsilon" not in params:
-            params["epsilon"] = 0.005
-
-        if "n_jobs" not in params:
-            params["n_jobs"] = -1
-
-        if "use_gpu" not in params:
-            params["use_gpu"] = False
-
-        if "init" not in params:
-            params["init"] = "nnsvd"
-
-        if "nmf_method" not in params:
-            params["nmf_method"] = "nmf_fro_mu"
-
-        if "sill_thresh" not in params:
-            params["sill_thresh"] = 0.8
 
         #
         # Required
