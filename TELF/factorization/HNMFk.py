@@ -85,6 +85,7 @@ class HNMFk():
                  generate_X_callback=None,
                  n_nodes=1,
                  verbose=True,
+                 comm_buff_size=10000000,
                  ):
         """
         HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.
@@ -145,6 +146,7 @@ class HNMFk():
         self.generate_X_callback = generate_X_callback
         self.n_nodes = n_nodes
         self.verbose = verbose
+        self.comm_buff_size = comm_buff_size
 
         organized_nmfk_params = []
         for params in nmfk_params:
