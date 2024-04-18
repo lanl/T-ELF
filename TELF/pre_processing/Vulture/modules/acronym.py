@@ -8,6 +8,26 @@ from TELF.pre_processing.Vulture.tokens_analysis.top_words import get_top_words
 FIRST_LETTER = 0
 LAST_PART_INDEX = -1
 
+def flatten_acronym_dict(acronym_dict):
+    """
+    Transform the acronym operator data into the format that will work for consolidation and substitution operators.
+
+    Parameters
+    ----------
+    acronym_dict: dict
+        The output from AcronymDetector
+
+    Returns
+    -------
+    list
+        a list of dict that contain the acronyms.
+    """
+    acronym_dict_list = []
+    for id, data in acronym_dict:
+        acronym_dict_list.append(data['Acronyms'])
+      
+    return acronym_dict_list
+
 class AcronymDetector(VultureModuleBase):
     """
     An operator that detects Acronyms in text.

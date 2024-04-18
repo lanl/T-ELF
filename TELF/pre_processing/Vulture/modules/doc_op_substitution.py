@@ -25,6 +25,7 @@ class SubstitutionOperator(VultureModuleBase):
         
     def run(self, document):
         """
+        Runs the substitutions per document with the two substitutions.
         
         Parameters
         ----------
