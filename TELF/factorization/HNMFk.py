@@ -309,6 +309,7 @@ class HNMFk():
             if (rank != 0 and job_flag) or (self.n_nodes == 1 and rank == 0):
                 
                 # process the current node
+                print(rank, "working")
                 node_results = self._process_node(**job_data)
 
                 # send worker node results to root
@@ -362,7 +363,7 @@ class HNMFk():
         return
         
     def _process_node(self, Ks, depth, original_indices, node_name, parent_node_name, parent_topic):
-
+        print("New=", Ks, depth, original_indices, node_name, parent_node_name, parent_topic)
         # where to save current node
         try:
             node_save_path = os.path.join(self.experiment_name, "depth_"+str(depth), node_name)
