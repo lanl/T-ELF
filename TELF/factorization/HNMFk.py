@@ -273,22 +273,35 @@ class HNMFk():
                 if self.n_nodes > 1:
                     self._signal_workers_exit(comm)
                 break
-            
+                
+            #
             # worker nodes check exit status
+            #
             if self.n_nodes > 1:
                 self._worker_check_exit_status(rank, comm)
 
-            # recieve jobs from rank 0 at worker ndoes
+            #
+            # send job to worker nodes
+            #
+            if rank == 0 and self.n_nodes > 1:
+                self._send_job_to_worker_nodes(comm)
+
+            #
+            # recieve jobs from rank 0 at worker nodes
+            #
             elif rank != 0 and self.n_nodes > 1:
                 job_data, job_flag = self._get_next_job_at_worker(
                     rank, comm)
 
+            #
             # single node job schedule
+            #
             else:
                 available_jobs = list(self.target_jobs.keys())
                 next_job = available_jobs.pop(0)
                 job_data = self.target_jobs[next_job]
                 job_flag = True
+
 
             # do the job
             if (rank != 0 and job_flag) or (self.n_nodes == 1 and rank == 0):
@@ -662,6 +675,27 @@ class HNMFk():
                     all_results.append(node_results)
 
         return all_results
+    
+    def _send_job_to_worker_nodes(self, comm):
+        scheduled = 0
+        available_jobs = list(self.target_jobs.keys())
+        # remove the jobs that are in the nodes from the available jobs
+        for _, status_info in self.node_status.items():
+            if status_info["job"] is not None and status_info["free"] is False:
+                try:
+                    _ = available_jobs.pop(available_jobs.index(status_info["job"]))
+                except Exception as e:
+                    print(e)
+        
+        for job_rank, status_info in self.node_status.items():
+            if len(available_jobs) > 0 and status_info["free"]:
+                next_job = available_jobs.pop(0)
+                req = comm.isend(self.target_jobs[next_job],
+                                 dest=job_rank, tag=int(f'200{job_rank}'))
+                req.wait()
+                self.node_status[job_rank]["free"] = False
+                self.node_status[job_rank]["job"] = next_job
+                scheduled += 1
     
     def _process_results(self, node_results, save_checkpoint):
         # remove the job
