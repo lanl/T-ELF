@@ -5,3 +5,4 @@ from .substitute import SubstitutionCleaner
 from .detect_nonenglish import RemoveNonEnglishCleaner
 from .ner import NEDetector
 from .acronym import AcronymDetector
+from .doc_op_substitution import SubstitutionOperator
