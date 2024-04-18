@@ -288,6 +288,7 @@ class HNMFk():
                 available_jobs = list(self.target_jobs.keys())
                 next_job = available_jobs.pop(0)
                 job_data = self.target_jobs[next_job]
+                job_flag = True
 
             # do the job
             if (rank != 0 and job_flag) or (self.n_nodes == 1 and rank == 0):

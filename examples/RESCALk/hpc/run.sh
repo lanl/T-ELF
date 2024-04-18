@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=120
 
 export PMIX_MCA_gds=hash
-source TELF
+source activate TELF
 echo $CONDA_DEFAULT_ENV
 export n_jobs=$SLURM_CPUS_PER_TASK
 export PMIX_MCA_gds=hash
