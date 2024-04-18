@@ -12,6 +12,7 @@ import os
 import time
 import sys
 import pickle
+import warnings
 
 try:
     from mpi4py import MPI
@@ -83,6 +84,7 @@ class HNMFk():
                  experiment_name="HNMFk_Output",
                  generate_X_callback=None,
                  n_nodes=1,
+                 verbose=True,
                  ):
         """
         HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.
@@ -123,6 +125,8 @@ class HNMFk():
             The default is None.
         n_nodes : int, optional
             Number of HPC nodes. The default is 1.
+        verbose : bool, optional
+            If True, it prints progress. The default is True.
         Returns
         -------
         None.
@@ -140,6 +144,7 @@ class HNMFk():
         self.experiment_name = experiment_name
         self.generate_X_callback = generate_X_callback
         self.n_nodes = n_nodes
+        self.verbose = verbose
 
         organized_nmfk_params = []
         for params in nmfk_params:
@@ -153,6 +158,7 @@ class HNMFk():
         self._all_nodes = []
         self.iterator = None
         self.root = None
+        self.root_name = ""
         self.node_save_paths = {}
 
         # path to save 
@@ -183,10 +189,11 @@ class HNMFk():
         Ks : list
             List of K values to factorize the input matrix.\n
             **Example:** ``Ks=range(1, 10, 1)``.
-        from_checkpoint : bool
-            todo
-        save_checkpoint : bool
-            todo
+        from_checkpoint : bool, optional
+            If True, it continues the process from the checkpoint. The default is False.
+        save_checkpoint : bool, optional
+            If True, it saves checkpoints. The default is False.
+        
         Returns
         -------
         None
@@ -212,18 +219,19 @@ class HNMFk():
 
         #
         # Checkpointing and job setup
-        #
-        self.X = X    
-        
+        #   
         if from_checkpoint:
-            pass
-            # todo
+            checkpoint_file = self._load_checkpoint_file()
         else:
             checkpoint_file = {}
         
         if from_checkpoint and len(checkpoint_file) > 0:
-            pass
-            # todo
+            if self.verbose:
+                print("Continuing from checkpoint...")
+
+            if rank == 0:
+                self._load_checkpoint(checkpoint_file)
+
         
         # setting up for a new job
         elif not from_checkpoint or len(checkpoint_file) == 0:
@@ -237,16 +245,18 @@ class HNMFk():
                     original_indices = np.arange(0, X.shape[1], 1)
                     self.num_features = X.shape[0]
 
-                root_name = str(uuid.uuid1())
-                self.target_jobs[root_name] = {
+                self.root_name = str(uuid.uuid1())
+                self.target_jobs[self.root_name] = {
                     "parent_node_name":"None",
-                    "node_name":root_name,
+                    "node_name":self.root_name,
                     "Ks":Ks,
                     "original_indices":original_indices,
                     "depth":0,
                     "parent_topic":None
                 }
 
+        # save data matrix
+        self.X = X 
 
         # wait for everyone
         start_time = time.time()
@@ -257,7 +267,7 @@ class HNMFk():
         # Run HNMFk
         # 
         while True:
-            
+
             # check exit status 
             if len(self.target_jobs) == 0 and rank == 0 and all([info["free"] for _, info in self.node_status.items()]):
                 if self.n_nodes > 1:
@@ -300,9 +310,9 @@ class HNMFk():
             if rank == 0:
                 if self.n_nodes > 1:
                     for node_results in all_node_results:
-                        self._process_results(node_results, save_checkpoint=False)
+                        self._process_results(node_results, save_checkpoint=save_checkpoint)
                 else:
-                    self._process_results(node_results, save_checkpoint=False)
+                    self._process_results(node_results, save_checkpoint=save_checkpoint)
 
         # total execution time
         total_exec_seconds = time.time() - start_time
@@ -310,7 +320,7 @@ class HNMFk():
 
         # prepare online iterator
         self.root = OnlineNode(
-            node_path=self.node_save_paths[root_name],
+            node_path=self.node_save_paths[self.root_name],
             parent_node=None,
             child_nodes=[]
         )
@@ -505,7 +515,7 @@ class HNMFk():
     def traverse_nodes(self):
         """
         Graph iterator. Returns all nodes in list format.\n
-        This operation will load each node into the memmory.
+        This operation will load each node persistently into the memory.
 
         Returns
         -------
@@ -531,7 +541,7 @@ class HNMFk():
     def go_to_root(self):
         """
         Graph iterator. Goes to root node.\n
-        This operation is online, only one node is kept in the memmory at a time.
+        This operation is online, only one node is kept in the memory at a time.
 
         Returns
         -------
@@ -546,7 +556,7 @@ class HNMFk():
     def get_node(self):
         """
         Graph iterator. Returns the current node.\n
-        This operation is online, only one node is kept in the memmory at a time.
+        This operation is online, only one node is kept in the memory at a time.
 
         Returns
         -------
@@ -560,7 +570,7 @@ class HNMFk():
     def go_to_parent(self):
         """
         Graph iterator. Goes to the parent of current node.\n
-        This operation is online, only one node is kept in the memmory at a time.
+        This operation is online, only one node is kept in the memory at a time.
 
         Returns
         -------
@@ -577,7 +587,7 @@ class HNMFk():
     def go_to_children(self, idx: int):
         """
         Graph iterator. Goes to the child node specified by index.\n
-        This operation is online, only one node is kept in the memmory at a time.
+        This operation is online, only one node is kept in the memory at a time.
 
         Parameters
         ----------
@@ -665,7 +675,31 @@ class HNMFk():
 
         # checkpointing
         if save_checkpoint:
-            #self._save_checkpoint()
-            # todo
-            pass
+            self._save_checkpoint()
 
+    def _load_checkpoint_file(self):
+        try:
+            saved_class_params = pickle.load(
+                open(os.path.join(self.experiment_save_path, "checkpoint.p"), "rb")
+            )
+            return saved_class_params
+        except Exception:
+            warnings.warn("No checkpoint file found!")
+            return {}
+            
+    def _load_checkpoint(self, saved_class_params):
+        if self.verbose:
+            print("Loading saved object state from checkpoint...")
+
+        self._set_params(saved_class_params)
+
+    def _set_params(self, class_parameters):
+        """Sets class variables from the loaded checkpoint"""
+        for parameter, value in class_parameters.items():
+            setattr(self, parameter, value)
+
+    def _save_checkpoint(self):
+        class_params = vars(self).copy()
+        del class_params["X"]
+        pickle.dump(class_params, open(os.path.join(
+            self.experiment_save_path, "checkpoint.p"), "wb"))

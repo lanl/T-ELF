@@ -25,12 +25,8 @@ Next, let's build the vocabulary:
    settings = {
       "dataset":df,
       "target_column":"clean_abstract",
-      "split_with":None,
       "min_df":10,
       "max_df":0.5,
-      "verbose":False,
-      "n_jobs":-1,
-      "parallel_backend":"multiprocessing"
    }
 
    vocabulary = beaver.get_vocabulary(**settings)
