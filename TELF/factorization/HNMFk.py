@@ -241,11 +241,9 @@ class HNMFk():
             if rank == 0:
                 if self.cluster_on == "W":
                     original_indices = np.arange(0, X.shape[0], 1)
-                    self.num_features = X.shape[1]
-
                 elif self.cluster_on == "H":
                     original_indices = np.arange(0, X.shape[1], 1)
-                    self.num_features = X.shape[0]
+                    
 
                 self.root_name = str(uuid.uuid1())
                 self.target_jobs[self.root_name] = {
@@ -259,6 +257,12 @@ class HNMFk():
 
         # save data matrix
         self.X = X 
+        if self.cluster_on == "W":
+            self.num_features = X.shape[1]
+        elif self.cluster_on == "H":
+            self.num_features = X.shape[0]
+        else:
+            raise Exception("Unknown clustering method!")
 
         # wait for everyone
         start_time = time.time()
@@ -309,7 +313,6 @@ class HNMFk():
             if (rank != 0 and job_flag) or (self.n_nodes == 1 and rank == 0):
                 
                 # process the current node
-                print(rank, "working")
                 node_results = self._process_node(**job_data)
 
                 # send worker node results to root
@@ -363,7 +366,6 @@ class HNMFk():
         return
         
     def _process_node(self, Ks, depth, original_indices, node_name, parent_node_name, parent_topic):
-        print("New=", Ks, depth, original_indices, node_name, parent_node_name, parent_topic)
         # where to save current node
         try:
             node_save_path = os.path.join(self.experiment_name, "depth_"+str(depth), node_name)
