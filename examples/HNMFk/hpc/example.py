@@ -78,10 +78,6 @@ def main():
         "experiment_name":name
     }
 
-    Ks = range(1,11,1)
-    name = "Example_HPC_NMFk"
-    note = "This is an example run of NMFk"
-
     model = HNMFk(**hnmfk_params)
     model.fit(X, Ks, from_checkpoint=True, save_checkpoint=True)
     all_nodes = model.traverse_nodes()
