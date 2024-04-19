@@ -420,6 +420,14 @@ class HNMFk():
             curr_X, save_at_node = self.generate_X_callback(current_node.original_indices)
             current_node.user_node_data = save_at_node.copy()
 
+        #
+        # Based on number of features or samples, no seperation possible
+        #
+        if min(curr_X.shape) <= 1:
+            current_node.leaf = True
+            pickle_path = f'{node_save_path}/node_{current_node.node_name}.p'
+            pickle.dump(current_node, open(pickle_path, "wb"))
+            return {"name":node_name, "target_jobs":[], "node_save_path":pickle_path}
 
         #
         # prepare the current nmfk parameters
@@ -430,6 +438,16 @@ class HNMFk():
             select_params = current_node.depth 
         curr_nmfk_params = self.nmfk_params[select_params % len(self.nmfk_params)]
         curr_nmfk_params["save_path"] = node_save_path
+
+        #
+        # check for K range
+        #
+        Ks = self._adjust_curr_Ks(curr_X.shape, Ks)
+        if len(Ks) == 0 or (len(Ks) == 1 and Ks[0] < 2):
+            current_node.leaf = True
+            pickle_path = f'{node_save_path}/node_{current_node.node_name}.p'
+            pickle.dump(current_node, open(pickle_path, "wb"))
+            return {"name":node_name, "target_jobs":[], "node_save_path":pickle_path}
 
         #
         # apply nmfk
@@ -516,6 +534,11 @@ class HNMFk():
         pickle.dump(current_node, open(pickle_path, "wb"))
 
         return {"name":node_name, "target_jobs":target_jobs, "node_save_path":pickle_path}
+    
+    def _adjust_curr_Ks(self, X_shape, Ks):
+        if min(X_shape) >= max(Ks):
+            Ks = range(1, min(X_shape), self.Ks_deep_step)
+        return Ks
     
     def _get_curr_Ks(self, node_k, num_samples):
         if not self.K2:
@@ -743,6 +766,6 @@ class HNMFk():
         del class_params["X"]
         if self.generate_X_callback is not None:
             del class_params["generate_X_callback"]
-            
+
         pickle.dump(class_params, open(os.path.join(
             self.experiment_save_path, "checkpoint.p"), "wb"))
