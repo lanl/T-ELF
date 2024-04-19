@@ -741,5 +741,8 @@ class HNMFk():
     def _save_checkpoint(self):
         class_params = vars(self).copy()
         del class_params["X"]
+        if self.generate_X_callback is not None:
+            del class_params["generate_X_callback"]
+            
         pickle.dump(class_params, open(os.path.join(
             self.experiment_save_path, "checkpoint.p"), "wb"))
