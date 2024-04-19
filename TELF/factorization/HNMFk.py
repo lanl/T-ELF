@@ -1,8 +1,18 @@
+"""
+job-schedule - 200
+job-complete - 300
+signal-exit  - 400
+"""
+
 from .NMFk import NMFk
 from pathlib import Path
 import numpy as np
 import uuid
 import os
+import time
+import sys
+import pickle
+import warnings
 
 try:
     from mpi4py import MPI
@@ -10,30 +20,49 @@ except:
     MPI = None
 
 
+class OnlineNode():
+    def __init__(self, 
+                 node_path:str,
+                 parent_node:object,
+                 child_nodes:list,
+                 ) -> None:
+        self.node_path = node_path
+        self.parent_node = parent_node
+        self.child_nodes = child_nodes
+        self.node_data = None
+    
+    def __call__(self, persistent=False):
+
+        if persistent:
+            if self.node_data is None:
+                 self.node_data = pickle.load(open(self.node_path, "rb"))
+            
+            return self.node_data
+
+        else:
+            return pickle.load(open(self.node_path, "rb"))
+
+
 class Node():
     def __init__(self,
-                 node_num: int,
+                 node_name: str,
                  depth: int,
                  parent_topic: int,
                  W: np.ndarray, H: np.ndarray, k: int,
-                 parent_node, parent_node_name: str,
-                 child_nodes: list, child_node_names: list,
+                 parent_node_name: str,
+                 child_node_names: list,
                  original_indices: np.ndarray,
                  num_samples:int,
                  leaf:bool,
                  user_node_data:dict
                  ):
-        self.node_num = node_num
-        self.name = "node"+str(node_num)
-        self.node_id = str(uuid.uuid1())
+        self.node_name = node_name
         self.depth = depth
         self.W = W
         self.H = H
         self.k = k
         self.parent_topic = parent_topic
-        self.parent_node = parent_node
         self.parent_node_name = parent_node_name
-        self.child_nodes = child_nodes
         self.child_node_names = child_node_names
         self.original_indices = original_indices
         self.num_samples = num_samples
@@ -55,6 +84,8 @@ class HNMFk():
                  experiment_name="HNMFk_Output",
                  generate_X_callback=None,
                  n_nodes=1,
+                 verbose=True,
+                 comm_buff_size=10000000,
                  ):
         """
         HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.
@@ -95,6 +126,8 @@ class HNMFk():
             The default is None.
         n_nodes : int, optional
             Number of HPC nodes. The default is 1.
+        verbose : bool, optional
+            If True, it prints progress. The default is True.
         Returns
         -------
         None.
@@ -112,6 +145,8 @@ class HNMFk():
         self.experiment_name = experiment_name
         self.generate_X_callback = generate_X_callback
         self.n_nodes = n_nodes
+        self.verbose = verbose
+        self.comm_buff_size = comm_buff_size
 
         organized_nmfk_params = []
         for params in nmfk_params:
@@ -120,29 +155,13 @@ class HNMFk():
 
         # object variables
         self.X = None
+        self.total_exec_seconds = 0
         self.num_features = 0
-        self.node_count = 0
         self._all_nodes = []
-
-        # root node
-        self.root = Node(
-            node_num=self.node_count,
-            depth=0,
-            W=None, H=None,
-            k=-1,
-            parent_topic=None,
-            parent_node=None,
-            parent_node_name="None",
-            child_nodes=[],
-            child_node_names=[],
-            original_indices=None,
-            num_samples=0,
-            leaf=False,
-            user_node_data={}
-        )
-
-        # iterator object pointer
-        self.iterator = self.root
+        self.iterator = None
+        self.root = None
+        self.root_name = ""
+        self.node_save_paths = {}
 
         # path to save 
         self.experiment_save_path = os.path.join(self.experiment_name)
@@ -161,7 +180,7 @@ class HNMFk():
                                                           1), "n_nodes was greater than 1 but MPI is not installed!"
 
 
-    def fit(self, X, Ks):
+    def fit(self, X, Ks, from_checkpoint=False, save_checkpoint=False):
         """
         Factorize the input matrix ``X`` for the each given K value in ``Ks``.
 
@@ -172,120 +191,301 @@ class HNMFk():
         Ks : list
             List of K values to factorize the input matrix.\n
             **Example:** ``Ks=range(1, 10, 1)``.
+        from_checkpoint : bool, optional
+            If True, it continues the process from the checkpoint. The default is False.
+        save_checkpoint : bool, optional
+            If True, it saves checkpoints. The default is False.
         
         Returns
         -------
         None
         """
+        #
+        # Job scheduling setup
+        #
 
-        self.X = X
+        # multi-node processing
+        if self.n_nodes > 1:
+            comm = MPI.COMM_WORLD
+            rank = comm.Get_rank()
+            self.node_status = {}
+            for ii in range(1, self.n_nodes, 1):
+                self.node_status[ii] = {"free":True, "job":None}
 
-        if self.cluster_on == "W":
-            self.root.original_indices = np.arange(0, X.shape[0], 1)
-            self.root.num_samples = X.shape[0]
-            self.num_features = X.shape[1]
-            self.root.leaf = False
+        # single node processing
+        else:
+            comm = None
+            rank = 0
+            self.node_status[0] = {"free": True, "job":None}
 
-        elif self.cluster_on == "H":
-            self.root.original_indices = np.arange(0, X.shape[1], 1)
-            self.num_features = X.shape[0]
-            self.root.num_samples = X.shape[1]
-            self.root.leaf = False
 
-        # begin
-        self._hierarchical_nmfk(self.root, Ks)
-
-    def _hierarchical_nmfk(self, node, Ks):
-
-        # check if only one sample is in the node
-        if node.num_samples == 1:
-            node.leaf = True
-            return
-
-        # check if num samples in node below threshold
-        if (self.sample_thresh > 0 and (node.num_samples <= self.sample_thresh)):
-            node.leaf = True
-            return
+        #
+        # Checkpointing and job setup
+        #   
+        if from_checkpoint:
+            checkpoint_file = self._load_checkpoint_file()
+        else:
+            checkpoint_file = {}
         
-        # where to save current depth
+        if from_checkpoint and len(checkpoint_file) > 0:
+            if self.verbose:
+                print("Continuing from checkpoint...")
+
+            if rank == 0:
+                self._load_checkpoint(checkpoint_file)
+
+        
+        # setting up for a new job
+        elif not from_checkpoint or len(checkpoint_file) == 0:
+            
+            if rank == 0:
+                if self.cluster_on == "W":
+                    original_indices = np.arange(0, X.shape[0], 1)
+                elif self.cluster_on == "H":
+                    original_indices = np.arange(0, X.shape[1], 1)
+                    
+
+                self.root_name = str(uuid.uuid1())
+                self.target_jobs[self.root_name] = {
+                    "parent_node_name":"None",
+                    "node_name":self.root_name,
+                    "Ks":Ks,
+                    "original_indices":original_indices,
+                    "depth":0,
+                    "parent_topic":None
+                }
+
+        # save data matrix
+        self.X = X 
+        if self.cluster_on == "W":
+            self.num_features = X.shape[1]
+        elif self.cluster_on == "H":
+            self.num_features = X.shape[0]
+        else:
+            raise Exception("Unknown clustering method!")
+
+        # wait for everyone
+        start_time = time.time()
+        if self.n_nodes > 1:
+            comm.Barrier()
+
+        #
+        # Run HNMFk
+        # 
+        while True:
+
+            # check exit status 
+            if len(self.target_jobs) == 0 and rank == 0 and all([info["free"] for _, info in self.node_status.items()]):
+                if self.n_nodes > 1:
+                    self._signal_workers_exit(comm)
+                break
+                
+            #
+            # worker nodes check exit status
+            #
+            if self.n_nodes > 1:
+                self._worker_check_exit_status(rank, comm)
+
+            #
+            # send job to worker nodes
+            #
+            if rank == 0 and self.n_nodes > 1:
+                self._send_job_to_worker_nodes(comm)
+
+            #
+            # recieve jobs from rank 0 at worker nodes
+            #
+            elif rank != 0 and self.n_nodes > 1:
+                job_data, job_flag = self._get_next_job_at_worker(
+                    rank, comm)
+
+            #
+            # single node job schedule
+            #
+            else:
+                available_jobs = list(self.target_jobs.keys())
+                next_job = available_jobs.pop(0)
+                job_data = self.target_jobs[next_job]
+                job_flag = True
+
+
+            # do the job
+            if (rank != 0 and job_flag) or (self.n_nodes == 1 and rank == 0):
+                
+                # process the current node
+                node_results = self._process_node(**job_data)
+
+                # send worker node results to root
+                if self.n_nodes > 1 and rank != 0:
+                    req = comm.isend(node_results, dest=0, tag=int(f'300{rank}'))
+                    req.wait()
+
+            # collect results at root
+            elif rank == 0 and self.n_nodes > 1:
+                all_node_results = self._collect_results_from_workers(rank, comm)
+                if len(all_node_results) == 0:
+                    continue
+            
+            # process results for job scheduling
+            if rank == 0:
+                if self.n_nodes > 1:
+                    for node_results in all_node_results:
+                        self._process_results(node_results, save_checkpoint=save_checkpoint)
+                else:
+                    self._process_results(node_results, save_checkpoint=save_checkpoint)
+
+        # total execution time
+        total_exec_seconds = time.time() - start_time
+        self.total_exec_seconds = total_exec_seconds
+
+        # prepare online iterator
+        self.root = OnlineNode(
+            node_path=self.node_save_paths[self.root_name],
+            parent_node=None,
+            child_nodes=[]
+        )
+        self.iterator = self.root
+        self._prepare_iterator(self.root)
+
+        return {"time":total_exec_seconds}
+
+
+    def _prepare_iterator(self, node):
+        
+        node_object = pickle.load(open(node.node_path, "rb"))
+        child_node_names = node_object.child_node_names
+
+        for child_name in child_node_names:
+            child_node = OnlineNode(
+                node_path=self.node_save_paths[child_name],
+                parent_node=node,
+                child_nodes=[])
+            node.child_nodes.append(child_node)
+            self._prepare_iterator(child_node)
+
+        return
+        
+    def _process_node(self, Ks, depth, original_indices, node_name, parent_node_name, parent_topic):
+        # where to save current node
         try:
-            depth_save_path = os.path.join(self.experiment_name, "depth_"+str(node.depth))
+            node_save_path = os.path.join(self.experiment_name, "depth_"+str(depth), node_name)
             try:
-                if not Path(depth_save_path).is_dir():
-                    Path(depth_save_path).mkdir(parents=True)
+                if not Path(node_save_path).is_dir():
+                    Path(node_save_path).mkdir(parents=True)
             except Exception as e:
                 print(e)
         except Exception as e:
             print(e)
 
-        # obtain the current X using the original X
-        if self.generate_X_callback is None or node.depth == 0:
+        #
+        # Create a node object
+        #
+        target_jobs = []
+        current_node = Node(
+                node_name=node_name,
+                depth=depth,
+                parent_topic=parent_topic,
+                parent_node_name=parent_node_name,
+                original_indices=original_indices,
+                num_samples=len(original_indices),
+                child_node_names=[],
+                user_node_data={},
+                leaf=False,
+                W=None, H=None,
+                k=None,
+        )
+
+        #
+        # check if leaf node status
+        #
+        if (current_node.num_samples == 1) or (self.sample_thresh > 0 and (current_node.num_samples <= self.sample_thresh)):
+            current_node.leaf = True
+            pickle_path = f'{node_save_path}/node_{current_node.node_name}.p'
+            pickle.dump(current_node, open(pickle_path, "wb"))
+            return {"name":node_name, "target_jobs":[], "node_save_path":pickle_path}
+
+
+        #
+        # obtain the current X
+        #
+        if self.generate_X_callback is None or current_node.depth == 0:
             save_at_node = {}
             if self.cluster_on == "W":
-                curr_X = self.X[node.original_indices]
+                curr_X = self.X[current_node.original_indices]
 
             elif self.cluster_on == "H":
-                curr_X = self.X[:, node.original_indices]
-        # obtain the current X using the callback function
-        else:
-            curr_X, save_at_node = self.generate_X_callback(node.original_indices)
-            node.user_node_data = save_at_node.copy()
+                curr_X = self.X[:, current_node.original_indices]
 
-        # prepare directory to save the results
-        if node.depth >= len(self.nmfk_params):
+        else:
+            curr_X, save_at_node = self.generate_X_callback(current_node.original_indices)
+            current_node.user_node_data = save_at_node.copy()
+
+
+        #
+        # prepare the current nmfk parameters
+        #
+        if current_node.depth >= len(self.nmfk_params):
             select_params = -1
         else:
-            select_params = node.depth 
+            select_params = current_node.depth 
         curr_nmfk_params = self.nmfk_params[select_params % len(self.nmfk_params)]
-        curr_nmfk_params["save_path"] = depth_save_path
+        curr_nmfk_params["save_path"] = node_save_path
 
+        #
         # apply nmfk
+        #
         model = NMFk(**curr_nmfk_params)
-        parent = node.parent_node
-
-        if parent is None:
-            folder_name = node.name
-        else:
-            folder_name = node.name+"-parent-"+str(node.parent_node.name)
-
-        results = model.fit(curr_X, Ks, name=folder_name)
+        results = model.fit(curr_X, Ks, name=f'NMFk-{node_name}')
         
+        #
         # Check if decomposition was not possible
+        #
         if results is None:
-            node.leaf = True
-            return
+            current_node.leaf = True
+            pickle_path = f'{node_save_path}/node_{current_node.node_name}.p'
+            pickle.dump(current_node, open(pickle_path, "wb"))
+            return {"name":node_name, "target_jobs":[], "node_save_path":pickle_path}
 
+        #
+        # latent factors
+        #
         if self.K2:
             factors_data = np.load(f'{model.save_path_full}/WH_k=2.npz')
-            node.W = factors_data["W"]
-            node.H = factors_data["H"]
-            node.k = 2
+            current_node.W = factors_data["W"]
+            current_node.H = factors_data["H"]
+            current_node.k = 2
         
         else:
             predict_k = results["k_predict"]
             factors_data = np.load(f'{model.save_path_full}/WH_k={predict_k}.npz')
-            node.W = factors_data["W"]
-            node.H = factors_data["H"]
-            node.k = predict_k
-            
-        # obtain the clusters
+            current_node.W = factors_data["W"]
+            current_node.H = factors_data["H"]
+            current_node.k = predict_k
+        
+        #
+        # apply clustering
+        #
         if self.cluster_on == "W":
-            cluster_labels = np.argmax(node.W, axis=1)
-            clusters = np.arange(0, node.W.shape[1], 1)
+            cluster_labels = np.argmax(current_node.W, axis=1)
+            clusters = np.arange(0, current_node.W.shape[1], 1)
 
         elif self.cluster_on == "H":
-            cluster_labels = np.argmax(node.H, axis=0)
-            clusters = np.arange(0, node.H.shape[0], 1)
+            cluster_labels = np.argmax(current_node.H, axis=0)
+            clusters = np.arange(0, current_node.H.shape[0], 1)
 
         # obtain the unique number of clusters that samples falls to
         n_clusters = len(set(cluster_labels))
 
         # leaf node or single cluster or all samples in same cluster
-        if ((node.depth >= self.depth) and self.depth > 0) or node.k == 1 or n_clusters == 1:
-            node.leaf = True
-            return
+        if ((current_node.depth >= self.depth) and self.depth > 0) or current_node.k == 1 or n_clusters == 1:
+            current_node.leaf = True
+            pickle_path = f'{node_save_path}/node_{current_node.node_name}.p'
+            pickle.dump(current_node, open(pickle_path, "wb"))
+            return {"name":node_name, "target_jobs":[], "node_save_path":pickle_path}
         
-        # go through each topic
+        #
+        # go through each topic/cluster
+        #
         for c in clusters:
 
             # current cluster samples
@@ -295,45 +495,46 @@ class HNMFk():
             if len(cluster_c_indices) == 0:
                 continue
 
-            # create a new child node for the cluster
-            self.node_count += 1
-            child_node = Node(
-                node_num=self.node_count,
-                depth=node.depth + 1,
-                W=None, H=None,
-                k=-1,
-                parent_topic=c,
-                parent_node=node,
-                parent_node_name=node.name,
-                child_nodes=[],
-                child_node_names=[],
-                original_indices=node.original_indices[cluster_c_indices],
-                num_samples=len(cluster_c_indices),
-                leaf=False,
-                user_node_data={}
-            )
-            node.child_nodes.append(child_node)
-            node.child_node_names.append(child_node.name)
+            # save current results
+            next_name = str(uuid.uuid1())
+            current_node.child_node_names.append(next_name)
+            
+            # prepare next job
+            next_job = {
+                "parent_node_name":node_name,
+                "node_name":next_name,
+                "Ks":self._get_curr_Ks(node_k=current_node.k, num_samples=len(cluster_c_indices)),
+                "original_indices":cluster_c_indices.copy(),
+                "depth":current_node.depth+1,
+                "parent_topic":c,
+            }
+            target_jobs.append(next_job)
 
-            # prepare to go to the next depth
-            if not self.K2:
-                if self.Ks_deep_max is None:
-                    k_max = node.k + 1
-                else:
-                    k_max = self.Ks_deep_max + 1
 
-                new_max_K = min(k_max, min(len(child_node.original_indices), self.num_features))
-                new_Ks = range(self.Ks_deep_min, new_max_K, self.Ks_deep_step)
+        # save the node
+        pickle_path = f'{node_save_path}/node_{current_node.node_name}.p'
+        pickle.dump(current_node, open(pickle_path, "wb"))
+
+        return {"name":node_name, "target_jobs":target_jobs, "node_save_path":pickle_path}
+    
+    def _get_curr_Ks(self, node_k, num_samples):
+        if not self.K2:
+            if self.Ks_deep_max is None:
+                k_max = node_k + 1
             else:
-                new_Ks = [2]
-                
-            self._hierarchical_nmfk(child_node, new_Ks)
+                k_max = self.Ks_deep_max + 1
 
-        return
+            new_max_K = min(k_max, min(num_samples, self.num_features))
+            new_Ks = range(self.Ks_deep_min, new_max_K, self.Ks_deep_step)
+        else:
+            new_Ks = [2]
+        
+        return new_Ks
 
     def traverse_nodes(self):
         """
-        Graph iterator. Returns all nodes in list format.
+        Graph iterator. Returns all nodes in list format.\n
+        This operation will load each node persistently into the memory.
 
         Returns
         -------
@@ -353,15 +554,13 @@ class HNMFk():
         for nn in node.child_nodes:
             self._get_traversal(nn)
 
-        data = vars(node).copy()
-        del data["child_nodes"]
-        del data["parent_node"]
-
+        data = vars(node(persistent=True)).copy()
         self._all_nodes.append(data)
 
     def go_to_root(self):
         """
-        Graph iterator. Goes to root node.
+        Graph iterator. Goes to root node.\n
+        This operation is online, only one node is kept in the memory at a time.
 
         Returns
         -------
@@ -370,14 +569,13 @@ class HNMFk():
 
         """
         self.iterator = self.root
-        data = vars(self.iterator).copy()
-        del data["child_nodes"]
-        del data["parent_node"]
+        data = vars(self.iterator()).copy()
         return data
 
     def get_node(self):
         """
-        Graph iterator. Returns the current node.
+        Graph iterator. Returns the current node.\n
+        This operation is online, only one node is kept in the memory at a time.
 
         Returns
         -------
@@ -385,14 +583,13 @@ class HNMFk():
             Dictionary format of node.
 
         """
-        data = vars(self.iterator).copy()
-        del data["child_nodes"]
-        del data["parent_node"]
+        data = vars(self.iterator()).copy()
         return data
 
     def go_to_parent(self):
         """
-        Graph iterator. Goes to the parent of current node.
+        Graph iterator. Goes to the parent of current node.\n
+        This operation is online, only one node is kept in the memory at a time.
 
         Returns
         -------
@@ -401,16 +598,15 @@ class HNMFk():
         """
         if self.iterator is not None:
             self.iterator = self.iterator.parent_node
-            data = vars(self.iterator).copy()
-            del data["child_nodes"]
-            del data["parent_node"]
+            data = vars(self.iterator()).copy()
             return data
         else:
             print("At the root! There is no parents.")
 
     def go_to_children(self, idx: int):
         """
-        Graph iterator. Goes to the child node specified by index.
+        Graph iterator. Goes to the child node specified by index.\n
+        This operation is online, only one node is kept in the memory at a time.
 
         Parameters
         ----------
@@ -425,9 +621,7 @@ class HNMFk():
 
         try:
             self.iterator = self.iterator.child_nodes[idx]
-            data = vars(self.iterator).copy()
-            del data["child_nodes"]
-            del data["parent_node"]
+            data = vars(self.iterator()).copy()
             return data
 
         except:
@@ -447,3 +641,105 @@ class HNMFk():
 
 
         return params
+
+    def _signal_workers_exit(self, comm):
+        for job_rank in range(1, self.n_nodes, 1):
+            req = comm.isend(np.array([True]),
+                             dest=job_rank, tag=int(f'400{job_rank}'))
+            req.wait()
+
+    def _worker_check_exit_status(self, rank, comm):
+        if comm.iprobe(source=0, tag=int(f'400{rank}')):
+            sys.exit(0)
+
+    def _get_next_job_at_worker(self, rank, comm):
+        job_flag = True
+        if comm.iprobe(source=0, tag=int(f'200{rank}')):
+            req = comm.irecv(buf=bytearray(b" " * self.comm_buff_size),
+                             source=0, tag=int(f'200{rank}'))
+            data = req.wait()
+
+        else:
+            job_flag = False
+            data = {}
+
+        return data, job_flag
+
+    def _collect_results_from_workers(self, rank, comm):
+
+        all_results = []
+        # collect results at root
+        if self.n_nodes > 1 and rank == 0:
+            for job_rank, status_info in self.node_status.items():
+                if self.node_status[job_rank]["free"] == False and comm.iprobe(source=job_rank, tag=int(f'300{job_rank}')):
+                    req = comm.irecv(buf=bytearray(b" " * self.comm_buff_size),
+                                     source=job_rank, tag=int(f'300{job_rank}'))
+                    node_results = req.wait()
+                    self.node_status[job_rank]["free"] = True
+                    self.node_status[job_rank]["job"] = None
+                    all_results.append(node_results)
+
+        return all_results
+    
+    def _send_job_to_worker_nodes(self, comm):
+        scheduled = 0
+        available_jobs = list(self.target_jobs.keys())
+        # remove the jobs that are in the nodes from the available jobs
+        for _, status_info in self.node_status.items():
+            if status_info["job"] is not None and status_info["free"] is False:
+                try:
+                    _ = available_jobs.pop(available_jobs.index(status_info["job"]))
+                except Exception as e:
+                    print(e)
+        
+        for job_rank, status_info in self.node_status.items():
+            if len(available_jobs) > 0 and status_info["free"]:
+                next_job = available_jobs.pop(0)
+                req = comm.isend(self.target_jobs[next_job],
+                                 dest=job_rank, tag=int(f'200{job_rank}'))
+                req.wait()
+                self.node_status[job_rank]["free"] = False
+                self.node_status[job_rank]["job"] = next_job
+                scheduled += 1
+    
+    def _process_results(self, node_results, save_checkpoint):
+        # remove the job
+        del self.target_jobs[node_results["name"]]
+
+        # save node save paths
+        self.node_save_paths[node_results["name"]] = node_results["node_save_path"]
+
+        # save
+        for next_job in node_results["target_jobs"]:
+            self.target_jobs[next_job["node_name"]] = next_job
+
+        # checkpointing
+        if save_checkpoint:
+            self._save_checkpoint()
+
+    def _load_checkpoint_file(self):
+        try:
+            saved_class_params = pickle.load(
+                open(os.path.join(self.experiment_save_path, "checkpoint.p"), "rb")
+            )
+            return saved_class_params
+        except Exception:
+            warnings.warn("No checkpoint file found!")
+            return {}
+            
+    def _load_checkpoint(self, saved_class_params):
+        if self.verbose:
+            print("Loading saved object state from checkpoint...")
+
+        self._set_params(saved_class_params)
+
+    def _set_params(self, class_parameters):
+        """Sets class variables from the loaded checkpoint"""
+        for parameter, value in class_parameters.items():
+            setattr(self, parameter, value)
+
+    def _save_checkpoint(self):
+        class_params = vars(self).copy()
+        del class_params["X"]
+        pickle.dump(class_params, open(os.path.join(
+            self.experiment_save_path, "checkpoint.p"), "wb"))

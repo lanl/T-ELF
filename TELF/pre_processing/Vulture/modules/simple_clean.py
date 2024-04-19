@@ -101,7 +101,16 @@ class SimpleCleaner(VultureModuleBase):
     }
     
 
-    def __init__(self, custom_patterns=None, stop_words=None, stop_phrases=None, min_characters=2, order=None, frozen=None):
+    def __init__(self, 
+                 custom_patterns=None, 
+                 stop_words=None, 
+                 stop_phrases=None, 
+                 min_characters=2, 
+                 exclude_hyphenated_stopwords=False,
+                 order=None, 
+                 frozen=None,
+                 ):
+        
         self._frozen = set()
         self.module_type = "CLEANER"
         self.effective_stop_words = None
@@ -114,6 +123,7 @@ class SimpleCleaner(VultureModuleBase):
         self.stop_phrases = stop_phrases
         self.min_characters = min_characters
         self.order = order
+        self.exclude_hyphenated_stopwords = exclude_hyphenated_stopwords
         
         self.sw_pattern = re.compile(r'\b[\w-]+\b')
         super().__init__(frozen)
@@ -210,7 +220,7 @@ class SimpleCleaner(VultureModuleBase):
             return ' '.join([t if t in self.frozen else t.lower() for t in tokens])
   
 
-    def _remove_stop_words(self, text, stop_words=None):
+    def _remove_stop_words(self, text ):
         """
         Removes stop words from text
 
@@ -218,8 +228,6 @@ class SimpleCleaner(VultureModuleBase):
         ----------
         text: str
             Document text.
-        stop_words: iterable
-            The stopwords to remove
 
         Returns
         -------
@@ -232,10 +240,17 @@ class SimpleCleaner(VultureModuleBase):
             return text
         else:
             tokens = self.sw_pattern.findall(text)
-            cleaned_words = [t for t in tokens if 
-                             t in self.frozen or  # entire term in frozen
-                             not any(part.lower() in self.effective_stop_words for part in t.split('-'))]  # no part in stopwords
-            return ' '.join(cleaned_words)
+
+            if self.exclude_hyphenated_stopwords:
+                cleaned_words = [t for t in tokens if 
+                                t in self.frozen or  # entire term in frozen
+                                not any(t.lower() in self.effective_stop_words)] 
+                return ' '.join(cleaned_words)
+            else:
+                cleaned_words = [t for t in tokens if 
+                                t in self.frozen or  # entire term in frozen
+                                not any(part.lower() in self.effective_stop_words for part in t.split('-'))]  # no part in stopwords
+                return ' '.join(cleaned_words)
 
         
     def _remove_stop_words_helper(self, text):

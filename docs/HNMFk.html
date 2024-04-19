@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF.factorization.HNMFk: Hierarchical Non-negative Matrix Factorization with Automatic Model Determination &#8212; TELF 0.0.14 documentation</title>
+    <title>TELF.factorization.HNMFk: Hierarchical Non-negative Matrix Factorization with Automatic Model Determination &#8212; TELF 0.0.15 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="_static/documentation_options.js?v=16242e91"></script>
+    <script src="_static/documentation_options.js?v=add8ac8c"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -127,7 +127,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.14 documentation</p>
+    <p class="title logo__title">TELF 0.0.15 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -338,6 +338,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.HNMFk.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.HNMFk.OnlineNode"><code class="docutils literal notranslate"><span class="pre">OnlineNode</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -363,7 +364,7 @@ document.write(`
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">HNMFk.__init__</span></code>([nmfk_params, cluster_on, ...])</p></td>
 <td><p>HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#TELF.factorization.HNMFk.HNMFk.fit" title="TELF.factorization.HNMFk.HNMFk.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HNMFk.fit</span></code></a>(X, Ks)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.factorization.HNMFk.HNMFk.fit" title="TELF.factorization.HNMFk.HNMFk.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HNMFk.fit</span></code></a>(X, Ks[, from_checkpoint, ...])</p></td>
 <td><p>Factorize the input matrix <code class="docutils literal notranslate"><span class="pre">X</span></code> for the each given K value in <code class="docutils literal notranslate"><span class="pre">Ks</span></code>.</p></td>
 </tr>
 </tbody>
@@ -371,9 +372,12 @@ document.write(`
 </section>
 <section id="module-TELF.factorization.HNMFk">
 <span id="module-contents"></span><h1>Module Contents<a class="headerlink" href="#module-TELF.factorization.HNMFk" title="Link to this heading">#</a></h1>
+<p>job-schedule - 200
+job-complete - 300
+signal-exit  - 400</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="TELF.factorization.HNMFk.HNMFk">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.factorization.HNMFk.</span></span><span class="sig-name descname"><span class="pre">HNMFk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nmfk_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[{}]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'H'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ks_deep_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ks_deep_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ks_deep_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'HNMFk_Output'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_X_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#HNMFk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.HNMFk" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.factorization.HNMFk.</span></span><span class="sig-name descname"><span class="pre">HNMFk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nmfk_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[{}]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'H'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ks_deep_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ks_deep_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ks_deep_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'HNMFk_Output'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_X_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm_buff_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#HNMFk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.HNMFk" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.</p>
 <dl class="field-list simple">
@@ -405,6 +409,7 @@ The default is -1.</p></li>
 The default is None.</p>
 </p></li>
 <li><p><strong>n_nodes</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of HPC nodes. The default is 1.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, it prints progress. The default is True.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -413,7 +418,7 @@ The default is None.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="TELF.factorization.HNMFk.HNMFk.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ks</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#HNMFk.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.HNMFk.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_checkpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_checkpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#HNMFk.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.HNMFk.fit" title="Link to this definition">#</a></dt>
 <dd><p>Factorize the input matrix <code class="docutils literal notranslate"><span class="pre">X</span></code> for the each given K value in <code class="docutils literal notranslate"><span class="pre">Ks</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -422,6 +427,8 @@ The default is None.</p>
 <li><p><strong>Ks</strong> (<em>list</em>) – <p>List of K values to factorize the input matrix.</p>
 <p><strong>Example:</strong> <code class="docutils literal notranslate"><span class="pre">Ks=range(1,</span> <span class="pre">10,</span> <span class="pre">1)</span></code>.</p>
 </p></li>
+<li><p><strong>from_checkpoint</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, it continues the process from the checkpoint. The default is False.</p></li>
+<li><p><strong>save_checkpoint</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, it saves checkpoints. The default is False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -434,6 +441,7 @@ The default is None.</p>
 <dt class="sig sig-object py" id="TELF.factorization.HNMFk.HNMFk.get_node">
 <span class="sig-name descname"><span class="pre">get_node</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#HNMFk.get_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.HNMFk.get_node" title="Link to this definition">#</a></dt>
 <dd><p>Graph iterator. Returns the current node.</p>
+<p>This operation is online, only one node is kept in the memory at a time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – Dictionary format of node.</p>
@@ -448,6 +456,7 @@ The default is None.</p>
 <dt class="sig sig-object py" id="TELF.factorization.HNMFk.HNMFk.go_to_children">
 <span class="sig-name descname"><span class="pre">go_to_children</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#HNMFk.go_to_children"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.HNMFk.go_to_children" title="Link to this definition">#</a></dt>
 <dd><p>Graph iterator. Goes to the child node specified by index.</p>
+<p>This operation is online, only one node is kept in the memory at a time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>idx</strong> (<em>int</em>) – Child index.</p>
@@ -465,6 +474,7 @@ The default is None.</p>
 <dt class="sig sig-object py" id="TELF.factorization.HNMFk.HNMFk.go_to_parent">
 <span class="sig-name descname"><span class="pre">go_to_parent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#HNMFk.go_to_parent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.HNMFk.go_to_parent" title="Link to this definition">#</a></dt>
 <dd><p>Graph iterator. Goes to the parent of current node.</p>
+<p>This operation is online, only one node is kept in the memory at a time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – Dictionary format of node.</p>
@@ -479,6 +489,7 @@ The default is None.</p>
 <dt class="sig sig-object py" id="TELF.factorization.HNMFk.HNMFk.go_to_root">
 <span class="sig-name descname"><span class="pre">go_to_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#HNMFk.go_to_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.HNMFk.go_to_root" title="Link to this definition">#</a></dt>
 <dd><p>Graph iterator. Goes to root node.</p>
+<p>This operation is online, only one node is kept in the memory at a time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – Dictionary format of node.</p>
@@ -493,6 +504,7 @@ The default is None.</p>
 <dt class="sig sig-object py" id="TELF.factorization.HNMFk.HNMFk.traverse_nodes">
 <span class="sig-name descname"><span class="pre">traverse_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#HNMFk.traverse_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.HNMFk.traverse_nodes" title="Link to this definition">#</a></dt>
 <dd><p>Graph iterator. Returns all nodes in list format.</p>
+<p>This operation will load each node persistently into the memory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – List of all nodes where each node is a dictionary.</p>
@@ -507,7 +519,13 @@ The default is None.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="TELF.factorization.HNMFk.Node">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.factorization.HNMFk.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_topic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child_node_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_indices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_node_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#Node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.Node" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.factorization.HNMFk.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_topic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_node_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child_node_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_indices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_node_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#Node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.Node" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="TELF.factorization.HNMFk.OnlineNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.factorization.HNMFk.</span></span><span class="sig-name descname"><span class="pre">OnlineNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/HNMFk.html#OnlineNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.HNMFk.OnlineNode" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 </dd></dl>
 
@@ -570,6 +588,7 @@ The default is None.</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.HNMFk.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.HNMFk.OnlineNode"><code class="docutils literal notranslate"><span class="pre">OnlineNode</span></code></a></li>
 </ul>
 </li>
 </ul>
