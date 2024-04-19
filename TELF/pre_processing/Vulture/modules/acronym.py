@@ -31,7 +31,6 @@ def flatten_acronym_dict(acronym_dict):
 class AcronymDetector(VultureModuleBase):
     """
     An operator that detects Acronyms in text.
-
     """
 
     def __init__(self, 
@@ -119,6 +118,21 @@ class AcronymDetector(VultureModuleBase):
     
 
     def _detect_acronym_helper(self, df):
+        """
+        Detect acronyms based on the input DataFrame.
+
+        Parameters
+        ----------
+        self: object
+            The AcronymDetector object
+        df: DataFrame
+            A DataFrame containing 'word', 'tf', and 'df' columns
+
+        Returns
+        -------
+        dict
+            A dictionary containing detected acronyms
+        """
         acronyms = {}
         for gram,tf, df in zip(df['word'],df['tf'], df['df']):
             gram_parts = gram.split()
@@ -141,13 +155,10 @@ class AcronymDetector(VultureModuleBase):
                     words_composing_acronym = " ".join(gram_without_beginning)      
                     acronym = first_part
 
-              
                 if words_composing_acronym in acronyms:
                     warning_sring = f'The document at id="{self.current_document_id}" defines "{last_part}" as an acronym twice, using last occurance!'
 
                     warnings.warn(warning_sring)
-
                 acronyms[words_composing_acronym] = acronym
-
 
         return acronyms
