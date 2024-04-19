@@ -1,4 +1,4 @@
-import permutations 
+from itertools import permutations 
 import re
 
 def expand_materials_regex(material:str):
