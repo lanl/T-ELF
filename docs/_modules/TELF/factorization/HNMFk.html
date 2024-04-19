@@ -372,6 +372,7 @@ document.write(`
                  <span class="n">generate_X_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">n_nodes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">comm_buff_size</span><span class="o">=</span><span class="mi">10000000</span><span class="p">,</span>
                  <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.</span>
@@ -432,6 +433,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">generate_X_callback</span> <span class="o">=</span> <span class="n">generate_X_callback</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">=</span> <span class="n">n_nodes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comm_buff_size</span> <span class="o">=</span> <span class="n">comm_buff_size</span>
 
         <span class="n">organized_nmfk_params</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">nmfk_params</span><span class="p">:</span>
@@ -445,6 +447,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_all_nodes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># path to save </span>
@@ -507,9 +510,7 @@ document.write(`
 
         <span class="c1">#</span>
         <span class="c1"># Checkpointing and job setup</span>
-        <span class="c1">#</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span>    
-        
+        <span class="c1">#   </span>
         <span class="k">if</span> <span class="n">from_checkpoint</span><span class="p">:</span>
             <span class="n">checkpoint_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_checkpoint_file</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
@@ -529,22 +530,28 @@ document.write(`
             <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">==</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span>
                     <span class="n">original_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
                 <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span>
                     <span class="n">original_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    
 
-                <span class="n">root_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span><span class="p">())</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">[</span><span class="n">root_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span><span class="p">())</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                     <span class="s2">&quot;parent_node_name&quot;</span><span class="p">:</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;node_name&quot;</span><span class="p">:</span><span class="n">root_name</span><span class="p">,</span>
+                    <span class="s2">&quot;node_name&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">,</span>
                     <span class="s2">&quot;Ks&quot;</span><span class="p">:</span><span class="n">Ks</span><span class="p">,</span>
                     <span class="s2">&quot;original_indices&quot;</span><span class="p">:</span><span class="n">original_indices</span><span class="p">,</span>
                     <span class="s2">&quot;depth&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
                     <span class="s2">&quot;parent_topic&quot;</span><span class="p">:</span><span class="kc">None</span>
                 <span class="p">}</span>
 
+        <span class="c1"># save data matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span> 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">==</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown clustering method!&quot;</span><span class="p">)</span>
 
         <span class="c1"># wait for everyone</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -555,27 +562,41 @@ document.write(`
         <span class="c1"># Run HNMFk</span>
         <span class="c1"># </span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            
+
             <span class="c1"># check exit status </span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;free&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="o">.</span><span class="n">items</span><span class="p">()]):</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_signal_workers_exit</span><span class="p">(</span><span class="n">comm</span><span class="p">)</span>
                 <span class="k">break</span>
-            
+                
+            <span class="c1">#</span>
             <span class="c1"># worker nodes check exit status</span>
+            <span class="c1">#</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_worker_check_exit_status</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">comm</span><span class="p">)</span>
 
-            <span class="c1"># recieve jobs from rank 0 at worker ndoes</span>
+            <span class="c1">#</span>
+            <span class="c1"># send job to worker nodes</span>
+            <span class="c1">#</span>
+            <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_send_job_to_worker_nodes</span><span class="p">(</span><span class="n">comm</span><span class="p">)</span>
+
+            <span class="c1">#</span>
+            <span class="c1"># recieve jobs from rank 0 at worker nodes</span>
+            <span class="c1">#</span>
             <span class="k">elif</span> <span class="n">rank</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">job_data</span><span class="p">,</span> <span class="n">job_flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_next_job_at_worker</span><span class="p">(</span>
                     <span class="n">rank</span><span class="p">,</span> <span class="n">comm</span><span class="p">)</span>
 
+            <span class="c1">#</span>
             <span class="c1"># single node job schedule</span>
+            <span class="c1">#</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">available_jobs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
                 <span class="n">next_job</span> <span class="o">=</span> <span class="n">available_jobs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 <span class="n">job_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">[</span><span class="n">next_job</span><span class="p">]</span>
+                <span class="n">job_flag</span> <span class="o">=</span> <span class="kc">True</span>
+
 
             <span class="c1"># do the job</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">rank</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">job_flag</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
@@ -608,7 +629,7 @@ document.write(`
 
         <span class="c1"># prepare online iterator</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">OnlineNode</span><span class="p">(</span>
-            <span class="n">node_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="p">[</span><span class="n">root_name</span><span class="p">],</span>
+            <span class="n">node_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">],</span>
             <span class="n">parent_node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">child_nodes</span><span class="o">=</span><span class="p">[]</span>
         <span class="p">)</span>
@@ -635,7 +656,6 @@ document.write(`
         <span class="k">return</span>
         
     <span class="k">def</span> <span class="nf">_process_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Ks</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">original_indices</span><span class="p">,</span> <span class="n">node_name</span><span class="p">,</span> <span class="n">parent_node_name</span><span class="p">,</span> <span class="n">parent_topic</span><span class="p">):</span>
-
         <span class="c1"># where to save current node</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">node_save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="s2">&quot;depth_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">depth</span><span class="p">),</span> <span class="n">node_name</span><span class="p">)</span>
@@ -966,6 +986,27 @@ document.write(`
 
         <span class="k">return</span> <span class="n">all_results</span>
     
+    <span class="k">def</span> <span class="nf">_send_job_to_worker_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comm</span><span class="p">):</span>
+        <span class="n">scheduled</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">available_jobs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="c1"># remove the jobs that are in the nodes from the available jobs</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">status_info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">status_info</span><span class="p">[</span><span class="s2">&quot;job&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">status_info</span><span class="p">[</span><span class="s2">&quot;free&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">_</span> <span class="o">=</span> <span class="n">available_jobs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">available_jobs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">status_info</span><span class="p">[</span><span class="s2">&quot;job&quot;</span><span class="p">]))</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">job_rank</span><span class="p">,</span> <span class="n">status_info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">available_jobs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">status_info</span><span class="p">[</span><span class="s2">&quot;free&quot;</span><span class="p">]:</span>
+                <span class="n">next_job</span> <span class="o">=</span> <span class="n">available_jobs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">req</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">isend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">[</span><span class="n">next_job</span><span class="p">],</span>
+                                 <span class="n">dest</span><span class="o">=</span><span class="n">job_rank</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;200</span><span class="si">{</span><span class="n">job_rank</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span>
+                <span class="n">req</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="p">[</span><span class="n">job_rank</span><span class="p">][</span><span class="s2">&quot;free&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="p">[</span><span class="n">job_rank</span><span class="p">][</span><span class="s2">&quot;job&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">next_job</span>
+                <span class="n">scheduled</span> <span class="o">+=</span> <span class="mi">1</span>
+    
     <span class="k">def</span> <span class="nf">_process_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_results</span><span class="p">,</span> <span class="n">save_checkpoint</span><span class="p">):</span>
         <span class="c1"># remove the job</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">[</span><span class="n">node_results</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>
@@ -1004,6 +1045,7 @@ document.write(`
 
     <span class="k">def</span> <span class="nf">_save_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">class_params</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">del</span> <span class="n">class_params</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span>
         <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">class_params</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">,</span> <span class="s2">&quot;checkpoint.p&quot;</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span></div>
 
