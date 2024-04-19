@@ -29,7 +29,7 @@ def expand_materials_regex(material:str, include_lower_case=True):
     
     return list(set(permuted_materials))  # Remove duplicates and return
 
-def permute_material_list(materials:list,  save_path:str ,sort=True,):
+def permute_material_list(materials:list,  save_path:str=None, sort:bool=True,):
     """
     Generates a list of permuted materials based on the given list of materials.
 
@@ -47,12 +47,13 @@ def permute_material_list(materials:list,  save_path:str ,sort=True,):
     list
         A list of permuted materials.
     """
-    if sort:
-        materials.sort()
     
     permuted_materials = []
     for material in materials:
         permuted_materials += expand_materials_regex(material)
+
+    if sort:
+        permuted_materials.sort(key=str.lower)
 
     if save_path:
         with open(save_path, 'w') as f:
