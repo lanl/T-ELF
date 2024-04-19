@@ -536,8 +536,13 @@ class HNMFk():
         return {"name":node_name, "target_jobs":target_jobs, "node_save_path":pickle_path}
     
     def _adjust_curr_Ks(self, X_shape, Ks):
-        if min(X_shape) >= max(Ks):
-            Ks = range(1, min(X_shape), self.Ks_deep_step)
+        if max(Ks) >= min(X_shape):
+            try:
+                Ks = range(1, min(X_shape), self.Ks_deep_step)
+            except Exception as e:
+                print(e)
+                return []
+            
         return Ks
     
     def _get_curr_Ks(self, node_k, num_samples):
