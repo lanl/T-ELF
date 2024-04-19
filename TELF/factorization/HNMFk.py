@@ -396,9 +396,9 @@ class HNMFk():
         )
 
         #
-        # check if leaf node status
+        # check if leaf node status based on number of samples
         #
-        if (current_node.num_samples == 1) or (self.sample_thresh > 0 and (current_node.num_samples <= self.sample_thresh)):
+        if (current_node.num_samples == 1):
             current_node.leaf = True
             pickle_path = f'{node_save_path}/node_{current_node.node_name}.p'
             pickle.dump(current_node, open(pickle_path, "wb"))
@@ -479,6 +479,13 @@ class HNMFk():
             current_node.W = factors_data["W"]
             current_node.H = factors_data["H"]
             current_node.k = predict_k
+
+        # sample threshold check for leaf node determination
+        if self.sample_thresh > 0 and (current_node.num_samples <= self.sample_thresh):
+            current_node.leaf = True
+            pickle_path = f'{node_save_path}/node_{current_node.node_name}.p'
+            pickle.dump(current_node, open(pickle_path, "wb"))
+            return {"name":node_name, "target_jobs":[], "node_save_path":pickle_path}
         
         #
         # apply clustering
@@ -494,7 +501,7 @@ class HNMFk():
         # obtain the unique number of clusters that samples falls to
         n_clusters = len(set(cluster_labels))
 
-        # leaf node or single cluster or all samples in same cluster
+        # leaf node based on depth limit or single cluster or all samples in same cluster
         if ((current_node.depth >= self.depth) and self.depth > 0) or current_node.k == 1 or n_clusters == 1:
             current_node.leaf = True
             pickle_path = f'{node_save_path}/node_{current_node.node_name}.p'
