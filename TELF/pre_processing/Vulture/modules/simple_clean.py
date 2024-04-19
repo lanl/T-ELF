@@ -244,7 +244,7 @@ class SimpleCleaner(VultureModuleBase):
             if self.exclude_hyphenated_stopwords:
                 cleaned_words = [t for t in tokens if 
                                 t in self.frozen or  # entire term in frozen
-                                not any(t.lower() in self.effective_stop_words)] 
+                                not t.lower() in self.effective_stop_words] 
                 return ' '.join(cleaned_words)
             else:
                 cleaned_words = [t for t in tokens if 

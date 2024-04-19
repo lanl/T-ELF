@@ -1,4 +1,5 @@
 import pandas as pd
+from tqdm import tqdm
 
 def levenshtein_distance(s1, s2):
     """
@@ -78,7 +79,7 @@ def replace_similar_keys_levenshtein(dict_list, changes_made_save_path=None, sim
     changes = []
 
     sorted_keys = sorted(all_keys)   
-    for key1 in sorted_keys:
+    for key1 in tqdm(sorted_keys):
         for key2 in sorted_keys:
             if key1 != key2:
                 similar_bool, similar_score = is_levenshtein_similar(key1, key2, similarity_threshold)
