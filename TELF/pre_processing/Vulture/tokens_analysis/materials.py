@@ -1,7 +1,7 @@
 from itertools import permutations 
 import re
 
-def expand_materials_regex(material:str):
+def expand_materials_regex(material:str, include_lower_case=True):
     """
     Expand a given material string by finding all the elements that match the regex pattern and generating all possible permutations of those elements.
 
@@ -9,6 +9,8 @@ def expand_materials_regex(material:str):
     ----------
     material : str
         The material string to be expanded.
+    include_lower_case : bool
+        if the permutations should be duplicated, lowercased, then added back to the permutations
 
     Returns
     -------
@@ -20,6 +22,10 @@ def expand_materials_regex(material:str):
     
     permuted_elements = permutations(elements)
     permuted_materials = [''.join(perm) for perm in permuted_elements]
+
+    if include_lower_case:
+        lower_case_materials = [material.lower() for material in permuted_materials]
+        permuted_materials += lower_case_materials
     
     return list(set(permuted_materials))  # Remove duplicates and return
 
