@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.15 documentation</title>
+    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.16 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../../../_static/documentation_options.js?v=add8ac8c"></script>
+    <script src="../../../_static/documentation_options.js?v=baac2cea"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.15 documentation</p>
+    <p class="title logo__title">TELF 0.0.16 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -710,6 +710,14 @@ document.write(`
             <span class="n">curr_X</span><span class="p">,</span> <span class="n">save_at_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_X_callback</span><span class="p">(</span><span class="n">current_node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">)</span>
             <span class="n">current_node</span><span class="o">.</span><span class="n">user_node_data</span> <span class="o">=</span> <span class="n">save_at_node</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
+        <span class="c1">#</span>
+        <span class="c1"># Based on number of features or samples, no seperation possible</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">curr_X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">current_node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">pickle_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">node_save_path</span><span class="si">}</span><span class="s1">/node_</span><span class="si">{</span><span class="n">current_node</span><span class="o">.</span><span class="n">node_name</span><span class="si">}</span><span class="s1">.p&#39;</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="n">node_name</span><span class="p">,</span> <span class="s2">&quot;target_jobs&quot;</span><span class="p">:[],</span> <span class="s2">&quot;node_save_path&quot;</span><span class="p">:</span><span class="n">pickle_path</span><span class="p">}</span>
 
         <span class="c1">#</span>
         <span class="c1"># prepare the current nmfk parameters</span>
@@ -720,6 +728,16 @@ document.write(`
             <span class="n">select_params</span> <span class="o">=</span> <span class="n">current_node</span><span class="o">.</span><span class="n">depth</span> 
         <span class="n">curr_nmfk_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params</span><span class="p">[</span><span class="n">select_params</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params</span><span class="p">)]</span>
         <span class="n">curr_nmfk_params</span><span class="p">[</span><span class="s2">&quot;save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_save_path</span>
+
+        <span class="c1">#</span>
+        <span class="c1"># check for K range</span>
+        <span class="c1">#</span>
+        <span class="n">Ks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adjust_curr_Ks</span><span class="p">(</span><span class="n">curr_X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">Ks</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">current_node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">pickle_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">node_save_path</span><span class="si">}</span><span class="s1">/node_</span><span class="si">{</span><span class="n">current_node</span><span class="o">.</span><span class="n">node_name</span><span class="si">}</span><span class="s1">.p&#39;</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="n">node_name</span><span class="p">,</span> <span class="s2">&quot;target_jobs&quot;</span><span class="p">:[],</span> <span class="s2">&quot;node_save_path&quot;</span><span class="p">:</span><span class="n">pickle_path</span><span class="p">}</span>
 
         <span class="c1">#</span>
         <span class="c1"># apply nmfk</span>
@@ -806,6 +824,16 @@ document.write(`
         <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="n">node_name</span><span class="p">,</span> <span class="s2">&quot;target_jobs&quot;</span><span class="p">:</span><span class="n">target_jobs</span><span class="p">,</span> <span class="s2">&quot;node_save_path&quot;</span><span class="p">:</span><span class="n">pickle_path</span><span class="p">}</span>
+    
+    <span class="k">def</span> <span class="nf">_adjust_curr_Ks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_shape</span><span class="p">,</span> <span class="n">Ks</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">min</span><span class="p">(</span><span class="n">X_shape</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">Ks</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">X_shape</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_step</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">[]</span>
+            
+        <span class="k">return</span> <span class="n">Ks</span>
     
     <span class="k">def</span> <span class="nf">_get_curr_Ks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_k</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="p">:</span>
@@ -1046,6 +1074,9 @@ document.write(`
     <span class="k">def</span> <span class="nf">_save_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">class_params</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">del</span> <span class="n">class_params</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_X_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">class_params</span><span class="p">[</span><span class="s2">&quot;generate_X_callback&quot;</span><span class="p">]</span>
+
         <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">class_params</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">,</span> <span class="s2">&quot;checkpoint.p&quot;</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span></div>
 
