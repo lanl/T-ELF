@@ -177,6 +177,7 @@ def replace_similar_keys_levenshtein(dict_list,
                     dict_[preferred_key] = dict_.get(preferred_key, 0) + dict_.pop(less_preferred_key)
                 elif isinstance(dict_[less_preferred_key], str):
                     dict_[preferred_key] = dict_.get(preferred_key, '') + dict_.pop(less_preferred_key)
+
                 changes.append({
                     'Previous Key': less_preferred_key,
                     'New Key': preferred_key,
@@ -187,4 +188,5 @@ def replace_similar_keys_levenshtein(dict_list,
 
     if changes_made_save_path:
         changes_df.to_csv(changes_made_save_path, index=False)
+
     return dict_list, changes_df

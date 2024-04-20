@@ -23,7 +23,7 @@ def flatten_acronym_dict(acronym_dict):
         a list of dict that contain the acronyms.
     """
     acronym_dict_list = []
-    for id, data in acronym_dict:
+    for id, data in acronym_dict.items():
         acronym_dict_list.append(data['Acronyms'])
       
     return acronym_dict_list
