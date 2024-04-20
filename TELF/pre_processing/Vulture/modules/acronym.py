@@ -8,6 +8,27 @@ from TELF.pre_processing.Vulture.tokens_analysis.top_words import get_top_words
 FIRST_LETTER = 0
 LAST_PART_INDEX = -1
 
+def transform_acronyms_to_substitutions(old_list):
+    """
+    TODO: Document this
+    """
+    new_list = []
+    for dictionary in old_list:
+        if dictionary:  
+            index_dictionary = {}
+            for key, value in dictionary.items():
+                new_key = '_'.join(key.split())
+
+                index_dictionary[key] = new_key
+                index_dictionary[value] = new_key
+
+            new_list.append(index_dictionary)
+        else:
+            new_list.append({})
+                
+    return new_list
+
+
 def flatten_acronym_dict(acronym_dict):
     """
     Transform the acronym operator data into the format that will work for consolidation and substitution operators.
