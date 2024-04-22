@@ -322,17 +322,6 @@ class VocabularyConsolidator:
             consolidated_vocab, df_changes = self.replace_similar_keys_levenshtein(output_list, 
                                                                                    changes_made_save_path=changes_made_save_path)
             
-            ignore_set = set(ignore_pairs)
-            ignore_set.update((b, a) for a, b in ignore_pairs)
-
-            corpus_substitutions = {}
-            for p, n in zip(df_changes['Previous Key'], df_changes['New Key']):
-                if (p, n) not in ignore_set and (n, p) not in ignore_set:
-                    corpus_substitutions[p] = n
-            
-            if not vulture:
-                vulture = Vulture(n_jobs=-1, verbose=True)
-
             if operated_text_save_path:
                 split_path = operated_text_save_path.split(os.path.sep)
                 save_path = (os.path.sep).join(split_path[:-1])
@@ -340,6 +329,30 @@ class VocabularyConsolidator:
             else:
                 save_path = None
                 save_file = None
+
+            ignore_set = set(ignore_pairs)
+            ignore_set.update((b, a) for a, b in ignore_pairs)
+
+            corpus_substitutions = {}
+            for p, n in zip(df_changes['Previous Key'], df_changes['New Key']):
+                if (p, n) not in ignore_set and (n, p) not in ignore_set:
+                    corpus_substitutions[p] = n
+               
+            
+            substitutions_df = pd.DataFrame(list(corpus_substitutions.items()), columns=['Previous Key', 'New Key'])
+            if save_path and save_file:
+                full_save_path = os.path.join(save_path, 'corrected_substitutions_df.csv')
+            elif save_file:
+                full_save_path =  'corrected_substitutions_df.csv'
+            else:
+                full_save_path = None
+            if full_save_path:
+                substitutions_df.to_csv(full_save_path, index=False)
+
+
+            if not vulture:
+                vulture = Vulture(n_jobs=-1, verbose=True)
+
             output = vulture.operate(texts, 
                                      steps=[SubstitutionOperator(document_substitutions=None, 
                                                                  corpus_substitutions=corpus_substitutions,
