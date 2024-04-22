@@ -288,7 +288,8 @@ class VocabularyConsolidator:
                           texts=None, 
                           vulture=None, 
                           changes_made_save_path=None,
-                          operated_text_save_path=None):
+                          operated_text_save_path=None,
+                          ignore_pairs = None):
         """
         Consolidate terms in a vocabulary or a list of texts using a Vulture pre-processing engine.
 
@@ -318,10 +319,16 @@ class VocabularyConsolidator:
 
         if texts:
             output_list = self.unique_words_by_id(texts)
-            consolidated_vocab, df_changes = self.replace_similar_keys_levenshtein(output_list, changes_made_save_path=changes_made_save_path)
+            consolidated_vocab, df_changes = self.replace_similar_keys_levenshtein(output_list, 
+                                                                                   changes_made_save_path=changes_made_save_path)
+            
+            ignore_set = set(ignore_pairs)
+            ignore_set.update((b, a) for a, b in ignore_pairs)
+
             corpus_substitutions = {}
             for p, n in zip(df_changes['Previous Key'], df_changes['New Key']):
-                corpus_substitutions[p] = n
+                if (p, n) not in ignore_set and (n, p) not in ignore_set:
+                    corpus_substitutions[p] = n
             
             if not vulture:
                 vulture = Vulture(n_jobs=-1, verbose=True)
