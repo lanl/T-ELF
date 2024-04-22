@@ -69,7 +69,6 @@ class SubstitutionOperator(VultureModuleBase):
         """
         replaced_text = text
         for search, replace in substitution_map.items():
-            replaced_text = re.sub(r'\b{}\b'.format(search), replace, replaced_text)
-                
+            replaced_text = re.sub(r'\b{}\b'.format(re.escape(search)), replace, replaced_text)                
         return {"replaced_text":replaced_text}
     
