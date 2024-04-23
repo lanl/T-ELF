@@ -998,12 +998,20 @@ class NMFk:
                     k_predict = pvalue_analysis(
                         combined_result["col_err"], Ks, combined_result["sils_min_W"], SILL_thr=self.sill_thresh
                     )[0]
+                
                 elif self.predict_k_method == "sill":
+                    
+                    # check if that sill threshold exist
+                    if self.sill_thresh > min([max(combined_result["sils_min_W"]), max(combined_result["sils_min_H"])]):
+                        self.sill_thresh = min([max(combined_result["sils_min_W"]), max(combined_result["sils_min_H"])])
+                        warnings.warn(f'W or H Silhouettes were all less than sill_thresh. Setting sill_thresh to minimum for K prediction. sill_thresh={round(self.sill_thresh, 3)}')
+
                     k_predict_W = Ks[np.max(np.argwhere(
                         np.array(combined_result["sils_min_W"]) >= self.sill_thresh).flatten())]
                     k_predict_H = Ks[np.max(np.argwhere(
                         np.array(combined_result["sils_min_H"]) >= self.sill_thresh).flatten())]
                     k_predict = min(k_predict_W, k_predict_H)
+            
             else:
                 k_predict = 0
                 
