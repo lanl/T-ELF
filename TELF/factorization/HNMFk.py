@@ -14,6 +14,8 @@ import sys
 import pickle
 import warnings
 
+from .utilities.hpc_comm_helpers import signal_workers_exit, worker_check_exit_status, get_next_job_at_worker, collect_results_from_workers, send_job_to_worker_nodes
+
 try:
     from mpi4py import MPI
 except:
@@ -277,27 +279,30 @@ class HNMFk():
             # check exit status 
             if len(self.target_jobs) == 0 and rank == 0 and all([info["free"] for _, info in self.node_status.items()]):
                 if self.n_nodes > 1:
-                    self._signal_workers_exit(comm)
+                    signal_workers_exit(comm, self.n_nodes)
                 break
                 
             #
             # worker nodes check exit status
             #
             if self.n_nodes > 1:
-                self._worker_check_exit_status(rank, comm)
+                worker_check_exit_status(rank, comm)
 
             #
             # send job to worker nodes
             #
             if rank == 0 and self.n_nodes > 1:
-                self._send_job_to_worker_nodes(comm)
+                send_job_to_worker_nodes(
+                    comm, self.target_jobs, self.node_status
+                )
 
             #
             # recieve jobs from rank 0 at worker nodes
             #
             elif rank != 0 and self.n_nodes > 1:
-                job_data, job_flag = self._get_next_job_at_worker(
-                    rank, comm)
+                job_data, job_flag = get_next_job_at_worker(
+                    rank, comm, self.comm_buff_size
+                )
 
             #
             # single node job schedule
@@ -322,7 +327,10 @@ class HNMFk():
 
             # collect results at root
             elif rank == 0 and self.n_nodes > 1:
-                all_node_results = self._collect_results_from_workers(rank, comm)
+                all_node_results = collect_results_from_workers(
+                    rank, comm, self.n_nodes, 
+                    self.node_status, self.comm_buff_size
+                )
                 if len(all_node_results) == 0:
                     continue
             
@@ -676,66 +684,6 @@ class HNMFk():
 
 
         return params
-
-    def _signal_workers_exit(self, comm):
-        for job_rank in range(1, self.n_nodes, 1):
-            req = comm.isend(np.array([True]),
-                             dest=job_rank, tag=int(f'400{job_rank}'))
-            req.wait()
-
-    def _worker_check_exit_status(self, rank, comm):
-        if comm.iprobe(source=0, tag=int(f'400{rank}')):
-            sys.exit(0)
-
-    def _get_next_job_at_worker(self, rank, comm):
-        job_flag = True
-        if comm.iprobe(source=0, tag=int(f'200{rank}')):
-            req = comm.irecv(buf=bytearray(b" " * self.comm_buff_size),
-                             source=0, tag=int(f'200{rank}'))
-            data = req.wait()
-
-        else:
-            job_flag = False
-            data = {}
-
-        return data, job_flag
-
-    def _collect_results_from_workers(self, rank, comm):
-
-        all_results = []
-        # collect results at root
-        if self.n_nodes > 1 and rank == 0:
-            for job_rank, status_info in self.node_status.items():
-                if self.node_status[job_rank]["free"] == False and comm.iprobe(source=job_rank, tag=int(f'300{job_rank}')):
-                    req = comm.irecv(buf=bytearray(b" " * self.comm_buff_size),
-                                     source=job_rank, tag=int(f'300{job_rank}'))
-                    node_results = req.wait()
-                    self.node_status[job_rank]["free"] = True
-                    self.node_status[job_rank]["job"] = None
-                    all_results.append(node_results)
-
-        return all_results
-    
-    def _send_job_to_worker_nodes(self, comm):
-        scheduled = 0
-        available_jobs = list(self.target_jobs.keys())
-        # remove the jobs that are in the nodes from the available jobs
-        for _, status_info in self.node_status.items():
-            if status_info["job"] is not None and status_info["free"] is False:
-                try:
-                    _ = available_jobs.pop(available_jobs.index(status_info["job"]))
-                except Exception as e:
-                    print(e)
-        
-        for job_rank, status_info in self.node_status.items():
-            if len(available_jobs) > 0 and status_info["free"]:
-                next_job = available_jobs.pop(0)
-                req = comm.isend(self.target_jobs[next_job],
-                                 dest=job_rank, tag=int(f'200{job_rank}'))
-                req.wait()
-                self.node_status[job_rank]["free"] = False
-                self.node_status[job_rank]["job"] = next_job
-                scheduled += 1
     
     def _process_results(self, node_results, save_checkpoint):
         # remove the job

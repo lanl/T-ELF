@@ -19,29 +19,27 @@ import warnings
 import numpy as np
 import scipy.sparse
 from tqdm import tqdm
-import multiprocessing
 from pathlib import Path
 import concurrent.futures
 from collections import defaultdict
-from joblib import Parallel, delayed
 from datetime import datetime, timedelta
-from scipy.spatial.distance import pdist, squareform
 from threading import Lock
 
 from .utilities.take_note import take_note, take_note_fmat, append_to_note
-from .utilities.plot_NMFk import plot_SymNMFk, plot_consensus_mat, plot_cophenetic_coeff
+from .utilities.plot_NMFk import plot_SymNMFk, plot_consensus_mat
 from .utilities.organize_n_jobs import organize_n_jobs
+from .utilities.data_host_transfer_helpers import put_X_gpu, put_A_gpu
+from .utilities.run_factorization_helpers import run_symnmf
+from .utilities.perturbation_helpers import perturb_X
+from .utilities.initialization_helpers import init_W
 from .decompositions.sym_nmf import sym_nmf_newt
-from .decompositions.utilities.nnsvd import nnsvd
-from .decompositions.utilities.resample import poisson, uniform_product
-from .decompositions.utilities.math_utils import prune, unprune, get_pac
-from .decompositions.utilities.concensus_matrix import compute_connectivity_mat, compute_consensus_matrix, reorder_con_mat
+from .decompositions.utilities.math_utils import get_pac
+from .decompositions.utilities.concensus_matrix import reorder_con_mat
 from .decompositions.utilities.similarity_matrix import get_connectivity_matrix, dist2, scale_dist3
 
 
 try:
     import cupy as cp
-    import cupyx.scipy.sparse
 except Exception:
     cp = None
     cupyx = None
@@ -50,52 +48,6 @@ try:
     from mpi4py import MPI
 except Exception:
     MPI = None
-
-
-def __put_X_gpu(X, gpuid:int):
-    with cp.cuda.Device(gpuid):
-        if scipy.sparse.issparse(X):
-            Y = cupyx.scipy.sparse.csr_matrix(
-                (cp.array(X.data), cp.array(X.indices), cp.array(X.indptr)),
-                shape=X.shape,
-                dtype=X.dtype,
-            )
-        else:
-            Y = cp.array(X)
-    return Y
-
-def __put_W_gpu(W, gpuid:int):
-    with cp.cuda.Device(gpuid):
-        W = cp.array(W)
-    return W
-
-
-def __run_symnmf(Y, W, nmf, nmf_params, use_gpu:bool, gpuid:int):
-    if use_gpu:
-        with cp.cuda.Device(gpuid):
-            W, obj = nmf(Y, W=W, **nmf_params)
-    else:
-        W, obj = nmf(Y, W=W, **nmf_params)
-    return W, obj
-
-
-def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
-    if perturb_type == "uniform":
-        Y = uniform_product(X, epsilon, random_state=perturbation)
-    elif perturb_type == "poisson":
-        Y = poisson(X)
-    return Y
-
-
-def __init_W(Y, k, mask, init_type:str, seed=42):
-    if init_type == "nnsvd":
-        if mask is not None:
-            Y[mask] = 0
-        W, _ = nnsvd(Y, k, use_gpu=False)
-    elif init_type == "random":
-        np.random.seed(seed)
-        W = 2 * np.sqrt(np.mean(Y) / k) * np.random.rand(Y.shape[0], k)
-    return W
 
 
 def _perturb_parallel_wrapper(
@@ -115,7 +67,7 @@ def _perturb_parallel_wrapper(
     nmf):
 
     # Perturb X
-    Xq = __perturb_X(X, perturbation, epsilon, perturb_type)
+    Xq = perturb_X(X, perturbation, epsilon, perturb_type)
 
     # Compute the similarity matrix
     if graph_type == 'full' and similarity_type == 'gaussian':
@@ -128,15 +80,15 @@ def _perturb_parallel_wrapper(
     # Dq = dist2(X, X)
     # Aq = scale_dist3(Dq, nearest_neighbors)
     #print(Aq)
-    Wq = __init_W(Aq, k, mask=mask, init_type=init_type, seed=perturbation)
+    Wq = init_W(Aq, k, mask=mask, init_type=init_type, seed=perturbation)
     
     
     # transfer to GPU
     if use_gpu:
-        Aq = __put_X_gpu(Aq, gpuid)
-        Wq = __put_W_gpu(Wq, gpuid)
+        Aq = put_X_gpu(Aq, gpuid)
+        Wq = put_A_gpu(Wq, gpuid)
 
-    Wq, obj = __run_symnmf(Aq, Wq, nmf, nmf_params, use_gpu, gpuid)
+    Wq, obj = run_symnmf(Aq, Wq, nmf, nmf_params, use_gpu, gpuid)
     
     # transfer to CPU
     if use_gpu:

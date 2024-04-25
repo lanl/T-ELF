@@ -2,6 +2,124 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
+def plot_RESCALk(data, k_predict, name, path, plot_predict=False, plot_final=False, simple_plot=False, calculate_error=True):
+
+    fig, ax1 = plt.subplots(figsize=(8, 8), dpi=80)
+    
+    # silhouette
+    color = "tab:red"
+    ax1.set_xlabel("latent dimension")
+    ax1.set_ylabel("silhouette", color=color)
+
+    # sill  
+    ax1.plot(
+        list(data["Ks"]),
+        data["sils_min"],
+        "o-",
+        color=color,
+        label="W minimum silhouette",
+    )
+    
+    # add a vertical line for xtick k-values to make it easier to see which point corresponds to which k
+    if not isinstance(data["sils_min"], np.float64):  # if plot contains more than one k-value
+        for xtick in ax1.get_xticks():
+            if xtick in data["Ks"]:
+                y = data["sils_min"][np.where(data["Ks"] == xtick)[0][0]]  # get the y value that corresponds to xtick
+                plt.vlines(xtick, min([0, np.min(data["sils_min"])]), y, colors='black', alpha=0.4)
+
+    if not simple_plot:
+        ax1.errorbar(
+            list(data["Ks"]),
+            data["sils_mean"],
+            yerr=data["sils_std"],
+            fmt="^:",
+            color="tab:green",
+            label=r"W mean +- std silhouette",
+        )
+
+    ax1.set_ylim(min([0, np.min(data["sils_min"])]), 1)
+    ax1.tick_params(axis="y", labelcolor=color)
+    
+    # k prediction
+    if plot_predict:
+            ax1.axvline(
+                x=list(data["Ks"])[list(data["Ks"]).index(k_predict)],
+                lw=5,
+                alpha=0.8,
+                color="lightsteelblue",
+                label="K Predict= " + str(k_predict),
+            )
+        
+    # legend
+    ax1.legend(
+        loc="upper left",
+        bbox_to_anchor=(0.5, -0.07),
+        fancybox=True,
+        shadow=True,
+    )
+    
+    # relative error
+    if calculate_error:
+        ax2 = ax1.twinx()
+        color = "tab:blue"
+        ax2.set_ylabel("relative error", color=color)
+        ax2.plot(
+            list(data["Ks"]),
+            data["err_reg"],
+            "o-",
+            color=color,
+            label="regression relative error",
+        )
+        
+        if not simple_plot:
+            ax2.errorbar(
+                list(data["Ks"]),
+                data["err_mean"],
+                yerr=data["err_std"],
+                fmt="^:",
+                color="tab:orange",
+                label="perturbation relative error mean +- std",
+            )
+
+        ax2.tick_params(axis="y", labelcolor=color)
+        ax2.legend(
+            loc="upper right",
+            bbox_to_anchor=(0.5, -0.07),
+            fancybox=True,
+            shadow=True,
+            handlelength=4,
+        )
+
+    ax1.legend(
+        loc="upper right",
+        bbox_to_anchor=(.9, -0.07),
+        fancybox=True,
+        shadow=True,
+        handlelength=4,
+    )
+    
+    # finalize
+    fig.tight_layout()
+    plt.title(name + "  " + str(min(list(data["Ks"]))) + "-" + str(max(list(data["Ks"]))))
+    plt.ioff()
+    
+    # save
+    if plot_final:
+        plt.savefig(
+            str(path) + "/FINAL_k=" +
+            str(min(list(data["Ks"]))) + "-" + str(max(list(data["Ks"]))) + ".png",
+            bbox_inches="tight",
+        )
+    else:
+        plt.savefig(
+            str(path) + "/k=" + str(min(list(data["Ks"]))) +
+            "-" + str(max(list(data["Ks"]))) + ".png",
+            bbox_inches="tight",
+        )
+    plt.close("all")
+
+
+
 def plot_SymNMFk(data, name, path, plot_final=False):
     pac = False
     if "pac" in data and len(data["pac"]) > 0:
@@ -114,25 +232,7 @@ def plot_BNMFk(Ks, sils, bool_err, path=None, name=None):
 
 
 def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False, simple_plot=False, calculate_error=True):
-    """
 
-
-    Parameters
-    ----------
-    data : TYPE
-        DESCRIPTION.
-    k_predict : TYPE
-        DESCRIPTION.
-    name : TYPE
-        DESCRIPTION.
-    path : TYPE
-        DESCRIPTION.
-
-    Returns
-    -------
-    None.
-
-    """
     pac = False
     if "pac" in data and len(data["pac"]) > 0:
         pac = True

@@ -15,13 +15,15 @@ from .utilities.take_note import take_note, take_note_fmat, append_to_note
 from .utilities.plot_NMFk import plot_NMFk, plot_consensus_mat, plot_cophenetic_coeff
 from .utilities.pvalue_analysis import pvalue_analysis
 from .utilities.organize_n_jobs import organize_n_jobs
+from .utilities.data_host_transfer_helpers import put_X_gpu, put_A_gpu, put_A_cpu, put_other_results_cpu
+from .utilities.run_factorization_helpers import run_nmf
+from .utilities.perturbation_helpers import perturb_X
+from .utilities.initialization_helpers import init_WH
+from .utilities.regression_helpers import H_regression
 from .decompositions.nmf_kl_mu import nmf as nmf_kl_mu
 from .decompositions.nmf_fro_mu import nmf as nmf_fro_mu
 from .decompositions.wnmf import nmf as wnmf
 from .decompositions.nmf_recommender import nmf as nmf_recommender
-from .decompositions.nmf_fro_mu import H_update
-from .decompositions.utilities.nnsvd import nnsvd
-from .decompositions.utilities.resample import poisson, uniform_product
 from .decompositions.utilities.clustering import custom_k_means, silhouettes
 from .decompositions.utilities.math_utils import prune, unprune, relative_error, get_pac
 from .decompositions.utilities.concensus_matrix import compute_consensus_matrix, reorder_con_mat
@@ -41,7 +43,6 @@ from threading import Lock
 
 try:
     import cupy as cp
-    import cupyx.scipy.sparse
 except Exception:
     cp = None
     cupyx = None
@@ -51,84 +52,6 @@ try:
 except Exception:
     MPI = None
 
-
-def __put_X_gpu(X, gpuid:int):
-    with cp.cuda.Device(gpuid):
-        if scipy.sparse.issparse(X):
-            Y = cupyx.scipy.sparse.csr_matrix(
-                (cp.array(X.data), cp.array(X.indices), cp.array(X.indptr)),
-                shape=X.shape,
-                dtype=X.dtype,
-            )
-        else:
-            Y = cp.array(X)
-    return Y
-
-def __put_WH_gpu(W, H, gpuid:int):
-    with cp.cuda.Device(gpuid):
-        W = cp.array(W)
-        H = cp.array(H)
-        
-    return W, H
-
-def __put_WH_cpu(W, H):
-    W = cp.asnumpy(W)
-    H = cp.asnumpy(H)
-    return W, H
-
-def __put_other_results_cpu(other_results):
-    other_results_cpu = {}
-    for key, value in other_results.items():
-        other_results_cpu[key] = cp.asnumpy(value)
-    del other_results
-    return other_results_cpu
-    
-def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
-    if use_gpu:
-        with cp.cuda.Device(gpuid):
-            W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
-    else:
-        W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
-
-    return W, H, other_results
-
-def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
-
-    if perturb_type == "uniform":
-        Y = uniform_product(X, epsilon, random_state=perturbation)
-    elif perturb_type == "poisson":
-        Y = poisson(X, random_state=perturbation)
-
-    return Y
-
-def __init_WH(Y, k, mask, init_type:str):
-
-    if init_type == "nnsvd":
-        if mask is not None:
-            Y[mask] = 0
-        W, H = nnsvd(Y, k, use_gpu=False)
-            
-    elif init_type == "random":
-        W, H = np.random.rand(Y.shape[0], k), np.random.rand(k, Y.shape[1])
-        
-    return W, H
-
-def __H_regression(X, W, mask, use_gpu:bool, gpuid:int):
-    if use_gpu:
-        Y = __put_X_gpu(X, gpuid)
-        with cp.cuda.Device(gpuid):
-            H_ = H_update(Y, cp.array(W), cp.random.rand(
-                W.shape[1], Y.shape[1]), use_gpu=use_gpu, mask=mask)
-            H = cp.asnumpy(H_)
-            
-        del Y, H_
-        cp._default_memory_pool.free_all_blocks()
-        
-    else:
-        H = H_update(X, W, np.random.rand(
-            W.shape[1], X.shape[1]), use_gpu=use_gpu, mask=mask)
-        
-    return H
 
 def _perturb_parallel_wrapper(
     perturbation,
@@ -145,22 +68,22 @@ def _perturb_parallel_wrapper(
     calculate_error):
 
     # Prepare
-    Y = __perturb_X(X, perturbation, epsilon, perturb_type)
-    W_init, H_init = __init_WH(Y, k, mask=mask, init_type=init_type)
+    Y = perturb_X(X, perturbation, epsilon, perturb_type)
+    W_init, H_init = init_WH(Y, k, mask=mask, init_type=init_type)
 
     # transfer to GPU
     if use_gpu:
-        Y = __put_X_gpu(Y, gpuid)
-        W_init, H_init = __put_WH_gpu(W_init, H_init, gpuid)
+        Y = put_X_gpu(Y, gpuid)
+        W_init, H_init = put_A_gpu(W_init, gpuid), put_A_gpu(H_init, gpuid)
         if "WEIGHTS" in nmf_params and nmf_params["WEIGHTS"] is not None:
-            nmf_params["WEIGHTS"] = __put_X_gpu(nmf_params["WEIGHTS"], gpuid)
+            nmf_params["WEIGHTS"] = put_X_gpu(nmf_params["WEIGHTS"], gpuid)
 
-    W, H, other_results = __run_nmf(Y, W_init, H_init, nmf, nmf_params, use_gpu, gpuid)
+    W, H, other_results = run_nmf(Y, W_init, H_init, nmf, nmf_params, use_gpu, gpuid)
 
     # transfer to CPU
     if use_gpu:
-        W, H = __put_WH_cpu(W, H)
-        other_results = __put_other_results_cpu(other_results)
+        W, H = put_A_cpu(W), put_A_cpu(H)
+        other_results = put_other_results_cpu(other_results)
         cp._default_memory_pool.free_all_blocks()
 
     # error calculation
@@ -277,7 +200,7 @@ def _nmf_parallel_wrapper(
     #
     # Regress H
     #
-    H = __H_regression(X, W, mask, use_gpu, gpuid)
+    H = H_regression(X, W, mask, use_gpu, gpuid)
     
     if use_gpu:
         cp._default_memory_pool.free_all_blocks()

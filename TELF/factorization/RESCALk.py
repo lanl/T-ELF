@@ -12,12 +12,14 @@ derivative works, distribute copies to the public, perform publicly and display 
 others to do so.
 """
 from .utilities.take_note import take_note, take_note_fmat, append_to_note
-from .utilities.plot_NMFk import plot_NMFk
+from .utilities.plot_NMFk import plot_RESCALk
 from .utilities.organize_n_jobs import organize_n_jobs
+from .utilities.data_host_transfer_helpers import put_A_cpu, put_A_gpu, put_tensor_X_gpu, put_tensor_R_cpu
+from .utilities.run_factorization_helpers import run_rescal
+from .utilities.perturbation_helpers import perturb_tensor_X
+from .utilities.initialization_helpers import init_A
+from .utilities.regression_helpers import R_regression
 from .decompositions.rescal_fro_mu import rescal as rescal_fro_mu
-from .decompositions.rescal_fro_mu import R_update
-from .decompositions.utilities.nnsvd import nnsvd
-from .decompositions.utilities.resample import poisson, uniform_product
 from .decompositions.utilities.clustering import custom_k_means, silhouettes
 from .decompositions.utilities.math_utils import relative_error_rescal
 
@@ -39,7 +41,6 @@ from pathlib import Path
 
 try:
     import cupy as cp
-    import cupyx.scipy.sparse
 except Exception:
     cp = None
     cupyx = None
@@ -48,81 +49,7 @@ try:
     from mpi4py import MPI
 except Exception:
     MPI = None
-
-
-def __put_X_gpu(X, gpuid:int):
-    with cp.cuda.Device(gpuid):
-        if scipy.sparse.issparse(X[0]):
-            Y = [cupyx.scipy.sparse.csr_matrix((cp.array(X1.data), cp.array(X1.indices), cp.array(X1.indptr)),
-                                                   shape=X1.shape, dtype=X1.dtype) for X1 in X]
-        else:
-            Y = [cp.array(X1) for X1 in X]
-    return Y
-
-def __put_A_gpu(A, gpuid:int):
-    with cp.cuda.Device(gpuid):
-        A = cp.array(A)
-    return A
-
-def __put_A_cpu(A):
-    A = cp.asnumpy(A)
-    return A
-
-def __put_R_cpu(R):
-    R = [cp.asnumpy(h_) for h_ in R]
-    return R
     
-def __run_rescal(Y, A, rescal, rescal_params, use_gpu:bool, gpuid:int):
-    k = A.shape[1]
-    if use_gpu:
-        with cp.cuda.Device(gpuid):
-            R = R_update(Y, A, [cp.random.rand(k, k) for _ in range(len(Y))])
-            A, R = rescal(X=Y, A=A, R=R, **rescal_params)
-    else:
-        R = R_update(Y, A, [np.random.rand(k, k) for _ in range(len(Y))])
-        A, R = rescal(X=Y, A=A, R=R, **rescal_params)
-
-    return A, R
-
-def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
-
-    if perturb_type == "uniform":
-        Y = [uniform_product(X_, epsilon, random_state=perturbation) for X_ in X]
-    elif perturb_type == "poisson":
-        Y = [poisson(X_, random_state=perturbation) for X_ in X]
-
-    return Y
-
-def __init_A(Y, k, init_type:str):
-    if init_type == "nnsvd":
-        if scipy.sparse.issparse(Y[0]):
-            Y_tmp = scipy.sparse.hstack((Y))
-        else:
-            Y_tmp = np.hstack((Y))
-
-        A, _ = nnsvd(Y_tmp, k, use_gpu=False)
-            
-    elif init_type == "random":
-        A = np.random.rand(Y[0].shape[0], k)
-        
-    return A
-
-def __R_regression(X, A, use_gpu:bool, gpuid:int):
-    k = A.shape[1]
-    if use_gpu:
-        Y = __put_X_gpu(X, gpuid)
-
-        with cp.cuda.Device(gpuid):
-            R_ = R_update(Y, cp.array(A), [cp.random.rand(k, k) for _ in range(len(Y))], use_gpu=use_gpu)
-            R = __put_R_cpu(R_)
-            
-        del Y, R_
-        cp._default_memory_pool.free_all_blocks()
-        
-    else:
-        R = R_update(X, A, [np.random.rand(k, k) for _ in range(len(X))], use_gpu=use_gpu)
-        
-    return R
 
 def _perturb_parallel_wrapper(
     perturbation,
@@ -138,20 +65,20 @@ def _perturb_parallel_wrapper(
     calculate_error):
 
     # Prepare
-    Y = __perturb_X(X, perturbation, epsilon, perturb_type)
-    A_init = __init_A(Y, k, init_type=init_type)
+    Y = perturb_tensor_X(X, perturbation, epsilon, perturb_type)
+    A_init = init_A(Y, k, init_type=init_type)
 
     # transfer to GPU
     if use_gpu:
-        Y = __put_X_gpu(Y, gpuid)
-        A_init = __put_A_gpu(A_init, gpuid)
+        Y = put_tensor_X_gpu(Y, gpuid)
+        A_init = put_A_gpu(A_init, gpuid)
 
-    A, R = __run_rescal(Y, A_init, rescal, rescal_params, use_gpu, gpuid)
+    A, R = run_rescal(Y, A_init, rescal, rescal_params, use_gpu, gpuid)
 
     # transfer to CPU
     if use_gpu:
-        A = __put_A_cpu(A)
-        R = __put_R_cpu(R)
+        A = put_A_cpu(A)
+        R = put_tensor_R_cpu(R)
         cp._default_memory_pool.free_all_blocks()
 
     # error calculation
@@ -238,7 +165,7 @@ def _rescal_parallel_wrapper(
     #
     # Regress H
     #
-    R = __R_regression(X, A, use_gpu, gpuid)
+    R = R_regression(X, A, use_gpu, gpuid)
     
     if use_gpu:
         cp._default_memory_pool.free_all_blocks()
@@ -759,7 +686,7 @@ class RESCALk:
 
             # final plot
             if self.save_output:
-                plot_NMFk(
+                plot_RESCALk(
                     combined_result, 
                     0, 
                     self.experiment_name, 
