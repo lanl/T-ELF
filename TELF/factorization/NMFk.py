@@ -58,7 +58,7 @@ except Exception:
 
 def _HPC_K_search_settings_update(n_nodes, my_rank, K_search_settings, save_path):
     for node_rank in range(n_nodes): 
-        if node_rank == my_rank:
+        if (node_rank == my_rank) or (not Path(f'{save_path}/{node_rank}-K_search_settings.p').is_file()):
             continue
         
         with open(f'{save_path}/{node_rank}-K_search_settings.p', 'rb') as file:
