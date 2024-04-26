@@ -231,13 +231,22 @@ def plot_BNMFk(Ks, sils, bool_err, path=None, name=None):
     return None
 
 
-def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False, simple_plot=False, calculate_error=True):
+def plot_NMFk(
+        data, 
+        k_predict, 
+        name, path, 
+        plot_predict=False, 
+        plot_final=False,
+        simple_plot=False, 
+        calculate_error=True,
+        Ks_not_computed=[]
+        ):
 
     pac = False
     if "pac" in data and len(data["pac"]) > 0:
         pac = True
     
-    fig, ax1 = plt.subplots(figsize=(8, 8), dpi=80)
+    fig, ax1 = plt.subplots(figsize=(12, 8), dpi=100)
     
     # silhouette
     color = "tab:red"
@@ -272,6 +281,9 @@ def plot_NMFk(data, k_predict, name, path, plot_predict=False, plot_final=False,
             if xtick in data["Ks"]:
                 y = data["sils_min_W"][np.where(data["Ks"] == xtick)[0][0]]  # get the y value that corresponds to xtick
                 plt.vlines(xtick, min([0, np.min(data["sils_min_H"]), np.min(data["sils_min_W"])]), y, colors='black', alpha=0.4)
+
+    for empty_k in Ks_not_computed:
+        plt.vlines(empty_k, ymin=min([0, np.min(data["sils_min_H"]), np.min(data["sils_min_W"])]), ymax=1, colors='black', linewidth=2, alpha=0.9)
 
     if not simple_plot:
         ax1.errorbar(

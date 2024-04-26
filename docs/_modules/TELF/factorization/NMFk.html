@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.NMFk &#8212; TELF 0.0.16 documentation</title>
+    <title>TELF.factorization.NMFk &#8212; TELF 0.0.17 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../../../_static/documentation_options.js?v=baac2cea"></script>
+    <script src="../../../_static/documentation_options.js?v=0150aef7"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.16 documentation</p>
+    <p class="title logo__title">TELF 0.0.17 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -294,13 +294,16 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.utilities.plot_NMFk</span> <span class="kn">import</span> <span class="n">plot_NMFk</span><span class="p">,</span> <span class="n">plot_consensus_mat</span><span class="p">,</span> <span class="n">plot_cophenetic_coeff</span>
 <span class="kn">from</span> <span class="nn">.utilities.pvalue_analysis</span> <span class="kn">import</span> <span class="n">pvalue_analysis</span>
 <span class="kn">from</span> <span class="nn">.utilities.organize_n_jobs</span> <span class="kn">import</span> <span class="n">organize_n_jobs</span>
+<span class="kn">from</span> <span class="nn">.utilities.data_host_transfer_helpers</span> <span class="kn">import</span> <span class="n">put_X_gpu</span><span class="p">,</span> <span class="n">put_A_gpu</span><span class="p">,</span> <span class="n">put_A_cpu</span><span class="p">,</span> <span class="n">put_other_results_cpu</span>
+<span class="kn">from</span> <span class="nn">.utilities.run_factorization_helpers</span> <span class="kn">import</span> <span class="n">run_nmf</span>
+<span class="kn">from</span> <span class="nn">.utilities.perturbation_helpers</span> <span class="kn">import</span> <span class="n">perturb_X</span>
+<span class="kn">from</span> <span class="nn">.utilities.initialization_helpers</span> <span class="kn">import</span> <span class="n">init_WH</span>
+<span class="kn">from</span> <span class="nn">.utilities.regression_helpers</span> <span class="kn">import</span> <span class="n">H_regression</span>
+<span class="kn">from</span> <span class="nn">.utilities.bst_helper</span> <span class="kn">import</span> <span class="n">BST</span>
 <span class="kn">from</span> <span class="nn">.decompositions.nmf_kl_mu</span> <span class="kn">import</span> <span class="n">nmf</span> <span class="k">as</span> <span class="n">nmf_kl_mu</span>
 <span class="kn">from</span> <span class="nn">.decompositions.nmf_fro_mu</span> <span class="kn">import</span> <span class="n">nmf</span> <span class="k">as</span> <span class="n">nmf_fro_mu</span>
 <span class="kn">from</span> <span class="nn">.decompositions.wnmf</span> <span class="kn">import</span> <span class="n">nmf</span> <span class="k">as</span> <span class="n">wnmf</span>
 <span class="kn">from</span> <span class="nn">.decompositions.nmf_recommender</span> <span class="kn">import</span> <span class="n">nmf</span> <span class="k">as</span> <span class="n">nmf_recommender</span>
-<span class="kn">from</span> <span class="nn">.decompositions.nmf_fro_mu</span> <span class="kn">import</span> <span class="n">H_update</span>
-<span class="kn">from</span> <span class="nn">.decompositions.utilities.nnsvd</span> <span class="kn">import</span> <span class="n">nnsvd</span>
-<span class="kn">from</span> <span class="nn">.decompositions.utilities.resample</span> <span class="kn">import</span> <span class="n">poisson</span><span class="p">,</span> <span class="n">uniform_product</span>
 <span class="kn">from</span> <span class="nn">.decompositions.utilities.clustering</span> <span class="kn">import</span> <span class="n">custom_k_means</span><span class="p">,</span> <span class="n">silhouettes</span>
 <span class="kn">from</span> <span class="nn">.decompositions.utilities.math_utils</span> <span class="kn">import</span> <span class="n">prune</span><span class="p">,</span> <span class="n">unprune</span><span class="p">,</span> <span class="n">relative_error</span><span class="p">,</span> <span class="n">get_pac</span>
 <span class="kn">from</span> <span class="nn">.decompositions.utilities.concensus_matrix</span> <span class="kn">import</span> <span class="n">compute_consensus_matrix</span><span class="p">,</span> <span class="n">reorder_con_mat</span>
@@ -320,7 +323,6 @@ document.write(`
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
-    <span class="kn">import</span> <span class="nn">cupyx.scipy.sparse</span>
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
     <span class="n">cp</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">cupyx</span> <span class="o">=</span> <span class="kc">None</span>
@@ -330,84 +332,6 @@ document.write(`
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
     <span class="n">MPI</span> <span class="o">=</span> <span class="kc">None</span>
 
-
-<span class="k">def</span> <span class="nf">__put_X_gpu</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
-    <span class="k">with</span> <span class="n">cp</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">gpuid</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
-            <span class="n">Y</span> <span class="o">=</span> <span class="n">cupyx</span><span class="o">.</span><span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">(</span>
-                <span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">indices</span><span class="p">),</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">indptr</span><span class="p">)),</span>
-                <span class="n">shape</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">Y</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Y</span>
-
-<span class="k">def</span> <span class="nf">__put_WH_gpu</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
-    <span class="k">with</span> <span class="n">cp</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">gpuid</span><span class="p">):</span>
-        <span class="n">W</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
-        <span class="n">H</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
-        
-    <span class="k">return</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span>
-
-<span class="k">def</span> <span class="nf">__put_WH_cpu</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">):</span>
-    <span class="n">W</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
-    <span class="n">H</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span>
-
-<span class="k">def</span> <span class="nf">__put_other_results_cpu</span><span class="p">(</span><span class="n">other_results</span><span class="p">):</span>
-    <span class="n">other_results_cpu</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">other_results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">other_results_cpu</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-    <span class="k">del</span> <span class="n">other_results</span>
-    <span class="k">return</span> <span class="n">other_results_cpu</span>
-    
-<span class="k">def</span> <span class="nf">__run_nmf</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">nmf</span><span class="p">,</span> <span class="n">nmf_params</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">cp</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">gpuid</span><span class="p">):</span>
-            <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">other_results</span> <span class="o">=</span> <span class="n">nmf</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="o">**</span><span class="n">nmf_params</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">other_results</span> <span class="o">=</span> <span class="n">nmf</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="o">**</span><span class="n">nmf_params</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">other_results</span>
-
-<span class="k">def</span> <span class="nf">__perturb_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span> <span class="n">perturb_type</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
-
-    <span class="k">if</span> <span class="n">perturb_type</span> <span class="o">==</span> <span class="s2">&quot;uniform&quot;</span><span class="p">:</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">uniform_product</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">perturbation</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">perturb_type</span> <span class="o">==</span> <span class="s2">&quot;poisson&quot;</span><span class="p">:</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">perturbation</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">Y</span>
-
-<span class="k">def</span> <span class="nf">__init_WH</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">init_type</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
-
-    <span class="k">if</span> <span class="n">init_type</span> <span class="o">==</span> <span class="s2">&quot;nnsvd&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">Y</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">nnsvd</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            
-    <span class="k">elif</span> <span class="n">init_type</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
-        <span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        
-    <span class="k">return</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span>
-
-<span class="k">def</span> <span class="nf">__H_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">__put_X_gpu</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
-        <span class="k">with</span> <span class="n">cp</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">gpuid</span><span class="p">):</span>
-            <span class="n">H_</span> <span class="o">=</span> <span class="n">H_update</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">W</span><span class="p">),</span> <span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span>
-                <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
-            <span class="n">H</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">(</span><span class="n">H_</span><span class="p">)</span>
-            
-        <span class="k">del</span> <span class="n">Y</span><span class="p">,</span> <span class="n">H_</span>
-        <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
-        
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">H</span> <span class="o">=</span> <span class="n">H_update</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span>
-            <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
-        
-    <span class="k">return</span> <span class="n">H</span>
 
 <span class="k">def</span> <span class="nf">_perturb_parallel_wrapper</span><span class="p">(</span>
     <span class="n">perturbation</span><span class="p">,</span>
@@ -424,22 +348,22 @@ document.write(`
     <span class="n">calculate_error</span><span class="p">):</span>
 
     <span class="c1"># Prepare</span>
-    <span class="n">Y</span> <span class="o">=</span> <span class="n">__perturb_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">perturb_type</span><span class="p">)</span>
-    <span class="n">W_init</span><span class="p">,</span> <span class="n">H_init</span> <span class="o">=</span> <span class="n">__init_WH</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">init_type</span><span class="o">=</span><span class="n">init_type</span><span class="p">)</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">perturb_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">perturb_type</span><span class="p">)</span>
+    <span class="n">W_init</span><span class="p">,</span> <span class="n">H_init</span> <span class="o">=</span> <span class="n">init_WH</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">init_type</span><span class="o">=</span><span class="n">init_type</span><span class="p">)</span>
 
     <span class="c1"># transfer to GPU</span>
     <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">__put_X_gpu</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
-        <span class="n">W_init</span><span class="p">,</span> <span class="n">H_init</span> <span class="o">=</span> <span class="n">__put_WH_gpu</span><span class="p">(</span><span class="n">W_init</span><span class="p">,</span> <span class="n">H_init</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">put_X_gpu</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
+        <span class="n">W_init</span><span class="p">,</span> <span class="n">H_init</span> <span class="o">=</span> <span class="n">put_A_gpu</span><span class="p">(</span><span class="n">W_init</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">),</span> <span class="n">put_A_gpu</span><span class="p">(</span><span class="n">H_init</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
         <span class="k">if</span> <span class="s2">&quot;WEIGHTS&quot;</span> <span class="ow">in</span> <span class="n">nmf_params</span> <span class="ow">and</span> <span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;WEIGHTS&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;WEIGHTS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">__put_X_gpu</span><span class="p">(</span><span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;WEIGHTS&quot;</span><span class="p">],</span> <span class="n">gpuid</span><span class="p">)</span>
+            <span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;WEIGHTS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">put_X_gpu</span><span class="p">(</span><span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;WEIGHTS&quot;</span><span class="p">],</span> <span class="n">gpuid</span><span class="p">)</span>
 
-    <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">other_results</span> <span class="o">=</span> <span class="n">__run_nmf</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">W_init</span><span class="p">,</span> <span class="n">H_init</span><span class="p">,</span> <span class="n">nmf</span><span class="p">,</span> <span class="n">nmf_params</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
+    <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">other_results</span> <span class="o">=</span> <span class="n">run_nmf</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">W_init</span><span class="p">,</span> <span class="n">H_init</span><span class="p">,</span> <span class="n">nmf</span><span class="p">,</span> <span class="n">nmf_params</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
 
     <span class="c1"># transfer to CPU</span>
     <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
-        <span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">__put_WH_cpu</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
-        <span class="n">other_results</span> <span class="o">=</span> <span class="n">__put_other_results_cpu</span><span class="p">(</span><span class="n">other_results</span><span class="p">)</span>
+        <span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">put_A_cpu</span><span class="p">(</span><span class="n">W</span><span class="p">),</span> <span class="n">put_A_cpu</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+        <span class="n">other_results</span> <span class="o">=</span> <span class="n">put_other_results_cpu</span><span class="p">(</span><span class="n">other_results</span><span class="p">)</span>
         <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
 
     <span class="c1"># error calculation</span>
@@ -449,6 +373,35 @@ document.write(`
         <span class="n">error</span> <span class="o">=</span> <span class="mi">0</span>
         
     <span class="k">return</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">other_results</span>
+
+<span class="k">def</span> <span class="nf">_take_exit_note</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">logging_stats</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
+    <span class="n">note_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;Done&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;N&quot;</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">logging_stats</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;k&#39;</span><span class="p">:</span>
+            <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span>  <span class="s1">&#39;sils_min_W&#39;</span><span class="p">:</span>
+            <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;--&quot;</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;sils_mean_W&#39;</span><span class="p">:</span>
+            <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;sils_mean_W&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;--&quot;</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span>  <span class="s1">&#39;sils_min_H&#39;</span><span class="p">:</span>
+            <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;sils_min_H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;--&quot;</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;sils_mean_H&#39;</span><span class="p">:</span>
+            <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;sils_mean_H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;--&quot;</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;err_mean&#39;</span><span class="p">:</span>
+            <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;err_mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;--&quot;</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;err_std&#39;</span><span class="p">:</span>
+            <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;err_std&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;--&quot;</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;col_error&#39;</span><span class="p">:</span>
+            <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;col_err&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;--&quot;</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span>
+            <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+            <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">elapsed_time</span><span class="p">)</span>
+            <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">elapsed_time</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[tELF]: Encountered unknown logging metric &quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+            <span class="n">note_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;N/A&#39;</span>
+    <span class="n">take_note_fmat</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="n">lock</span><span class="p">,</span> <span class="o">**</span><span class="n">note_data</span><span class="p">)</span>
         
 
 <span class="k">def</span> <span class="nf">_nmf_parallel_wrapper</span><span class="p">(</span>
@@ -479,7 +432,9 @@ document.write(`
         <span class="n">perturb_multiprocessing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">perturb_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">lock</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">note_name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">):</span>
+        <span class="n">note_name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">,</span>
+        <span class="n">K_search_settings</span><span class="o">=</span><span class="kc">None</span>
+        <span class="p">):</span>
 
     <span class="c1">#</span>
     <span class="c1"># run for each perturbations</span>
@@ -501,6 +456,15 @@ document.write(`
     <span class="n">W_all</span><span class="p">,</span> <span class="n">H_all</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">other_results_all</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">perturb_multiprocessing</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">perturbation</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_perturbs</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">perturb_verbose</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">n_perturbs</span><span class="p">):</span>
+
+            <span class="c1"># check for early termination</span>
+            <span class="k">if</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_search_method&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s1">&#39;lock&#39;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_min&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">&gt;=</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_max&quot;</span><span class="p">]:</span>
+                        <span class="k">if</span> <span class="n">save_output</span><span class="p">:</span>
+                            <span class="n">_take_exit_note</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">logging_stats</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Ks&quot;</span><span class="p">:</span><span class="n">k</span><span class="p">,</span> <span class="s2">&quot;exit_early&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">}</span>
+
             <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">other_results_curr</span> <span class="o">=</span> <span class="n">_perturb_parallel_wrapper</span><span class="p">(</span><span class="n">perturbation</span><span class="o">=</span><span class="n">perturbation</span><span class="p">,</span> <span class="n">gpuid</span><span class="o">=</span><span class="n">gpuid</span><span class="p">,</span> <span class="o">**</span><span class="n">perturb_job_data</span><span class="p">)</span>
             <span class="n">W_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
             <span class="n">H_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
@@ -556,7 +520,7 @@ document.write(`
     <span class="c1">#</span>
     <span class="c1"># Regress H</span>
     <span class="c1">#</span>
-    <span class="n">H</span> <span class="o">=</span> <span class="n">__H_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">H_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
     
     <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
         <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
@@ -590,6 +554,32 @@ document.write(`
         <span class="n">H</span> <span class="o">=</span> <span class="n">unprune</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">perturb_cols</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="c1">#</span>
+    <span class="c1"># Calculate statistics on results</span>
+    <span class="c1">#</span>
+    <span class="n">err_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+    <span class="n">err_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+
+    <span class="n">sils_W_all_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_W</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">sils_H_all_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">sils_min_W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">sils_W_all_mean</span><span class="p">)</span>
+    <span class="n">sils_mean_W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_W_all_mean</span><span class="p">)</span>
+    <span class="n">sils_std_W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">sils_W_all_mean</span><span class="p">)</span>
+    <span class="n">sils_min_H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">sils_H_all_mean</span><span class="p">)</span>
+    <span class="n">sils_mean_H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_H_all_mean</span><span class="p">)</span>
+    <span class="n">sils_std_H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">sils_H_all_mean</span><span class="p">)</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># Decisions on K search</span>
+    <span class="c1">#</span>
+    <span class="k">if</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_search_method&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s1">&#39;lock&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">sils_min_W</span><span class="p">,</span> <span class="n">sils_min_H</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;sill_thresh&quot;</span><span class="p">]:</span>
+                <span class="n">K_search_settings</span><span class="p">[</span><span class="s1">&#39;k_min&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+            <span class="k">if</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;H_sill_thresh&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sils_min_H</span> <span class="o">&lt;=</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;H_sill_thresh&quot;</span><span class="p">]):</span>
+                <span class="n">K_search_settings</span><span class="p">[</span><span class="s1">&#39;k_max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+
+    <span class="c1">#</span>
     <span class="c1"># save output factors and the plot</span>
     <span class="c1">#</span>
     <span class="k">if</span> <span class="n">save_output</span><span class="p">:</span>
@@ -618,61 +608,58 @@ document.write(`
             <span class="o">**</span><span class="n">save_data</span>
         <span class="p">)</span>
 
-        <span class="n">plot_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">note_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_search_method&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
+            <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;Done&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Y&quot;</span>
+
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">logging_stats</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;k&#39;</span><span class="p">:</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
             <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span>  <span class="s1">&#39;sils_min_W&#39;</span><span class="p">:</span>
-                <span class="n">sils_min_W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_W</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_min_W</span><span class="p">)</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_min_W</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;sils_mean_W&#39;</span><span class="p">:</span>
-                <span class="n">sils_mean_W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_W</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_mean_W&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_mean_W</span><span class="p">)</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;sils_mean_W&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_mean_W</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span>  <span class="s1">&#39;sils_min_H&#39;</span><span class="p">:</span>
-                <span class="n">sils_min_H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_H</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_min_H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_min_H</span><span class="p">)</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;sils_min_H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_min_H</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;sils_mean_H&#39;</span><span class="p">:</span>
-                <span class="n">sils_mean_H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_H</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;sils_mean_H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_mean_H</span><span class="p">)</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;sils_mean_H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sils_mean_H</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;err_mean&#39;</span><span class="p">:</span>
-                <span class="n">err_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;err_mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err_mean</span><span class="p">)</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;err_mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err_mean</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;err_std&#39;</span><span class="p">:</span>
-                <span class="n">err_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;err_std&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err_std</span><span class="p">)</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;err_std&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err_std</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;col_error&#39;</span><span class="p">:</span>
-                <span class="n">mean_col_err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">curr_col_err</span><span class="p">)</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;col_err&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mean_col_err</span><span class="p">)</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;col_err&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">curr_col_err</span><span class="p">))</span>
             <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span>
                 <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
                 <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">elapsed_time</span><span class="p">)</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">elapsed_time</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">elapsed_time</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[tELF]: Encountered unknown logging metric &quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
-                <span class="n">plot_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;N/A&#39;</span>
-        <span class="n">take_note_fmat</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="n">lock</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_data</span><span class="p">)</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;N/A&#39;</span>
+        <span class="n">take_note_fmat</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="n">lock</span><span class="p">,</span> <span class="o">**</span><span class="n">note_data</span><span class="p">)</span>
 
     <span class="c1">#</span>
     <span class="c1"># collect results</span>
     <span class="c1">#</span>
     <span class="n">results_k</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;Ks&quot;</span><span class="p">:</span><span class="n">k</span><span class="p">,</span>
-        <span class="s2">&quot;err_mean&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">errors</span><span class="p">),</span>
-        <span class="s2">&quot;err_std&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">errors</span><span class="p">),</span>
+        <span class="s2">&quot;err_mean&quot;</span><span class="p">:</span><span class="n">err_mean</span><span class="p">,</span>
+        <span class="s2">&quot;err_std&quot;</span><span class="p">:</span><span class="n">err_std</span><span class="p">,</span>
         <span class="s2">&quot;err_reg&quot;</span><span class="p">:</span><span class="n">error_reg</span><span class="p">,</span>
 
-        <span class="s2">&quot;sils_min_W&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_W</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
-        <span class="s2">&quot;sils_mean_W&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_W</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
-        <span class="s2">&quot;sils_std_W&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_W</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="s2">&quot;sils_min_W&quot;</span><span class="p">:</span><span class="n">sils_min_W</span><span class="p">,</span>
+        <span class="s2">&quot;sils_mean_W&quot;</span><span class="p">:</span><span class="n">sils_mean_W</span><span class="p">,</span>
+        <span class="s2">&quot;sils_std_W&quot;</span><span class="p">:</span><span class="n">sils_std_W</span><span class="p">,</span>
         <span class="s2">&quot;sils_all_W&quot;</span><span class="p">:</span><span class="n">sils_all_W</span><span class="p">,</span>
 
-        <span class="s2">&quot;sils_min_H&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
-        <span class="s2">&quot;sils_mean_H&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
-        <span class="s2">&quot;sils_std_H&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sils_all_H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+        <span class="s2">&quot;sils_min_H&quot;</span><span class="p">:</span><span class="n">sils_min_H</span><span class="p">,</span>
+        <span class="s2">&quot;sils_mean_H&quot;</span><span class="p">:</span><span class="n">sils_mean_H</span><span class="p">,</span>
+        <span class="s2">&quot;sils_std_H&quot;</span><span class="p">:</span><span class="n">sils_std_H</span><span class="p">,</span>
         <span class="s2">&quot;sils_all_H&quot;</span><span class="p">:</span><span class="n">sils_all_H</span><span class="p">,</span>
 
         <span class="s2">&quot;cophenetic_coeff&quot;</span><span class="p">:</span><span class="n">coeff_k</span><span class="p">,</span>
         <span class="s2">&quot;col_err&quot;</span><span class="p">:</span><span class="n">curr_col_err</span><span class="p">,</span>
+        <span class="s2">&quot;exit_early&quot;</span><span class="p">:</span><span class="kc">False</span>
     <span class="p">}</span>
 
     <span class="k">if</span> <span class="n">collect_output</span><span class="p">:</span>
@@ -717,7 +704,10 @@ document.write(`
             <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">calculate_pac</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">get_plot_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">simple_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,):</span>
+            <span class="n">simple_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">k_search_method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
+            <span class="n">H_sill_thresh</span><span class="o">=-</span><span class="mi">1</span>
+            <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NMFk is a Non-negative Matrix Factorization module with the capability to do automatic model determination.</span>
 
@@ -828,6 +818,13 @@ document.write(`
 <span class="sd">            When True, collectes the data used in plotting each intermidiate k factorization. The default is False.</span>
 <span class="sd">        simple_plot : bool, optional</span>
 <span class="sd">            When True, creates a simple plot for each intermidiate k factorization which hides the statistics such as average and maximum Silhouette scores. The default is True.</span>
+<span class="sd">        k_search_method : str, optional</span>
+<span class="sd">            Which approach to use when searching for the rank or k. The default is &quot;linear&quot;.\n</span>
+<span class="sd">            * ``k_search_method=&#39;linear&#39;`` will visit each K given in ``Ks`` hyper-parameter of the ``fit()`` function.\n</span>
+<span class="sd">            * ``k_search_method=&#39;bst_post&#39;`` will perform post-order binary search. When a rank is found with ``min(W silhouette, H silhouette) &gt;= sill_thresh``, all lower ranks are pruned from search space.</span>
+<span class="sd">            * ``k_search_method=&#39;bst_pre&#39;`` will perform pre-order binary search. When a rank is found with ``min(W silhouette, H silhouette) &gt;= sill_thresh``, all lower ranks are pruned from search space.</span>
+<span class="sd">        H_sill_thresh : float, optional</span>
+<span class="sd">            When ``k_search=&#39;bst_post&#39;`` or ``k_search=&#39;bst_pre&#39;``, use this hyper-parameter to cut off higher ranks from search space based on threshold for H silhouette. If -1, not used. The default is -1.</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None.</span>
@@ -874,9 +871,12 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">simple_plot</span> <span class="o">=</span> <span class="n">simple_plot</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_plot_data</span> <span class="o">=</span> <span class="n">get_plot_data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">perturb_multiprocessing</span> <span class="o">=</span> <span class="n">perturb_multiprocessing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_search_method</span> <span class="o">=</span> <span class="n">k_search_method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H_sill_thresh</span> <span class="o">=</span> <span class="n">H_sill_thresh</span>
 
         <span class="c1"># warnings</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;sill&quot;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_search_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="s2">&quot;bst_pre&quot;</span><span class="p">,</span> <span class="s2">&quot;bst_post&quot;</span><span class="p">],</span> <span class="s2">&quot;Invalid k_search_method method. Choose from linear, bst_pre, or bst_post.&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;sill&quot;</span><span class="p">],</span> <span class="s2">&quot;Invalid predict_k_method method. Choose from pvalue, sill.&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_pac</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">consensus_mat</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">consensus_mat</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;consensus_mat was False when calculate_pac was True! consensus_mat changed to True.&quot;</span><span class="p">)</span>
@@ -902,13 +902,23 @@ document.write(`
 
         <span class="c1"># check that the perturbation type is valid</span>
         <span class="k">assert</span> <span class="n">perturb_type</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="s2">&quot;uniform&quot;</span><span class="p">,</span> <span class="s2">&quot;poisson&quot;</span><span class="p">],</span> <span class="s2">&quot;Invalid perturbation type. Choose from uniform, poisson&quot;</span>
+            <span class="s2">&quot;uniform&quot;</span><span class="p">,</span> <span class="s2">&quot;poisson&quot;</span><span class="p">],</span> <span class="s2">&quot;Invalid perturbation type. Choose from uniform, poisson.&quot;</span>
 
         <span class="c1"># organize n_jobs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="n">organize_n_jobs</span><span class="p">(</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
         
         <span class="c1"># create a shared lock</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+
+        <span class="c1"># settings for K search</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">K_search_settings</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;lock&quot;</span><span class="p">:</span> <span class="n">Lock</span><span class="p">(),</span>
+            <span class="s2">&quot;k_search_method&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">k_search_method</span><span class="p">,</span>
+            <span class="s2">&quot;sill_thresh&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span><span class="p">,</span>
+            <span class="s2">&quot;H_sill_thresh&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">H_sill_thresh</span><span class="p">,</span>
+            <span class="s2">&quot;k_min&quot;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;k_max&quot;</span><span class="p">:</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+        <span class="p">}</span>
 
         <span class="c1">#</span>
         <span class="c1"># Save information from the solution</span>
@@ -1019,6 +1029,17 @@ document.write(`
 <span class="sd">            * results will always include a field for ``time``, that gives the total compute time.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+
+        <span class="c1"># Prepare Ks</span>
+        <span class="n">Ks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span>
+        <span class="n">Ks</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_search_method&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">BST</span><span class="o">.</span><span class="n">sorted_array_to_bst</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_search_method&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;bst_pre&quot;</span><span class="p">:</span> 
+                <span class="n">Ks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">preorder</span><span class="p">())</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_search_method&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;bst_post&quot;</span><span class="p">:</span> 
+                <span class="n">Ks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">postorder</span><span class="p">())</span>
+
         <span class="c1">#</span>
         <span class="c1"># check X format</span>
         <span class="c1">#</span>
@@ -1036,6 +1057,9 @@ document.write(`
 
         <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">min</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Maximum rank k to try in Ks should be k&lt;min(X.shape)&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Minimum Ks needs to be more than 0.&quot;</span><span class="p">)</span>
 
         <span class="c1">#</span>
         <span class="c1"># MPI</span>
@@ -1216,13 +1240,15 @@ document.write(`
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb_multiprocessing</span><span class="p">:</span>
             <span class="n">all_k_results</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">Ks</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
-                <span class="n">k_result</span> <span class="o">=</span> <span class="n">_nmf_parallel_wrapper</span><span class="p">(</span><span class="n">gpuid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="o">**</span><span class="n">job_data</span><span class="p">)</span>
+                <span class="n">k_result</span> <span class="o">=</span> <span class="n">_nmf_parallel_wrapper</span><span class="p">(</span><span class="n">gpuid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">K_search_settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">K_search_settings</span><span class="p">,</span> <span class="o">**</span><span class="n">job_data</span><span class="p">)</span>
                 <span class="n">all_k_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k_result</span><span class="p">)</span>
         
         <span class="c1"># multiprocessing over each K</span>
         <span class="k">else</span><span class="p">:</span>   
             <span class="n">executor</span> <span class="o">=</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">)</span>
-            <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">_nmf_parallel_wrapper</span><span class="p">,</span> <span class="n">gpuid</span><span class="o">=</span><span class="n">kidx</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="o">**</span><span class="n">job_data</span><span class="p">)</span> <span class="k">for</span> <span class="n">kidx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Ks</span><span class="p">)]</span>
+            <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+                <span class="n">_nmf_parallel_wrapper</span><span class="p">,</span> <span class="n">gpuid</span><span class="o">=</span><span class="n">kidx</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">K_search_settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">K_search_settings</span><span class="p">,</span> <span class="o">**</span><span class="n">job_data</span>
+                <span class="p">)</span> <span class="k">for</span> <span class="n">kidx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Ks</span><span class="p">)]</span>
             <span class="n">all_k_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">Ks</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)]</span>
 
         <span class="c1">#</span>
@@ -1258,12 +1284,27 @@ document.write(`
         <span class="k">for</span> <span class="n">k_results</span> <span class="ow">in</span> <span class="n">all_k_results</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">k_results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">combined_result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                
+            
         <span class="c1">#</span>
         <span class="c1"># revent to original Ks</span>
         <span class="c1">#</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">Ks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">collected_Ks</span><span class="p">)[</span><span class="n">Ks_sort_indices</span><span class="p">]</span>
+
+        <span class="c1">#</span>
+        <span class="c1"># Which Ks computed</span>
+        <span class="c1">#    </span>
+        <span class="n">Ks_not_computed</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">K_search_settings</span> <span class="o">!=</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
+            <span class="n">Ks_computed</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">flag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;exit_early&quot;</span><span class="p">]):</span>
+                <span class="k">if</span> <span class="n">flag</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="n">Ks_computed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;Ks&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">Ks_not_computed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;Ks&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">])</span>        
+            
+            <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;Ks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ks_computed</span>
+            <span class="n">Ks</span> <span class="o">=</span> <span class="n">Ks_computed</span>
             
         <span class="c1">#</span>
         <span class="c1"># Finalize</span>
@@ -1281,12 +1322,20 @@ document.write(`
                     <span class="n">k_predict</span> <span class="o">=</span> <span class="n">pvalue_analysis</span><span class="p">(</span>
                         <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;col_err&quot;</span><span class="p">],</span> <span class="n">Ks</span><span class="p">,</span> <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">],</span> <span class="n">SILL_thr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span>
                     <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                
                 <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="o">==</span> <span class="s2">&quot;sill&quot;</span><span class="p">:</span>
+                    
+                    <span class="c1"># check if that sill threshold exist</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span> <span class="o">&gt;</span> <span class="nb">min</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_H&quot;</span><span class="p">])]):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_H&quot;</span><span class="p">])])</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;W or H Silhouettes were all less than sill_thresh. Setting sill_thresh to minimum for K prediction. sill_thresh=</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
                     <span class="n">k_predict_W</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span>
                         <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())]</span>
                     <span class="n">k_predict_H</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span>
                         <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_H&quot;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())]</span>
                     <span class="n">k_predict</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">k_predict_W</span><span class="p">,</span> <span class="n">k_predict_H</span><span class="p">)</span>
+            
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">k_predict</span> <span class="o">=</span> <span class="mi">0</span>
                 
@@ -1331,7 +1380,8 @@ document.write(`
                     <span class="n">plot_predict</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_k</span><span class="p">,</span>
                     <span class="n">plot_final</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="n">simple_plot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">simple_plot</span><span class="p">,</span>
-                    <span class="n">calculate_error</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">calculate_error</span>
+                    <span class="n">calculate_error</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">calculate_error</span><span class="p">,</span>
+                    <span class="n">Ks_not_computed</span><span class="o">=</span><span class="n">Ks_not_computed</span>
                 <span class="p">)</span>
                 <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
                 <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;end_time= &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
