@@ -46,7 +46,7 @@ class SubstitutionOperator(VultureModuleBase):
         elif self.corpus_substitutions:
             substitution_map =  self.corpus_substitutions
         elif self.document_substitutions:
-            substitution_map = self.document_substitutions
+            substitution_map = self.document_substitutions[doc_id] 
         else:
             raise ValueError("No substitutions were passed to the SubstitutionOperator.")
         
