@@ -97,7 +97,6 @@ def _perturb_parallel_wrapper(
 
 def _take_exit_note(k, logging_stats, start_time, save_path, note_name, lock):
     note_data = dict()
-    note_data["Done"] = "N"
     for key in logging_stats:
         if key == 'k':
             note_data["k"] = k
@@ -115,6 +114,8 @@ def _take_exit_note(k, logging_stats, start_time, save_path, note_name, lock):
             note_data["err_std"] = "--"
         elif key == 'col_error':
             note_data["col_err"] = "--"
+        elif key == "Done":
+                note_data["Done"] = "N"
         elif key == 'time':
             elapsed_time = time.time() - start_time
             elapsed_time = timedelta(seconds=elapsed_time)
@@ -330,9 +331,6 @@ def _nmf_parallel_wrapper(
         )
 
         note_data = dict()
-        if K_search_settings["k_search_method"] != "linear":
-            note_data["Done"] = "Y"
-
         for key in logging_stats:
             if key == 'k':
                 note_data["k"] = k
@@ -354,6 +352,8 @@ def _nmf_parallel_wrapper(
                 elapsed_time = time.time() - start_time
                 elapsed_time = timedelta(seconds=elapsed_time)
                 note_data["time"] = str(elapsed_time).split('.')[0]
+            elif key == "Done":
+                note_data["Done"] = "Y"
             else:
                 warnings.warn(f'[tELF]: Encountered unknown logging metric "{key}"', RuntimeWarning)
                 note_data[key] = 'N/A'
@@ -828,17 +828,19 @@ class NMFk:
 
         # init the stats header 
         # this will setup the logging for all configurations of nmfk
-        stats_header = {'k': 'k', 
-                        'sils_min_W': 'W Min. Silhouette', 
-                        'sils_mean_W': 'W Mean Silhouette',
-                        'sils_min_H': 'H Min. Silhouette', 
-                        'sils_mean_H': 'H Mean Silhouette',
+        stats_header = {
+                        'Done': "Done",
+                        'k': 'k',
+                        'sils_min_W': 'W Min. Sill', 
+                        'sils_mean_W': 'W Mean Sill',
+                        'sils_min_H': 'H Min. Sill', 
+                        'sils_mean_H': 'H Mean Sill',
                         }
         if self.calculate_error:
-            stats_header['err_mean'] = 'Mean Error'
-            stats_header['err_std'] = 'STD Error'
+            stats_header['err_mean'] = 'Mean Err'
+            stats_header['err_std'] = 'STD Err'
         if self.predict_k:
-            stats_header['col_error'] = 'Mean Col. Error'
+            stats_header['col_error'] = 'Mean Col. Err'
         if self.calculate_pac:
             stats_header['pac'] = 'PAC'
         stats_header['time'] = 'Time Elapsed'
@@ -879,7 +881,6 @@ class NMFk:
             notes["X_shape"] = X.shape
             take_note(notes, self.save_path_full, name=note_name, lock=self.lock)
             append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
-            take_note_fmat(self.save_path_full, name=note_name, lock=self.lock, **stats_header)
         
         if self.n_nodes > 1:
             comm.Barrier()
@@ -918,6 +919,9 @@ class NMFk:
 
         else:
             perturb_rows, perturb_cols = None, None
+
+        if self.save_output:
+            take_note_fmat(self.save_path_full, name=note_name, lock=self.lock, **stats_header)
 
         #
         # Begin NMFk
