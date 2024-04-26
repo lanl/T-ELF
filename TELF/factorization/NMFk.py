@@ -95,7 +95,7 @@ def _perturb_parallel_wrapper(
         
     return W, H, error, other_results
 
-def _take_exit_note(k, logging_stats, start_time, save_path, note_name, lock):
+def _take_exit_note(k, n_perturbs, logging_stats, start_time, save_path, note_name, lock):
     note_data = dict()
     for key in logging_stats:
         if key == 'k':
@@ -116,6 +116,8 @@ def _take_exit_note(k, logging_stats, start_time, save_path, note_name, lock):
             note_data["col_err"] = "--"
         elif key == "Done":
                 note_data["Done"] = "N"
+        elif key == "Perturbs":
+                note_data["Perturbs"] = f'{n_perturbs}'
         elif key == 'time':
             elapsed_time = time.time() - start_time
             elapsed_time = timedelta(seconds=elapsed_time)
@@ -184,7 +186,7 @@ def _nmf_parallel_wrapper(
                 with K_search_settings['lock']:
                     if k <= K_search_settings["k_min"] or k >= K_search_settings["k_max"]:
                         if save_output:
-                            _take_exit_note(k, logging_stats, start_time, save_path, note_name, lock)
+                            _take_exit_note(k, perturbation, logging_stats, start_time, save_path, note_name, lock)
                         return {"Ks":k, "exit_early":True}
 
             W, H, error, other_results_curr = _perturb_parallel_wrapper(perturbation=perturbation, gpuid=gpuid, **perturb_job_data)
@@ -354,6 +356,8 @@ def _nmf_parallel_wrapper(
                 note_data["time"] = str(elapsed_time).split('.')[0]
             elif key == "Done":
                 note_data["Done"] = "Y"
+            elif key == "Perturbs":
+                note_data["Perturbs"] = n_perturbs
             else:
                 warnings.warn(f'[tELF]: Encountered unknown logging metric "{key}"', RuntimeWarning)
                 note_data[key] = 'N/A'
@@ -829,8 +833,9 @@ class NMFk:
         # init the stats header 
         # this will setup the logging for all configurations of nmfk
         stats_header = {
-                        'Done': "Done",
+                        'Done': 'Done',
                         'k': 'k',
+                        'Perturbs': 'Perturbs',
                         'sils_min_W': 'W Min. Sill', 
                         'sils_mean_W': 'W Mean Sill',
                         'sils_min_H': 'H Min. Sill', 
