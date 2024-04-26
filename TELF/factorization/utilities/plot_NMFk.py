@@ -389,9 +389,11 @@ def plot_NMFk(
     
     # save
     if plot_final:
+        kmin = min(min(list(data["Ks"])), min(list(Ks_not_computed)))
+        kmax = max(max(list(data["Ks"])), max(list(Ks_not_computed)))
         plt.savefig(
             str(path) + "/FINAL_k=" +
-            str(min(list(data["Ks"]))) + "-" + str(max(list(data["Ks"]))) + ".png",
+            str(kmin) + "-" + str(kmax) + ".png",
             bbox_inches="tight",
         )
     else:

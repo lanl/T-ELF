@@ -41,6 +41,9 @@ import socket
 from pathlib import Path
 import concurrent.futures
 from threading import Lock
+import pickle
+import fcntl
+import tempfile
 
 try:
     import cupy as cp
@@ -53,6 +56,21 @@ try:
 except Exception:
     MPI = None
 
+def _HPC_K_search_settings_update(n_nodes, my_rank, K_search_settings, save_path):
+    for node_rank in range(n_nodes): 
+        if node_rank == my_rank:
+            continue
+        
+        with open(f'{save_path}/{node_rank}-K_search_settings.p', 'rb') as file:
+            fcntl.flock(file, fcntl.LOCK_SH)
+            node_settings = pickle.load(file)
+            fcntl.flock(file, fcntl.LOCK_UN)
+
+        if node_settings["k_min"] > K_search_settings["k_min"]:
+            K_search_settings["k_min"] = node_settings["k_min"]
+
+        if node_settings["k_max"] < K_search_settings["k_max"]:
+            K_search_settings["k_max"] = node_settings["k_max"]
 
 def _perturb_parallel_wrapper(
     perturbation,
@@ -66,7 +84,20 @@ def _perturb_parallel_wrapper(
     init_type,
     nmf_params,
     nmf,
-    calculate_error):
+    calculate_error,
+    K_search_settings,
+    n_nodes,
+    my_rank,
+    save_path):
+
+    if K_search_settings["k_search_method"] != "linear":
+        with K_search_settings['lock']:
+            
+            if n_nodes > 1:
+                _HPC_K_search_settings_update(n_nodes, my_rank, K_search_settings, save_path)
+
+            if k <= K_search_settings["k_min"] or k >= K_search_settings["k_max"]:
+                return {"exit_early": True, "perturbation":perturbation}
 
     # Prepare
     Y = perturb_X(X, perturbation, epsilon, perturb_type)
@@ -93,7 +124,7 @@ def _perturb_parallel_wrapper(
     else:
         error = 0
         
-    return W, H, error, other_results
+    return {"exit_early":False, "W":W, "H":H, "error":error, "other_results":other_results}
 
 def _take_exit_note(k, n_perturbs, logging_stats, start_time, save_path, note_name, lock):
     note_data = dict()
@@ -157,7 +188,9 @@ def _nmf_parallel_wrapper(
         perturb_verbose=False,
         lock=None,
         note_name="experiment",
-        K_search_settings=None
+        K_search_settings=None,
+        n_nodes=1,
+        rank=0
         ):
 
     #
@@ -173,7 +206,10 @@ def _nmf_parallel_wrapper(
         "calculate_error":calculate_error,
         "k":k,
         "mask":mask,
-        "init_type":init_type
+        "init_type":init_type,
+        "n_nodes":n_nodes,
+        "my_rank":rank,
+        "save_path":save_path
     }
     
     # single job or parallel over Ks
@@ -181,15 +217,24 @@ def _nmf_parallel_wrapper(
     if n_jobs == 1 or not perturb_multiprocessing:
         for perturbation in tqdm(range(n_perturbs), disable=not perturb_verbose, total=n_perturbs):
 
-            # check for early termination
-            if K_search_settings["k_search_method"] != "linear":
-                with K_search_settings['lock']:
-                    if k <= K_search_settings["k_min"] or k >= K_search_settings["k_max"]:
-                        if save_output:
-                            _take_exit_note(k, perturbation, logging_stats, start_time, save_path, note_name, lock)
-                        return {"Ks":k, "exit_early":True}
+            curr_perturbation_results = _perturb_parallel_wrapper(
+                perturbation=perturbation, 
+                gpuid=gpuid, 
+                K_search_settings=K_search_settings,
+                **perturb_job_data)
 
-            W, H, error, other_results_curr = _perturb_parallel_wrapper(perturbation=perturbation, gpuid=gpuid, **perturb_job_data)
+            # check for early termination
+            if curr_perturbation_results["exit_early"]:
+                if save_output:
+                    _take_exit_note(k, perturbation, logging_stats, start_time, save_path, note_name, lock)
+                return {"Ks":k, "exit_early":True}
+
+            # did not exit early
+            W = curr_perturbation_results["W"]
+            H = curr_perturbation_results["H"]
+            error = curr_perturbation_results["error"]
+            other_results_curr = curr_perturbation_results["other_results"]
+
             W_all.append(W)
             H_all.append(H)
             errors.append(error)
@@ -198,14 +243,28 @@ def _nmf_parallel_wrapper(
     # multiple jobs over perturbations
     else:
         executor = concurrent.futures.ThreadPoolExecutor(max_workers=n_jobs)
-        futures = [executor.submit(_perturb_parallel_wrapper, gpuid=pidx % n_jobs, perturbation=perturbation, **perturb_job_data) for pidx, perturbation in enumerate(range(n_perturbs))]
+        futures = [executor.submit(
+            _perturb_parallel_wrapper, 
+            gpuid=pidx % n_jobs, 
+            perturbation=perturbation, 
+            K_search_settings=K_search_settings, 
+            **perturb_job_data) for pidx, perturbation in enumerate(range(n_perturbs))]
         all_perturbation_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), disable=not perturb_verbose, total=n_perturbs)]
 
-        for W, H, error, other_results_curr in all_perturbation_results:
-            W_all.append(W)
-            H_all.append(H)
-            errors.append(error)
-            other_results_all.append(other_results_curr)
+        # check for early termination
+        for curr_perturbation_results in all_perturbation_results:
+            if curr_perturbation_results["exit_early"]:
+                if save_output:
+                    exit_perturbation = curr_perturbation_results["perturbation"]
+                    _take_exit_note(k, exit_perturbation, logging_stats, start_time, save_path, note_name, lock)
+                return {"Ks":k, "exit_early":True}
+
+        # did not exit early
+        for curr_perturbation_results in all_perturbation_results:
+            W_all.append(curr_perturbation_results["W"])
+            H_all.append(curr_perturbation_results["H"])
+            errors.append(curr_perturbation_results["error"])
+            other_results_all.append(curr_perturbation_results["other_results"])
     
     #
     # Organize other results
@@ -302,6 +361,25 @@ def _nmf_parallel_wrapper(
                 K_search_settings['k_min'] = k
             if K_search_settings["H_sill_thresh"] >= 0 and (sils_min_H <= K_search_settings["H_sill_thresh"]):
                 K_search_settings['k_max'] = k
+
+            if n_nodes > 1:
+                # save the changed state for multi-node operations
+                save_settings = {
+                    "k_min": K_search_settings['k_min'],
+                    "k_max": K_search_settings['k_max'],
+                }
+                
+                # atomic safe write
+                dir_name = os.path.dirname(f'{save_path}')
+                temp_file = tempfile.NamedTemporaryFile(delete=False, dir=dir_name, mode='wb')
+                try:
+                    # Write data to the temporary file
+                    pickle.dump(save_settings, temp_file)
+                finally:
+                    temp_file.close()
+                
+                # Atomically replace the old file with the new file
+                os.replace(temp_file.name, f'{save_path}/{rank}-K_search_settings.p')
 
     #
     # save output factors and the plot
@@ -610,6 +688,10 @@ class NMFk:
         if self.calculate_pac and not self.save_output:
             self.save_output = True
             warnings.warn("save_output was False when calculate_pac was True! save_output changed to True.")
+
+        if (self.n_nodes > 1 and self.k_search_method != "linear") and not self.save_output:
+            self.save_output = True
+            warnings.warn("save_output was False when n_nodes > 1 and k_search_method != 'linear'! save_output changed to True.")
 
         if self.calculate_error:
             warnings.warn(
@@ -959,7 +1041,9 @@ class NMFk:
             "perturb_multiprocessing":self.perturb_multiprocessing,
             "perturb_verbose":self.perturb_verbose,
             "lock":self.lock,
-            "note_name":note_name
+            "note_name":note_name,
+            "n_nodes":self.n_nodes,
+            "rank":rank,
         }
         
         # Single job or parallel over perturbations
