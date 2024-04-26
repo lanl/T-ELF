@@ -621,11 +621,13 @@ class NMFk:
             When True, creates a simple plot for each intermidiate k factorization which hides the statistics such as average and maximum Silhouette scores. The default is True.
         k_search_method : str, optional
             Which approach to use when searching for the rank or k. The default is "linear".\n
-            * ``k_search_method='linear'`` will visit each K given in ``Ks`` hyper-parameter of the ``fit()`` function.\n
-            * ``k_search_method='bst_post'`` will perform post-order binary search. When a rank is found with ``min(W silhouette, H silhouette) >= sill_thresh``, all lower ranks are pruned from search space.
-            * ``k_search_method='bst_pre'`` will perform pre-order binary search. When a rank is found with ``min(W silhouette, H silhouette) >= sill_thresh``, all lower ranks are pruned from search space.
+            * ``k_search_method='linear'`` will linearly visit each K given in ``Ks`` hyper-parameter of the ``fit()`` function.\n
+            * ``k_search_method='bst_post'`` will perform post-order binary search. When an ideal rank is found with ``min(W silhouette, H silhouette) >= sill_thresh``, all lower ranks are pruned from the search space.
+            * ``k_search_method='bst_pre'`` will perform pre-order binary search. When an ideal rank is found with ``min(W silhouette, H silhouette) >= sill_thresh``, all lower ranks are pruned from the search space.
         H_sill_thresh : float, optional
-            When ``k_search='bst_post'`` or ``k_search='bst_pre'``, use this hyper-parameter to cut off higher ranks from search space based on threshold for H silhouette. If -1, not used. The default is -1.
+            When searching for the optimal rank with binary search using ``k_search='bst_post'`` or ``k_search='bst_pre'``, this hyper-parameter can be used to cut off higher ranks from search space.\n
+            The cut-off of higher ranks from the search space is based on threshold for H silhouette. When H silhouette below ``H_sill_thresh`` is found, all higher ranks are removed from the search space.\n
+            If ``H_sill_thresh=-1``, it is not used. The default is -1.
         Returns
         -------
         None.
