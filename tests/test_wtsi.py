@@ -20,8 +20,9 @@ def test_wtsi_k():
         "transpose":False,
         "sill_thresh":0.9,
         "nmf_verbose":False,
-        "nmf_method":'nmf_kl_mu'
-
+        "nmf_method":'nmf_kl_mu',
+        "k_search_method":"bst_post",
+        "H_sill_thresh":0.1
     }
     model = NMFk(**params)
     
