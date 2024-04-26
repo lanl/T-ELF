@@ -625,8 +625,9 @@ class NMFk:
             * ``k_search_method='bst_post'`` will perform post-order binary search. When an ideal rank is found with ``min(W silhouette, H silhouette) >= sill_thresh``, all lower ranks are pruned from the search space.
             * ``k_search_method='bst_pre'`` will perform pre-order binary search. When an ideal rank is found with ``min(W silhouette, H silhouette) >= sill_thresh``, all lower ranks are pruned from the search space.
         H_sill_thresh : float, optional
+            Setting for removing higher ranks from the search space.\n
             When searching for the optimal rank with binary search using ``k_search='bst_post'`` or ``k_search='bst_pre'``, this hyper-parameter can be used to cut off higher ranks from search space.\n
-            The cut-off of higher ranks from the search space is based on threshold for H silhouette. When H silhouette below ``H_sill_thresh`` is found, all higher ranks are removed from the search space.\n
+            The cut-off of higher ranks from the search space is based on threshold for H silhouette. When a H silhouette below ``H_sill_thresh`` is found for a given rank or K, all higher ranks are removed from the search space.\n
             If ``H_sill_thresh=-1``, it is not used. The default is -1.
         Returns
         -------

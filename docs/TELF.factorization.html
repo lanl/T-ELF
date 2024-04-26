@@ -612,8 +612,9 @@ others to do so.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">k_search_method='bst_pre'</span></code> will perform pre-order binary search. When an ideal rank is found with <code class="docutils literal notranslate"><span class="pre">min(W</span> <span class="pre">silhouette,</span> <span class="pre">H</span> <span class="pre">silhouette)</span> <span class="pre">&gt;=</span> <span class="pre">sill_thresh</span></code>, all lower ranks are pruned from the search space.</p></li>
 </ul>
 </dd>
-<dt>H_sill_thresh<span class="classifier">float, optional</span></dt><dd><p>When searching for the optimal rank with binary search using <code class="docutils literal notranslate"><span class="pre">k_search='bst_post'</span></code> or <code class="docutils literal notranslate"><span class="pre">k_search='bst_pre'</span></code>, this hyper-parameter can be used to cut off higher ranks from search space.</p>
-<p>The cut-off of higher ranks from the search space is based on threshold for H silhouette. When H silhouette below <code class="docutils literal notranslate"><span class="pre">H_sill_thresh</span></code> is found, all higher ranks are removed from the search space.</p>
+<dt>H_sill_thresh<span class="classifier">float, optional</span></dt><dd><p>Setting for removing higher ranks from the search space.</p>
+<p>When searching for the optimal rank with binary search using <code class="docutils literal notranslate"><span class="pre">k_search='bst_post'</span></code> or <code class="docutils literal notranslate"><span class="pre">k_search='bst_pre'</span></code>, this hyper-parameter can be used to cut off higher ranks from search space.</p>
+<p>The cut-off of higher ranks from the search space is based on threshold for H silhouette. When a H silhouette below <code class="docutils literal notranslate"><span class="pre">H_sill_thresh</span></code> is found for a given rank or K, all higher ranks are removed from the search space.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">H_sill_thresh=-1</span></code>, it is not used. The default is -1.</p>
 </dd>
 </dl>
