@@ -118,9 +118,6 @@ conda install cudnn
 |           BNMFk           |                    |                    |                    |                    |                     |                    |                           Boolean NMFk                                           |             |       :soon:       |
 |         SPLIT NMFk        |                    |                    |                    |                    |                     |                    |        Joint NMFk factorization of multiple data via SPLIT                       |             |       :soon:       |
 | SPLIT Transfer Classifier |                    |                    |                    |                    |                     |                    |      Supervised transfer learning method via SPLIT and NMFk                      |             |       :soon:       |
-|           CP-ALS          |                    |                    |                    |                    |                     |                    |    Alternating least squares algorithm for canonical polyadic decomposition      |             |       :soon:       |
-|           CP-APR          |                    |                    |                    |                    |                     |                    |    Alternating Poisson regression algorithm for canonical polyadic decomposition |             |       :soon:       |
-|           NTDS_FAPG       |                    |                    |                    |                    |                     |                    |                      Non-negative Tucker Tensor Decomposition                    |             |       :soon:       |
  
 ### TELF.pre_processing
 
