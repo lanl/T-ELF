@@ -320,6 +320,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">concurrent.futures</span>
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">fcntl</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
@@ -332,6 +335,21 @@ document.write(`
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
     <span class="n">MPI</span> <span class="o">=</span> <span class="kc">None</span>
 
+<span class="k">def</span> <span class="nf">_HPC_K_search_settings_update</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">my_rank</span><span class="p">,</span> <span class="n">K_search_settings</span><span class="p">,</span> <span class="n">save_path</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">node_rank</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span> 
+        <span class="k">if</span> <span class="n">node_rank</span> <span class="o">==</span> <span class="n">my_rank</span><span class="p">:</span>
+            <span class="k">continue</span>
+        
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">node_rank</span><span class="si">}</span><span class="s1">-K_search_settings.p&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_SH</span><span class="p">)</span>
+            <span class="n">node_settings</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">node_settings</span><span class="p">[</span><span class="s2">&quot;k_min&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_min&quot;</span><span class="p">]:</span>
+            <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_settings</span><span class="p">[</span><span class="s2">&quot;k_min&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">node_settings</span><span class="p">[</span><span class="s2">&quot;k_max&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_max&quot;</span><span class="p">]:</span>
+            <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node_settings</span><span class="p">[</span><span class="s2">&quot;k_max&quot;</span><span class="p">]</span>
 
 <span class="k">def</span> <span class="nf">_perturb_parallel_wrapper</span><span class="p">(</span>
     <span class="n">perturbation</span><span class="p">,</span>
@@ -345,7 +363,20 @@ document.write(`
     <span class="n">init_type</span><span class="p">,</span>
     <span class="n">nmf_params</span><span class="p">,</span>
     <span class="n">nmf</span><span class="p">,</span>
-    <span class="n">calculate_error</span><span class="p">):</span>
+    <span class="n">calculate_error</span><span class="p">,</span>
+    <span class="n">K_search_settings</span><span class="p">,</span>
+    <span class="n">n_nodes</span><span class="p">,</span>
+    <span class="n">my_rank</span><span class="p">,</span>
+    <span class="n">save_path</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_search_method&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s1">&#39;lock&#39;</span><span class="p">]:</span>
+            
+            <span class="k">if</span> <span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">_HPC_K_search_settings_update</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">my_rank</span><span class="p">,</span> <span class="n">K_search_settings</span><span class="p">,</span> <span class="n">save_path</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_min&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">&gt;=</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_max&quot;</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;exit_early&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;perturbation&quot;</span><span class="p">:</span><span class="n">perturbation</span><span class="p">}</span>
 
     <span class="c1"># Prepare</span>
     <span class="n">Y</span> <span class="o">=</span> <span class="n">perturb_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">perturb_type</span><span class="p">)</span>
@@ -372,11 +403,10 @@ document.write(`
     <span class="k">else</span><span class="p">:</span>
         <span class="n">error</span> <span class="o">=</span> <span class="mi">0</span>
         
-    <span class="k">return</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">other_results</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;exit_early&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">:</span><span class="n">W</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span><span class="n">H</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span><span class="n">error</span><span class="p">,</span> <span class="s2">&quot;other_results&quot;</span><span class="p">:</span><span class="n">other_results</span><span class="p">}</span>
 
-<span class="k">def</span> <span class="nf">_take_exit_note</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">logging_stats</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_take_exit_note</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">n_perturbs</span><span class="p">,</span> <span class="n">logging_stats</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
     <span class="n">note_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;Done&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;N&quot;</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">logging_stats</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;k&#39;</span><span class="p">:</span>
             <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
@@ -394,6 +424,10 @@ document.write(`
             <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;err_std&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;--&quot;</span>
         <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;col_error&#39;</span><span class="p">:</span>
             <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;col_err&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;--&quot;</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Done&quot;</span><span class="p">:</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;Done&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;N&quot;</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Perturbs&quot;</span><span class="p">:</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;Perturbs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_perturbs</span><span class="si">}</span><span class="s1">&#39;</span>
         <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span>
             <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
             <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">elapsed_time</span><span class="p">)</span>
@@ -433,7 +467,9 @@ document.write(`
         <span class="n">perturb_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">lock</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">note_name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">,</span>
-        <span class="n">K_search_settings</span><span class="o">=</span><span class="kc">None</span>
+        <span class="n">K_search_settings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">n_nodes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">rank</span><span class="o">=</span><span class="mi">0</span>
         <span class="p">):</span>
 
     <span class="c1">#</span>
@@ -449,7 +485,10 @@ document.write(`
         <span class="s2">&quot;calculate_error&quot;</span><span class="p">:</span><span class="n">calculate_error</span><span class="p">,</span>
         <span class="s2">&quot;k&quot;</span><span class="p">:</span><span class="n">k</span><span class="p">,</span>
         <span class="s2">&quot;mask&quot;</span><span class="p">:</span><span class="n">mask</span><span class="p">,</span>
-        <span class="s2">&quot;init_type&quot;</span><span class="p">:</span><span class="n">init_type</span>
+        <span class="s2">&quot;init_type&quot;</span><span class="p">:</span><span class="n">init_type</span><span class="p">,</span>
+        <span class="s2">&quot;n_nodes&quot;</span><span class="p">:</span><span class="n">n_nodes</span><span class="p">,</span>
+        <span class="s2">&quot;my_rank&quot;</span><span class="p">:</span><span class="n">rank</span><span class="p">,</span>
+        <span class="s2">&quot;save_path&quot;</span><span class="p">:</span><span class="n">save_path</span>
     <span class="p">}</span>
     
     <span class="c1"># single job or parallel over Ks</span>
@@ -457,15 +496,24 @@ document.write(`
     <span class="k">if</span> <span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">perturb_multiprocessing</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">perturbation</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_perturbs</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">perturb_verbose</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">n_perturbs</span><span class="p">):</span>
 
-            <span class="c1"># check for early termination</span>
-            <span class="k">if</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_search_method&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
-                <span class="k">with</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s1">&#39;lock&#39;</span><span class="p">]:</span>
-                    <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_min&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">&gt;=</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_max&quot;</span><span class="p">]:</span>
-                        <span class="k">if</span> <span class="n">save_output</span><span class="p">:</span>
-                            <span class="n">_take_exit_note</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">logging_stats</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="p">)</span>
-                        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Ks&quot;</span><span class="p">:</span><span class="n">k</span><span class="p">,</span> <span class="s2">&quot;exit_early&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">}</span>
+            <span class="n">curr_perturbation_results</span> <span class="o">=</span> <span class="n">_perturb_parallel_wrapper</span><span class="p">(</span>
+                <span class="n">perturbation</span><span class="o">=</span><span class="n">perturbation</span><span class="p">,</span> 
+                <span class="n">gpuid</span><span class="o">=</span><span class="n">gpuid</span><span class="p">,</span> 
+                <span class="n">K_search_settings</span><span class="o">=</span><span class="n">K_search_settings</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">perturb_job_data</span><span class="p">)</span>
 
-            <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">other_results_curr</span> <span class="o">=</span> <span class="n">_perturb_parallel_wrapper</span><span class="p">(</span><span class="n">perturbation</span><span class="o">=</span><span class="n">perturbation</span><span class="p">,</span> <span class="n">gpuid</span><span class="o">=</span><span class="n">gpuid</span><span class="p">,</span> <span class="o">**</span><span class="n">perturb_job_data</span><span class="p">)</span>
+            <span class="c1"># check for early termination</span>
+            <span class="k">if</span> <span class="n">curr_perturbation_results</span><span class="p">[</span><span class="s2">&quot;exit_early&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">save_output</span><span class="p">:</span>
+                    <span class="n">_take_exit_note</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">,</span> <span class="n">logging_stats</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Ks&quot;</span><span class="p">:</span><span class="n">k</span><span class="p">,</span> <span class="s2">&quot;exit_early&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">}</span>
+
+            <span class="c1"># did not exit early</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="n">curr_perturbation_results</span><span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">]</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">curr_perturbation_results</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">curr_perturbation_results</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">]</span>
+            <span class="n">other_results_curr</span> <span class="o">=</span> <span class="n">curr_perturbation_results</span><span class="p">[</span><span class="s2">&quot;other_results&quot;</span><span class="p">]</span>
+
             <span class="n">W_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
             <span class="n">H_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
             <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
@@ -474,14 +522,28 @@ document.write(`
     <span class="c1"># multiple jobs over perturbations</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">executor</span> <span class="o">=</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)</span>
-        <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">_perturb_parallel_wrapper</span><span class="p">,</span> <span class="n">gpuid</span><span class="o">=</span><span class="n">pidx</span> <span class="o">%</span> <span class="n">n_jobs</span><span class="p">,</span> <span class="n">perturbation</span><span class="o">=</span><span class="n">perturbation</span><span class="p">,</span> <span class="o">**</span><span class="n">perturb_job_data</span><span class="p">)</span> <span class="k">for</span> <span class="n">pidx</span><span class="p">,</span> <span class="n">perturbation</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_perturbs</span><span class="p">))]</span>
+        <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+            <span class="n">_perturb_parallel_wrapper</span><span class="p">,</span> 
+            <span class="n">gpuid</span><span class="o">=</span><span class="n">pidx</span> <span class="o">%</span> <span class="n">n_jobs</span><span class="p">,</span> 
+            <span class="n">perturbation</span><span class="o">=</span><span class="n">perturbation</span><span class="p">,</span> 
+            <span class="n">K_search_settings</span><span class="o">=</span><span class="n">K_search_settings</span><span class="p">,</span> 
+            <span class="o">**</span><span class="n">perturb_job_data</span><span class="p">)</span> <span class="k">for</span> <span class="n">pidx</span><span class="p">,</span> <span class="n">perturbation</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_perturbs</span><span class="p">))]</span>
         <span class="n">all_perturbation_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">perturb_verbose</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">n_perturbs</span><span class="p">)]</span>
 
-        <span class="k">for</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">other_results_curr</span> <span class="ow">in</span> <span class="n">all_perturbation_results</span><span class="p">:</span>
-            <span class="n">W_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
-            <span class="n">H_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
-            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-            <span class="n">other_results_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">other_results_curr</span><span class="p">)</span>
+        <span class="c1"># check for early termination</span>
+        <span class="k">for</span> <span class="n">curr_perturbation_results</span> <span class="ow">in</span> <span class="n">all_perturbation_results</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">curr_perturbation_results</span><span class="p">[</span><span class="s2">&quot;exit_early&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">save_output</span><span class="p">:</span>
+                    <span class="n">exit_perturbation</span> <span class="o">=</span> <span class="n">curr_perturbation_results</span><span class="p">[</span><span class="s2">&quot;perturbation&quot;</span><span class="p">]</span>
+                    <span class="n">_take_exit_note</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">exit_perturbation</span><span class="p">,</span> <span class="n">logging_stats</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Ks&quot;</span><span class="p">:</span><span class="n">k</span><span class="p">,</span> <span class="s2">&quot;exit_early&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">}</span>
+
+        <span class="c1"># did not exit early</span>
+        <span class="k">for</span> <span class="n">curr_perturbation_results</span> <span class="ow">in</span> <span class="n">all_perturbation_results</span><span class="p">:</span>
+            <span class="n">W_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_perturbation_results</span><span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">])</span>
+            <span class="n">H_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_perturbation_results</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_perturbation_results</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">])</span>
+            <span class="n">other_results_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_perturbation_results</span><span class="p">[</span><span class="s2">&quot;other_results&quot;</span><span class="p">])</span>
     
     <span class="c1">#</span>
     <span class="c1"># Organize other results</span>
@@ -579,6 +641,25 @@ document.write(`
             <span class="k">if</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;H_sill_thresh&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sils_min_H</span> <span class="o">&lt;=</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;H_sill_thresh&quot;</span><span class="p">]):</span>
                 <span class="n">K_search_settings</span><span class="p">[</span><span class="s1">&#39;k_max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
 
+            <span class="k">if</span> <span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># save the changed state for multi-node operations</span>
+                <span class="n">save_settings</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;k_min&quot;</span><span class="p">:</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s1">&#39;k_min&#39;</span><span class="p">],</span>
+                    <span class="s2">&quot;k_max&quot;</span><span class="p">:</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s1">&#39;k_max&#39;</span><span class="p">],</span>
+                <span class="p">}</span>
+                
+                <span class="c1"># atomic safe write</span>
+                <span class="n">dir_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">temp_file</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="n">dir_name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># Write data to the temporary file</span>
+                    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">save_settings</span><span class="p">,</span> <span class="n">temp_file</span><span class="p">)</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="n">temp_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                
+                <span class="c1"># Atomically replace the old file with the new file</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temp_file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1">-K_search_settings.p&#39;</span><span class="p">)</span>
+
     <span class="c1">#</span>
     <span class="c1"># save output factors and the plot</span>
     <span class="c1">#</span>
@@ -609,9 +690,6 @@ document.write(`
         <span class="p">)</span>
 
         <span class="n">note_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_search_method&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
-            <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;Done&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Y&quot;</span>
-
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">logging_stats</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;k&#39;</span><span class="p">:</span>
                 <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;k&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
@@ -633,6 +711,10 @@ document.write(`
                 <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
                 <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">elapsed_time</span><span class="p">)</span>
                 <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">elapsed_time</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Done&quot;</span><span class="p">:</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;Done&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Y&quot;</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;Perturbs&quot;</span><span class="p">:</span>
+                <span class="n">note_data</span><span class="p">[</span><span class="s2">&quot;Perturbs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_perturbs</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[tELF]: Encountered unknown logging metric &quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
                 <span class="n">note_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;N/A&#39;</span>
@@ -888,6 +970,10 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;save_output was False when calculate_pac was True! save_output changed to True.&quot;</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_search_method</span> <span class="o">!=</span> <span class="s2">&quot;linear&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;save_output was False when n_nodes &gt; 1 and k_search_method != &#39;linear&#39;! save_output changed to True.&quot;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_error</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;calculate_error is True! Error calculation can make the runtime longer and take up more memory space!&quot;</span><span class="p">)</span>
@@ -1111,17 +1197,20 @@ document.write(`
 
         <span class="c1"># init the stats header </span>
         <span class="c1"># this will setup the logging for all configurations of nmfk</span>
-        <span class="n">stats_header</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> 
-                        <span class="s1">&#39;sils_min_W&#39;</span><span class="p">:</span> <span class="s1">&#39;W Min. Silhouette&#39;</span><span class="p">,</span> 
-                        <span class="s1">&#39;sils_mean_W&#39;</span><span class="p">:</span> <span class="s1">&#39;W Mean Silhouette&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;sils_min_H&#39;</span><span class="p">:</span> <span class="s1">&#39;H Min. Silhouette&#39;</span><span class="p">,</span> 
-                        <span class="s1">&#39;sils_mean_H&#39;</span><span class="p">:</span> <span class="s1">&#39;H Mean Silhouette&#39;</span><span class="p">,</span>
+        <span class="n">stats_header</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;Done&#39;</span><span class="p">:</span> <span class="s1">&#39;Done&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;Perturbs&#39;</span><span class="p">:</span> <span class="s1">&#39;Perturbs&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;sils_min_W&#39;</span><span class="p">:</span> <span class="s1">&#39;W Min. Sill&#39;</span><span class="p">,</span> 
+                        <span class="s1">&#39;sils_mean_W&#39;</span><span class="p">:</span> <span class="s1">&#39;W Mean Sill&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;sils_min_H&#39;</span><span class="p">:</span> <span class="s1">&#39;H Min. Sill&#39;</span><span class="p">,</span> 
+                        <span class="s1">&#39;sils_mean_H&#39;</span><span class="p">:</span> <span class="s1">&#39;H Mean Sill&#39;</span><span class="p">,</span>
                         <span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_error</span><span class="p">:</span>
-            <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;err_mean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Mean Error&#39;</span>
-            <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;err_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;STD Error&#39;</span>
+            <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;err_mean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Mean Err&#39;</span>
+            <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;err_std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;STD Err&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k</span><span class="p">:</span>
-            <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;col_error&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Mean Col. Error&#39;</span>
+            <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;col_error&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Mean Col. Err&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_pac</span><span class="p">:</span>
             <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;pac&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;PAC&#39;</span>
         <span class="n">stats_header</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Time Elapsed&#39;</span>
@@ -1162,7 +1251,6 @@ document.write(`
             <span class="n">notes</span><span class="p">[</span><span class="s2">&quot;X_shape&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
             <span class="n">take_note</span><span class="p">(</span><span class="n">notes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
             <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
-            <span class="n">take_note_fmat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">,</span> <span class="o">**</span><span class="n">stats_header</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">comm</span><span class="o">.</span><span class="n">Barrier</span><span class="p">()</span>
@@ -1202,6 +1290,9 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="n">perturb_rows</span><span class="p">,</span> <span class="n">perturb_cols</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">:</span>
+            <span class="n">take_note_fmat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">,</span> <span class="o">**</span><span class="n">stats_header</span><span class="p">)</span>
+
         <span class="c1">#</span>
         <span class="c1"># Begin NMFk</span>
         <span class="c1">#</span>
@@ -1233,7 +1324,9 @@ document.write(`
             <span class="s2">&quot;perturb_multiprocessing&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">perturb_multiprocessing</span><span class="p">,</span>
             <span class="s2">&quot;perturb_verbose&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">perturb_verbose</span><span class="p">,</span>
             <span class="s2">&quot;lock&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">,</span>
-            <span class="s2">&quot;note_name&quot;</span><span class="p">:</span><span class="n">note_name</span>
+            <span class="s2">&quot;note_name&quot;</span><span class="p">:</span><span class="n">note_name</span><span class="p">,</span>
+            <span class="s2">&quot;n_nodes&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">,</span>
+            <span class="s2">&quot;rank&quot;</span><span class="p">:</span><span class="n">rank</span><span class="p">,</span>
         <span class="p">}</span>
         
         <span class="c1"># Single job or parallel over perturbations</span>
