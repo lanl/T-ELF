@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.RESCALk &#8212; TELF 0.0.16 documentation</title>
+    <title>TELF.factorization.RESCALk &#8212; TELF 0.0.17 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../../../_static/documentation_options.js?v=baac2cea"></script>
+    <script src="../../../_static/documentation_options.js?v=0150aef7"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.16 documentation</p>
+    <p class="title logo__title">TELF 0.0.17 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -291,12 +291,14 @@ document.write(`
 <span class="sd">others to do so.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">.utilities.take_note</span> <span class="kn">import</span> <span class="n">take_note</span><span class="p">,</span> <span class="n">take_note_fmat</span><span class="p">,</span> <span class="n">append_to_note</span>
-<span class="kn">from</span> <span class="nn">.utilities.plot_NMFk</span> <span class="kn">import</span> <span class="n">plot_NMFk</span>
+<span class="kn">from</span> <span class="nn">.utilities.plot_NMFk</span> <span class="kn">import</span> <span class="n">plot_RESCALk</span>
 <span class="kn">from</span> <span class="nn">.utilities.organize_n_jobs</span> <span class="kn">import</span> <span class="n">organize_n_jobs</span>
+<span class="kn">from</span> <span class="nn">.utilities.data_host_transfer_helpers</span> <span class="kn">import</span> <span class="n">put_A_cpu</span><span class="p">,</span> <span class="n">put_A_gpu</span><span class="p">,</span> <span class="n">put_tensor_X_gpu</span><span class="p">,</span> <span class="n">put_tensor_R_cpu</span>
+<span class="kn">from</span> <span class="nn">.utilities.run_factorization_helpers</span> <span class="kn">import</span> <span class="n">run_rescal</span>
+<span class="kn">from</span> <span class="nn">.utilities.perturbation_helpers</span> <span class="kn">import</span> <span class="n">perturb_tensor_X</span>
+<span class="kn">from</span> <span class="nn">.utilities.initialization_helpers</span> <span class="kn">import</span> <span class="n">init_A</span>
+<span class="kn">from</span> <span class="nn">.utilities.regression_helpers</span> <span class="kn">import</span> <span class="n">R_regression</span>
 <span class="kn">from</span> <span class="nn">.decompositions.rescal_fro_mu</span> <span class="kn">import</span> <span class="n">rescal</span> <span class="k">as</span> <span class="n">rescal_fro_mu</span>
-<span class="kn">from</span> <span class="nn">.decompositions.rescal_fro_mu</span> <span class="kn">import</span> <span class="n">R_update</span>
-<span class="kn">from</span> <span class="nn">.decompositions.utilities.nnsvd</span> <span class="kn">import</span> <span class="n">nnsvd</span>
-<span class="kn">from</span> <span class="nn">.decompositions.utilities.resample</span> <span class="kn">import</span> <span class="n">poisson</span><span class="p">,</span> <span class="n">uniform_product</span>
 <span class="kn">from</span> <span class="nn">.decompositions.utilities.clustering</span> <span class="kn">import</span> <span class="n">custom_k_means</span><span class="p">,</span> <span class="n">silhouettes</span>
 <span class="kn">from</span> <span class="nn">.decompositions.utilities.math_utils</span> <span class="kn">import</span> <span class="n">relative_error_rescal</span>
 
@@ -318,7 +320,6 @@ document.write(`
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">cupy</span> <span class="k">as</span> <span class="nn">cp</span>
-    <span class="kn">import</span> <span class="nn">cupyx.scipy.sparse</span>
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
     <span class="n">cp</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">cupyx</span> <span class="o">=</span> <span class="kc">None</span>
@@ -327,81 +328,7 @@ document.write(`
     <span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
     <span class="n">MPI</span> <span class="o">=</span> <span class="kc">None</span>
-
-
-<span class="k">def</span> <span class="nf">__put_X_gpu</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
-    <span class="k">with</span> <span class="n">cp</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">gpuid</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="n">Y</span> <span class="o">=</span> <span class="p">[</span><span class="n">cupyx</span><span class="o">.</span><span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">((</span><span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X1</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X1</span><span class="o">.</span><span class="n">indices</span><span class="p">),</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X1</span><span class="o">.</span><span class="n">indptr</span><span class="p">)),</span>
-                                                   <span class="n">shape</span><span class="o">=</span><span class="n">X1</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">X1</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="k">for</span> <span class="n">X1</span> <span class="ow">in</span> <span class="n">X</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">Y</span> <span class="o">=</span> <span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X1</span><span class="p">)</span> <span class="k">for</span> <span class="n">X1</span> <span class="ow">in</span> <span class="n">X</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">Y</span>
-
-<span class="k">def</span> <span class="nf">__put_A_gpu</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
-    <span class="k">with</span> <span class="n">cp</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">gpuid</span><span class="p">):</span>
-        <span class="n">A</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">A</span>
-
-<span class="k">def</span> <span class="nf">__put_A_cpu</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-    <span class="n">A</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">A</span>
-
-<span class="k">def</span> <span class="nf">__put_R_cpu</span><span class="p">(</span><span class="n">R</span><span class="p">):</span>
-    <span class="n">R</span> <span class="o">=</span> <span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">asnumpy</span><span class="p">(</span><span class="n">h_</span><span class="p">)</span> <span class="k">for</span> <span class="n">h_</span> <span class="ow">in</span> <span class="n">R</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">R</span>
     
-<span class="k">def</span> <span class="nf">__run_rescal</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">rescal</span><span class="p">,</span> <span class="n">rescal_params</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
-    <span class="n">k</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">cp</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">gpuid</span><span class="p">):</span>
-            <span class="n">R</span> <span class="o">=</span> <span class="n">R_update</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Y</span><span class="p">))])</span>
-            <span class="n">A</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">rescal</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="n">A</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="o">**</span><span class="n">rescal_params</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">R</span> <span class="o">=</span> <span class="n">R_update</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Y</span><span class="p">))])</span>
-        <span class="n">A</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">rescal</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="n">A</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="o">**</span><span class="n">rescal_params</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">A</span><span class="p">,</span> <span class="n">R</span>
-
-<span class="k">def</span> <span class="nf">__perturb_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">:</span><span class="nb">float</span><span class="p">,</span> <span class="n">perturb_type</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
-
-    <span class="k">if</span> <span class="n">perturb_type</span> <span class="o">==</span> <span class="s2">&quot;uniform&quot;</span><span class="p">:</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="p">[</span><span class="n">uniform_product</span><span class="p">(</span><span class="n">X_</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">perturbation</span><span class="p">)</span> <span class="k">for</span> <span class="n">X_</span> <span class="ow">in</span> <span class="n">X</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">perturb_type</span> <span class="o">==</span> <span class="s2">&quot;poisson&quot;</span><span class="p">:</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="p">[</span><span class="n">poisson</span><span class="p">(</span><span class="n">X_</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">perturbation</span><span class="p">)</span> <span class="k">for</span> <span class="n">X_</span> <span class="ow">in</span> <span class="n">X</span><span class="p">]</span>
-
-    <span class="k">return</span> <span class="n">Y</span>
-
-<span class="k">def</span> <span class="nf">__init_A</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">init_type</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">init_type</span> <span class="o">==</span> <span class="s2">&quot;nnsvd&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">issparse</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="n">Y_tmp</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Y</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">Y_tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Y</span><span class="p">))</span>
-
-        <span class="n">A</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nnsvd</span><span class="p">(</span><span class="n">Y_tmp</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            
-    <span class="k">elif</span> <span class="n">init_type</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
-        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="p">)</span>
-        
-    <span class="k">return</span> <span class="n">A</span>
-
-<span class="k">def</span> <span class="nf">__R_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
-    <span class="n">k</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">__put_X_gpu</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
-
-        <span class="k">with</span> <span class="n">cp</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">Device</span><span class="p">(</span><span class="n">gpuid</span><span class="p">):</span>
-            <span class="n">R_</span> <span class="o">=</span> <span class="n">R_update</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">cp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">A</span><span class="p">),</span> <span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Y</span><span class="p">))],</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
-            <span class="n">R</span> <span class="o">=</span> <span class="n">__put_R_cpu</span><span class="p">(</span><span class="n">R_</span><span class="p">)</span>
-            
-        <span class="k">del</span> <span class="n">Y</span><span class="p">,</span> <span class="n">R_</span>
-        <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
-        
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">R</span> <span class="o">=</span> <span class="n">R_update</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))],</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">use_gpu</span><span class="p">)</span>
-        
-    <span class="k">return</span> <span class="n">R</span>
 
 <span class="k">def</span> <span class="nf">_perturb_parallel_wrapper</span><span class="p">(</span>
     <span class="n">perturbation</span><span class="p">,</span>
@@ -417,20 +344,20 @@ document.write(`
     <span class="n">calculate_error</span><span class="p">):</span>
 
     <span class="c1"># Prepare</span>
-    <span class="n">Y</span> <span class="o">=</span> <span class="n">__perturb_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">perturb_type</span><span class="p">)</span>
-    <span class="n">A_init</span> <span class="o">=</span> <span class="n">__init_A</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">init_type</span><span class="o">=</span><span class="n">init_type</span><span class="p">)</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">perturb_tensor_X</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">perturbation</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">perturb_type</span><span class="p">)</span>
+    <span class="n">A_init</span> <span class="o">=</span> <span class="n">init_A</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">init_type</span><span class="o">=</span><span class="n">init_type</span><span class="p">)</span>
 
     <span class="c1"># transfer to GPU</span>
     <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">__put_X_gpu</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
-        <span class="n">A_init</span> <span class="o">=</span> <span class="n">__put_A_gpu</span><span class="p">(</span><span class="n">A_init</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">put_tensor_X_gpu</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
+        <span class="n">A_init</span> <span class="o">=</span> <span class="n">put_A_gpu</span><span class="p">(</span><span class="n">A_init</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
 
-    <span class="n">A</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">__run_rescal</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">A_init</span><span class="p">,</span> <span class="n">rescal</span><span class="p">,</span> <span class="n">rescal_params</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
+    <span class="n">A</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">run_rescal</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">A_init</span><span class="p">,</span> <span class="n">rescal</span><span class="p">,</span> <span class="n">rescal_params</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
 
     <span class="c1"># transfer to CPU</span>
     <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
-        <span class="n">A</span> <span class="o">=</span> <span class="n">__put_A_cpu</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-        <span class="n">R</span> <span class="o">=</span> <span class="n">__put_R_cpu</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">put_A_cpu</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">put_tensor_R_cpu</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
         <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
 
     <span class="c1"># error calculation</span>
@@ -517,7 +444,7 @@ document.write(`
     <span class="c1">#</span>
     <span class="c1"># Regress H</span>
     <span class="c1">#</span>
-    <span class="n">R</span> <span class="o">=</span> <span class="n">__R_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">R_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
     
     <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
         <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
@@ -1042,7 +969,7 @@ document.write(`
 
             <span class="c1"># final plot</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">:</span>
-                <span class="n">plot_NMFk</span><span class="p">(</span>
+                <span class="n">plot_RESCALk</span><span class="p">(</span>
                     <span class="n">combined_result</span><span class="p">,</span> 
                     <span class="mi">0</span><span class="p">,</span> 
                     <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> 

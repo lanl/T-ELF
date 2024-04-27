@@ -46,7 +46,7 @@ class SubstitutionOperator(VultureModuleBase):
         elif self.corpus_substitutions:
             substitution_map =  self.corpus_substitutions
         elif self.document_substitutions:
-            substitution_map = self.document_substitutions
+            substitution_map = self.document_substitutions[doc_id] 
         else:
             raise ValueError("No substitutions were passed to the SubstitutionOperator.")
         
@@ -69,7 +69,6 @@ class SubstitutionOperator(VultureModuleBase):
         """
         replaced_text = text
         for search, replace in substitution_map.items():
-            replaced_text = re.sub(r'\b{}\b'.format(search), replace, replaced_text)
-                
+            replaced_text = re.sub(r'\b{}\b'.format(re.escape(search)), replace, replaced_text)                
         return {"replaced_text":replaced_text}
     

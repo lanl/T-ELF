@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.16 documentation</title>
+    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.17 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../../../_static/documentation_options.js?v=baac2cea"></script>
+    <script src="../../../_static/documentation_options.js?v=0150aef7"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.16 documentation</p>
+    <p class="title logo__title">TELF 0.0.17 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -292,6 +292,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">.utilities.hpc_comm_helpers</span> <span class="kn">import</span> <span class="n">signal_workers_exit</span><span class="p">,</span> <span class="n">worker_check_exit_status</span><span class="p">,</span> <span class="n">get_next_job_at_worker</span><span class="p">,</span> <span class="n">collect_results_from_workers</span><span class="p">,</span> <span class="n">send_job_to_worker_nodes</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
@@ -566,27 +568,30 @@ document.write(`
             <span class="c1"># check exit status </span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;free&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="o">.</span><span class="n">items</span><span class="p">()]):</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_signal_workers_exit</span><span class="p">(</span><span class="n">comm</span><span class="p">)</span>
+                    <span class="n">signal_workers_exit</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">)</span>
                 <span class="k">break</span>
                 
             <span class="c1">#</span>
             <span class="c1"># worker nodes check exit status</span>
             <span class="c1">#</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_worker_check_exit_status</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">comm</span><span class="p">)</span>
+                <span class="n">worker_check_exit_status</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">comm</span><span class="p">)</span>
 
             <span class="c1">#</span>
             <span class="c1"># send job to worker nodes</span>
             <span class="c1">#</span>
             <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_send_job_to_worker_nodes</span><span class="p">(</span><span class="n">comm</span><span class="p">)</span>
+                <span class="n">send_job_to_worker_nodes</span><span class="p">(</span>
+                    <span class="n">comm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span>
+                <span class="p">)</span>
 
             <span class="c1">#</span>
             <span class="c1"># recieve jobs from rank 0 at worker nodes</span>
             <span class="c1">#</span>
             <span class="k">elif</span> <span class="n">rank</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">job_data</span><span class="p">,</span> <span class="n">job_flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_next_job_at_worker</span><span class="p">(</span>
-                    <span class="n">rank</span><span class="p">,</span> <span class="n">comm</span><span class="p">)</span>
+                <span class="n">job_data</span><span class="p">,</span> <span class="n">job_flag</span> <span class="o">=</span> <span class="n">get_next_job_at_worker</span><span class="p">(</span>
+                    <span class="n">rank</span><span class="p">,</span> <span class="n">comm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm_buff_size</span>
+                <span class="p">)</span>
 
             <span class="c1">#</span>
             <span class="c1"># single node job schedule</span>
@@ -611,7 +616,10 @@ document.write(`
 
             <span class="c1"># collect results at root</span>
             <span class="k">elif</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">all_node_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collect_results_from_workers</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">comm</span><span class="p">)</span>
+                <span class="n">all_node_results</span> <span class="o">=</span> <span class="n">collect_results_from_workers</span><span class="p">(</span>
+                    <span class="n">rank</span><span class="p">,</span> <span class="n">comm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">,</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm_buff_size</span>
+                <span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_node_results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">continue</span>
             
@@ -981,66 +989,6 @@ document.write(`
 
 
         <span class="k">return</span> <span class="n">params</span>
-
-    <span class="k">def</span> <span class="nf">_signal_workers_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comm</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">job_rank</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="n">req</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">isend</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">True</span><span class="p">]),</span>
-                             <span class="n">dest</span><span class="o">=</span><span class="n">job_rank</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;400</span><span class="si">{</span><span class="n">job_rank</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span>
-            <span class="n">req</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">_worker_check_exit_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">comm</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">comm</span><span class="o">.</span><span class="n">iprobe</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;400</span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)):</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_get_next_job_at_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">comm</span><span class="p">):</span>
-        <span class="n">job_flag</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">if</span> <span class="n">comm</span><span class="o">.</span><span class="n">iprobe</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;200</span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)):</span>
-            <span class="n">req</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">irecv</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="nb">bytearray</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm_buff_size</span><span class="p">),</span>
-                             <span class="n">source</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;200</span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">job_flag</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
-
-        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">job_flag</span>
-
-    <span class="k">def</span> <span class="nf">_collect_results_from_workers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">comm</span><span class="p">):</span>
-
-        <span class="n">all_results</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># collect results at root</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">job_rank</span><span class="p">,</span> <span class="n">status_info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="p">[</span><span class="n">job_rank</span><span class="p">][</span><span class="s2">&quot;free&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">comm</span><span class="o">.</span><span class="n">iprobe</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">job_rank</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;300</span><span class="si">{</span><span class="n">job_rank</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)):</span>
-                    <span class="n">req</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">irecv</span><span class="p">(</span><span class="n">buf</span><span class="o">=</span><span class="nb">bytearray</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">comm_buff_size</span><span class="p">),</span>
-                                     <span class="n">source</span><span class="o">=</span><span class="n">job_rank</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;300</span><span class="si">{</span><span class="n">job_rank</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span>
-                    <span class="n">node_results</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="p">[</span><span class="n">job_rank</span><span class="p">][</span><span class="s2">&quot;free&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="p">[</span><span class="n">job_rank</span><span class="p">][</span><span class="s2">&quot;job&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">all_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_results</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">all_results</span>
-    
-    <span class="k">def</span> <span class="nf">_send_job_to_worker_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">comm</span><span class="p">):</span>
-        <span class="n">scheduled</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">available_jobs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="c1"># remove the jobs that are in the nodes from the available jobs</span>
-        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">status_info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">status_info</span><span class="p">[</span><span class="s2">&quot;job&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">status_info</span><span class="p">[</span><span class="s2">&quot;free&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">_</span> <span class="o">=</span> <span class="n">available_jobs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">available_jobs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">status_info</span><span class="p">[</span><span class="s2">&quot;job&quot;</span><span class="p">]))</span>
-                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-        
-        <span class="k">for</span> <span class="n">job_rank</span><span class="p">,</span> <span class="n">status_info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">available_jobs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">status_info</span><span class="p">[</span><span class="s2">&quot;free&quot;</span><span class="p">]:</span>
-                <span class="n">next_job</span> <span class="o">=</span> <span class="n">available_jobs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                <span class="n">req</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">isend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">[</span><span class="n">next_job</span><span class="p">],</span>
-                                 <span class="n">dest</span><span class="o">=</span><span class="n">job_rank</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;200</span><span class="si">{</span><span class="n">job_rank</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span>
-                <span class="n">req</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="p">[</span><span class="n">job_rank</span><span class="p">][</span><span class="s2">&quot;free&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="p">[</span><span class="n">job_rank</span><span class="p">][</span><span class="s2">&quot;job&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">next_job</span>
-                <span class="n">scheduled</span> <span class="o">+=</span> <span class="mi">1</span>
     
     <span class="k">def</span> <span class="nf">_process_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_results</span><span class="p">,</span> <span class="n">save_checkpoint</span><span class="p">):</span>
         <span class="c1"># remove the job</span>

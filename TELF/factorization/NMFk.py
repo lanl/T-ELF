@@ -15,13 +15,16 @@ from .utilities.take_note import take_note, take_note_fmat, append_to_note
 from .utilities.plot_NMFk import plot_NMFk, plot_consensus_mat, plot_cophenetic_coeff
 from .utilities.pvalue_analysis import pvalue_analysis
 from .utilities.organize_n_jobs import organize_n_jobs
+from .utilities.data_host_transfer_helpers import put_X_gpu, put_A_gpu, put_A_cpu, put_other_results_cpu
+from .utilities.run_factorization_helpers import run_nmf
+from .utilities.perturbation_helpers import perturb_X
+from .utilities.initialization_helpers import init_WH
+from .utilities.regression_helpers import H_regression
+from .utilities.bst_helper import BST
 from .decompositions.nmf_kl_mu import nmf as nmf_kl_mu
 from .decompositions.nmf_fro_mu import nmf as nmf_fro_mu
 from .decompositions.wnmf import nmf as wnmf
 from .decompositions.nmf_recommender import nmf as nmf_recommender
-from .decompositions.nmf_fro_mu import H_update
-from .decompositions.utilities.nnsvd import nnsvd
-from .decompositions.utilities.resample import poisson, uniform_product
 from .decompositions.utilities.clustering import custom_k_means, silhouettes
 from .decompositions.utilities.math_utils import prune, unprune, relative_error, get_pac
 from .decompositions.utilities.concensus_matrix import compute_consensus_matrix, reorder_con_mat
@@ -38,10 +41,12 @@ import socket
 from pathlib import Path
 import concurrent.futures
 from threading import Lock
+import pickle
+import fcntl
+import tempfile
 
 try:
     import cupy as cp
-    import cupyx.scipy.sparse
 except Exception:
     cp = None
     cupyx = None
@@ -51,84 +56,21 @@ try:
 except Exception:
     MPI = None
 
-
-def __put_X_gpu(X, gpuid:int):
-    with cp.cuda.Device(gpuid):
-        if scipy.sparse.issparse(X):
-            Y = cupyx.scipy.sparse.csr_matrix(
-                (cp.array(X.data), cp.array(X.indices), cp.array(X.indptr)),
-                shape=X.shape,
-                dtype=X.dtype,
-            )
-        else:
-            Y = cp.array(X)
-    return Y
-
-def __put_WH_gpu(W, H, gpuid:int):
-    with cp.cuda.Device(gpuid):
-        W = cp.array(W)
-        H = cp.array(H)
+def _HPC_K_search_settings_update(n_nodes, my_rank, K_search_settings, save_path):
+    for node_rank in range(n_nodes): 
+        if (node_rank == my_rank) or (not Path(f'{save_path}/{node_rank}-K_search_settings.p').is_file()):
+            continue
         
-    return W, H
+        with open(f'{save_path}/{node_rank}-K_search_settings.p', 'rb') as file:
+            fcntl.flock(file, fcntl.LOCK_SH)
+            node_settings = pickle.load(file)
+            fcntl.flock(file, fcntl.LOCK_UN)
 
-def __put_WH_cpu(W, H):
-    W = cp.asnumpy(W)
-    H = cp.asnumpy(H)
-    return W, H
+        if node_settings["k_min"] > K_search_settings["k_min"]:
+            K_search_settings["k_min"] = node_settings["k_min"]
 
-def __put_other_results_cpu(other_results):
-    other_results_cpu = {}
-    for key, value in other_results.items():
-        other_results_cpu[key] = cp.asnumpy(value)
-    del other_results
-    return other_results_cpu
-    
-def __run_nmf(Y, W, H, nmf, nmf_params, use_gpu:bool, gpuid:int):
-    if use_gpu:
-        with cp.cuda.Device(gpuid):
-            W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
-    else:
-        W, H, other_results = nmf(X=Y, W=W, H=H, **nmf_params)
-
-    return W, H, other_results
-
-def __perturb_X(X, perturbation:int, epsilon:float, perturb_type:str):
-
-    if perturb_type == "uniform":
-        Y = uniform_product(X, epsilon, random_state=perturbation)
-    elif perturb_type == "poisson":
-        Y = poisson(X, random_state=perturbation)
-
-    return Y
-
-def __init_WH(Y, k, mask, init_type:str):
-
-    if init_type == "nnsvd":
-        if mask is not None:
-            Y[mask] = 0
-        W, H = nnsvd(Y, k, use_gpu=False)
-            
-    elif init_type == "random":
-        W, H = np.random.rand(Y.shape[0], k), np.random.rand(k, Y.shape[1])
-        
-    return W, H
-
-def __H_regression(X, W, mask, use_gpu:bool, gpuid:int):
-    if use_gpu:
-        Y = __put_X_gpu(X, gpuid)
-        with cp.cuda.Device(gpuid):
-            H_ = H_update(Y, cp.array(W), cp.random.rand(
-                W.shape[1], Y.shape[1]), use_gpu=use_gpu, mask=mask)
-            H = cp.asnumpy(H_)
-            
-        del Y, H_
-        cp._default_memory_pool.free_all_blocks()
-        
-    else:
-        H = H_update(X, W, np.random.rand(
-            W.shape[1], X.shape[1]), use_gpu=use_gpu, mask=mask)
-        
-    return H
+        if node_settings["k_max"] < K_search_settings["k_max"]:
+            K_search_settings["k_max"] = node_settings["k_max"]
 
 def _perturb_parallel_wrapper(
     perturbation,
@@ -142,25 +84,38 @@ def _perturb_parallel_wrapper(
     init_type,
     nmf_params,
     nmf,
-    calculate_error):
+    calculate_error,
+    K_search_settings,
+    n_nodes,
+    my_rank,
+    save_path):
+
+    if K_search_settings["k_search_method"] != "linear":
+        with K_search_settings['lock']:
+            
+            if n_nodes > 1:
+                _HPC_K_search_settings_update(n_nodes, my_rank, K_search_settings, save_path)
+
+            if k <= K_search_settings["k_min"] or k >= K_search_settings["k_max"]:
+                return {"exit_early": True, "perturbation":perturbation}
 
     # Prepare
-    Y = __perturb_X(X, perturbation, epsilon, perturb_type)
-    W_init, H_init = __init_WH(Y, k, mask=mask, init_type=init_type)
+    Y = perturb_X(X, perturbation, epsilon, perturb_type)
+    W_init, H_init = init_WH(Y, k, mask=mask, init_type=init_type)
 
     # transfer to GPU
     if use_gpu:
-        Y = __put_X_gpu(Y, gpuid)
-        W_init, H_init = __put_WH_gpu(W_init, H_init, gpuid)
+        Y = put_X_gpu(Y, gpuid)
+        W_init, H_init = put_A_gpu(W_init, gpuid), put_A_gpu(H_init, gpuid)
         if "WEIGHTS" in nmf_params and nmf_params["WEIGHTS"] is not None:
-            nmf_params["WEIGHTS"] = __put_X_gpu(nmf_params["WEIGHTS"], gpuid)
+            nmf_params["WEIGHTS"] = put_X_gpu(nmf_params["WEIGHTS"], gpuid)
 
-    W, H, other_results = __run_nmf(Y, W_init, H_init, nmf, nmf_params, use_gpu, gpuid)
+    W, H, other_results = run_nmf(Y, W_init, H_init, nmf, nmf_params, use_gpu, gpuid)
 
     # transfer to CPU
     if use_gpu:
-        W, H = __put_WH_cpu(W, H)
-        other_results = __put_other_results_cpu(other_results)
+        W, H = put_A_cpu(W), put_A_cpu(H)
+        other_results = put_other_results_cpu(other_results)
         cp._default_memory_pool.free_all_blocks()
 
     # error calculation
@@ -169,7 +124,39 @@ def _perturb_parallel_wrapper(
     else:
         error = 0
         
-    return W, H, error, other_results
+    return {"exit_early":False, "W":W, "H":H, "error":error, "other_results":other_results}
+
+def _take_exit_note(k, n_perturbs, logging_stats, start_time, save_path, note_name, lock):
+    note_data = dict()
+    for key in logging_stats:
+        if key == 'k':
+            note_data["k"] = k
+        elif key ==  'sils_min_W':
+            note_data["sils_min_W"] = "--"
+        elif key == 'sils_mean_W':
+            note_data["sils_mean_W"] = "--"
+        elif key ==  'sils_min_H':
+            note_data["sils_min_H"] = "--"
+        elif key == 'sils_mean_H':
+            note_data["sils_mean_H"] = "--"
+        elif key == 'err_mean':
+            note_data["err_mean"] = "--"
+        elif key == 'err_std':
+            note_data["err_std"] = "--"
+        elif key == 'col_error':
+            note_data["col_err"] = "--"
+        elif key == "Done":
+                note_data["Done"] = "N"
+        elif key == "Perturbs":
+                note_data["Perturbs"] = f'{n_perturbs}'
+        elif key == 'time':
+            elapsed_time = time.time() - start_time
+            elapsed_time = timedelta(seconds=elapsed_time)
+            note_data["time"] = str(elapsed_time).split('.')[0]
+        else:
+            warnings.warn(f'[tELF]: Encountered unknown logging metric "{key}"', RuntimeWarning)
+            note_data[key] = 'N/A'
+    take_note_fmat(save_path, name=note_name, lock=lock, **note_data)
         
 
 def _nmf_parallel_wrapper(
@@ -200,7 +187,11 @@ def _nmf_parallel_wrapper(
         perturb_multiprocessing=False,
         perturb_verbose=False,
         lock=None,
-        note_name="experiment"):
+        note_name="experiment",
+        K_search_settings=None,
+        n_nodes=1,
+        rank=0
+        ):
 
     #
     # run for each perturbations
@@ -215,14 +206,35 @@ def _nmf_parallel_wrapper(
         "calculate_error":calculate_error,
         "k":k,
         "mask":mask,
-        "init_type":init_type
+        "init_type":init_type,
+        "n_nodes":n_nodes,
+        "my_rank":rank,
+        "save_path":save_path
     }
     
     # single job or parallel over Ks
     W_all, H_all, errors, other_results_all = [], [], [], []
     if n_jobs == 1 or not perturb_multiprocessing:
         for perturbation in tqdm(range(n_perturbs), disable=not perturb_verbose, total=n_perturbs):
-            W, H, error, other_results_curr = _perturb_parallel_wrapper(perturbation=perturbation, gpuid=gpuid, **perturb_job_data)
+
+            curr_perturbation_results = _perturb_parallel_wrapper(
+                perturbation=perturbation, 
+                gpuid=gpuid, 
+                K_search_settings=K_search_settings,
+                **perturb_job_data)
+
+            # check for early termination
+            if curr_perturbation_results["exit_early"]:
+                if save_output:
+                    _take_exit_note(k, perturbation, logging_stats, start_time, save_path, note_name, lock)
+                return {"Ks":k, "exit_early":True}
+
+            # did not exit early
+            W = curr_perturbation_results["W"]
+            H = curr_perturbation_results["H"]
+            error = curr_perturbation_results["error"]
+            other_results_curr = curr_perturbation_results["other_results"]
+
             W_all.append(W)
             H_all.append(H)
             errors.append(error)
@@ -231,14 +243,28 @@ def _nmf_parallel_wrapper(
     # multiple jobs over perturbations
     else:
         executor = concurrent.futures.ThreadPoolExecutor(max_workers=n_jobs)
-        futures = [executor.submit(_perturb_parallel_wrapper, gpuid=pidx % n_jobs, perturbation=perturbation, **perturb_job_data) for pidx, perturbation in enumerate(range(n_perturbs))]
+        futures = [executor.submit(
+            _perturb_parallel_wrapper, 
+            gpuid=pidx % n_jobs, 
+            perturbation=perturbation, 
+            K_search_settings=K_search_settings, 
+            **perturb_job_data) for pidx, perturbation in enumerate(range(n_perturbs))]
         all_perturbation_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), disable=not perturb_verbose, total=n_perturbs)]
 
-        for W, H, error, other_results_curr in all_perturbation_results:
-            W_all.append(W)
-            H_all.append(H)
-            errors.append(error)
-            other_results_all.append(other_results_curr)
+        # check for early termination
+        for curr_perturbation_results in all_perturbation_results:
+            if curr_perturbation_results["exit_early"]:
+                if save_output:
+                    exit_perturbation = curr_perturbation_results["perturbation"]
+                    _take_exit_note(k, exit_perturbation, logging_stats, start_time, save_path, note_name, lock)
+                return {"Ks":k, "exit_early":True}
+
+        # did not exit early
+        for curr_perturbation_results in all_perturbation_results:
+            W_all.append(curr_perturbation_results["W"])
+            H_all.append(curr_perturbation_results["H"])
+            errors.append(curr_perturbation_results["error"])
+            other_results_all.append(curr_perturbation_results["other_results"])
     
     #
     # Organize other results
@@ -277,7 +303,7 @@ def _nmf_parallel_wrapper(
     #
     # Regress H
     #
-    H = __H_regression(X, W, mask, use_gpu, gpuid)
+    H = H_regression(X, W, mask, use_gpu, gpuid)
     
     if use_gpu:
         cp._default_memory_pool.free_all_blocks()
@@ -311,6 +337,51 @@ def _nmf_parallel_wrapper(
         H = unprune(H, perturb_cols, 1)
 
     #
+    # Calculate statistics on results
+    #
+    err_mean = np.mean(errors)
+    err_std = np.std(errors)
+
+    sils_W_all_mean = np.mean(sils_all_W, 1)
+    sils_H_all_mean = np.mean(sils_all_H, 1)
+    
+    sils_min_W = np.min(sils_W_all_mean)
+    sils_mean_W = np.mean(sils_W_all_mean)
+    sils_std_W = np.std(sils_W_all_mean)
+    sils_min_H = np.min(sils_H_all_mean)
+    sils_mean_H = np.mean(sils_H_all_mean)
+    sils_std_H = np.std(sils_H_all_mean)
+
+    #
+    # Decisions on K search
+    #
+    if K_search_settings["k_search_method"] != "linear":
+        with K_search_settings['lock']:
+            if min(sils_min_W, sils_min_H) >= K_search_settings["sill_thresh"]:
+                K_search_settings['k_min'] = k
+            if K_search_settings["H_sill_thresh"] >= 0 and (sils_min_H <= K_search_settings["H_sill_thresh"]):
+                K_search_settings['k_max'] = k
+
+            if n_nodes > 1:
+                # save the changed state for multi-node operations
+                save_settings = {
+                    "k_min": K_search_settings['k_min'],
+                    "k_max": K_search_settings['k_max'],
+                }
+                
+                # atomic safe write
+                dir_name = os.path.dirname(f'{save_path}')
+                temp_file = tempfile.NamedTemporaryFile(delete=False, dir=dir_name, mode='wb')
+                try:
+                    # Write data to the temporary file
+                    pickle.dump(save_settings, temp_file)
+                finally:
+                    temp_file.close()
+                
+                # Atomically replace the old file with the new file
+                os.replace(temp_file.name, f'{save_path}/{rank}-K_search_settings.p')
+
+    #
     # save output factors and the plot
     #
     if save_output:
@@ -339,61 +410,59 @@ def _nmf_parallel_wrapper(
             **save_data
         )
 
-        plot_data = dict()
+        note_data = dict()
         for key in logging_stats:
             if key == 'k':
-                plot_data["k"] = k
+                note_data["k"] = k
             elif key ==  'sils_min_W':
-                sils_min_W = np.min(np.mean(sils_all_W, 1))
-                plot_data["sils_min_W"] = '{0:.3f}'.format(sils_min_W)
+                note_data["sils_min_W"] = '{0:.3f}'.format(sils_min_W)
             elif key == 'sils_mean_W':
-                sils_mean_W = np.mean(np.mean(sils_all_W, 1))
-                plot_data["sils_mean_W"] = '{0:.3f}'.format(sils_mean_W)
+                note_data["sils_mean_W"] = '{0:.3f}'.format(sils_mean_W)
             elif key ==  'sils_min_H':
-                sils_min_H = np.min(np.mean(sils_all_H, 1))
-                plot_data["sils_min_H"] = '{0:.3f}'.format(sils_min_H)
+                note_data["sils_min_H"] = '{0:.3f}'.format(sils_min_H)
             elif key == 'sils_mean_H':
-                sils_mean_H = np.mean(np.mean(sils_all_H, 1))
-                plot_data["sils_mean_H"] = '{0:.3f}'.format(sils_mean_H)
+                note_data["sils_mean_H"] = '{0:.3f}'.format(sils_mean_H)
             elif key == 'err_mean':
-                err_mean = np.mean(errors)
-                plot_data["err_mean"] = '{0:.3f}'.format(err_mean)
+                note_data["err_mean"] = '{0:.3f}'.format(err_mean)
             elif key == 'err_std':
-                err_std = np.std(errors)
-                plot_data["err_std"] = '{0:.3f}'.format(err_std)
+                note_data["err_std"] = '{0:.3f}'.format(err_std)
             elif key == 'col_error':
-                mean_col_err = np.mean(curr_col_err)
-                plot_data["col_err"] = '{0:.3f}'.format(mean_col_err)
+                note_data["col_err"] = '{0:.3f}'.format(np.mean(curr_col_err))
             elif key == 'time':
                 elapsed_time = time.time() - start_time
                 elapsed_time = timedelta(seconds=elapsed_time)
-                plot_data["time"] = str(elapsed_time).split('.')[0]
+                note_data["time"] = str(elapsed_time).split('.')[0]
+            elif key == "Done":
+                note_data["Done"] = "Y"
+            elif key == "Perturbs":
+                note_data["Perturbs"] = n_perturbs
             else:
                 warnings.warn(f'[tELF]: Encountered unknown logging metric "{key}"', RuntimeWarning)
-                plot_data[key] = 'N/A'
-        take_note_fmat(save_path, name=note_name, lock=lock, **plot_data)
+                note_data[key] = 'N/A'
+        take_note_fmat(save_path, name=note_name, lock=lock, **note_data)
 
     #
     # collect results
     #
     results_k = {
         "Ks":k,
-        "err_mean":np.mean(errors),
-        "err_std":np.std(errors),
+        "err_mean":err_mean,
+        "err_std":err_std,
         "err_reg":error_reg,
 
-        "sils_min_W":np.min(np.mean(sils_all_W, 1)),
-        "sils_mean_W":np.mean(np.mean(sils_all_W, 1)),
-        "sils_std_W":np.std(np.mean(sils_all_W, 1)),
+        "sils_min_W":sils_min_W,
+        "sils_mean_W":sils_mean_W,
+        "sils_std_W":sils_std_W,
         "sils_all_W":sils_all_W,
 
-        "sils_min_H":np.min(np.mean(sils_all_H, 1)),
-        "sils_mean_H":np.mean(np.mean(sils_all_H, 1)),
-        "sils_std_H":np.std(np.mean(sils_all_H, 1)),
+        "sils_min_H":sils_min_H,
+        "sils_mean_H":sils_mean_H,
+        "sils_std_H":sils_std_H,
         "sils_all_H":sils_all_H,
 
         "cophenetic_coeff":coeff_k,
         "col_err":curr_col_err,
+        "exit_early":False
     }
 
     if collect_output:
@@ -436,7 +505,10 @@ class NMFk:
             mask=None,
             calculate_pac=False,
             get_plot_data=False,
-            simple_plot=True,):
+            simple_plot=True,
+            k_search_method="linear",
+            H_sill_thresh=-1
+            ):
         """
         NMFk is a Non-negative Matrix Factorization module with the capability to do automatic model determination.
 
@@ -547,6 +619,16 @@ class NMFk:
             When True, collectes the data used in plotting each intermidiate k factorization. The default is False.
         simple_plot : bool, optional
             When True, creates a simple plot for each intermidiate k factorization which hides the statistics such as average and maximum Silhouette scores. The default is True.
+        k_search_method : str, optional
+            Which approach to use when searching for the rank or k. The default is "linear".\n
+            * ``k_search_method='linear'`` will linearly visit each K given in ``Ks`` hyper-parameter of the ``fit()`` function.\n
+            * ``k_search_method='bst_post'`` will perform post-order binary search. When an ideal rank is found with ``min(W silhouette, H silhouette) >= sill_thresh``, all lower ranks are pruned from the search space.
+            * ``k_search_method='bst_pre'`` will perform pre-order binary search. When an ideal rank is found with ``min(W silhouette, H silhouette) >= sill_thresh``, all lower ranks are pruned from the search space.
+        H_sill_thresh : float, optional
+            Setting for removing higher ranks from the search space.\n
+            When searching for the optimal rank with binary search using ``k_search='bst_post'`` or ``k_search='bst_pre'``, this hyper-parameter can be used to cut off higher ranks from search space.\n
+            The cut-off of higher ranks from the search space is based on threshold for H silhouette. When a H silhouette below ``H_sill_thresh`` is found for a given rank or K, all higher ranks are removed from the search space.\n
+            If ``H_sill_thresh=-1``, it is not used. The default is -1.
         Returns
         -------
         None.
@@ -593,9 +675,12 @@ class NMFk:
         self.simple_plot = simple_plot
         self.get_plot_data = get_plot_data
         self.perturb_multiprocessing = perturb_multiprocessing
+        self.k_search_method = k_search_method
+        self.H_sill_thresh = H_sill_thresh
 
         # warnings
-        assert self.predict_k_method in ["pvalue", "sill"]
+        assert self.k_search_method in ["linear", "bst_pre", "bst_post"], "Invalid k_search_method method. Choose from linear, bst_pre, or bst_post."
+        assert self.predict_k_method in ["pvalue", "sill"], "Invalid predict_k_method method. Choose from pvalue, sill."
         if self.calculate_pac and not self.consensus_mat:
             self.consensus_mat = True
             warnings.warn("consensus_mat was False when calculate_pac was True! consensus_mat changed to True.")
@@ -606,6 +691,10 @@ class NMFk:
         if self.calculate_pac and not self.save_output:
             self.save_output = True
             warnings.warn("save_output was False when calculate_pac was True! save_output changed to True.")
+
+        if (self.n_nodes > 1 and self.k_search_method != "linear") and not self.save_output:
+            self.save_output = True
+            warnings.warn("save_output was False when n_nodes > 1 and k_search_method != 'linear'! save_output changed to True.")
 
         if self.calculate_error:
             warnings.warn(
@@ -621,13 +710,23 @@ class NMFk:
 
         # check that the perturbation type is valid
         assert perturb_type in [
-            "uniform", "poisson"], "Invalid perturbation type. Choose from uniform, poisson"
+            "uniform", "poisson"], "Invalid perturbation type. Choose from uniform, poisson."
 
         # organize n_jobs
         self.n_jobs, self.use_gpu = organize_n_jobs(use_gpu, n_jobs)
         
         # create a shared lock
         self.lock = Lock()
+
+        # settings for K search
+        self.K_search_settings = {
+            "lock": Lock(),
+            "k_search_method":self.k_search_method,
+            "sill_thresh":self.sill_thresh,
+            "H_sill_thresh":self.H_sill_thresh,
+            "k_min":-1,
+            "k_max":float('inf')
+        }
 
         #
         # Save information from the solution
@@ -736,6 +835,17 @@ class NMFk:
             * results will always include a field for ``time``, that gives the total compute time.
         """
 
+
+        # Prepare Ks
+        Ks = list(Ks)
+        Ks.sort()
+        if self.K_search_settings["k_search_method"] != "linear":
+            node = BST.sorted_array_to_bst(Ks)
+            if self.K_search_settings["k_search_method"] != "bst_pre": 
+                Ks = list(node.preorder())
+            if self.K_search_settings["k_search_method"] != "bst_post": 
+                Ks = list(node.postorder())
+
         #
         # check X format
         #
@@ -753,6 +863,9 @@ class NMFk:
 
         if max(Ks) >= min(X.shape):
             raise Exception("Maximum rank k to try in Ks should be k<min(X.shape)")
+        
+        if min(Ks) <= 0:
+            raise Exception("Minimum Ks needs to be more than 0.")
 
         #
         # MPI
@@ -804,17 +917,20 @@ class NMFk:
 
         # init the stats header 
         # this will setup the logging for all configurations of nmfk
-        stats_header = {'k': 'k', 
-                        'sils_min_W': 'W Min. Silhouette', 
-                        'sils_mean_W': 'W Mean Silhouette',
-                        'sils_min_H': 'H Min. Silhouette', 
-                        'sils_mean_H': 'H Mean Silhouette',
+        stats_header = {
+                        'Done': 'Done',
+                        'k': 'k',
+                        'Perturbs': 'Perturbs',
+                        'sils_min_W': 'W Min. Sill', 
+                        'sils_mean_W': 'W Mean Sill',
+                        'sils_min_H': 'H Min. Sill', 
+                        'sils_mean_H': 'H Mean Sill',
                         }
         if self.calculate_error:
-            stats_header['err_mean'] = 'Mean Error'
-            stats_header['err_std'] = 'STD Error'
+            stats_header['err_mean'] = 'Mean Err'
+            stats_header['err_std'] = 'STD Err'
         if self.predict_k:
-            stats_header['col_error'] = 'Mean Col. Error'
+            stats_header['col_error'] = 'Mean Col. Err'
         if self.calculate_pac:
             stats_header['pac'] = 'PAC'
         stats_header['time'] = 'Time Elapsed'
@@ -855,7 +971,6 @@ class NMFk:
             notes["X_shape"] = X.shape
             take_note(notes, self.save_path_full, name=note_name, lock=self.lock)
             append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
-            take_note_fmat(self.save_path_full, name=note_name, lock=self.lock, **stats_header)
         
         if self.n_nodes > 1:
             comm.Barrier()
@@ -895,6 +1010,9 @@ class NMFk:
         else:
             perturb_rows, perturb_cols = None, None
 
+        if self.save_output:
+            take_note_fmat(self.save_path_full, name=note_name, lock=self.lock, **stats_header)
+
         #
         # Begin NMFk
         #
@@ -926,20 +1044,24 @@ class NMFk:
             "perturb_multiprocessing":self.perturb_multiprocessing,
             "perturb_verbose":self.perturb_verbose,
             "lock":self.lock,
-            "note_name":note_name
+            "note_name":note_name,
+            "n_nodes":self.n_nodes,
+            "rank":rank,
         }
         
         # Single job or parallel over perturbations
         if self.n_jobs == 1 or self.perturb_multiprocessing:
             all_k_results = []
             for k in tqdm(Ks, total=len(Ks), disable=not self.verbose):
-                k_result = _nmf_parallel_wrapper(gpuid=0, k=k, **job_data)
+                k_result = _nmf_parallel_wrapper(gpuid=0, k=k, K_search_settings=self.K_search_settings, **job_data)
                 all_k_results.append(k_result)
         
         # multiprocessing over each K
         else:   
             executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.n_jobs)
-            futures = [executor.submit(_nmf_parallel_wrapper, gpuid=kidx % self.n_jobs, k=k, **job_data) for kidx, k in enumerate(Ks)]
+            futures = [executor.submit(
+                _nmf_parallel_wrapper, gpuid=kidx % self.n_jobs, k=k, K_search_settings=self.K_search_settings, **job_data
+                ) for kidx, k in enumerate(Ks)]
             all_k_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), total=len(Ks), disable=not self.verbose)]
 
         #
@@ -975,12 +1097,27 @@ class NMFk:
         for k_results in all_k_results:
             for key, value in k_results.items():
                 combined_result[key].append(value)
-                
+            
         #
         # revent to original Ks
         #
         if self.n_nodes > 1:
             Ks = np.array(collected_Ks)[Ks_sort_indices]
+
+        #
+        # Which Ks computed
+        #    
+        Ks_not_computed = []
+        if self.K_search_settings != "linear":
+            Ks_computed = []
+            for idx, flag in enumerate(combined_result["exit_early"]):
+                if flag is False:
+                    Ks_computed.append(combined_result["Ks"][idx])
+                else:
+                    Ks_not_computed.append(combined_result["Ks"][idx])        
+            
+            combined_result["Ks"] = Ks_computed
+            Ks = Ks_computed
             
         #
         # Finalize
@@ -998,12 +1135,20 @@ class NMFk:
                     k_predict = pvalue_analysis(
                         combined_result["col_err"], Ks, combined_result["sils_min_W"], SILL_thr=self.sill_thresh
                     )[0]
+                
                 elif self.predict_k_method == "sill":
+                    
+                    # check if that sill threshold exist
+                    if self.sill_thresh > min([max(combined_result["sils_min_W"]), max(combined_result["sils_min_H"])]):
+                        self.sill_thresh = min([max(combined_result["sils_min_W"]), max(combined_result["sils_min_H"])])
+                        warnings.warn(f'W or H Silhouettes were all less than sill_thresh. Setting sill_thresh to minimum for K prediction. sill_thresh={round(self.sill_thresh, 3)}')
+
                     k_predict_W = Ks[np.max(np.argwhere(
                         np.array(combined_result["sils_min_W"]) >= self.sill_thresh).flatten())]
                     k_predict_H = Ks[np.max(np.argwhere(
                         np.array(combined_result["sils_min_H"]) >= self.sill_thresh).flatten())]
                     k_predict = min(k_predict_W, k_predict_H)
+            
             else:
                 k_predict = 0
                 
@@ -1048,7 +1193,8 @@ class NMFk:
                     plot_predict=self.predict_k,
                     plot_final=True,
                     simple_plot=self.simple_plot,
-                    calculate_error=self.calculate_error
+                    calculate_error=self.calculate_error,
+                    Ks_not_computed=Ks_not_computed
                 )
                 append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
                 append_to_note(["end_time= "+str(datetime.now())], self.save_path_full, name=note_name, lock=self.lock)

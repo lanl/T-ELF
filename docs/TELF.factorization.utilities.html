@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF.factorization.utilities package &#8212; TELF 0.0.16 documentation</title>
+    <title>TELF.factorization.utilities package &#8212; TELF 0.0.17 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="_static/documentation_options.js?v=baac2cea"></script>
+    <script src="_static/documentation_options.js?v=0150aef7"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -127,7 +127,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.16 documentation</p>
+    <p class="title logo__title">TELF 0.0.17 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -342,6 +342,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.plot_NMFk">TELF.factorization.utilities.plot_NMFk module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.plot_NMFk.plot_BNMFk"><code class="docutils literal notranslate"><span class="pre">plot_BNMFk()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.plot_NMFk.plot_NMFk"><code class="docutils literal notranslate"><span class="pre">plot_NMFk()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.plot_NMFk.plot_RESCALk"><code class="docutils literal notranslate"><span class="pre">plot_RESCALk()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.plot_NMFk.plot_SymNMFk"><code class="docutils literal notranslate"><span class="pre">plot_SymNMFk()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.plot_NMFk.plot_consensus_mat"><code class="docutils literal notranslate"><span class="pre">plot_consensus_mat()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.plot_NMFk.plot_cophenetic_coeff"><code class="docutils literal notranslate"><span class="pre">plot_cophenetic_coeff()</span></code></a></li>
@@ -479,21 +480,13 @@ on the sentences. When False, window size is used, and documents is a list of do
 
 <dl class="py function">
 <dt class="sig sig-object py" id="TELF.factorization.utilities.plot_NMFk.plot_NMFk">
-<span class="sig-prename descclassname"><span class="pre">TELF.factorization.utilities.plot_NMFk.</span></span><span class="sig-name descname"><span class="pre">plot_NMFk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_predict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_predict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_final</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simple_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculate_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/utilities/plot_NMFk.html#plot_NMFk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.utilities.plot_NMFk.plot_NMFk" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
-<li><p><strong>k_predict</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
-<li><p><strong>name</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
-<li><p><strong>path</strong> (<em>TYPE</em>) – DESCRIPTION.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None.</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.utilities.plot_NMFk.</span></span><span class="sig-name descname"><span class="pre">plot_NMFk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_predict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_predict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_final</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simple_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculate_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ks_not_computed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/utilities/plot_NMFk.html#plot_NMFk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.utilities.plot_NMFk.plot_NMFk" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.factorization.utilities.plot_NMFk.plot_RESCALk">
+<span class="sig-prename descclassname"><span class="pre">TELF.factorization.utilities.plot_NMFk.</span></span><span class="sig-name descname"><span class="pre">plot_RESCALk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_predict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_predict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_final</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simple_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculate_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/utilities/plot_NMFk.html#plot_RESCALk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.utilities.plot_NMFk.plot_RESCALk" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="TELF.factorization.utilities.plot_NMFk.plot_SymNMFk">
@@ -779,6 +772,7 @@ do not write to the file simultaneously.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.plot_NMFk">TELF.factorization.utilities.plot_NMFk module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.plot_NMFk.plot_BNMFk"><code class="docutils literal notranslate"><span class="pre">plot_BNMFk()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.plot_NMFk.plot_NMFk"><code class="docutils literal notranslate"><span class="pre">plot_NMFk()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.plot_NMFk.plot_RESCALk"><code class="docutils literal notranslate"><span class="pre">plot_RESCALk()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.plot_NMFk.plot_SymNMFk"><code class="docutils literal notranslate"><span class="pre">plot_SymNMFk()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.plot_NMFk.plot_consensus_mat"><code class="docutils literal notranslate"><span class="pre">plot_consensus_mat()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.plot_NMFk.plot_cophenetic_coeff"><code class="docutils literal notranslate"><span class="pre">plot_cophenetic_coeff()</span></code></a></li>

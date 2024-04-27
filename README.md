@@ -118,9 +118,6 @@ conda install cudnn
 |           BNMFk           |                    |                    |                    |                    |                     |                    |                           Boolean NMFk                                           |             |       :soon:       |
 |         SPLIT NMFk        |                    |                    |                    |                    |                     |                    |        Joint NMFk factorization of multiple data via SPLIT                       |             |       :soon:       |
 | SPLIT Transfer Classifier |                    |                    |                    |                    |                     |                    |      Supervised transfer learning method via SPLIT and NMFk                      |             |       :soon:       |
-|           CP-ALS          |                    |                    |                    |                    |                     |                    |    Alternating least squares algorithm for canonical polyadic decomposition      |             |       :soon:       |
-|           CP-APR          |                    |                    |                    |                    |                     |                    |    Alternating Poisson regression algorithm for canonical polyadic decomposition |             |       :soon:       |
-|           NTDS_FAPG       |                    |                    |                    |                    |                     |                    |                      Non-negative Tucker Tensor Decomposition                    |             |       :soon:       |
  
 ### TELF.pre_processing
 
@@ -156,7 +153,7 @@ If you use T-ELF please cite.
 
 **APA:**
 ```latex
-Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.16) [Computer software]. https://doi.org/10.5281/zenodo.10257897
+Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.17) [Computer software]. https://doi.org/10.5281/zenodo.10257897
 ```
 
 **BibTeX:**
