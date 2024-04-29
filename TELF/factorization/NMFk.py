@@ -566,7 +566,7 @@ class NMFk:
             * ``predict_k_method='WH_sill'`` will use Silhouette scores from minimum of W and H latent factors for estimating the number of latent factors.\n
             * ``predict_k_method='W_sill'`` will use Silhouette scores from W latent factor for estimating the number of latent factors.\n
             * ``predict_k_method='H_sill'`` will use Silhouette scores from H latent factor for estimating the number of latent factors.\n
-            * ``predict_k_method='sill'`` will default to `predict_k_method='WH_sill'``.\n
+            * ``predict_k_method='sill'`` will default to ``predict_k_method='WH_sill'``.\n
             .. warning::
 
                 ``predict_k_method='pvalue'`` prediction will result in significantly longer processing time, altough it is more accurate! ``predict_k_method='WH_sill'``, on the other hand, will be much faster.
