@@ -856,9 +856,9 @@ class NMFk:
         Ks.sort()
         if self.K_search_settings["k_search_method"] != "linear":
             node = BST.sorted_array_to_bst(Ks)
-            if self.K_search_settings["k_search_method"] != "bst_pre": 
+            if self.K_search_settings["k_search_method"] == "bst_pre": 
                 Ks = list(node.preorder())
-            if self.K_search_settings["k_search_method"] != "bst_post": 
+            if self.K_search_settings["k_search_method"] == "bst_post": 
                 Ks = list(node.postorder())
 
         #
