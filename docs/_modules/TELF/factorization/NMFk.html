@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.NMFk &#8212; TELF 0.0.17 documentation</title>
+    <title>TELF.factorization.NMFk &#8212; TELF 0.0.18 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
-    <script src="../../../_static/documentation_options.js?v=0150aef7"></script>
+    <script src="../../../_static/documentation_options.js?v=4bf62f09"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
@@ -124,7 +124,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.17 documentation</p>
+    <p class="title logo__title">TELF 0.0.18 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -337,7 +337,7 @@ document.write(`
 
 <span class="k">def</span> <span class="nf">_HPC_K_search_settings_update</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">my_rank</span><span class="p">,</span> <span class="n">K_search_settings</span><span class="p">,</span> <span class="n">save_path</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">node_rank</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span> 
-        <span class="k">if</span> <span class="n">node_rank</span> <span class="o">==</span> <span class="n">my_rank</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node_rank</span> <span class="o">==</span> <span class="n">my_rank</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">node_rank</span><span class="si">}</span><span class="s1">-K_search_settings.p&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()):</span>
             <span class="k">continue</span>
         
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">node_rank</span><span class="si">}</span><span class="s1">-K_search_settings.p&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
@@ -453,7 +453,7 @@ document.write(`
         <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
         <span class="n">consensus_mat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">predict_k</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">predict_k_method</span><span class="o">=</span><span class="s2">&quot;sill&quot;</span><span class="p">,</span>
+        <span class="n">predict_k_method</span><span class="o">=</span><span class="s2">&quot;WH_sill&quot;</span><span class="p">,</span>
         <span class="n">pruned</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">perturb_rows</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">perturb_cols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -636,9 +636,21 @@ document.write(`
     <span class="c1">#</span>
     <span class="k">if</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_search_method&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s1">&#39;lock&#39;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">sils_min_W</span><span class="p">,</span> <span class="n">sils_min_H</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;sill_thresh&quot;</span><span class="p">]:</span>
+            
+            <span class="k">if</span> <span class="n">predict_k_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;WH_sill&quot;</span><span class="p">,</span> <span class="s2">&quot;sill&quot;</span><span class="p">]:</span>
+                <span class="n">curr_score</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sils_min_W</span><span class="p">,</span> <span class="n">sils_min_H</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">predict_k_method</span> <span class="o">==</span> <span class="s2">&quot;W_sill&quot;</span><span class="p">:</span>
+                <span class="n">curr_score</span> <span class="o">=</span> <span class="n">sils_min_W</span>
+            <span class="k">elif</span> <span class="n">predict_k_method</span> <span class="o">==</span> <span class="s2">&quot;H_sill&quot;</span><span class="p">:</span>
+                <span class="n">curr_score</span> <span class="o">=</span> <span class="n">sils_min_H</span>
+            <span class="k">elif</span> <span class="n">predict_k_method</span> <span class="o">==</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">:</span>
+                <span class="n">curr_score</span> <span class="o">=</span> <span class="n">sils_min_W</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown predict_k_method!&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">curr_score</span> <span class="o">&gt;=</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;sill_thresh&quot;</span><span class="p">]:</span>
                 <span class="n">K_search_settings</span><span class="p">[</span><span class="s1">&#39;k_min&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
-            <span class="k">if</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;H_sill_thresh&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sils_min_H</span> <span class="o">&lt;=</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;H_sill_thresh&quot;</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;H_sill_thresh&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sils_min_H</span> <span class="o">&lt;=</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;H_sill_thresh&quot;</span><span class="p">]):</span>
                 <span class="n">K_search_settings</span><span class="p">[</span><span class="s1">&#39;k_max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
 
             <span class="k">if</span> <span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -769,7 +781,7 @@ document.write(`
             <span class="n">save_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">collect_output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">predict_k</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">predict_k_method</span><span class="o">=</span><span class="s2">&quot;sill&quot;</span><span class="p">,</span>
+            <span class="n">predict_k_method</span><span class="o">=</span><span class="s2">&quot;WH_sill&quot;</span><span class="p">,</span>
             <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">nmf_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">perturb_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -788,7 +800,7 @@ document.write(`
             <span class="n">get_plot_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">simple_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">k_search_method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
-            <span class="n">H_sill_thresh</span><span class="o">=-</span><span class="mi">1</span>
+            <span class="n">H_sill_thresh</span><span class="o">=</span><span class="kc">None</span>
             <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NMFk is a Non-negative Matrix Factorization module with the capability to do automatic model determination.</span>
@@ -830,13 +842,16 @@ document.write(`
 <span class="sd">                Even when ``predict_k=False``, number of latent factors can be estimated using the figures saved in ``save_path``.</span>
 
 <span class="sd">        predict_k_method : str, optional</span>
-<span class="sd">            Method to use when performing automatic k prediction. Default is &quot;sill&quot;.\n</span>
+<span class="sd">            Method to use when performing automatic k prediction. Default is &quot;WH_sill&quot;.\n</span>
 <span class="sd">            * ``predict_k_method=&#39;pvalue&#39;`` will use L-Statistics with column-wise error for automatically estimating the number of latent factors.\n</span>
-<span class="sd">            * ``predict_k_method=&#39;sill&#39;`` will use Silhouette score for estimating the number of latent factors.</span>
-
+<span class="sd">            * ``predict_k_method=&#39;WH_sill&#39;`` will use Silhouette scores from minimum of W and H latent factors for estimating the number of latent factors.\n</span>
+<span class="sd">            * ``predict_k_method=&#39;W_sill&#39;`` will use Silhouette scores from W latent factor for estimating the number of latent factors.\n</span>
+<span class="sd">            * ``predict_k_method=&#39;H_sill&#39;`` will use Silhouette scores from H latent factor for estimating the number of latent factors.\n</span>
+<span class="sd">            * ``predict_k_method=&#39;sill&#39;`` will default to ``predict_k_method=&#39;WH_sill&#39;``.</span>
+<span class="sd">            </span>
 <span class="sd">            .. warning::</span>
 
-<span class="sd">                ``predict_k_method=&#39;pvalue&#39;`` prediction will result in significantly longer processing time, altough it is more accurate! ``predict_k_method=&#39;sill&#39;``, on the other hand, will be much faster.</span>
+<span class="sd">                ``predict_k_method=&#39;pvalue&#39;`` prediction will result in significantly longer processing time, altough it is more accurate! ``predict_k_method=&#39;WH_sill&#39;``, on the other hand, will be much faster.</span>
 
 <span class="sd">        verbose : bool, optional</span>
 <span class="sd">            If True, shows progress in each k. The default is True.</span>
@@ -903,13 +918,13 @@ document.write(`
 <span class="sd">        k_search_method : str, optional</span>
 <span class="sd">            Which approach to use when searching for the rank or k. The default is &quot;linear&quot;.\n</span>
 <span class="sd">            * ``k_search_method=&#39;linear&#39;`` will linearly visit each K given in ``Ks`` hyper-parameter of the ``fit()`` function.\n</span>
-<span class="sd">            * ``k_search_method=&#39;bst_post&#39;`` will perform post-order binary search. When an ideal rank is found with ``min(W silhouette, H silhouette) &gt;= sill_thresh``, all lower ranks are pruned from the search space.</span>
-<span class="sd">            * ``k_search_method=&#39;bst_pre&#39;`` will perform pre-order binary search. When an ideal rank is found with ``min(W silhouette, H silhouette) &gt;= sill_thresh``, all lower ranks are pruned from the search space.</span>
+<span class="sd">            * ``k_search_method=&#39;bst_post&#39;`` will perform post-order binary search. When an ideal rank is found, determined by the selected ``predict_k_method``, all lower ranks are pruned from the search space.</span>
+<span class="sd">            * ``k_search_method=&#39;bst_pre&#39;`` will perform pre-order binary search. When an ideal rank is found, determined by the selected ``predict_k_method``, all lower ranks are pruned from the search space.</span>
 <span class="sd">        H_sill_thresh : float, optional</span>
 <span class="sd">            Setting for removing higher ranks from the search space.\n</span>
 <span class="sd">            When searching for the optimal rank with binary search using ``k_search=&#39;bst_post&#39;`` or ``k_search=&#39;bst_pre&#39;``, this hyper-parameter can be used to cut off higher ranks from search space.\n</span>
 <span class="sd">            The cut-off of higher ranks from the search space is based on threshold for H silhouette. When a H silhouette below ``H_sill_thresh`` is found for a given rank or K, all higher ranks are removed from the search space.\n</span>
-<span class="sd">            If ``H_sill_thresh=-1``, it is not used. The default is -1.</span>
+<span class="sd">            If ``H_sill_thresh=None``, it is not used. The default is None.</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None.</span>
@@ -961,7 +976,7 @@ document.write(`
 
         <span class="c1"># warnings</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_search_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="s2">&quot;bst_pre&quot;</span><span class="p">,</span> <span class="s2">&quot;bst_post&quot;</span><span class="p">],</span> <span class="s2">&quot;Invalid k_search_method method. Choose from linear, bst_pre, or bst_post.&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;sill&quot;</span><span class="p">],</span> <span class="s2">&quot;Invalid predict_k_method method. Choose from pvalue, sill.&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;WH_sill&quot;</span><span class="p">,</span> <span class="s2">&quot;W_sill&quot;</span><span class="p">,</span> <span class="s2">&quot;H_sill&quot;</span><span class="p">,</span> <span class="s2">&quot;sill&quot;</span><span class="p">],</span> <span class="s2">&quot;Invalid predict_k_method method. Choose from pvalue, WH_sill, W_sill, H_sill, or sill. sill defaults to WH_sill.&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_pac</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">consensus_mat</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">consensus_mat</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;consensus_mat was False when calculate_pac was True! consensus_mat changed to True.&quot;</span><span class="p">)</span>
@@ -1419,18 +1434,30 @@ document.write(`
                         <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;col_err&quot;</span><span class="p">],</span> <span class="n">Ks</span><span class="p">,</span> <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">],</span> <span class="n">SILL_thr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span>
                     <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                 
-                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="o">==</span> <span class="s2">&quot;sill&quot;</span><span class="p">:</span>
-                    
-                    <span class="c1"># check if that sill threshold exist</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span> <span class="o">&gt;</span> <span class="nb">min</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_H&quot;</span><span class="p">])]):</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_H&quot;</span><span class="p">])])</span>
-                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;W or H Silhouettes were all less than sill_thresh. Setting sill_thresh to minimum for K prediction. sill_thresh=</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;WH_sill&quot;</span><span class="p">,</span> <span class="s2">&quot;sill&quot;</span><span class="p">]:</span>
+                        <span class="n">curr_sill_max_score</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_H&quot;</span><span class="p">])])</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="o">==</span> <span class="s2">&quot;W_sill&quot;</span><span class="p">:</span>
+                        <span class="n">curr_sill_max_score</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">])</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="o">==</span> <span class="s2">&quot;H_sill&quot;</span><span class="p">:</span>
+                        <span class="n">curr_sill_max_score</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_H&quot;</span><span class="p">])</span>
 
+                    <span class="c1"># check if that sill threshold exist</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span> <span class="o">&gt;</span> <span class="n">curr_sill_max_score</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span> <span class="o">=</span> <span class="n">curr_sill_max_score</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;W or H Silhouettes were all less than sill_thresh. Setting sill_thresh to minimum for K prediction. sill_thresh=</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                    
                     <span class="n">k_predict_W</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span>
                         <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_W&quot;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())]</span>
                     <span class="n">k_predict_H</span> <span class="o">=</span> <span class="n">Ks</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span>
                         <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;sils_min_H&quot;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill_thresh</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())]</span>
-                    <span class="n">k_predict</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">k_predict_W</span><span class="p">,</span> <span class="n">k_predict_H</span><span class="p">)</span>
+                    
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;WH_sill&quot;</span><span class="p">,</span> <span class="s2">&quot;sill&quot;</span><span class="p">]:</span>
+                        <span class="n">k_predict</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">k_predict_W</span><span class="p">,</span> <span class="n">k_predict_H</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="o">==</span> <span class="s2">&quot;W_sill&quot;</span><span class="p">:</span>
+                        <span class="n">k_predict</span> <span class="o">=</span> <span class="n">k_predict_W</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="o">==</span> <span class="s2">&quot;H_sill&quot;</span><span class="p">:</span>
+                        <span class="n">k_predict</span> <span class="o">=</span> <span class="n">k_predict_H</span>
             
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">k_predict</span> <span class="o">=</span> <span class="mi">0</span>
