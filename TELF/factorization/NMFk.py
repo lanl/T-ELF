@@ -696,6 +696,11 @@ class NMFk:
         # warnings
         assert self.k_search_method in ["linear", "bst_pre", "bst_post"], "Invalid k_search_method method. Choose from linear, bst_pre, or bst_post."
         assert self.predict_k_method in ["pvalue", "WH_sill", "W_sill", "H_sill", "sill"], "Invalid predict_k_method method. Choose from pvalue, WH_sill, W_sill, H_sill, or sill. sill defaults to WH_sill."
+        
+        if self.predict_k_method == "sill":
+            self.predict_k_method = "WH_sill"
+            warnings.warn("predict_k_method is defaulted to WH_sill!")
+
         if self.calculate_pac and not self.consensus_mat:
             self.consensus_mat = True
             warnings.warn("consensus_mat was False when calculate_pac was True! consensus_mat changed to True.")
