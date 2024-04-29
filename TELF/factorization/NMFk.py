@@ -174,7 +174,7 @@ def _nmf_parallel_wrapper(
         mask=None, 
         consensus_mat=False,
         predict_k=False,
-        predict_k_method="sill",
+        predict_k_method="WH_sill",
         pruned=True,
         perturb_rows=None,
         perturb_cols=None,
@@ -357,7 +357,19 @@ def _nmf_parallel_wrapper(
     #
     if K_search_settings["k_search_method"] != "linear":
         with K_search_settings['lock']:
-            if min(sils_min_W, sils_min_H) >= K_search_settings["sill_thresh"]:
+            
+            if predict_k_method in ["WH_sill", "sill"]:
+                curr_score = min(sils_min_W, sils_min_H)
+            elif predict_k_method == "W_sill":
+                curr_score = sils_min_W
+            elif predict_k_method == "H_sill":
+                curr_score = sils_min_H
+            elif predict_k_method == "pvalue":
+                curr_score = sils_min_W
+            else:
+                raise Exception("Unknown predict_k_method!")
+
+            if curr_score >= K_search_settings["sill_thresh"]:
                 K_search_settings['k_min'] = k
             if K_search_settings["H_sill_thresh"] is not None and (sils_min_H <= K_search_settings["H_sill_thresh"]):
                 K_search_settings['k_max'] = k
@@ -488,7 +500,7 @@ class NMFk:
             save_output=True,
             collect_output=False,
             predict_k=False,
-            predict_k_method="sill",
+            predict_k_method="WH_sill",
             verbose=True,
             nmf_verbose=False,
             perturb_verbose=False,
@@ -549,13 +561,15 @@ class NMFk:
                 Even when ``predict_k=False``, number of latent factors can be estimated using the figures saved in ``save_path``.
 
         predict_k_method : str, optional
-            Method to use when performing automatic k prediction. Default is "sill".\n
+            Method to use when performing automatic k prediction. Default is "WH_sill".\n
             * ``predict_k_method='pvalue'`` will use L-Statistics with column-wise error for automatically estimating the number of latent factors.\n
-            * ``predict_k_method='sill'`` will use Silhouette score for estimating the number of latent factors.
-
+            * ``predict_k_method='WH_sill'`` will use Silhouette scores from minimum of W and H latent factors for estimating the number of latent factors.
+            * ``predict_k_method='W_sill'`` will use Silhouette scores from W latent factor for estimating the number of latent factors.
+            * ``predict_k_method='H_sill'`` will use Silhouette scores from H latent factor for estimating the number of latent factors.
+            * ``predict_k_method='sill'`` will default to `predict_k_method='WH_sill'``.
             .. warning::
 
-                ``predict_k_method='pvalue'`` prediction will result in significantly longer processing time, altough it is more accurate! ``predict_k_method='sill'``, on the other hand, will be much faster.
+                ``predict_k_method='pvalue'`` prediction will result in significantly longer processing time, altough it is more accurate! ``predict_k_method='WH_sill'``, on the other hand, will be much faster.
 
         verbose : bool, optional
             If True, shows progress in each k. The default is True.
@@ -622,8 +636,8 @@ class NMFk:
         k_search_method : str, optional
             Which approach to use when searching for the rank or k. The default is "linear".\n
             * ``k_search_method='linear'`` will linearly visit each K given in ``Ks`` hyper-parameter of the ``fit()`` function.\n
-            * ``k_search_method='bst_post'`` will perform post-order binary search. When an ideal rank is found with ``min(W silhouette, H silhouette) >= sill_thresh``, all lower ranks are pruned from the search space.
-            * ``k_search_method='bst_pre'`` will perform pre-order binary search. When an ideal rank is found with ``min(W silhouette, H silhouette) >= sill_thresh``, all lower ranks are pruned from the search space.
+            * ``k_search_method='bst_post'`` will perform post-order binary search. When an ideal rank is found, determined by the selected ``predict_k_method``, all lower ranks are pruned from the search space.
+            * ``k_search_method='bst_pre'`` will perform pre-order binary search. When an ideal rank is found, determined by the selected ``predict_k_method``, all lower ranks are pruned from the search space.
         H_sill_thresh : float, optional
             Setting for removing higher ranks from the search space.\n
             When searching for the optimal rank with binary search using ``k_search='bst_post'`` or ``k_search='bst_pre'``, this hyper-parameter can be used to cut off higher ranks from search space.\n
@@ -680,7 +694,7 @@ class NMFk:
 
         # warnings
         assert self.k_search_method in ["linear", "bst_pre", "bst_post"], "Invalid k_search_method method. Choose from linear, bst_pre, or bst_post."
-        assert self.predict_k_method in ["pvalue", "sill"], "Invalid predict_k_method method. Choose from pvalue, sill."
+        assert self.predict_k_method in ["pvalue", "WH_sill", "W_sill", "H_sill", "sill"], "Invalid predict_k_method method. Choose from pvalue, WH_sill, W_sill, H_sill, or sill. sill defaults to WH_sill."
         if self.calculate_pac and not self.consensus_mat:
             self.consensus_mat = True
             warnings.warn("consensus_mat was False when calculate_pac was True! consensus_mat changed to True.")
@@ -1136,18 +1150,30 @@ class NMFk:
                         combined_result["col_err"], Ks, combined_result["sils_min_W"], SILL_thr=self.sill_thresh
                     )[0]
                 
-                elif self.predict_k_method == "sill":
-                    
-                    # check if that sill threshold exist
-                    if self.sill_thresh > min([max(combined_result["sils_min_W"]), max(combined_result["sils_min_H"])]):
-                        self.sill_thresh = min([max(combined_result["sils_min_W"]), max(combined_result["sils_min_H"])])
-                        warnings.warn(f'W or H Silhouettes were all less than sill_thresh. Setting sill_thresh to minimum for K prediction. sill_thresh={round(self.sill_thresh, 3)}')
+                else:
+                    if self.predict_k_method in ["WH_sill", "sill"]:
+                        curr_sill_max_score = min([max(combined_result["sils_min_W"]), max(combined_result["sils_min_H"])])
+                    elif self.predict_k_method == "W_sill":
+                        curr_sill_max_score = max(combined_result["sils_min_W"])
+                    elif self.predict_k_method == "H_sill":
+                        curr_sill_max_score = max(combined_result["sils_min_H"])
 
+                    # check if that sill threshold exist
+                    if self.sill_thresh > curr_sill_max_score:
+                        self.sill_thresh = curr_sill_max_score
+                        warnings.warn(f'W or H Silhouettes were all less than sill_thresh. Setting sill_thresh to minimum for K prediction. sill_thresh={round(self.sill_thresh, 3)}')
+                    
                     k_predict_W = Ks[np.max(np.argwhere(
                         np.array(combined_result["sils_min_W"]) >= self.sill_thresh).flatten())]
                     k_predict_H = Ks[np.max(np.argwhere(
                         np.array(combined_result["sils_min_H"]) >= self.sill_thresh).flatten())]
-                    k_predict = min(k_predict_W, k_predict_H)
+                    
+                    if self.predict_k_method in ["WH_sill", "sill"]:
+                        k_predict = min(k_predict_W, k_predict_H)
+                    elif self.predict_k_method == "W_sill":
+                        k_predict = k_predict_W
+                    elif self.predict_k_method == "H_sill":
+                        k_predict = k_predict_H
             
             else:
                 k_predict = 0
