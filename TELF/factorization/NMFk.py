@@ -359,7 +359,7 @@ def _nmf_parallel_wrapper(
         with K_search_settings['lock']:
             if min(sils_min_W, sils_min_H) >= K_search_settings["sill_thresh"]:
                 K_search_settings['k_min'] = k
-            if K_search_settings["H_sill_thresh"] >= 0 and (sils_min_H <= K_search_settings["H_sill_thresh"]):
+            if K_search_settings["H_sill_thresh"] is not None and (sils_min_H <= K_search_settings["H_sill_thresh"]):
                 K_search_settings['k_max'] = k
 
             if n_nodes > 1:
@@ -507,7 +507,7 @@ class NMFk:
             get_plot_data=False,
             simple_plot=True,
             k_search_method="linear",
-            H_sill_thresh=-1
+            H_sill_thresh=None
             ):
         """
         NMFk is a Non-negative Matrix Factorization module with the capability to do automatic model determination.
@@ -628,7 +628,7 @@ class NMFk:
             Setting for removing higher ranks from the search space.\n
             When searching for the optimal rank with binary search using ``k_search='bst_post'`` or ``k_search='bst_pre'``, this hyper-parameter can be used to cut off higher ranks from search space.\n
             The cut-off of higher ranks from the search space is based on threshold for H silhouette. When a H silhouette below ``H_sill_thresh`` is found for a given rank or K, all higher ranks are removed from the search space.\n
-            If ``H_sill_thresh=-1``, it is not used. The default is -1.
+            If ``H_sill_thresh=None``, it is not used. The default is None.
         Returns
         -------
         None.
