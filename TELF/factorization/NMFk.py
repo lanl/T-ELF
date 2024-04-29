@@ -1161,8 +1161,10 @@ class NMFk:
                 else:
                     if self.predict_k_method in ["WH_sill", "sill"]:
                         curr_sill_max_score = min([max(combined_result["sils_min_W"]), max(combined_result["sils_min_H"])])
+                    
                     elif self.predict_k_method == "W_sill":
                         curr_sill_max_score = max(combined_result["sils_min_W"])
+                    
                     elif self.predict_k_method == "H_sill":
                         curr_sill_max_score = max(combined_result["sils_min_H"])
 
@@ -1171,17 +1173,14 @@ class NMFk:
                         self.sill_thresh = curr_sill_max_score
                         warnings.warn(f'W or H Silhouettes were all less than sill_thresh. Setting sill_thresh to minimum for K prediction. sill_thresh={round(self.sill_thresh, 3)}')
                     
-                    k_predict_W = Ks[np.max(np.argwhere(
-                        np.array(combined_result["sils_min_W"]) >= self.sill_thresh).flatten())]
-                    k_predict_H = Ks[np.max(np.argwhere(
-                        np.array(combined_result["sils_min_H"]) >= self.sill_thresh).flatten())]
-                    
                     if self.predict_k_method in ["WH_sill", "sill"]:
+                        k_predict_W = Ks[np.max(np.argwhere(np.array(combined_result["sils_min_W"]) >= self.sill_thresh).flatten())]
+                        k_predict_H = Ks[np.max(np.argwhere(np.array(combined_result["sils_min_H"]) >= self.sill_thresh).flatten())]
                         k_predict = min(k_predict_W, k_predict_H)
                     elif self.predict_k_method == "W_sill":
-                        k_predict = k_predict_W
+                        k_predict = Ks[np.max(np.argwhere(np.array(combined_result["sils_min_W"]) >= self.sill_thresh).flatten())]
                     elif self.predict_k_method == "H_sill":
-                        k_predict = k_predict_H
+                        k_predict = Ks[np.max(np.argwhere(np.array(combined_result["sils_min_H"]) >= self.sill_thresh).flatten())]
             
             else:
                 k_predict = 0
