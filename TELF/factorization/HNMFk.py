@@ -210,16 +210,11 @@ class HNMFk():
         if self.n_nodes > 1:
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
-            self.node_status = {}
-            for ii in range(1, self.n_nodes, 1):
-                self.node_status[ii] = {"free":True, "job":None}
 
         # single node processing
         else:
             comm = None
             rank = 0
-            self.node_status[0] = {"free": True, "job":None}
-
 
         #
         # Checkpointing and job setup
@@ -256,6 +251,16 @@ class HNMFk():
                     "depth":0,
                     "parent_topic":None
                 }
+        
+        # organize node status
+        if self.n_nodes > 1:
+            self.node_status = {}
+            for ii in range(1, self.n_nodes, 1):
+                self.node_status[ii] = {"free":True, "job":None}
+
+        else:
+             self.node_status = {}
+             self.node_status[0] = {"free": True, "job":None}
 
         # save data matrix
         self.X = X 
@@ -354,6 +359,9 @@ class HNMFk():
         )
         self.iterator = self.root
         self._prepare_iterator(self.root)
+
+        if self.verbose:
+            print("Done")
 
         return {"time":total_exec_seconds}
 
