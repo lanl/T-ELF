@@ -21,11 +21,19 @@ class BST(object):
             yield from self.left.preorder()
         if self.right:
             yield from self.right.preorder()
-
+        
     def postorder(self):
+        if self.left:
+            yield from self.left.postorder()
+        if self.right:
+            yield from self.right.postorder()
+        yield self.value
+        
+    def inorder(self):
+        if self.left:
+            yield from self.left.postorder()
         yield self.value
         if self.right:
-            yield from self.right.preorder()
-        if self.left:
-            yield from self.left.preorder()
+            yield from self.right.postorder()
+
 
