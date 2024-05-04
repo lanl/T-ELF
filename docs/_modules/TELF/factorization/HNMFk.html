@@ -499,16 +499,11 @@ document.write(`
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
             <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;free&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;job&quot;</span><span class="p">:</span><span class="kc">None</span><span class="p">}</span>
 
         <span class="c1"># single node processing</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">comm</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">rank</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;free&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;job&quot;</span><span class="p">:</span><span class="kc">None</span><span class="p">}</span>
-
 
         <span class="c1">#</span>
         <span class="c1"># Checkpointing and job setup</span>
@@ -545,6 +540,16 @@ document.write(`
                     <span class="s2">&quot;depth&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
                     <span class="s2">&quot;parent_topic&quot;</span><span class="p">:</span><span class="kc">None</span>
                 <span class="p">}</span>
+        
+        <span class="c1"># organize node status</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;free&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;job&quot;</span><span class="p">:</span><span class="kc">None</span><span class="p">}</span>
+
+        <span class="k">else</span><span class="p">:</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span> <span class="o">=</span> <span class="p">{}</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;free&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;job&quot;</span><span class="p">:</span><span class="kc">None</span><span class="p">}</span>
 
         <span class="c1"># save data matrix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span> 
@@ -643,6 +648,9 @@ document.write(`
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_iterator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span><span class="n">total_exec_seconds</span><span class="p">}</span></div>
 
