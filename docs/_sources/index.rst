@@ -104,7 +104,7 @@ How to Cite T-ELF?
 
 .. code-block:: console
 
-   Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.18) [Computer software]. https://doi.org/10.5281/zenodo.10257897
+   Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.19) [Computer software]. https://doi.org/10.5281/zenodo.10257897
 
 **BibTeX:**
 

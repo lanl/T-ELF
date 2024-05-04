@@ -637,8 +637,9 @@ class NMFk:
         k_search_method : str, optional
             Which approach to use when searching for the rank or k. The default is "linear".\n
             * ``k_search_method='linear'`` will linearly visit each K given in ``Ks`` hyper-parameter of the ``fit()`` function.\n
-            * ``k_search_method='bst_post'`` will perform post-order binary search. When an ideal rank is found, determined by the selected ``predict_k_method``, all lower ranks are pruned from the search space.
-            * ``k_search_method='bst_pre'`` will perform pre-order binary search. When an ideal rank is found, determined by the selected ``predict_k_method``, all lower ranks are pruned from the search space.
+            * ``k_search_method='bst_post'`` will perform post-order binary search. When an ideal rank is found, determined by the selected ``predict_k_method``, all lower ranks are pruned from the search space.\n
+            * ``k_search_method='bst_pre'`` will perform pre-order binary search. When an ideal rank is found, determined by the selected ``predict_k_method``, all lower ranks are pruned from the search space.\n
+            * ``k_search_method='bst_in'`` will perform in-order binary search. When an ideal rank is found, determined by the selected ``predict_k_method``, all lower ranks are pruned from the search space.
         H_sill_thresh : float, optional
             Setting for removing higher ranks from the search space.\n
             When searching for the optimal rank with binary search using ``k_search='bst_post'`` or ``k_search='bst_pre'``, this hyper-parameter can be used to cut off higher ranks from search space.\n
@@ -694,7 +695,7 @@ class NMFk:
         self.H_sill_thresh = H_sill_thresh
 
         # warnings
-        assert self.k_search_method in ["linear", "bst_pre", "bst_post"], "Invalid k_search_method method. Choose from linear, bst_pre, or bst_post."
+        assert self.k_search_method in ["linear", "bst_pre", "bst_post", "bst_in"], "Invalid k_search_method method. Choose from linear, bst_pre, bst_in, or bst_post."
         assert self.predict_k_method in ["pvalue", "WH_sill", "W_sill", "H_sill", "sill"], "Invalid predict_k_method method. Choose from pvalue, WH_sill, W_sill, H_sill, or sill. sill defaults to WH_sill."
         
         if self.predict_k_method == "sill":
@@ -863,11 +864,17 @@ class NMFk:
             node = BST.sorted_array_to_bst(Ks)
             if self.K_search_settings["k_search_method"] == "bst_pre": 
                 Ks = list(node.preorder())
-            if self.K_search_settings["k_search_method"] == "bst_post": 
+            elif self.K_search_settings["k_search_method"] == "bst_post": 
                 Ks = list(node.postorder())
+            elif self.K_search_settings["k_search_method"] == "bst_in": 
+                Ks = list(node.inorder())
             else:
                 raise Exception("Unknown k_search_method!")
+            
+            if self.verbose:
+                print(f'Performing K search with {self.K_search_settings["k_search_method"]}. Ks={Ks}')
 
+        
         #
         # check X format
         #
