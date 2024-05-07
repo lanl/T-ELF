@@ -23,10 +23,12 @@ class StemProcessor:
             common suffixes in english
         """
         self.vocabulary = vocabulary
-        if suffixes:
-            self.suffixes = sorted(suffixes, key=len, reverse=True)
-        else:
-
+        if not suffixes:
+            suffixes = ['able', 'ac', 'acity', 'acy', 'al', 'ance', 'ancy', 'ant', 'ar', 'ary', 'ate', 'ation', 'ative', 'cide', 'cracy', 'craft',
+                'dom', 'ed', 'ee', 'en', 'ence', 'ency', 'ent', 'er', 'ern', 'ese', 'esque', 'ess', 'est', 'ful', 'fy', 'hood', 'ian', 
+                'ible', 'ic', 'ice', 'ify', 'ing', 'ion', 'ish', 'ism', 'ist', 'ity', 'ive', 'ize', 'less', 'like', 'ly', 'ment', 'ness', 'or',
+                'ory', 'ous', 'ship', 'sion', 'ster', 'tion', 'ty', 'ward', 'ware', 'wise', 'y' ]
+        self.suffixes = sorted(suffixes, key=len, reverse=True)
 
     def strip_suffixes(self, word):
         """
