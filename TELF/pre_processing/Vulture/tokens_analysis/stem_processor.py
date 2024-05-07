@@ -5,7 +5,7 @@ from tqdm import tqdm
 from TELF.pre_processing.Vulture.tokens_analysis.levenstein import compare_keys
 
 """
-SAPMPLE USAGE
+SAMPLE USAGE
 ----------
 stem_processor = StemProcessor(vocabulary)
 subs_stemed, new_vocabulary = stem_processor.build_vocab_stem_subs()
@@ -22,13 +22,19 @@ class StemProcessor:
         suffixes : list
             common suffixes in english
         """
+        SUFFIXES = ['acity', 'ation', 'ative', 'cracy', 'craft', 'esque', 'able', 
+                    'ance', 'ancy', 'cide', 'ence', 'ency', 'hood', 'ible', 'less', 
+                    'like', 'ment', 'ness', 'ship', 'sion', 'ster', 'tion', 'ward', 
+                    'ware', 'wise', 'acy', 'ant', 'ary', 'ate', 'dom', 'ent', 'ern', 
+                    'ese', 'ess', 'est', 'ful', 'ian', 'ice', 'ify', 'ing', 'ion', 
+                    'ish', 'ism', 'ist', 'ity', 'ive', 'ize', 'ory', 'ous', 'ac', 
+                    'al', 'ar', 'ed', 'ee', 'en', 'er', 'fy', 'ic', 'ly', 'or', 'ty', 
+                    'y']
+        if suffixes:
+            self.suffixes = sorted(suffixes, key=len, reverse=True)
+        else:
+            self.suffixes = SUFFIXES
         self.vocabulary = vocabulary
-        if not suffixes:
-            suffixes = ['able', 'ac', 'acity', 'acy', 'al', 'ance', 'ancy', 'ant', 'ar', 'ary', 'ate', 'ation', 'ative', 'cide', 'cracy', 'craft',
-                'dom', 'ed', 'ee', 'en', 'ence', 'ency', 'ent', 'er', 'ern', 'ese', 'esque', 'ess', 'est', 'ful', 'fy', 'hood', 'ian', 
-                'ible', 'ic', 'ice', 'ify', 'ing', 'ion', 'ish', 'ism', 'ist', 'ity', 'ive', 'ize', 'less', 'like', 'ly', 'ment', 'ness', 'or',
-                'ory', 'ous', 'ship', 'sion', 'ster', 'tion', 'ty', 'ward', 'ware', 'wise', 'y' ]
-        self.suffixes = sorted(suffixes, key=len, reverse=True)
 
     def strip_suffixes(self, word):
         """
@@ -49,7 +55,7 @@ class StemProcessor:
                 return word[:-len(suffix)]
         return word
 
-    def unify_common_stems(self, vocab_stems, similarity_threshold=0.9, min_word_length=5, num_threads=4):
+    def unify_common_stems(self, vocab_stems, similarity_threshold=0.9, min_word_length=5, n_jobs=None):
         """
         finds stems that are the same without endings
 
@@ -57,10 +63,12 @@ class StemProcessor:
         ----------
         vocab_stems : dict (str:str)
             unified variants map to shortest variant
-        suffixes : list
-            common suffixes in english
-        threshold : float
+        similarity_threshold : float
             similarity cutoff
+        min_word_length : int
+            only consider words meeting this length
+        n_jobs : int
+            number of concurrent jobs
     
         Returns
         -------
@@ -81,7 +89,7 @@ class StemProcessor:
         stem_pairs = [(stems[i], stems[j]) for i in range(len(stems)) for j in range(i + 1, len(stems)) if stems[i][0] == stems[j][0]]
         similar = []
 
-        with ThreadPoolExecutor(max_workers=num_threads) as executor:
+        with ThreadPoolExecutor(max_workers=n_jobs) as executor:
             results = list(tqdm(executor.map(compare_stems, stem_pairs), total=len(stem_pairs)))
 
         similar = [result for result in results if result is not None]
@@ -145,7 +153,7 @@ class StemProcessor:
             destination_word = info['dest']
             shortened_vocabulary.add(destination_word)
             for src in info['src']:
-                if src != destination_word and len(src) > 3 and len(destination_word) > 3:
+                if src != destination_word:
                     subs_stemed[src] = destination_word
 
         return subs_stemed, list(shortened_vocabulary)
