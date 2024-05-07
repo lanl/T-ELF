@@ -8,7 +8,7 @@ from TELF.pre_processing.Vulture.tokens_analysis.levenstein import compare_keys
 SAMPLE USAGE
 ----------
 stem_processor = StemProcessor(vocabulary)
-subs_stemed, new_vocabulary = stem_processor.build_vocab_stem_subs()
+subs_stemed, new_vocabulary = stem_processor()
 """
 class StemProcessor:
 
@@ -134,7 +134,7 @@ class StemProcessor:
 
         return vocab_stems
 
-    def build_vocab_stem_subs(self):
+    def __call__(self):
 
         """
         Stems vocabulary, constructs map of all variants to the shorstest variant.
