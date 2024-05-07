@@ -11,6 +11,16 @@ stem_processor = StemProcessor(vocabulary)
 subs_stemed, new_vocabulary = stem_processor.build_vocab_stem_subs()
 """
 class StemProcessor:
+
+    SUFFIXES = ['acity', 'ation', 'ative', 'cracy', 'craft', 'esque', 'able', 
+                'ance', 'ancy', 'cide', 'ence', 'ency', 'hood', 'ible', 'less', 
+                'like', 'ment', 'ness', 'ship', 'sion', 'ster', 'tion', 'ward', 
+                'ware', 'wise', 'acy', 'ant', 'ary', 'ate', 'dom', 'ent', 'ern', 
+                'ese', 'ess', 'est', 'ful', 'ian', 'ice', 'ify', 'ing', 'ion', 
+                'ish', 'ism', 'ist', 'ity', 'ive', 'ize', 'ory', 'ous', 'ac', 
+                'al', 'ar', 'ed', 'ee', 'en', 'er', 'fy', 'ic', 'ly', 'or', 'ty', 
+                'y']
+    
     def __init__(self, vocabulary, suffixes=None):
         """
         Store values for processing in functions
@@ -22,18 +32,10 @@ class StemProcessor:
         suffixes : list
             common suffixes in english
         """
-        SUFFIXES = ['acity', 'ation', 'ative', 'cracy', 'craft', 'esque', 'able', 
-                    'ance', 'ancy', 'cide', 'ence', 'ency', 'hood', 'ible', 'less', 
-                    'like', 'ment', 'ness', 'ship', 'sion', 'ster', 'tion', 'ward', 
-                    'ware', 'wise', 'acy', 'ant', 'ary', 'ate', 'dom', 'ent', 'ern', 
-                    'ese', 'ess', 'est', 'ful', 'ian', 'ice', 'ify', 'ing', 'ion', 
-                    'ish', 'ism', 'ist', 'ity', 'ive', 'ize', 'ory', 'ous', 'ac', 
-                    'al', 'ar', 'ed', 'ee', 'en', 'er', 'fy', 'ic', 'ly', 'or', 'ty', 
-                    'y']
         if suffixes:
             self.suffixes = sorted(suffixes, key=len, reverse=True)
         else:
-            self.suffixes = SUFFIXES
+            self.suffixes = StemProcessor.SUFFIXES
         self.vocabulary = vocabulary
 
     def strip_suffixes(self, word):
