@@ -536,6 +536,8 @@ class HNMFk():
             if len(cluster_c_indices) == 0:
                 continue
 
+            extracted_indicies = [current_node.original_indices[i] for i in cluster_c_indices]
+
             # save current results
             next_name = str(uuid.uuid1())
             current_node.child_node_names.append(next_name)
@@ -544,8 +546,8 @@ class HNMFk():
             next_job = {
                 "parent_node_name":node_name,
                 "node_name":next_name,
-                "Ks":self._get_curr_Ks(node_k=current_node.k, num_samples=len(cluster_c_indices)),
-                "original_indices":cluster_c_indices.copy(),
+                "Ks":self._get_curr_Ks(node_k=current_node.k, num_samples=len(extracted_indicies)),
+                "original_indices":extracted_indicies.copy(),
                 "depth":current_node.depth+1,
                 "parent_topic":c,
             }
