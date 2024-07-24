@@ -24,7 +24,7 @@ jobs:
         run: |
           conda info
           conda list
-          python setup.py install
+          pip install -e .
           
       - name: Run the Unittests
         run: |
