@@ -18,15 +18,17 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: anaconda-client-env
-          python-version: 3.11
+          python-version: 3.11.10
           auto-activate-base: True
       - name: Install Dependencies and T-ELF
         run: |
           conda info
           conda list
-          pip install -e .
+          pip install pytest
+          pip install poetry
+          poetry install
           
       - name: Run the Unittests
         run: |
-          cd tests && python -m pytest *
+          cd tests && poetry run python -m pytest *
       
