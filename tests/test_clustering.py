@@ -1,7 +1,8 @@
 import numpy as np
 import scipy
 import scipy.sparse
-from TELF.factorization.decompositions.utilities import clustering
+from TELF.factorization.decompositions.utilities.clustering import custom_k_means
+from TELF.factorization.decompositions.utilities.silhouettes import silhouettes
 import pytest
 
 
@@ -11,7 +12,7 @@ def test_custom_k_means_numpy():
         W = W/np.sum(W, axis=0)
         W_all = np.stack((W, W[:, [0, 1, 2]], W[:, [1, 0, 2]], W[:, [
                          1, 2, 0]], W[:, [2, 0, 1]], W[:, [2, 1, 0]]), axis=2)
-        W_cent, W_clust = clustering.custom_k_means(W_all)
+        W_cent, W_clust = custom_k_means(W_all)
         assert W_cent.dtype == W_clust.dtype == dtype
         assert np.allclose(W_cent, W)
 
@@ -37,7 +38,7 @@ def test_silhouettes_numpy():
                             [0.30287937, 0.63102511, 0.65766421,
                                 0.48852792, 0.0183531],
                             [0.29249252, 0.62571947, 0.73744142, 0.73927311, 0.67945464]])
-        sils = clustering.silhouettes(W_clust)
+        sils = silhouettes(W_clust)
         assert np.allclose(sils, sil_ans)
 
 
@@ -50,5 +51,5 @@ def test_silhouettes_cupy():
                             [0.30287937, 0.63102511, 0.65766421,
                                 0.48852792, 0.0183531],
                             [0.29249252, 0.62571947, 0.73744142, 0.73927311, 0.67945464]])
-        sils = clustering.silhouettes(W_clust)
+        sils = silhouettes(W_clust)
         assert cp.allclose(sils, sil_ans)

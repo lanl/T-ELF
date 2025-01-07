@@ -1,7 +1,8 @@
 import sys
-sys.path += ["decompositions/utilities/"]
-sys.path += ["utilities/"]
-sys.path += ["decompositions/"]
+import os
+sys.path += [os.path.join("decompositions", "utilities")]
+sys.path += ["utilities"]
+sys.path += ["decompositions"]
 
 from .NMFk import NMFk
 from .HNMFk import HNMFk

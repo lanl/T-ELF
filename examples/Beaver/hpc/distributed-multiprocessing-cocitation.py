@@ -5,6 +5,7 @@ import sys
 import pandas as pd
 import numpy as np
 from TELF.pre_processing import Beaver
+import os 
 
 def main(argv):
 
@@ -13,7 +14,7 @@ def main(argv):
     n_jobs = int(argv[1])
 
     # load data
-    df = pd.read_csv("../../../data/sample.csv")
+    df = pd.read_csv(os.path.join("..", "..", "..", "data", "sample.csv"))
     df.references.replace(np.nan, '', regex=True, inplace=True)
 
     # build tensor

@@ -19,7 +19,7 @@ def nmf(X, W, H,
         lr_bi=.005,
         global_mean=0,
         calculate_global_mean=True,
-        KNOWN_MASK = None
+        MASK = None
     ):
 
 
@@ -50,7 +50,7 @@ def nmf(X, W, H,
     n_items = X.shape[1]
     
     # known coords and entries
-    if KNOWN_MASK is None:
+    if MASK is None:
         if use_gpu and HAS_CUPY and scipy.sparse.issparse(X):
             rows, columns, entries = cupyx.scipy.sparse.find(X)
         else:
@@ -60,7 +60,7 @@ def nmf(X, W, H,
             else:
                 entries = X[rows, columns]
     else:
-        rows, columns = KNOWN_MASK
+        rows, columns = np.argwhere(MASK)[:,0], np.argwhere(MASK)[:,1]
         rows, columns = np.array(rows), np.array(columns)
 
         if scipy.sparse.issparse(X):

@@ -233,7 +233,7 @@ def nmf_with_ADMM(X, W, H, lowerthres=1, upperthres=None, opts=None, use_gpu=Tru
     Mask = X == 1
 
     if opts["pruned"]:
-        X, rows, cols = prune(X, use_gpu=use_gpu)
+        X, rows, cols, _ = prune(X, use_gpu=use_gpu)
         W = W[rows, :]
         H = H[:, cols]
     if scipy.sparse.issparse(X):

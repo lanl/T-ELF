@@ -6,7 +6,8 @@ os.environ["VECLIB_MAXIMUM_THREADS"] = "1" # export VECLIB_MAXIMUM_THREADS=1
 os.environ["NUMEXPR_NUM_THREADS"] = "1" # export NUMEXPR_NUM_THREADS=1
 
 from TELF.factorization import NMFk
-import sys; sys.path.append("../../../scripts/")
+import os 
+import sys; sys.path.append(os.path.join("..", "..", "..", "scripts"))
 from generate_X import gen_data
 
 def main():
@@ -19,7 +20,7 @@ def main():
         "n_nodes":2,
         "init":"nnsvd", 
         "use_gpu":False,
-        "save_path":"../../results/", 
+        "save_path":os.path.join("..", "..", "..", "results"), 
         "save_output":True,
         "collect_output":True,
         "predict_k_method":"sill",

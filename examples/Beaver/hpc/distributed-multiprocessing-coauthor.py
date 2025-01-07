@@ -4,6 +4,7 @@ Run this example with: sbatch job_distributed-multiprocessing-coauthor.sh
 import sys
 import pandas as pd
 from TELF.pre_processing import Beaver
+import os 
 
 def main(argv):
 
@@ -12,7 +13,7 @@ def main(argv):
     n_jobs = int(argv[1])
 
     # load data
-    df = pd.read_csv("../../../data/sample.csv")
+    df = pd.read_csv(os.path.join("..", "..", "..", "data", "sample.csv"))
 
     # build tensor
     beaver = Beaver()

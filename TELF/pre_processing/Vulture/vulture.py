@@ -160,7 +160,7 @@ class Vulture:
         all_results = []
         for step in steps:
             if save_path is not None:
-                self.save_path = f'{save_path}/{file_name}_{step.__class__.__name__}.p'
+                self.save_path = os.path.join(save_path, file_name, f'_{step.__class__.__name__}.p')
             else:
                 self.save_path = save_path
 

@@ -44,7 +44,7 @@ def get_pac(C, use_gpu=False, verbose=False):
     return pac
 
 
-def prune(X, use_gpu=False):
+def prune(X, use_gpu=False, other=None, keys_to_check_other=["MASK"]):
     """
     Removes zero rows and columns from a matrix
 
@@ -98,7 +98,7 @@ def prune(X, use_gpu=False):
             cols = np.asarray(cols)
             rows = np.asarray(rows)
             
-        return Y.asformat(sparse_format), rows, cols
+        Y = Y.asformat(sparse_format)
     
     else:
         zero_inds = []
@@ -108,7 +108,19 @@ def prune(X, use_gpu=False):
             )
         Y = X[np.ix_(*[np.nonzero(zi)[0] for zi in zero_inds])]
         rows, cols = [zi != 0 for zi in zero_inds]
+
+    # prune other items based on pruning in X, if it is passed
+    # for example, prune MASK
+    for key in keys_to_check_other:
+        if other is not None and key in other:
+            pruning_other = other[key][rows]
+            pruning_other = pruning_other[:,cols]
+            other[key] = pruning_other
+    
+    if other is None:
         return Y, rows, cols
+    
+    return Y, rows, cols, other 
 
 
 def unprune(A, indices, axis, use_gpu=False):
@@ -119,6 +131,7 @@ def unprune(A, indices, axis, use_gpu=False):
     elif axis == 1:
         B = np.zeros((A.shape[0], len(indices)), dtype=A.dtype)
         B[:, indices] = A
+    
     return B
 
 
@@ -135,7 +148,13 @@ def kl_divergence(X, Y):
         raise Exception("Unknown data type!")
     
     if scipy.sparse.issparse(X):
-        div = np.nansum(X.multiply(np.log(X / (Y + eps) + eps)) - X + Y)
+        # Below 4 lines used to be this single line: div = np.nansum(X.multiply(np.log(X / (Y + eps) + eps)) - X + Y)
+        # Replaced the above single line with below lines at v0.0.27 to accomodate the below error:
+        # NotImplementedError('adding a nonzero scalar to a sparse array is not supported')
+        A = X / (Y + eps)
+        A.data += eps
+        A = A.log1p()
+        div = np.nansum(X.multiply(A) - X + Y)
     else:
         div = np.nansum(X * np.log(X / (Y + eps) + eps) - X + Y)
     return div
@@ -186,15 +205,17 @@ def relative_error_rescal(X,A, R, normX=None):
 
     error = np.linalg.norm([relative_error(X[i],A,R[i]@A.T)*norm_X(X[i]) for i in range(len(X))]) \
             /np.linalg.norm([norm_X(X[i]) for i in range(len(X))])
+   
     return error
 
 
-def relative_error(X, W, H, normX=None):
+def relative_error(X, W, H, MASK=None, normX=None):
     r"""
     input:
       X (sparse array, ndarray): shape $m \times n$ array or sparse array.
       W (ndarray): shape $m \times k$ left factor of X.
       H (ndarray): shape $k \times n$ right factor of X.
+      MASK (ndarray, optional): shape $m \times n$ matrix. Only consider errors where MASK == 1.
       normX, optional (double): Optional argument if you already know the norm of X. 
     output:
       rel_err (double): the relative error $||X-WH||_F/||X||_F$.
@@ -210,10 +231,36 @@ def relative_error(X, W, H, normX=None):
         eps = np.finfo(dtype).eps
     else:
         raise Exception("Unknown data type!")
-    
-    if not scipy.sparse.issparse(X):
-        return fro_norm(X-W@H) / fro_norm(X)
 
+    # Check if a MASK is provided
+    if MASK is not None:
+        # Perform masked error calculation
+        if not scipy.sparse.issparse(X):
+            # Dense case
+            masked_error = (X - W @ H) * MASK
+            norm_masked_error = fro_norm(masked_error)
+            masked_X = X * MASK
+            norm_masked_X = fro_norm(masked_X)
+            return norm_masked_error / norm_masked_X
+
+        # Sparse case
+        if normX is None:
+            normX = np.linalg.norm((X.multiply(MASK)).data)
+        
+        normX = normX + eps
+        W = np.maximum(W, eps)
+        H = np.maximum(H, eps)
+        
+        WTWHHT = np.trace((W.T @ W) @ (H @ H.T))
+        WTXHT = np.trace(W.T @ np.array((X.multiply(MASK)).dot(H.T)))
+        
+        rel_err = np.sqrt(normX**2 + WTWHHT - 2 * WTXHT) / normX
+        return rel_err
+
+    # If no MASK is provided, fall back to unmasked error calculation
+    if not scipy.sparse.issparse(X):
+        return fro_norm(X - W @ H) / fro_norm(X)
+    
     if normX is None:
         if scipy.sparse.issparse(X):
             normX = np.linalg.norm(X.data)
@@ -221,15 +268,14 @@ def relative_error(X, W, H, normX=None):
             normX = np.linalg.norm(X)
     
     normX = normX + eps
-    W=np.maximum(W,eps)
-    H=np.maximum(H,eps)
+    W = np.maximum(W, eps)
+    H = np.maximum(H, eps)
     
-    WTWHHT = np.trace((W.T@W)@(H@H.T))
-    WTXHT = np.trace(W.T@np.array(X.dot(H.T)))
+    WTWHHT = np.trace((W.T @ W) @ (H @ H.T))
+    WTXHT = np.trace(W.T @ np.array(X.dot(H.T)))
     
-    rel_err = np.sqrt(normX**2 + WTWHHT -2*WTXHT) / normX
+    rel_err = np.sqrt(normX**2 + WTWHHT - 2 * WTXHT) / normX
     return rel_err
-
 
 def fro_norm(X, use_gpu=False):
     np = get_np(X, use_gpu=use_gpu)
