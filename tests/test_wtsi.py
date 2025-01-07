@@ -1,10 +1,11 @@
 from TELF.factorization import NMFk
 import mat73
 import pytest
+import os 
 
 def test_wtsi_k():
     
-    X = mat73.loadmat('../data/wtsi.mat')['X'].astype('float32')
+    X = mat73.loadmat(os.path.join("..", "data", "wtsi.mat"))['X'].astype('float32')
 
     params = {
         "n_perturbs":32,

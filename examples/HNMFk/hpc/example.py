@@ -6,7 +6,7 @@ os.environ["VECLIB_MAXIMUM_THREADS"] = "1" # export VECLIB_MAXIMUM_THREADS=1
 os.environ["NUMEXPR_NUM_THREADS"] = "1" # export NUMEXPR_NUM_THREADS=1
 
 from TELF.factorization.HNMFk import HNMFk
-import sys; sys.path.append("../../../scripts/")
+import sys; sys.path.append(os.path.join("..", "..", "..", "scripts"))
 from generate_X import gen_data,gen_data_sparse
 import numpy as np
 

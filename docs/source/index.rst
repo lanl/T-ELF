@@ -22,61 +22,46 @@ Resources
 
 Installation
 ========================================
-**Step 1: Install the Library**
+**Step 1:** `Install Poetry to your system <https://python-poetry.org/docs/>`_
+This step is optional. Use Pip or Conda if Poetry is not avaiable.
 
-* Option 1: Install via PIP
+**Step 2: Install the Library**
 
-.. code-block:: shell
-
-	conda create --name TELF python=3.11.5
-	source activate TELF # or <conda activate TELF>
-	pip install git+https://github.com/lanl/T-ELF.git
-
-
-* Option 2: Install from Source
+* Option 1: Install via Poetry or Pip
 
 .. code-block:: shell
 
-	git clone https://github.com/lanl/T-ELF.git
-	cd T-ELF
-	conda create --name TELF python=3.11.5
-	source activate TELF # or <conda activate TELF>
-	pip install -e . # or <python setup.py install>
+   conda create --name TELF python=3.11.10
+   source activate TELF # or <conda activate TELF>
+   poetry install # or <pip install .>
 
 
-* Option 3: Install via Conda
+* Option 2: Install via Conda
 
 .. code-block:: shell
 
-   git clone https://github.com/lanl/T-ELF.git
-   cd T-ELF
+   git clone https://gitlab.lanl.gov/maksim/telf_internal
+   cd telf_internal
    conda env create --file environment_gpu.yml # use <conda env create --file environment_cpu.yml> for CPU only
    conda activate TELF_conda
    conda develop .
 
 
-**Step 2: Install Spacy NLP model and NLTK Packages**
+**Step 3: Post-installation Dependencies**
+
+Next, we need to install the optional and additional dependencies. These include optional dependencies for GPU and HPC capabilities, as well as required dependencies like the SpaCy language models.
+To view all available options, please run:
 
 .. code-block:: shell
 
-   python -m spacy download en_core_web_lg
-   python -m spacy download en_core_web_trf
-   python -m nltk.downloader wordnet omw-1.4
+   python post_install.py --help
 
-
-**Step 3: Install Cupy if using GPU (*Optional* - Skip if used Option 3 in Step 1)**
+Install the additional dependencies:
 
 .. code-block:: shell
+   
+   python post_install.py # use the following, for example, for GPU system: <python post_install.py --gpu>
 
-	conda install -c conda-forge cupy
-
-
-**Step 4: Install MPI if using HPC (*Optional*)**
-
-.. code-block:: shell
-
-	module load <openmpi> # On a HPC Node
-	pip install mpi4py # or <conda install -c conda-forge mpi4py> depending on the system
 
 
 **Optional Tutorial for Examples:**
@@ -89,6 +74,33 @@ On some Linux devices, based on how CUDA was configured, you may get an error wh
 	
 	conda install cudatoolkit
 	conda install cudnn
+
+
+LANL HPC Installation Notes
+========================================
+
+**Chicoma**
+
+.. code-block:: shell
+
+   # replace <path to your conda environments under projects> with your own path below.
+   conda create --prefix=<path to your conda environments under projects> python=3.11.10
+   source activate <path to your conda environments under projects> # or use conda activate <...>
+   pip install .
+   python post_install.py --gpu --hpc-conda
+
+**Darwin**
+
+.. code-block:: shell
+
+   salloc -n 1 -p shared-gpu
+   module load openmpi
+   module load miniconda3
+   conda create --name TELF python=3.11.10
+   conda activate TELF # or <source activate TELF>
+   pip install .
+   python post_install.py --gpu --hpc
+
 
 
 Capabilities
@@ -104,7 +116,7 @@ How to Cite T-ELF?
 
 .. code-block:: console
 
-   Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) (Version 0.0.20) [Computer software]. https://doi.org/10.5281/zenodo.10257897
+   Eren, M., Solovyev, N., Barron, R., Bhattarai, M., Truong, D., Boureima, I., Skau, E., Rasmussen, K., & Alexandrov, B. (2023). Tensor Extraction of Latent Features (T-ELF) [Computer software]. https://doi.org/10.5281/zenodo.10257897
 
 **BibTeX:**
 

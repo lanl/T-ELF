@@ -4,6 +4,7 @@ import numpy as np
 import scipy.sparse as ss
 from scipy import optimize
 from TELF.factorization.decompositions.utilities.math_utils import fro_norm
+import os 
 
 def computErr_np(Worig,Wfin): #Computes the error in factor matrices for given np array.
     if Worig.shape!=Wfin.shape:
@@ -25,11 +26,11 @@ def computErr_np(Worig,Wfin): #Computes the error in factor matrices for given n
 
 def test_nmfk_factors():
     
-    # load data
-    W_true = np.load("../data/test/Wtrue.npz", allow_pickle=True)["W"]
-    W_compare = np.load("../data/test/Wcompare.npz")["W"]
-    H_compare = np.load("../data/test/Hcompare.npz")["H"]
-    X = ss.load_npz("../data/test/Xtrue.npz")
+    # load data 
+    W_true = np.load(os.path.join("..", "data", "test", "Wtrue.npz"), allow_pickle=True)["W"]
+    W_compare = np.load(os.path.join("..", "data", "test", "Wcompare.npz"))["W"]
+    H_compare = np.load(os.path.join("..", "data", "test", "Hcompare.npz"))["H"]
+    X = ss.load_npz(os.path.join("..", "data", "test", "Xtrue.npz"))
     
     print(X.shape, W_true.shape, W_compare.shape, H_compare.shape)
     

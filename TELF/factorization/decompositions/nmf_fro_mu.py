@@ -94,7 +94,7 @@ def W_update(X, W, H, opts=None, use_gpu=True, mask=None):
             X[mask] = Xhat[mask]  # *update NaN spots
 
             if opts["hist"] is not None:
-                opts["hist"].append(fro_norm(X - W @ H))
+                opts["hist"].append(fro_norm(X - W @ H, use_gpu=use_gpu))
     else:
         if scipy.sparse.issparse(X):
             # bug in setting has_canonical_format flag in cupy
@@ -112,7 +112,7 @@ def W_update(X, W, H, opts=None, use_gpu=True, mask=None):
                 W = np.maximum(W, eps)
 
             if opts["hist"] is not None:
-                opts["hist"].append(fro_norm(X - W @ H))
+                opts["hist"].append(fro_norm(X - W @ H, use_gpu=use_gpu))
     return W
 
 
@@ -187,7 +187,7 @@ def nmf(X, W, H,
             W = np.maximum(W.astype(dtype), eps)
 
         if hist is not None:
-            hist.append(fro_norm(X - W @ H))
+            hist.append(fro_norm(X - W @ H, use_gpu=use_gpu))
             
         if mask is not None:  # *update mask
             Xhat = W@H

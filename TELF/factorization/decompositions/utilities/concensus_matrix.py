@@ -4,7 +4,7 @@ from scipy.cluster.hierarchy import linkage, cophenet, leaves_list, optimal_leaf
 from sklearn.cluster import SpectralClustering, AgglomerativeClustering
 from .math_utils import unprune
 
-def compute_consensus_matrix(H_all, pruned=False, perturb_cols=None):
+def compute_consensus_matrix(H_all, pruned=False, pruned_cols=None):
 
     # * H_all's shape: k x m x n_perturb
     k, m, npert = H_all.shape
@@ -14,10 +14,10 @@ def compute_consensus_matrix(H_all, pruned=False, perturb_cols=None):
         h = H_all[:, :, i]
 
         if pruned:
-            if perturb_cols is None:
+            if pruned_cols is None:
                 raise Exception("Attempted to calculate consensus matrix on a pruned matrix without passing perturb_cols!")
                 
-            h = unprune(h, perturb_cols, 1)
+            h = unprune(h, pruned_cols, 1)
 
         connect_mat = compute_connectivity_mat(h)
         consensus_mat += connect_mat

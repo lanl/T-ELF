@@ -193,8 +193,8 @@ def _symnmf_parallel_wrapper(
     #
     # save output factors and the plot
     #
-    if save_output:
-        con_fig_name = f'{save_path}/k_{k}_con_mat.png'
+    if save_output: 
+        con_fig_name = os.path.join(f'{save_path}', f'k_{k}_con_mat.png')
         plot_consensus_mat(reordered_con_mat, con_fig_name)
         
         save_data = {
@@ -203,12 +203,8 @@ def _symnmf_parallel_wrapper(
             "reordered_con_mat": reordered_con_mat,
             "cophenetic_coeff": coeff_k
         }
-        np.savez_compressed(
-            save_path
-            + "/W"
-            + "_k="
-            + str(k)
-            + ".npz",
+        np.savez_compressed( 
+            os.path.join(f'{save_path}', f'W_k={k}.npz'),
             **save_data
         )
         
@@ -256,7 +252,7 @@ class SymNMFk:
             n_jobs=1,
             n_nodes=1,
             use_gpu=False,
-            save_path="./",
+            save_path="",
             save_output=True,
             collect_output=False,
             verbose=False,

@@ -1,6 +1,6 @@
 import sys
-sys.path += ["Vulture/"]
-sys.path += ["Beaver/"]
+sys.path += ["Vulture"]
+sys.path += ["Beaver"]
 
 # Beaver
 from .Beaver.beaver import Beaver

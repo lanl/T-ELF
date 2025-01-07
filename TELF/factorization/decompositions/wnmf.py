@@ -4,8 +4,10 @@ Implements WLRA as WNMF from the MATLAB version in https://gitlab.com/ngillis/nm
 from .utilities.generic_utils import get_np, get_scipy
 from tqdm import tqdm
 import sys
+
+
 def nmf(X, W, H,
-        WEIGHTS = None,
+        MASK = None,
         lamb = 1e-6,
         niter=1000, use_gpu=True,
         nmf_verbose=True,
@@ -34,9 +36,9 @@ def nmf(X, W, H,
     assert K == W.shape[1]
     W, H = __scaleWH(X=X, W=W, H=H, use_gpu=use_gpu)
     
-    if WEIGHTS is None:
-        WEIGHTS = X.copy()
-        WEIGHTS[np.where(WEIGHTS)] = 1
+    if MASK is None:
+        MASK = X.copy()
+        MASK[np.where(MASK)] = 1
     
     #
     # main loop
@@ -47,14 +49,14 @@ def nmf(X, W, H,
         # for each rank
         for curr_k in range(K):
             R += np.outer(W[:, curr_k], H[curr_k])
-            Rp = R * WEIGHTS
+            Rp = R * MASK
 
             # W update
-            W[:, curr_k] = np.dot(Rp, H[curr_k]) / (np.dot(WEIGHTS, H[curr_k]**2) + lamb)
+            W[:, curr_k] = np.dot(Rp, H[curr_k]) / (np.dot(MASK, H[curr_k]**2) + lamb)
             W[:, curr_k] = np.maximum(W[:, curr_k].astype(dtype), eps)
 
             # H update
-            H[curr_k] = np.dot(Rp.T, W[:, curr_k]) / (np.dot(WEIGHTS.T, W[:, curr_k]**2) + lamb)
+            H[curr_k] = np.dot(Rp.T, W[:, curr_k]) / (np.dot(MASK.T, W[:, curr_k]**2) + lamb)
             H[curr_k] = np.maximum(H[curr_k].astype(dtype), eps)
 
             R -= np.outer(W[:, curr_k], H[curr_k])

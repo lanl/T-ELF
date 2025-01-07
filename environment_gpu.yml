@@ -3,9 +3,9 @@ channels:
   - conda-forge
   - conda
 dependencies:
-  - python=3.11.5
-  - numpy
-  - scipy==1.10.1
+  - python=3.11.10
+  - numpy<2.1.0
+  - scipy
   - matplotlib
   - pathos
   - psutil
@@ -19,7 +19,7 @@ dependencies:
   - pandas
   - nltk
   - joblib
-  - spacy==3.7.2
+  - spacy
   - mat73
   - cupy
   - networkx
