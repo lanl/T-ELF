@@ -1,9 +1,11 @@
+import os
 import pandas as pd
 from tqdm import tqdm
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from itertools import combinations
-import os
+from rapidfuzz.distance import Levenshtein
+
 from TELF.pre_processing.Vulture import Vulture
 from TELF.pre_processing.Vulture.modules import SubstitutionOperator
 
@@ -102,7 +104,8 @@ class VocabularyConsolidator:
         """
         length_1, length_2 = len(key1), len(key2)
         max_len = max(length_1, length_2)
-        dist = self.levenshtein_distance(key1, key2, length_1, length_2)
+        #dist = self.levenshtein_distance(key1, key2, length_1, length_2)
+        dist = Levenshtein.distance(key1, key2)
         similarity = (max_len - dist) / max_len
 
         if threshold <= similarity <= (threshold + edge_range):

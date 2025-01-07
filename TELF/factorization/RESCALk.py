@@ -20,7 +20,8 @@ from .utilities.perturbation_helpers import perturb_tensor_X
 from .utilities.initialization_helpers import init_A
 from .utilities.regression_helpers import R_regression
 from .decompositions.rescal_fro_mu import rescal as rescal_fro_mu
-from .decompositions.utilities.clustering import custom_k_means, silhouettes
+from .decompositions.utilities.clustering import custom_k_means
+from .decompositions.utilities.silhouettes import silhouettes
 from .decompositions.utilities.math_utils import relative_error_rescal
 
 
@@ -198,12 +199,8 @@ def _rescal_parallel_wrapper(
             "error_reg": error_reg,
             "errors": errors,
         }
-        np.savez_compressed(
-            save_path
-            + "/AR"
-            + "_k="
-            + str(k)
-            + ".npz",
+        np.savez_compressed( 
+            os.path.join(f'{save_path}', f'AR_k={k}.npz'),
             **save_data
         )
 
@@ -262,7 +259,7 @@ class RESCALk:
             n_nodes=1,
             init="nnsvd",
             use_gpu=True,
-            save_path="./",
+            save_path="",
             save_output=True,
             verbose=True,
             rescal_verbose=False,
@@ -302,7 +299,7 @@ class RESCALk:
         use_gpu : bool, optional
             If True, uses GPU for operations. The default is True.
         save_path : str, optional
-            Location to save output. The default is "./".
+            Location to save output. The default is "".
         save_output : bool, optional
             If True, saves the resulting latent factors and plots. The default is True.
 

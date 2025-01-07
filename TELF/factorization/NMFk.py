@@ -14,20 +14,26 @@ others to do so.
 from .utilities.take_note import take_note, take_note_fmat, append_to_note
 from .utilities.plot_NMFk import plot_NMFk, plot_consensus_mat, plot_cophenetic_coeff
 from .utilities.pvalue_analysis import pvalue_analysis
-from .utilities.organize_n_jobs import organize_n_jobs
+from .utilities.organize_n_jobs import organize_n_jobs, organize_devices
 from .utilities.data_host_transfer_helpers import put_X_gpu, put_A_gpu, put_A_cpu, put_other_results_cpu
-from .utilities.run_factorization_helpers import run_nmf
+from .utilities.run_factorization_helpers import run_nmf, run_thresholding
 from .utilities.perturbation_helpers import perturb_X
 from .utilities.initialization_helpers import init_WH
 from .utilities.regression_helpers import H_regression
 from .utilities.bst_helper import BST
+from .utilities.factor_thresholding import (find_thres_WH, coord_desc_thresh, 
+                                            coord_desc_thresh_onefactor, otsu_thresh, 
+                                            otsu_thresh_onefactor, kmeans_thresh_onefactor, kmeans_thresh)
 from .decompositions.nmf_kl_mu import nmf as nmf_kl_mu
 from .decompositions.nmf_fro_mu import nmf as nmf_fro_mu
 from .decompositions.wnmf import nmf as wnmf
+from .decompositions.bnmf import nmf as bnmf
 from .decompositions.nmf_recommender import nmf as nmf_recommender
-from .decompositions.utilities.clustering import custom_k_means, silhouettes
+from .decompositions.utilities.clustering import custom_k_means, custom_bool_clustering
+from .decompositions.utilities.silhouettes import silhouettes, silhouettes_with_distance
 from .decompositions.utilities.math_utils import prune, unprune, relative_error, get_pac
 from .decompositions.utilities.concensus_matrix import compute_consensus_matrix, reorder_con_mat
+
 from datetime import datetime, timedelta
 from collections import defaultdict
 import sys
@@ -58,10 +64,10 @@ except Exception:
 
 def _HPC_K_search_settings_update(n_nodes, my_rank, K_search_settings, save_path):
     for node_rank in range(n_nodes): 
-        if (node_rank == my_rank) or (not Path(f'{save_path}/{node_rank}-K_search_settings.p').is_file()):
+        if (node_rank == my_rank) or (not Path(os.path.join(f'{save_path}', f'{node_rank}-K_search_settings.p')).is_file()):
             continue
         
-        with open(f'{save_path}/{node_rank}-K_search_settings.p', 'rb') as file:
+        with open(os.path.join(f'{save_path}', f'{node_rank}-K_search_settings.p'), 'rb') as file:
             fcntl.flock(file, fcntl.LOCK_SH)
             node_settings = pickle.load(file)
             fcntl.flock(file, fcntl.LOCK_UN)
@@ -88,8 +94,11 @@ def _perturb_parallel_wrapper(
     K_search_settings,
     n_nodes,
     my_rank,
-    save_path):
-
+    save_path,
+    factor_thresholding_obj_params,
+    thresholding_function,
+    ):
+    
     if K_search_settings["k_search_method"] != "linear":
         with K_search_settings['lock']:
             
@@ -107,12 +116,21 @@ def _perturb_parallel_wrapper(
     if use_gpu:
         Y = put_X_gpu(Y, gpuid)
         W_init, H_init = put_A_gpu(W_init, gpuid), put_A_gpu(H_init, gpuid)
-        if "WEIGHTS" in nmf_params and nmf_params["WEIGHTS"] is not None:
-            nmf_params["WEIGHTS"] = put_X_gpu(nmf_params["WEIGHTS"], gpuid)
+        
+        if "MASK" in nmf_params and nmf_params["MASK"] is not None:
+            nmf_params = nmf_params.copy()
+            nmf_params["MASK"] = put_X_gpu(nmf_params["MASK"], gpuid)
 
     W, H, other_results = run_nmf(Y, W_init, H_init, nmf, nmf_params, use_gpu, gpuid)
+    del W_init
+    del H_init
+
+    # boolean thresholding if specified
+    if thresholding_function is not None:
+        W, H = run_thresholding(Y, W, H, factor_thresholding_obj_params, thresholding_function, use_gpu, gpuid)
 
     # transfer to CPU
+    del Y # done with this
     if use_gpu:
         W, H = put_A_cpu(W), put_A_cpu(H)
         other_results = put_other_results_cpu(other_results)
@@ -120,7 +138,13 @@ def _perturb_parallel_wrapper(
 
     # error calculation
     if calculate_error:
-        error = relative_error(X, W, H)
+        if use_gpu:
+            if "MASK" in nmf_params and nmf_params["MASK"] is not None:
+                nmf_params["MASK"] = put_A_cpu(nmf_params["MASK"])
+
+        error = relative_error(
+            X=X, W=W, H=H, 
+            MASK=nmf_params["MASK"] if "MASK" in nmf_params else None)
     else:
         error = 0
         
@@ -163,6 +187,7 @@ def _nmf_parallel_wrapper(
         n_perturbs, 
         nmf, 
         nmf_params,
+        clustering_obj_params,
         init_type="nnsvd", 
         X=None, 
         k=None,
@@ -176,8 +201,8 @@ def _nmf_parallel_wrapper(
         predict_k=False,
         predict_k_method="WH_sill",
         pruned=True,
-        perturb_rows=None,
-        perturb_cols=None,
+        pruned_rows=None,
+        pruned_cols=None,
         save_output=True,
         save_path="",
         collect_output=False,
@@ -190,7 +215,12 @@ def _nmf_parallel_wrapper(
         note_name="experiment",
         K_search_settings=None,
         n_nodes=1,
-        rank=0
+        rank=0,
+        factor_thresholding_obj_params={},
+        factor_thresholding_H_regression_obj_params={},
+        clustering_method="kmeans",
+        thresholding_function=None,
+        factor_thresholding_H_regression=None
         ):
 
     #
@@ -209,7 +239,9 @@ def _nmf_parallel_wrapper(
         "init_type":init_type,
         "n_nodes":n_nodes,
         "my_rank":rank,
-        "save_path":save_path
+        "save_path":save_path,
+        "factor_thresholding_obj_params":factor_thresholding_obj_params,
+        "thresholding_function":thresholding_function,
     }
     
     # single job or parallel over Ks
@@ -286,10 +318,19 @@ def _nmf_parallel_wrapper(
 
     #
     # cluster the solutions
-    # 
-    W, W_clust = custom_k_means(W_all, use_gpu=False)
-    sils_all_W = silhouettes(W_clust)
-    sils_all_H = silhouettes(np.array(H_all).transpose((1, 0, 2)))
+    #
+    if clustering_method == "bool" or clustering_method == "boolean":
+        W, W_clust = custom_bool_clustering(W_all, use_gpu=False, **clustering_obj_params)
+        sils_all_W = silhouettes_with_distance(W_all, distance=clustering_obj_params["distance"], use_gpu=False)
+        sils_all_H = silhouettes_with_distance(W_all, distance=clustering_obj_params["distance"], use_gpu=False)
+        
+    elif clustering_method == "kmeans":
+        W, W_clust = custom_k_means(W_all, use_gpu=False, **clustering_obj_params)
+        sils_all_W = silhouettes(W_clust, use_gpu=False)
+        sils_all_H = silhouettes(np.array(H_all).transpose((1, 0, 2)), use_gpu=False)
+    
+    else:
+        raise Exception("Unknown clustering method!")
 
     #
     # concensus matrix
@@ -297,14 +338,29 @@ def _nmf_parallel_wrapper(
     coeff_k = 0
     reordered_con_mat = None
     if consensus_mat:
-        con_mat_k = compute_consensus_matrix(H_all, pruned=pruned, perturb_cols=perturb_cols)
+        con_mat_k = compute_consensus_matrix(H_all, pruned=pruned, pruned_cols=pruned_cols)
         reordered_con_mat, coeff_k = reorder_con_mat(con_mat_k, k)
 
     #
     # Regress H
     #
     H = H_regression(X, W, mask, use_gpu, gpuid)
+
+    #
+    # Thresholding
+    #
+    if factor_thresholding_H_regression is not None:
+        H_dtype = H.dtype
     
+        if factor_thresholding_H_regression == "otsu_thresh":
+            H_thresh_result = otsu_thresh_onefactor(X, H.T, W, use_gpu=False, **factor_thresholding_H_regression_obj_params)["wt"].T
+        elif factor_thresholding_H_regression == "coord_desc_thresh":
+            H_thresh_result = coord_desc_thresh_onefactor(X.T, H.T, W.T, use_gpu=False, **factor_thresholding_H_regression_obj_params)["wt"]
+        elif factor_thresholding_H_regression == "kmeans_thresh": 
+            H_thresh_result = kmeans_thresh_onefactor(X, W, H, use_gpu=False, **factor_thresholding_H_regression_obj_params)["wt"]
+
+        H = (H >= H_thresh_result).astype(H_dtype)
+
     if use_gpu:
         cp._default_memory_pool.free_all_blocks()
 
@@ -315,7 +371,10 @@ def _nmf_parallel_wrapper(
         if mask is not None:
             Xhat = W@H
             X[mask] = Xhat[mask]
-        error_reg = relative_error(X, W, H)
+
+        error_reg = relative_error(
+            X=X, W=W, H=H, 
+            MASK=nmf_params["MASK"] if "MASK" in nmf_params else None)
     else:
         error_reg = 0
 
@@ -333,8 +392,15 @@ def _nmf_parallel_wrapper(
     # unprune
     #
     if pruned:
-        W = unprune(W, perturb_rows, 0)
-        H = unprune(H, perturb_cols, 1)
+        # latent factors
+        W = unprune(W, pruned_rows, 0)
+        H = unprune(H, pruned_cols, 1)
+
+        # biases
+        if "bu" in other_results:
+            other_results["bu"] = unprune(other_results["bu"], pruned_rows, 1)[0]
+        if "bi" in other_results:
+            other_results["bi"] = unprune(other_results["bi"], pruned_cols, 1)[0]
 
     #
     # Calculate statistics on results
@@ -390,15 +456,15 @@ def _nmf_parallel_wrapper(
                 finally:
                     temp_file.close()
                 
-                # Atomically replace the old file with the new file
-                os.replace(temp_file.name, f'{save_path}/{rank}-K_search_settings.p')
+                # Atomically replace the old file with the new file 
+                os.replace(temp_file.name, os.path.join(f'{save_path}', f'{rank}-K_search_settings.p'))
 
     #
     # save output factors and the plot
     #
     if save_output:
-        if consensus_mat:
-            con_fig_name = f'{save_path}/k_{k}_con_mat.png'
+        if consensus_mat: 
+            con_fig_name = os.path.join(f'{save_path}', f'k_{k}_con_mat.png')
             plot_consensus_mat(reordered_con_mat, con_fig_name)
         
         save_data = {
@@ -410,15 +476,16 @@ def _nmf_parallel_wrapper(
             "errors": errors,
             "reordered_con_mat": reordered_con_mat,
             "H_all": H_all,
+            "W_all": W_all,
             "cophenetic_coeff": coeff_k,
-            "other_results": other_results
+            "pruned_rows":pruned_rows,
+            "pruned_cols":pruned_cols,
         }
-        np.savez_compressed(
-            save_path
-            + "/WH"
-            + "_k="
-            + str(k)
-            + ".npz",
+        for key, value in other_results.items():
+            save_data[key] = value
+            
+        np.savez_compressed( 
+            os.path.join(f'{save_path}', f'WH_k={k}.npz'),
             **save_data
         )
 
@@ -496,7 +563,7 @@ class NMFk:
             n_nodes=1,
             init="nnsvd",
             use_gpu=True,
-            save_path="./",
+            save_path="",
             save_output=True,
             collect_output=False,
             predict_k=False,
@@ -508,7 +575,9 @@ class NMFk:
             sill_thresh=0.8,
             nmf_func=None,
             nmf_method="nmf_fro_mu",
+            clustering_method="kmeans",
             nmf_obj_params={},
+            clustering_obj_params={},
             pruned=True,
             calculate_error=True,
             perturb_multiprocessing=False,
@@ -519,7 +588,12 @@ class NMFk:
             get_plot_data=False,
             simple_plot=True,
             k_search_method="linear",
-            H_sill_thresh=None
+            H_sill_thresh=None,
+            factor_thresholding=None,
+            factor_thresholding_H_regression=None,
+            factor_thresholding_obj_params={},
+            factor_thresholding_H_regression_obj_params={},
+            device=-1,
             ):
         """
         NMFk is a Non-negative Matrix Factorization module with the capability to do automatic model determination.
@@ -530,13 +604,27 @@ class NMFk:
             Number of bootstrap operations, or random matrices generated around the original matrix. The default is 20.
         n_iters : int, optional
             Number of NMF iterations. The default is 100.
-        epsilon : float, optional
+        epsilon : float or tuple of two elements, optional
             Error amount for the random matrices generated around the original matrix. The default is 0.015.\n
-            ``epsilon`` is used when ``perturb_type='uniform'``.
+            The default when ``perturb_type='bool'`` or ``perturb_type='boolean'`` is (epsilon, epsilon).\n
+            ``epsilon`` is used when ``perturb_type='uniform'`` or ``perturb_type='bool'`` or ``perturb_type='boolean'``.
+
+            .. note::
+
+                If ``perturb_type='bool'`` or ``perturb_type='boolean'``, use ```epsilon=tuple()``` where\n
+                positive noise: flip 0s to 1s (additive noise), negative noise: flip 1s to 0s (subtractive noise).
+
         perturb_type : str, optional
             Type of error sampling to perform for the bootstrap operation. The default is "uniform".\n
             * ``perturb_type='uniform'`` will use uniform distribution for sampling.\n
             * ``perturb_type='poisson'`` will use Poission distribution for sampling.\n
+            * ``perturb_type='bool'`` or ``perturb_type='boolean'`` will use Boolean perturbations.\n
+
+            .. note::
+
+                If ``perturb_type='bool'`` or ``perturb_type='boolean'``, use ```epsilon=tuple()``` where\n
+                positive noise: flip 0s to 1s (additive noise), negative noise: flip 1s to 0s (subtractive noise).
+
         n_jobs : int, optional
             Number of parallel jobs. Use -1 to use all available resources. The default is 1.
         n_nodes : int, optional
@@ -548,7 +636,7 @@ class NMFk:
         use_gpu : bool, optional
             If True, uses GPU for operations. The default is True.
         save_path : str, optional
-            Location to save output. The default is "./".
+            Location to save output. The default is "".
         save_output : bool, optional
             If True, saves the resulting latent factors and plots. The default is True.
         collect_output : bool, optional
@@ -591,6 +679,7 @@ class NMFk:
             * ``nmf_method='func'`` will use the custom NMF function passed using the ``nmf_func`` parameter.\n
             * ``nmf_method='nmf_recommender'`` will use the Recommender NMF method for collaborative filtering.\n
             * ``nmf_method='wnmf'`` will use the Weighted NMF for missing value completion.\n
+            * ``nmf_method='bnmf'`` will use the Boolean NMF for missing value completion on boolean matrix.\n
 
             .. note::
 
@@ -602,15 +691,29 @@ class NMFk:
                 When using ``nmf_method='wnmf'``, pass ``nmf_obj_params={"WEIGHTS":P}`` where ``P`` is a matrix of size ``X`` and carries the weights for each item in ``X``.\n
                 For example, here ``P`` can be used as a mask where 1s in ``P`` are the known entries, and 0s are the missing values in ``X`` that we want to predict (i.e. a recommender system).\n
                 Note that ``nmf_method='wnmf'`` does not support sparse matrices currently.
-                
+
+            .. note::
+                When using ``nmf_method='bnmf'``, pass ``nmf_obj_params={"MASK":P}`` where ``P`` is a mask matrix of size ``X`` where 0s and 1s in ``P`` are the known and unknown locations in ``X``.\n
+                0s in ``P`` are the places we would like to predict.\n
+                Note that ``nmf_method='bnmf'`` does not support sparse matrices currently.\n
+                When ``nmf_method='bnmf'``, ``perturb_type='bool'`` or ``perturb_type='boolean'`` is recommended to use. It will not set it automatically but raise warning if not used.\n
+        
+        clustering_method : str, optional
+            Clustering used on the W patterns. Default is "kmeans".
+            Options are "kmeans" and "bool" or "boolean"
 
         nmf_obj_params : dict, optional
             Parameters used by NMF function. The default is {}.
+
+        clustering_obj_params: dict, optinal
+            Parameters used by custom clustering functions. The default is {}.\n
+            When ``nmf_method='bnmf'``, ``max_iters:int`` and ``distance:str`` can be passed here. ``distance`` can be ``'hamming'``, ``'FN'``, or ``'FP'``. Default is ``hamming``.\n 
+            For all nmf methods passed in ``nmf_method``, ``max_iters`` can also be passed.
+        
         pruned : bool, optional
             When True, removes columns and rows from the input matrix that has only 0 values. The default is True.
 
             .. warning::
-                * Pruning should not be used with ``nmf_method='nmf_recommender'``.\n
                 * If after pruning decomposition is not possible (for example if the number of samples left is 1, or K range is empty based on the rule ``k < min(X.shape)``, ``fit()`` will return ``None``.
 
         calculate_error : bool, optional
@@ -645,6 +748,29 @@ class NMFk:
             When searching for the optimal rank with binary search using ``k_search='bst_post'`` or ``k_search='bst_pre'``, this hyper-parameter can be used to cut off higher ranks from search space.\n
             The cut-off of higher ranks from the search space is based on threshold for H silhouette. When a H silhouette below ``H_sill_thresh`` is found for a given rank or K, all higher ranks are removed from the search space.\n
             If ``H_sill_thresh=None``, it is not used. The default is None.
+        factor_thresholding : str, optional
+            If not None, W and H factors are thresholded using a thresholding method specified to be boolean. Default is None.\n
+            Options are ``WH_thresh`` and ``coord_desc_thresh`` and ``otsu_thresh`` and ``kmeans_thresh``.\n
+            If ``nmf_method='bnmf'``, ``factor_thresholding='otsu_thresh'`` is used by default.
+        factor_thresholding_H_regression : str, optional
+            If not None, H factor is thresholded using a thresholding method specified to be boolean. Default is None.\n
+            Options are ``coord_desc_thresh``, ``otsu_thresh``, and ``kmeans_thresh``.\n
+            If ``nmf_method='bnmf'``, ``factor_thresholding='kmeans_thresh'`` is used by default.
+        factor_thresholding_obj_params : dict, optional
+            Extra settings used for the thresholding used in ``factor_thresholding``. Default is {}.\n
+            For ``factor_thresholding='coord_desc_thresh'``, options include ``max_iter:int``, ``wt``, and ``ht``.\n
+            For ``factor_thresholding='WH_thresh'``, options include ``npoint``.
+        factor_thresholding_H_regression_obj_params : dict, optional
+            Extra settings used for the thresholding used in ``factor_thresholding_H_regression``. Default is {}.\n
+            For ``factor_thresholding='coord_desc_thresh'``, options include ``max_iter:int``, ``wt``, and ``ht``.\n
+            For ``factor_thresholding='WH_thresh'``, options include ``npoint``.
+        device : int or list, optional
+            CUDA device or list of CUDA devices (GPUs) to use. Default is -1.\n
+            When device is a positive integer such as ``device=0`` it will use the given GPU with the id.\n
+            When device is -1, it will use all devices.\n
+            When device is a list of devices, it will use those devices.\n
+            If device is negative integer other than -1, it will use number if GPUs minues the device + 1.
+        
         Returns
         -------
         None.
@@ -682,6 +808,7 @@ class NMFk:
         self.nmf = None
         self.nmf_method = nmf_method
         self.nmf_obj_params = nmf_obj_params
+        self.clustering_obj_params = clustering_obj_params
         self.pruned = pruned
         self.calculate_error = calculate_error
         self.consensus_mat = consensus_mat
@@ -693,10 +820,17 @@ class NMFk:
         self.perturb_multiprocessing = perturb_multiprocessing
         self.k_search_method = k_search_method
         self.H_sill_thresh = H_sill_thresh
+        self.factor_thresholding = factor_thresholding
+        self.factor_thresholding_H_regression = factor_thresholding_H_regression
+        self.factor_thresholding_obj_params = factor_thresholding_obj_params
+        self.factor_thresholding_H_regression_obj_params = factor_thresholding_H_regression_obj_params
+        self.clustering_method = clustering_method
+        self.device = device
 
         # warnings
         assert self.k_search_method in ["linear", "bst_pre", "bst_post", "bst_in"], "Invalid k_search_method method. Choose from linear, bst_pre, bst_in, or bst_post."
         assert self.predict_k_method in ["pvalue", "WH_sill", "W_sill", "H_sill", "sill"], "Invalid predict_k_method method. Choose from pvalue, WH_sill, W_sill, H_sill, or sill. sill defaults to WH_sill."
+        assert self.clustering_method in ["kmeans", "bool", "boolean"]
         
         if self.predict_k_method == "sill":
             self.predict_k_method = "WH_sill"
@@ -730,12 +864,23 @@ class NMFk:
             raise Exception("n_perturbs should be at least 2!")
 
         # check that the perturbation type is valid
-        assert perturb_type in [
-            "uniform", "poisson"], "Invalid perturbation type. Choose from uniform, poisson."
+        perturb_options = ["uniform", "poisson", "bool", "boolean"]
+        assert self.perturb_type in perturb_options, f"Invalid perturbation type. Choose from {', '.join(perturb_options)}."
+
+        if self.perturb_type in ["bool", "boolean"] and (isinstance(self.epsilon, tuple) or isinstance(self.epsilon, list) or isinstance(self.epsilon, np.ndarray)):
+            assert len(self.epsilon) == 2, f"When using boolean perturbation, epsilon should be either a single float/integer, or a tuple/list of two elements."
+
+        if self.perturb_type in ["bool", "boolean"] and not any([isinstance(self.epsilon, tuple) or isinstance(self.epsilon, list) or isinstance(self.epsilon, np.ndarray)]):
+            self.epsilon = (self.epsilon, self.epsilon)
+            warnings.warn(f"epsilon was single element while using boolean perturbation. epsilon is now set to {self.epsilon}.")
+
 
         # organize n_jobs
         self.n_jobs, self.use_gpu = organize_n_jobs(use_gpu, n_jobs)
-        
+
+        # organize devices
+        self.device = organize_devices(self.n_jobs, self.device, self.use_gpu)
+           
         # create a shared lock
         self.lock = Lock()
 
@@ -756,6 +901,16 @@ class NMFk:
         self.experiment_name = ""
 
         #
+        # Check the clustering parameters
+        #
+        if "distance" in self.clustering_obj_params:
+            assert self.nmf_method is "bnmf", "distance can only be set for nmf_method='bnmf'!"
+            assert self.clustering_obj_params["distance"] in ["hamming", "FN", "FP"], "Unknown clustering distance parameter."
+        
+        elif "distance" not in self.clustering_obj_params and self.clustering_method in ["bool", "boolean"]:
+            self.clustering_obj_params["distance"] = "hamming"
+
+        #
         # Prepare NMF function
         #
         avail_nmf_methods = [
@@ -763,12 +918,49 @@ class NMFk:
             "nmf_kl_mu", 
             "nmf_recommender", 
             "wnmf",
+            "bnmf",
             "func"
         ]
+        if "WEIGHTS" in self.nmf_obj_params:
+            self.nmf_obj_params["MASK"] = self.nmf_obj_params["WEIGHTS"].copy()
+            del self.nmf_obj_params["WEIGHTS"]
+
         if self.nmf_method not in avail_nmf_methods:
             raise Exception("Invalid NMF method is selected. Choose from: " +
                             ",".join(avail_nmf_methods))
         
+        if self.nmf_method == "bnmf" and self.perturb_type not in ["bool", "boolean"]:
+            warnings.warn(f"nmf_method='bnmf' but perturb_type={self.perturb_type} instead of a boolean perturbation.")
+
+        if self.nmf_method == "bnmf" and self.clustering_method not in ["bool", "boolean"]:
+            warnings.warn(f"nmf_method='bnmf' but clustering_method={self.clustering_method} instead of a boolean clustering.")
+        
+        if self.nmf_method == "bnmf" and self.factor_thresholding is None:
+            self.factor_thresholding = "otsu_thresh"
+
+        if self.nmf_method == "bnmf" and self.factor_thresholding_H_regression is None:
+            self.factor_thresholding_H_regression = "kmeans_thresh"
+        
+        if self.factor_thresholding_H_regression is not None:
+            assert self.factor_thresholding_H_regression in ["coord_desc_thresh", "otsu_thresh", "kmeans_thresh"], f"Unknown factor_thresholding_H_regression! Select from {', '.join(['coord_desc_thresh', 'otsu_thresh', 'kmeans_thresh'])}"
+
+        if self.factor_thresholding is not None:
+            assert self.factor_thresholding in ["coord_desc_thresh", "WH_thresh", "otsu_thresh", "kmeans_thresh"], f"Unknown factor_thresholding! Select from {', '.join(['coord_desc_thresh', 'WH_thresh', 'otsu_thresh'])}"
+        
+        if self.factor_thresholding == "coord_desc_thresh":
+            self.thresholding_function = coord_desc_thresh
+        elif factor_thresholding == "WH_thresh":
+            self.thresholding_function = find_thres_WH
+        elif factor_thresholding == "otsu_thresh":
+            self.thresholding_function = otsu_thresh
+        elif factor_thresholding == "kmeans_thresh":
+            self.thresholding_function = kmeans_thresh
+        else:
+            self.thresholding_function = None
+
+        if self.nmf_method in ["wnmf", "bnmf", "nmf_recommender"] and "MASK" not in self.nmf_obj_params:
+                warnings.warn(f"When using {self.nmf_method}, use nmf_obj_params={'MASK':P}, where P is the mask matrix. Otherwise P will have 1s where X>0. P should have 0's at places in X that we do not know, i.e. NaNs, and 1s at places we know in X.")
+
         if self.nmf_method == "nmf_fro_mu":
             self.nmf_params = {
                 "niter": self.n_iters,
@@ -795,19 +987,21 @@ class NMFk:
                 "use_gpu": self.use_gpu,
                 "nmf_verbose": self.nmf_verbose,
             }
-            if "WEIGHTS" not in self.nmf_obj_params:
-                warnings.warn("When using wnmf, use nmf_obj_params={'WEIGHTS':P}, where P is the weights matrix. Otherwise P will have 1s where X>0.")
             self.nmf = wnmf
+
+        elif self.nmf_method == "bnmf":        
+            self.nmf_params = {
+                "niter": self.n_iters,
+                "use_gpu": self.use_gpu,
+                "nmf_verbose": self.nmf_verbose,
+            }
+            self.nmf = bnmf    
 
         elif self.nmf_method == "func" or nmf_func is not None:
             self.nmf_params = self.nmf_obj_params
             self.nmf = nmf_func
 
-        elif self.nmf_method == "nmf_recommender":
-            if self.pruned:
-                warnings.warn(
-                    f'nmf_recommender method should not be used with pruning!')
-                
+        elif self.nmf_method == "nmf_recommender":                
             self.nmf_params = {
                 "niter": self.n_iters,
                 "use_gpu": self.use_gpu,
@@ -1008,7 +1202,9 @@ class NMFk:
         # Prune
         #
         if self.pruned:
-            X, perturb_rows, perturb_cols = prune(X, use_gpu=self.use_gpu)
+            X, pruned_rows, pruned_cols, self.nmf_params = prune(X, 
+                                                use_gpu=self.use_gpu, 
+                                                other=self.nmf_params, keys_to_check_other=["MASK"])
 
             # check for K after prune and adjust if needed
             if max(Ks) >= min(X.shape):
@@ -1037,7 +1233,7 @@ class NMFk:
                     append_to_note(["#" * 100], self.save_path_full, name=note_name, lock=self.lock)
 
         else:
-            perturb_rows, perturb_cols = None, None
+            pruned_rows, pruned_cols = None, None
 
         if self.save_output:
             take_note_fmat(self.save_path_full, name=note_name, lock=self.lock, **stats_header)
@@ -1051,6 +1247,7 @@ class NMFk:
             "n_perturbs":self.n_perturbs,
             "nmf":self.nmf,
             "nmf_params":self.nmf_params,
+            "clustering_obj_params":self.clustering_obj_params,
             "init_type":self.init,
             "X":X,
             "epsilon":self.epsilon,
@@ -1062,8 +1259,8 @@ class NMFk:
             "predict_k":self.predict_k,
             "predict_k_method":self.predict_k_method,
             "pruned":self.pruned,
-            "perturb_rows":perturb_rows,
-            "perturb_cols":perturb_cols,
+            "pruned_rows":pruned_rows,
+            "pruned_cols":pruned_cols,
             "save_output":self.save_output,
             "save_path":self.save_path_full,
             "collect_output":self.collect_output,
@@ -1076,20 +1273,25 @@ class NMFk:
             "note_name":note_name,
             "n_nodes":self.n_nodes,
             "rank":rank,
+            "factor_thresholding_obj_params":self.factor_thresholding_obj_params,
+            "factor_thresholding_H_regression_obj_params":self.factor_thresholding_H_regression_obj_params,
+            "factor_thresholding_H_regression":self.factor_thresholding_H_regression,
+            "clustering_method":self.clustering_method,
+            "thresholding_function":self.thresholding_function,
         }
         
         # Single job or parallel over perturbations
         if self.n_jobs == 1 or self.perturb_multiprocessing:
             all_k_results = []
-            for k in tqdm(Ks, total=len(Ks), disable=not self.verbose):
-                k_result = _nmf_parallel_wrapper(gpuid=0, k=k, K_search_settings=self.K_search_settings, **job_data)
+            for kidx, k in tqdm(enumerate(Ks), total=len(Ks), disable=not self.verbose):
+                k_result = _nmf_parallel_wrapper(gpuid=self.device[kidx % len(self.device)], k=k, K_search_settings=self.K_search_settings, **job_data)
                 all_k_results.append(k_result)
         
         # multiprocessing over each K
         else:   
             executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.n_jobs)
             futures = [executor.submit(
-                _nmf_parallel_wrapper, gpuid=kidx % self.n_jobs, k=k, K_search_settings=self.K_search_settings, **job_data
+                _nmf_parallel_wrapper, gpuid=self.device[kidx % len(self.device)], k=k, K_search_settings=self.K_search_settings, **job_data
                 ) for kidx, k in enumerate(Ks)]
             all_k_results = [future.result() for future in tqdm(concurrent.futures.as_completed(futures), total=len(Ks), disable=not self.verbose)]
 
@@ -1198,16 +1400,16 @@ class NMFk:
             if self.consensus_mat:
 
                 # * save the plot
-                if self.save_output:
-                    con_fig_name = f'{self.save_path_full}/k_{Ks[0]}_{Ks[-1]}_cophenetic_coeff.png'
+                if self.save_output: 
+                    con_fig_name = os.path.join(f'{self.save_path_full}', f'k_{Ks[0]}_{Ks[-1]}_cophenetic_coeff.png')
                     plot_cophenetic_coeff(Ks, combined_result["cophenetic_coeff"], con_fig_name)
 
                 if self.calculate_pac:
                     
                     # load reordered consensus matrices from each k
                     reordered_con_matrices = []
-                    for curr_k_to_load in Ks:
-                        reordered_con_matrices.append(np.load(f'{self.save_path_full}/WH_k={curr_k_to_load}.npz')["reordered_con_mat"])
+                    for curr_k_to_load in Ks: 
+                        reordered_con_matrices.append(np.load(os.path.join(f'{self.save_path_full}', f'WH_k={curr_k_to_load}.npz'))["reordered_con_mat"])
                     consensus_tensor = np.array(reordered_con_matrices)
                     combined_result["pac"] = np.array(get_pac(consensus_tensor, use_gpu=self.use_gpu, verbose=self.verbose))
                     consensus_tensor, reordered_con_matrices = None, None
@@ -1217,12 +1419,9 @@ class NMFk:
                 results["k_predict"] = k_predict
 
                 if self.collect_output:
-                        results["W"] = combined_result["W"][combined_result["Ks"].index(k_predict)]
-                        results["H"] = combined_result["H"][combined_result["Ks"].index(k_predict)]
-
-                        if self.nmf_method == "nmf_recommender":
-                            results["other_results"] = combined_result["other_results"][combined_result["Ks"].index(k_predict)]
-
+                        for key in ["W", "H", "other_results"]:
+                            if key in combined_result:
+                                results[key] = combined_result[key][combined_result["Ks"].index(k_predict)]
             # final plot
             if self.save_output:
                 plot_NMFk(

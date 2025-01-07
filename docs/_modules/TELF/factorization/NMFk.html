@@ -2,49 +2,53 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../../../" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.NMFk &#8212; TELF 0.0.20 documentation</title>
+    <title>TELF.factorization.NMFk &#8212; TELF 0.0.34 documentation</title>
   
   
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=362ab14a" />
-    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
-  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=30839ccb"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/documentation_options.js?v=d15f0e27"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/factorization/NMFk';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -52,32 +56,16 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -85,7 +73,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -93,16 +80,27 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -115,6 +113,9 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
+  
+    
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -124,10 +125,17 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.20 documentation</p>
+    <p class="title logo__title">TELF 0.0.34 documentation</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
@@ -160,22 +168,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
 
 
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">TELF</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../TELF.html">TELF package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../TELF.factorization.html">TELF.factorization package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../TELF.html">TELF package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../TELF.factorization.html">TELF.factorization package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
 </ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../TELF.pre_processing.html">TELF.pre_processing package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../TELF.pre_processing.html">TELF.pre_processing package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
 </ul>
-</li>
+</details></li>
 </ul>
-</li>
+</details></li>
 </ul>
-</li>
+</details></li>
 </ul>
 
     </div>
@@ -191,7 +199,7 @@
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -200,14 +208,14 @@
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -234,23 +242,17 @@
 </button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
-  </button>
-`);
-</script>
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 
 </div></div>
       
@@ -274,7 +276,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <h1>Source code for TELF.factorization.NMFk</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
@@ -293,20 +295,26 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.utilities.take_note</span> <span class="kn">import</span> <span class="n">take_note</span><span class="p">,</span> <span class="n">take_note_fmat</span><span class="p">,</span> <span class="n">append_to_note</span>
 <span class="kn">from</span> <span class="nn">.utilities.plot_NMFk</span> <span class="kn">import</span> <span class="n">plot_NMFk</span><span class="p">,</span> <span class="n">plot_consensus_mat</span><span class="p">,</span> <span class="n">plot_cophenetic_coeff</span>
 <span class="kn">from</span> <span class="nn">.utilities.pvalue_analysis</span> <span class="kn">import</span> <span class="n">pvalue_analysis</span>
-<span class="kn">from</span> <span class="nn">.utilities.organize_n_jobs</span> <span class="kn">import</span> <span class="n">organize_n_jobs</span>
+<span class="kn">from</span> <span class="nn">.utilities.organize_n_jobs</span> <span class="kn">import</span> <span class="n">organize_n_jobs</span><span class="p">,</span> <span class="n">organize_devices</span>
 <span class="kn">from</span> <span class="nn">.utilities.data_host_transfer_helpers</span> <span class="kn">import</span> <span class="n">put_X_gpu</span><span class="p">,</span> <span class="n">put_A_gpu</span><span class="p">,</span> <span class="n">put_A_cpu</span><span class="p">,</span> <span class="n">put_other_results_cpu</span>
-<span class="kn">from</span> <span class="nn">.utilities.run_factorization_helpers</span> <span class="kn">import</span> <span class="n">run_nmf</span>
+<span class="kn">from</span> <span class="nn">.utilities.run_factorization_helpers</span> <span class="kn">import</span> <span class="n">run_nmf</span><span class="p">,</span> <span class="n">run_thresholding</span>
 <span class="kn">from</span> <span class="nn">.utilities.perturbation_helpers</span> <span class="kn">import</span> <span class="n">perturb_X</span>
 <span class="kn">from</span> <span class="nn">.utilities.initialization_helpers</span> <span class="kn">import</span> <span class="n">init_WH</span>
 <span class="kn">from</span> <span class="nn">.utilities.regression_helpers</span> <span class="kn">import</span> <span class="n">H_regression</span>
 <span class="kn">from</span> <span class="nn">.utilities.bst_helper</span> <span class="kn">import</span> <span class="n">BST</span>
+<span class="kn">from</span> <span class="nn">.utilities.factor_thresholding</span> <span class="kn">import</span> <span class="p">(</span><span class="n">find_thres_WH</span><span class="p">,</span> <span class="n">coord_desc_thresh</span><span class="p">,</span> 
+                                            <span class="n">coord_desc_thresh_onefactor</span><span class="p">,</span> <span class="n">otsu_thresh</span><span class="p">,</span> 
+                                            <span class="n">otsu_thresh_onefactor</span><span class="p">,</span> <span class="n">kmeans_thresh_onefactor</span><span class="p">,</span> <span class="n">kmeans_thresh</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.decompositions.nmf_kl_mu</span> <span class="kn">import</span> <span class="n">nmf</span> <span class="k">as</span> <span class="n">nmf_kl_mu</span>
 <span class="kn">from</span> <span class="nn">.decompositions.nmf_fro_mu</span> <span class="kn">import</span> <span class="n">nmf</span> <span class="k">as</span> <span class="n">nmf_fro_mu</span>
 <span class="kn">from</span> <span class="nn">.decompositions.wnmf</span> <span class="kn">import</span> <span class="n">nmf</span> <span class="k">as</span> <span class="n">wnmf</span>
+<span class="kn">from</span> <span class="nn">.decompositions.bnmf</span> <span class="kn">import</span> <span class="n">nmf</span> <span class="k">as</span> <span class="n">bnmf</span>
 <span class="kn">from</span> <span class="nn">.decompositions.nmf_recommender</span> <span class="kn">import</span> <span class="n">nmf</span> <span class="k">as</span> <span class="n">nmf_recommender</span>
-<span class="kn">from</span> <span class="nn">.decompositions.utilities.clustering</span> <span class="kn">import</span> <span class="n">custom_k_means</span><span class="p">,</span> <span class="n">silhouettes</span>
+<span class="kn">from</span> <span class="nn">.decompositions.utilities.clustering</span> <span class="kn">import</span> <span class="n">custom_k_means</span><span class="p">,</span> <span class="n">custom_bool_clustering</span>
+<span class="kn">from</span> <span class="nn">.decompositions.utilities.silhouettes</span> <span class="kn">import</span> <span class="n">silhouettes</span><span class="p">,</span> <span class="n">silhouettes_with_distance</span>
 <span class="kn">from</span> <span class="nn">.decompositions.utilities.math_utils</span> <span class="kn">import</span> <span class="n">prune</span><span class="p">,</span> <span class="n">unprune</span><span class="p">,</span> <span class="n">relative_error</span><span class="p">,</span> <span class="n">get_pac</span>
 <span class="kn">from</span> <span class="nn">.decompositions.utilities.concensus_matrix</span> <span class="kn">import</span> <span class="n">compute_consensus_matrix</span><span class="p">,</span> <span class="n">reorder_con_mat</span>
+
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -337,10 +345,10 @@ document.write(`
 
 <span class="k">def</span> <span class="nf">_HPC_K_search_settings_update</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">,</span> <span class="n">my_rank</span><span class="p">,</span> <span class="n">K_search_settings</span><span class="p">,</span> <span class="n">save_path</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">node_rank</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span> 
-        <span class="k">if</span> <span class="p">(</span><span class="n">node_rank</span> <span class="o">==</span> <span class="n">my_rank</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">node_rank</span><span class="si">}</span><span class="s1">-K_search_settings.p&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node_rank</span> <span class="o">==</span> <span class="n">my_rank</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">node_rank</span><span class="si">}</span><span class="s1">-K_search_settings.p&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">is_file</span><span class="p">()):</span>
             <span class="k">continue</span>
         
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">node_rank</span><span class="si">}</span><span class="s1">-K_search_settings.p&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">node_rank</span><span class="si">}</span><span class="s1">-K_search_settings.p&#39;</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_SH</span><span class="p">)</span>
             <span class="n">node_settings</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
             <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
@@ -367,8 +375,11 @@ document.write(`
     <span class="n">K_search_settings</span><span class="p">,</span>
     <span class="n">n_nodes</span><span class="p">,</span>
     <span class="n">my_rank</span><span class="p">,</span>
-    <span class="n">save_path</span><span class="p">):</span>
-
+    <span class="n">save_path</span><span class="p">,</span>
+    <span class="n">factor_thresholding_obj_params</span><span class="p">,</span>
+    <span class="n">thresholding_function</span><span class="p">,</span>
+    <span class="p">):</span>
+    
     <span class="k">if</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s2">&quot;k_search_method&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">K_search_settings</span><span class="p">[</span><span class="s1">&#39;lock&#39;</span><span class="p">]:</span>
             
@@ -386,12 +397,21 @@ document.write(`
     <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="n">put_X_gpu</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
         <span class="n">W_init</span><span class="p">,</span> <span class="n">H_init</span> <span class="o">=</span> <span class="n">put_A_gpu</span><span class="p">(</span><span class="n">W_init</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">),</span> <span class="n">put_A_gpu</span><span class="p">(</span><span class="n">H_init</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;WEIGHTS&quot;</span> <span class="ow">in</span> <span class="n">nmf_params</span> <span class="ow">and</span> <span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;WEIGHTS&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;WEIGHTS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">put_X_gpu</span><span class="p">(</span><span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;WEIGHTS&quot;</span><span class="p">],</span> <span class="n">gpuid</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="s2">&quot;MASK&quot;</span> <span class="ow">in</span> <span class="n">nmf_params</span> <span class="ow">and</span> <span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;MASK&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nmf_params</span> <span class="o">=</span> <span class="n">nmf_params</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;MASK&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">put_X_gpu</span><span class="p">(</span><span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;MASK&quot;</span><span class="p">],</span> <span class="n">gpuid</span><span class="p">)</span>
 
     <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">other_results</span> <span class="o">=</span> <span class="n">run_nmf</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">W_init</span><span class="p">,</span> <span class="n">H_init</span><span class="p">,</span> <span class="n">nmf</span><span class="p">,</span> <span class="n">nmf_params</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">W_init</span>
+    <span class="k">del</span> <span class="n">H_init</span>
+
+    <span class="c1"># boolean thresholding if specified</span>
+    <span class="k">if</span> <span class="n">thresholding_function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">run_thresholding</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">factor_thresholding_obj_params</span><span class="p">,</span> <span class="n">thresholding_function</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
 
     <span class="c1"># transfer to CPU</span>
+    <span class="k">del</span> <span class="n">Y</span> <span class="c1"># done with this</span>
     <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
         <span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">put_A_cpu</span><span class="p">(</span><span class="n">W</span><span class="p">),</span> <span class="n">put_A_cpu</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
         <span class="n">other_results</span> <span class="o">=</span> <span class="n">put_other_results_cpu</span><span class="p">(</span><span class="n">other_results</span><span class="p">)</span>
@@ -399,7 +419,13 @@ document.write(`
 
     <span class="c1"># error calculation</span>
     <span class="k">if</span> <span class="n">calculate_error</span><span class="p">:</span>
-        <span class="n">error</span> <span class="o">=</span> <span class="n">relative_error</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;MASK&quot;</span> <span class="ow">in</span> <span class="n">nmf_params</span> <span class="ow">and</span> <span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;MASK&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;MASK&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">put_A_cpu</span><span class="p">(</span><span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;MASK&quot;</span><span class="p">])</span>
+
+        <span class="n">error</span> <span class="o">=</span> <span class="n">relative_error</span><span class="p">(</span>
+            <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> 
+            <span class="n">MASK</span><span class="o">=</span><span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;MASK&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;MASK&quot;</span> <span class="ow">in</span> <span class="n">nmf_params</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">error</span> <span class="o">=</span> <span class="mi">0</span>
         
@@ -442,6 +468,7 @@ document.write(`
         <span class="n">n_perturbs</span><span class="p">,</span> 
         <span class="n">nmf</span><span class="p">,</span> 
         <span class="n">nmf_params</span><span class="p">,</span>
+        <span class="n">clustering_obj_params</span><span class="p">,</span>
         <span class="n">init_type</span><span class="o">=</span><span class="s2">&quot;nnsvd&quot;</span><span class="p">,</span> 
         <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
         <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -455,8 +482,8 @@ document.write(`
         <span class="n">predict_k</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">predict_k_method</span><span class="o">=</span><span class="s2">&quot;WH_sill&quot;</span><span class="p">,</span>
         <span class="n">pruned</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">perturb_rows</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">perturb_cols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">pruned_rows</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">pruned_cols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">save_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="n">collect_output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -469,7 +496,12 @@ document.write(`
         <span class="n">note_name</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">,</span>
         <span class="n">K_search_settings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">n_nodes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">rank</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">rank</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">factor_thresholding_obj_params</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">factor_thresholding_H_regression_obj_params</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">clustering_method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span>
+        <span class="n">thresholding_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">factor_thresholding_H_regression</span><span class="o">=</span><span class="kc">None</span>
         <span class="p">):</span>
 
     <span class="c1">#</span>
@@ -488,7 +520,9 @@ document.write(`
         <span class="s2">&quot;init_type&quot;</span><span class="p">:</span><span class="n">init_type</span><span class="p">,</span>
         <span class="s2">&quot;n_nodes&quot;</span><span class="p">:</span><span class="n">n_nodes</span><span class="p">,</span>
         <span class="s2">&quot;my_rank&quot;</span><span class="p">:</span><span class="n">rank</span><span class="p">,</span>
-        <span class="s2">&quot;save_path&quot;</span><span class="p">:</span><span class="n">save_path</span>
+        <span class="s2">&quot;save_path&quot;</span><span class="p">:</span><span class="n">save_path</span><span class="p">,</span>
+        <span class="s2">&quot;factor_thresholding_obj_params&quot;</span><span class="p">:</span><span class="n">factor_thresholding_obj_params</span><span class="p">,</span>
+        <span class="s2">&quot;thresholding_function&quot;</span><span class="p">:</span><span class="n">thresholding_function</span><span class="p">,</span>
     <span class="p">}</span>
     
     <span class="c1"># single job or parallel over Ks</span>
@@ -565,10 +599,19 @@ document.write(`
 
     <span class="c1">#</span>
     <span class="c1"># cluster the solutions</span>
-    <span class="c1"># </span>
-    <span class="n">W</span><span class="p">,</span> <span class="n">W_clust</span> <span class="o">=</span> <span class="n">custom_k_means</span><span class="p">(</span><span class="n">W_all</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">sils_all_W</span> <span class="o">=</span> <span class="n">silhouettes</span><span class="p">(</span><span class="n">W_clust</span><span class="p">)</span>
-    <span class="n">sils_all_H</span> <span class="o">=</span> <span class="n">silhouettes</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">H_all</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+    <span class="c1">#</span>
+    <span class="k">if</span> <span class="n">clustering_method</span> <span class="o">==</span> <span class="s2">&quot;bool&quot;</span> <span class="ow">or</span> <span class="n">clustering_method</span> <span class="o">==</span> <span class="s2">&quot;boolean&quot;</span><span class="p">:</span>
+        <span class="n">W</span><span class="p">,</span> <span class="n">W_clust</span> <span class="o">=</span> <span class="n">custom_bool_clustering</span><span class="p">(</span><span class="n">W_all</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">clustering_obj_params</span><span class="p">)</span>
+        <span class="n">sils_all_W</span> <span class="o">=</span> <span class="n">silhouettes_with_distance</span><span class="p">(</span><span class="n">W_all</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">clustering_obj_params</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">],</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">sils_all_H</span> <span class="o">=</span> <span class="n">silhouettes_with_distance</span><span class="p">(</span><span class="n">W_all</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="n">clustering_obj_params</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">],</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        
+    <span class="k">elif</span> <span class="n">clustering_method</span> <span class="o">==</span> <span class="s2">&quot;kmeans&quot;</span><span class="p">:</span>
+        <span class="n">W</span><span class="p">,</span> <span class="n">W_clust</span> <span class="o">=</span> <span class="n">custom_k_means</span><span class="p">(</span><span class="n">W_all</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">clustering_obj_params</span><span class="p">)</span>
+        <span class="n">sils_all_W</span> <span class="o">=</span> <span class="n">silhouettes</span><span class="p">(</span><span class="n">W_clust</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">sils_all_H</span> <span class="o">=</span> <span class="n">silhouettes</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">H_all</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown clustering method!&quot;</span><span class="p">)</span>
 
     <span class="c1">#</span>
     <span class="c1"># concensus matrix</span>
@@ -576,14 +619,29 @@ document.write(`
     <span class="n">coeff_k</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">reordered_con_mat</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">consensus_mat</span><span class="p">:</span>
-        <span class="n">con_mat_k</span> <span class="o">=</span> <span class="n">compute_consensus_matrix</span><span class="p">(</span><span class="n">H_all</span><span class="p">,</span> <span class="n">pruned</span><span class="o">=</span><span class="n">pruned</span><span class="p">,</span> <span class="n">perturb_cols</span><span class="o">=</span><span class="n">perturb_cols</span><span class="p">)</span>
+        <span class="n">con_mat_k</span> <span class="o">=</span> <span class="n">compute_consensus_matrix</span><span class="p">(</span><span class="n">H_all</span><span class="p">,</span> <span class="n">pruned</span><span class="o">=</span><span class="n">pruned</span><span class="p">,</span> <span class="n">pruned_cols</span><span class="o">=</span><span class="n">pruned_cols</span><span class="p">)</span>
         <span class="n">reordered_con_mat</span><span class="p">,</span> <span class="n">coeff_k</span> <span class="o">=</span> <span class="n">reorder_con_mat</span><span class="p">(</span><span class="n">con_mat_k</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
     <span class="c1">#</span>
     <span class="c1"># Regress H</span>
     <span class="c1">#</span>
     <span class="n">H</span> <span class="o">=</span> <span class="n">H_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">use_gpu</span><span class="p">,</span> <span class="n">gpuid</span><span class="p">)</span>
+
+    <span class="c1">#</span>
+    <span class="c1"># Thresholding</span>
+    <span class="c1">#</span>
+    <span class="k">if</span> <span class="n">factor_thresholding_H_regression</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">H_dtype</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">dtype</span>
     
+        <span class="k">if</span> <span class="n">factor_thresholding_H_regression</span> <span class="o">==</span> <span class="s2">&quot;otsu_thresh&quot;</span><span class="p">:</span>
+            <span class="n">H_thresh_result</span> <span class="o">=</span> <span class="n">otsu_thresh_onefactor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">factor_thresholding_H_regression_obj_params</span><span class="p">)[</span><span class="s2">&quot;wt&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">elif</span> <span class="n">factor_thresholding_H_regression</span> <span class="o">==</span> <span class="s2">&quot;coord_desc_thresh&quot;</span><span class="p">:</span>
+            <span class="n">H_thresh_result</span> <span class="o">=</span> <span class="n">coord_desc_thresh_onefactor</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">factor_thresholding_H_regression_obj_params</span><span class="p">)[</span><span class="s2">&quot;wt&quot;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">factor_thresholding_H_regression</span> <span class="o">==</span> <span class="s2">&quot;kmeans_thresh&quot;</span><span class="p">:</span> 
+            <span class="n">H_thresh_result</span> <span class="o">=</span> <span class="n">kmeans_thresh_onefactor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">factor_thresholding_H_regression_obj_params</span><span class="p">)[</span><span class="s2">&quot;wt&quot;</span><span class="p">]</span>
+
+        <span class="n">H</span> <span class="o">=</span> <span class="p">(</span><span class="n">H</span> <span class="o">&gt;=</span> <span class="n">H_thresh_result</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">H_dtype</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">use_gpu</span><span class="p">:</span>
         <span class="n">cp</span><span class="o">.</span><span class="n">_default_memory_pool</span><span class="o">.</span><span class="n">free_all_blocks</span><span class="p">()</span>
 
@@ -594,7 +652,10 @@ document.write(`
         <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">Xhat</span> <span class="o">=</span> <span class="n">W</span><span class="nd">@H</span>
             <span class="n">X</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">Xhat</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
-        <span class="n">error_reg</span> <span class="o">=</span> <span class="n">relative_error</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+
+        <span class="n">error_reg</span> <span class="o">=</span> <span class="n">relative_error</span><span class="p">(</span>
+            <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="o">=</span><span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> 
+            <span class="n">MASK</span><span class="o">=</span><span class="n">nmf_params</span><span class="p">[</span><span class="s2">&quot;MASK&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;MASK&quot;</span> <span class="ow">in</span> <span class="n">nmf_params</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">error_reg</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -612,8 +673,15 @@ document.write(`
     <span class="c1"># unprune</span>
     <span class="c1">#</span>
     <span class="k">if</span> <span class="n">pruned</span><span class="p">:</span>
-        <span class="n">W</span> <span class="o">=</span> <span class="n">unprune</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">perturb_rows</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">H</span> <span class="o">=</span> <span class="n">unprune</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">perturb_cols</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># latent factors</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">unprune</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">pruned_rows</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">unprune</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">pruned_cols</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># biases</span>
+        <span class="k">if</span> <span class="s2">&quot;bu&quot;</span> <span class="ow">in</span> <span class="n">other_results</span><span class="p">:</span>
+            <span class="n">other_results</span><span class="p">[</span><span class="s2">&quot;bu&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">unprune</span><span class="p">(</span><span class="n">other_results</span><span class="p">[</span><span class="s2">&quot;bu&quot;</span><span class="p">],</span> <span class="n">pruned_rows</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;bi&quot;</span> <span class="ow">in</span> <span class="n">other_results</span><span class="p">:</span>
+            <span class="n">other_results</span><span class="p">[</span><span class="s2">&quot;bi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">unprune</span><span class="p">(</span><span class="n">other_results</span><span class="p">[</span><span class="s2">&quot;bi&quot;</span><span class="p">],</span> <span class="n">pruned_cols</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1">#</span>
     <span class="c1"># Calculate statistics on results</span>
@@ -669,15 +737,15 @@ document.write(`
                 <span class="k">finally</span><span class="p">:</span>
                     <span class="n">temp_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
                 
-                <span class="c1"># Atomically replace the old file with the new file</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temp_file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1">-K_search_settings.p&#39;</span><span class="p">)</span>
+                <span class="c1"># Atomically replace the old file with the new file </span>
+                <span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">temp_file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s1">-K_search_settings.p&#39;</span><span class="p">))</span>
 
     <span class="c1">#</span>
     <span class="c1"># save output factors and the plot</span>
     <span class="c1">#</span>
     <span class="k">if</span> <span class="n">save_output</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">consensus_mat</span><span class="p">:</span>
-            <span class="n">con_fig_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">/k_</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">_con_mat.png&#39;</span>
+        <span class="k">if</span> <span class="n">consensus_mat</span><span class="p">:</span> 
+            <span class="n">con_fig_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;k_</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">_con_mat.png&#39;</span><span class="p">)</span>
             <span class="n">plot_consensus_mat</span><span class="p">(</span><span class="n">reordered_con_mat</span><span class="p">,</span> <span class="n">con_fig_name</span><span class="p">)</span>
         
         <span class="n">save_data</span> <span class="o">=</span> <span class="p">{</span>
@@ -689,15 +757,16 @@ document.write(`
             <span class="s2">&quot;errors&quot;</span><span class="p">:</span> <span class="n">errors</span><span class="p">,</span>
             <span class="s2">&quot;reordered_con_mat&quot;</span><span class="p">:</span> <span class="n">reordered_con_mat</span><span class="p">,</span>
             <span class="s2">&quot;H_all&quot;</span><span class="p">:</span> <span class="n">H_all</span><span class="p">,</span>
+            <span class="s2">&quot;W_all&quot;</span><span class="p">:</span> <span class="n">W_all</span><span class="p">,</span>
             <span class="s2">&quot;cophenetic_coeff&quot;</span><span class="p">:</span> <span class="n">coeff_k</span><span class="p">,</span>
-            <span class="s2">&quot;other_results&quot;</span><span class="p">:</span> <span class="n">other_results</span>
+            <span class="s2">&quot;pruned_rows&quot;</span><span class="p">:</span><span class="n">pruned_rows</span><span class="p">,</span>
+            <span class="s2">&quot;pruned_cols&quot;</span><span class="p">:</span><span class="n">pruned_cols</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span>
-            <span class="n">save_path</span>
-            <span class="o">+</span> <span class="s2">&quot;/WH&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;_k=&quot;</span>
-            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot;.npz&quot;</span><span class="p">,</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">other_results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">save_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            
+        <span class="n">np</span><span class="o">.</span><span class="n">savez_compressed</span><span class="p">(</span> 
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;WH_k=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">.npz&#39;</span><span class="p">),</span>
             <span class="o">**</span><span class="n">save_data</span>
         <span class="p">)</span>
 
@@ -777,7 +846,7 @@ document.write(`
             <span class="n">n_nodes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">init</span><span class="o">=</span><span class="s2">&quot;nnsvd&quot;</span><span class="p">,</span>
             <span class="n">use_gpu</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span>
+            <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="n">save_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">collect_output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">predict_k</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -789,7 +858,9 @@ document.write(`
             <span class="n">sill_thresh</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
             <span class="n">nmf_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">nmf_method</span><span class="o">=</span><span class="s2">&quot;nmf_fro_mu&quot;</span><span class="p">,</span>
+            <span class="n">clustering_method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span>
             <span class="n">nmf_obj_params</span><span class="o">=</span><span class="p">{},</span>
+            <span class="n">clustering_obj_params</span><span class="o">=</span><span class="p">{},</span>
             <span class="n">pruned</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">calculate_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">perturb_multiprocessing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -800,7 +871,12 @@ document.write(`
             <span class="n">get_plot_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">simple_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">k_search_method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span>
-            <span class="n">H_sill_thresh</span><span class="o">=</span><span class="kc">None</span>
+            <span class="n">H_sill_thresh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">factor_thresholding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">factor_thresholding_H_regression</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">factor_thresholding_obj_params</span><span class="o">=</span><span class="p">{},</span>
+            <span class="n">factor_thresholding_H_regression_obj_params</span><span class="o">=</span><span class="p">{},</span>
+            <span class="n">device</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
             <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        NMFk is a Non-negative Matrix Factorization module with the capability to do automatic model determination.</span>
@@ -811,13 +887,27 @@ document.write(`
 <span class="sd">            Number of bootstrap operations, or random matrices generated around the original matrix. The default is 20.</span>
 <span class="sd">        n_iters : int, optional</span>
 <span class="sd">            Number of NMF iterations. The default is 100.</span>
-<span class="sd">        epsilon : float, optional</span>
+<span class="sd">        epsilon : float or tuple of two elements, optional</span>
 <span class="sd">            Error amount for the random matrices generated around the original matrix. The default is 0.015.\n</span>
-<span class="sd">            ``epsilon`` is used when ``perturb_type=&#39;uniform&#39;``.</span>
+<span class="sd">            The default when ``perturb_type=&#39;bool&#39;`` or ``perturb_type=&#39;boolean&#39;`` is (epsilon, epsilon).\n</span>
+<span class="sd">            ``epsilon`` is used when ``perturb_type=&#39;uniform&#39;`` or ``perturb_type=&#39;bool&#39;`` or ``perturb_type=&#39;boolean&#39;``.</span>
+
+<span class="sd">            .. note::</span>
+
+<span class="sd">                If ``perturb_type=&#39;bool&#39;`` or ``perturb_type=&#39;boolean&#39;``, use ```epsilon=tuple()``` where\n</span>
+<span class="sd">                positive noise: flip 0s to 1s (additive noise), negative noise: flip 1s to 0s (subtractive noise).</span>
+
 <span class="sd">        perturb_type : str, optional</span>
 <span class="sd">            Type of error sampling to perform for the bootstrap operation. The default is &quot;uniform&quot;.\n</span>
 <span class="sd">            * ``perturb_type=&#39;uniform&#39;`` will use uniform distribution for sampling.\n</span>
 <span class="sd">            * ``perturb_type=&#39;poisson&#39;`` will use Poission distribution for sampling.\n</span>
+<span class="sd">            * ``perturb_type=&#39;bool&#39;`` or ``perturb_type=&#39;boolean&#39;`` will use Boolean perturbations.\n</span>
+
+<span class="sd">            .. note::</span>
+
+<span class="sd">                If ``perturb_type=&#39;bool&#39;`` or ``perturb_type=&#39;boolean&#39;``, use ```epsilon=tuple()``` where\n</span>
+<span class="sd">                positive noise: flip 0s to 1s (additive noise), negative noise: flip 1s to 0s (subtractive noise).</span>
+
 <span class="sd">        n_jobs : int, optional</span>
 <span class="sd">            Number of parallel jobs. Use -1 to use all available resources. The default is 1.</span>
 <span class="sd">        n_nodes : int, optional</span>
@@ -829,7 +919,7 @@ document.write(`
 <span class="sd">        use_gpu : bool, optional</span>
 <span class="sd">            If True, uses GPU for operations. The default is True.</span>
 <span class="sd">        save_path : str, optional</span>
-<span class="sd">            Location to save output. The default is &quot;./&quot;.</span>
+<span class="sd">            Location to save output. The default is &quot;&quot;.</span>
 <span class="sd">        save_output : bool, optional</span>
 <span class="sd">            If True, saves the resulting latent factors and plots. The default is True.</span>
 <span class="sd">        collect_output : bool, optional</span>
@@ -872,6 +962,7 @@ document.write(`
 <span class="sd">            * ``nmf_method=&#39;func&#39;`` will use the custom NMF function passed using the ``nmf_func`` parameter.\n</span>
 <span class="sd">            * ``nmf_method=&#39;nmf_recommender&#39;`` will use the Recommender NMF method for collaborative filtering.\n</span>
 <span class="sd">            * ``nmf_method=&#39;wnmf&#39;`` will use the Weighted NMF for missing value completion.\n</span>
+<span class="sd">            * ``nmf_method=&#39;bnmf&#39;`` will use the Boolean NMF for missing value completion on boolean matrix.\n</span>
 
 <span class="sd">            .. note::</span>
 
@@ -883,15 +974,29 @@ document.write(`
 <span class="sd">                When using ``nmf_method=&#39;wnmf&#39;``, pass ``nmf_obj_params={&quot;WEIGHTS&quot;:P}`` where ``P`` is a matrix of size ``X`` and carries the weights for each item in ``X``.\n</span>
 <span class="sd">                For example, here ``P`` can be used as a mask where 1s in ``P`` are the known entries, and 0s are the missing values in ``X`` that we want to predict (i.e. a recommender system).\n</span>
 <span class="sd">                Note that ``nmf_method=&#39;wnmf&#39;`` does not support sparse matrices currently.</span>
-<span class="sd">                </span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                When using ``nmf_method=&#39;bnmf&#39;``, pass ``nmf_obj_params={&quot;MASK&quot;:P}`` where ``P`` is a mask matrix of size ``X`` where 0s and 1s in ``P`` are the known and unknown locations in ``X``.\n</span>
+<span class="sd">                0s in ``P`` are the places we would like to predict.\n</span>
+<span class="sd">                Note that ``nmf_method=&#39;bnmf&#39;`` does not support sparse matrices currently.\n</span>
+<span class="sd">                When ``nmf_method=&#39;bnmf&#39;``, ``perturb_type=&#39;bool&#39;`` or ``perturb_type=&#39;boolean&#39;`` is recommended to use. It will not set it automatically but raise warning if not used.\n</span>
+<span class="sd">        </span>
+<span class="sd">        clustering_method : str, optional</span>
+<span class="sd">            Clustering used on the W patterns. Default is &quot;kmeans&quot;.</span>
+<span class="sd">            Options are &quot;kmeans&quot; and &quot;bool&quot; or &quot;boolean&quot;</span>
 
 <span class="sd">        nmf_obj_params : dict, optional</span>
 <span class="sd">            Parameters used by NMF function. The default is {}.</span>
+
+<span class="sd">        clustering_obj_params: dict, optinal</span>
+<span class="sd">            Parameters used by custom clustering functions. The default is {}.\n</span>
+<span class="sd">            When ``nmf_method=&#39;bnmf&#39;``, ``max_iters:int`` and ``distance:str`` can be passed here. ``distance`` can be ``&#39;hamming&#39;``, ``&#39;FN&#39;``, or ``&#39;FP&#39;``. Default is ``hamming``.\n </span>
+<span class="sd">            For all nmf methods passed in ``nmf_method``, ``max_iters`` can also be passed.</span>
+<span class="sd">        </span>
 <span class="sd">        pruned : bool, optional</span>
 <span class="sd">            When True, removes columns and rows from the input matrix that has only 0 values. The default is True.</span>
 
 <span class="sd">            .. warning::</span>
-<span class="sd">                * Pruning should not be used with ``nmf_method=&#39;nmf_recommender&#39;``.\n</span>
 <span class="sd">                * If after pruning decomposition is not possible (for example if the number of samples left is 1, or K range is empty based on the rule ``k &lt; min(X.shape)``, ``fit()`` will return ``None``.</span>
 
 <span class="sd">        calculate_error : bool, optional</span>
@@ -926,6 +1031,29 @@ document.write(`
 <span class="sd">            When searching for the optimal rank with binary search using ``k_search=&#39;bst_post&#39;`` or ``k_search=&#39;bst_pre&#39;``, this hyper-parameter can be used to cut off higher ranks from search space.\n</span>
 <span class="sd">            The cut-off of higher ranks from the search space is based on threshold for H silhouette. When a H silhouette below ``H_sill_thresh`` is found for a given rank or K, all higher ranks are removed from the search space.\n</span>
 <span class="sd">            If ``H_sill_thresh=None``, it is not used. The default is None.</span>
+<span class="sd">        factor_thresholding : str, optional</span>
+<span class="sd">            If not None, W and H factors are thresholded using a thresholding method specified to be boolean. Default is None.\n</span>
+<span class="sd">            Options are ``WH_thresh`` and ``coord_desc_thresh`` and ``otsu_thresh`` and ``kmeans_thresh``.\n</span>
+<span class="sd">            If ``nmf_method=&#39;bnmf&#39;``, ``factor_thresholding=&#39;otsu_thresh&#39;`` is used by default.</span>
+<span class="sd">        factor_thresholding_H_regression : str, optional</span>
+<span class="sd">            If not None, H factor is thresholded using a thresholding method specified to be boolean. Default is None.\n</span>
+<span class="sd">            Options are ``coord_desc_thresh``, ``otsu_thresh``, and ``kmeans_thresh``.\n</span>
+<span class="sd">            If ``nmf_method=&#39;bnmf&#39;``, ``factor_thresholding=&#39;kmeans_thresh&#39;`` is used by default.</span>
+<span class="sd">        factor_thresholding_obj_params : dict, optional</span>
+<span class="sd">            Extra settings used for the thresholding used in ``factor_thresholding``. Default is {}.\n</span>
+<span class="sd">            For ``factor_thresholding=&#39;coord_desc_thresh&#39;``, options include ``max_iter:int``, ``wt``, and ``ht``.\n</span>
+<span class="sd">            For ``factor_thresholding=&#39;WH_thresh&#39;``, options include ``npoint``.</span>
+<span class="sd">        factor_thresholding_H_regression_obj_params : dict, optional</span>
+<span class="sd">            Extra settings used for the thresholding used in ``factor_thresholding_H_regression``. Default is {}.\n</span>
+<span class="sd">            For ``factor_thresholding=&#39;coord_desc_thresh&#39;``, options include ``max_iter:int``, ``wt``, and ``ht``.\n</span>
+<span class="sd">            For ``factor_thresholding=&#39;WH_thresh&#39;``, options include ``npoint``.</span>
+<span class="sd">        device : int or list, optional</span>
+<span class="sd">            CUDA device or list of CUDA devices (GPUs) to use. Default is -1.\n</span>
+<span class="sd">            When device is a positive integer such as ``device=0`` it will use the given GPU with the id.\n</span>
+<span class="sd">            When device is -1, it will use all devices.\n</span>
+<span class="sd">            When device is a list of devices, it will use those devices.\n</span>
+<span class="sd">            If device is negative integer other than -1, it will use number if GPUs minues the device + 1.</span>
+<span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None.</span>
@@ -963,6 +1091,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">nmf</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="o">=</span> <span class="n">nmf_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nmf_obj_params</span> <span class="o">=</span> <span class="n">nmf_obj_params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clustering_obj_params</span> <span class="o">=</span> <span class="n">clustering_obj_params</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pruned</span> <span class="o">=</span> <span class="n">pruned</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">calculate_error</span> <span class="o">=</span> <span class="n">calculate_error</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">consensus_mat</span> <span class="o">=</span> <span class="n">consensus_mat</span>
@@ -974,10 +1103,17 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">perturb_multiprocessing</span> <span class="o">=</span> <span class="n">perturb_multiprocessing</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">k_search_method</span> <span class="o">=</span> <span class="n">k_search_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">H_sill_thresh</span> <span class="o">=</span> <span class="n">H_sill_thresh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding</span> <span class="o">=</span> <span class="n">factor_thresholding</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding_H_regression</span> <span class="o">=</span> <span class="n">factor_thresholding_H_regression</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding_obj_params</span> <span class="o">=</span> <span class="n">factor_thresholding_obj_params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding_H_regression_obj_params</span> <span class="o">=</span> <span class="n">factor_thresholding_H_regression_obj_params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clustering_method</span> <span class="o">=</span> <span class="n">clustering_method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
 
         <span class="c1"># warnings</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">k_search_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="s2">&quot;bst_pre&quot;</span><span class="p">,</span> <span class="s2">&quot;bst_post&quot;</span><span class="p">,</span> <span class="s2">&quot;bst_in&quot;</span><span class="p">],</span> <span class="s2">&quot;Invalid k_search_method method. Choose from linear, bst_pre, bst_in, or bst_post.&quot;</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;WH_sill&quot;</span><span class="p">,</span> <span class="s2">&quot;W_sill&quot;</span><span class="p">,</span> <span class="s2">&quot;H_sill&quot;</span><span class="p">,</span> <span class="s2">&quot;sill&quot;</span><span class="p">],</span> <span class="s2">&quot;Invalid predict_k_method method. Choose from pvalue, WH_sill, W_sill, H_sill, or sill. sill defaults to WH_sill.&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">clustering_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;kmeans&quot;</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">,</span> <span class="s2">&quot;boolean&quot;</span><span class="p">]</span>
         
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="o">==</span> <span class="s2">&quot;sill&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span> <span class="o">=</span> <span class="s2">&quot;WH_sill&quot;</span>
@@ -1011,12 +1147,23 @@ document.write(`
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;n_perturbs should be at least 2!&quot;</span><span class="p">)</span>
 
         <span class="c1"># check that the perturbation type is valid</span>
-        <span class="k">assert</span> <span class="n">perturb_type</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="s2">&quot;uniform&quot;</span><span class="p">,</span> <span class="s2">&quot;poisson&quot;</span><span class="p">],</span> <span class="s2">&quot;Invalid perturbation type. Choose from uniform, poisson.&quot;</span>
+        <span class="n">perturb_options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span> <span class="s2">&quot;poisson&quot;</span><span class="p">,</span> <span class="s2">&quot;bool&quot;</span><span class="p">,</span> <span class="s2">&quot;boolean&quot;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb_type</span> <span class="ow">in</span> <span class="n">perturb_options</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Invalid perturbation type. Choose from </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">perturb_options</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bool&quot;</span><span class="p">,</span> <span class="s2">&quot;boolean&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;When using boolean perturbation, epsilon should be either a single float/integer, or a tuple/list of two elements.&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bool&quot;</span><span class="p">,</span> <span class="s2">&quot;boolean&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;epsilon was single element while using boolean perturbation. epsilon is now set to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
 
         <span class="c1"># organize n_jobs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span> <span class="o">=</span> <span class="n">organize_n_jobs</span><span class="p">(</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
-        
+
+        <span class="c1"># organize devices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">organize_devices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">)</span>
+           
         <span class="c1"># create a shared lock</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
 
@@ -1037,6 +1184,16 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
         <span class="c1">#</span>
+        <span class="c1"># Check the clustering parameters</span>
+        <span class="c1">#</span>
+        <span class="k">if</span> <span class="s2">&quot;distance&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">clustering_obj_params</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="ow">is</span> <span class="s2">&quot;bnmf&quot;</span><span class="p">,</span> <span class="s2">&quot;distance can only be set for nmf_method=&#39;bnmf&#39;!&quot;</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">clustering_obj_params</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;hamming&quot;</span><span class="p">,</span> <span class="s2">&quot;FN&quot;</span><span class="p">,</span> <span class="s2">&quot;FP&quot;</span><span class="p">],</span> <span class="s2">&quot;Unknown clustering distance parameter.&quot;</span>
+        
+        <span class="k">elif</span> <span class="s2">&quot;distance&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">clustering_obj_params</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">clustering_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bool&quot;</span><span class="p">,</span> <span class="s2">&quot;boolean&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clustering_obj_params</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;hamming&quot;</span>
+
+        <span class="c1">#</span>
         <span class="c1"># Prepare NMF function</span>
         <span class="c1">#</span>
         <span class="n">avail_nmf_methods</span> <span class="o">=</span> <span class="p">[</span>
@@ -1044,12 +1201,49 @@ document.write(`
             <span class="s2">&quot;nmf_kl_mu&quot;</span><span class="p">,</span> 
             <span class="s2">&quot;nmf_recommender&quot;</span><span class="p">,</span> 
             <span class="s2">&quot;wnmf&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;bnmf&quot;</span><span class="p">,</span>
             <span class="s2">&quot;func&quot;</span>
         <span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;WEIGHTS&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_obj_params</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nmf_obj_params</span><span class="p">[</span><span class="s2">&quot;MASK&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_obj_params</span><span class="p">[</span><span class="s2">&quot;WEIGHTS&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_obj_params</span><span class="p">[</span><span class="s2">&quot;WEIGHTS&quot;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">avail_nmf_methods</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid NMF method is selected. Choose from: &quot;</span> <span class="o">+</span>
                             <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">avail_nmf_methods</span><span class="p">))</span>
         
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="o">==</span> <span class="s2">&quot;bnmf&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bool&quot;</span><span class="p">,</span> <span class="s2">&quot;boolean&quot;</span><span class="p">]:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;nmf_method=&#39;bnmf&#39; but perturb_type=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">perturb_type</span><span class="si">}</span><span class="s2"> instead of a boolean perturbation.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="o">==</span> <span class="s2">&quot;bnmf&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">clustering_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;bool&quot;</span><span class="p">,</span> <span class="s2">&quot;boolean&quot;</span><span class="p">]:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;nmf_method=&#39;bnmf&#39; but clustering_method=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">clustering_method</span><span class="si">}</span><span class="s2"> instead of a boolean clustering.&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="o">==</span> <span class="s2">&quot;bnmf&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding</span> <span class="o">=</span> <span class="s2">&quot;otsu_thresh&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="o">==</span> <span class="s2">&quot;bnmf&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding_H_regression</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding_H_regression</span> <span class="o">=</span> <span class="s2">&quot;kmeans_thresh&quot;</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding_H_regression</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding_H_regression</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;coord_desc_thresh&quot;</span><span class="p">,</span> <span class="s2">&quot;otsu_thresh&quot;</span><span class="p">,</span> <span class="s2">&quot;kmeans_thresh&quot;</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;Unknown factor_thresholding_H_regression! Select from </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;coord_desc_thresh&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;otsu_thresh&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;kmeans_thresh&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;coord_desc_thresh&quot;</span><span class="p">,</span> <span class="s2">&quot;WH_thresh&quot;</span><span class="p">,</span> <span class="s2">&quot;otsu_thresh&quot;</span><span class="p">,</span> <span class="s2">&quot;kmeans_thresh&quot;</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;Unknown factor_thresholding! Select from </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;coord_desc_thresh&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;WH_thresh&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;otsu_thresh&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding</span> <span class="o">==</span> <span class="s2">&quot;coord_desc_thresh&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thresholding_function</span> <span class="o">=</span> <span class="n">coord_desc_thresh</span>
+        <span class="k">elif</span> <span class="n">factor_thresholding</span> <span class="o">==</span> <span class="s2">&quot;WH_thresh&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thresholding_function</span> <span class="o">=</span> <span class="n">find_thres_WH</span>
+        <span class="k">elif</span> <span class="n">factor_thresholding</span> <span class="o">==</span> <span class="s2">&quot;otsu_thresh&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thresholding_function</span> <span class="o">=</span> <span class="n">otsu_thresh</span>
+        <span class="k">elif</span> <span class="n">factor_thresholding</span> <span class="o">==</span> <span class="s2">&quot;kmeans_thresh&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thresholding_function</span> <span class="o">=</span> <span class="n">kmeans_thresh</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thresholding_function</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;wnmf&quot;</span><span class="p">,</span> <span class="s2">&quot;bnmf&quot;</span><span class="p">,</span> <span class="s2">&quot;nmf_recommender&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;MASK&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_obj_params</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;When using </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span><span class="si">}</span><span class="s2">, use nmf_obj_params=</span><span class="si">{</span><span class="s1">&#39;MASK&#39;</span><span class="si">:</span><span class="s2">P</span><span class="si">}</span><span class="s2">, where P is the mask matrix. Otherwise P will have 1s where X&gt;0. P should have 0&#39;s at places in X that we do not know, i.e. NaNs, and 1s at places we know in X.&quot;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="o">==</span> <span class="s2">&quot;nmf_fro_mu&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nmf_params</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iters</span><span class="p">,</span>
@@ -1076,19 +1270,21 @@ document.write(`
                 <span class="s2">&quot;use_gpu&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
                 <span class="s2">&quot;nmf_verbose&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_verbose</span><span class="p">,</span>
             <span class="p">}</span>
-            <span class="k">if</span> <span class="s2">&quot;WEIGHTS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_obj_params</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;When using wnmf, use nmf_obj_params={&#39;WEIGHTS&#39;:P}, where P is the weights matrix. Otherwise P will have 1s where X&gt;0.&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nmf</span> <span class="o">=</span> <span class="n">wnmf</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="o">==</span> <span class="s2">&quot;bnmf&quot;</span><span class="p">:</span>        
+            <span class="bp">self</span><span class="o">.</span><span class="n">nmf_params</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iters</span><span class="p">,</span>
+                <span class="s2">&quot;use_gpu&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
+                <span class="s2">&quot;nmf_verbose&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_verbose</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nmf</span> <span class="o">=</span> <span class="n">bnmf</span>    
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="o">==</span> <span class="s2">&quot;func&quot;</span> <span class="ow">or</span> <span class="n">nmf_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nmf_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_obj_params</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nmf</span> <span class="o">=</span> <span class="n">nmf_func</span>
 
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="o">==</span> <span class="s2">&quot;nmf_recommender&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pruned</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s1">&#39;nmf_recommender method should not be used with pruning!&#39;</span><span class="p">)</span>
-                
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="o">==</span> <span class="s2">&quot;nmf_recommender&quot;</span><span class="p">:</span>                
             <span class="bp">self</span><span class="o">.</span><span class="n">nmf_params</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;niter&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iters</span><span class="p">,</span>
                 <span class="s2">&quot;use_gpu&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span>
@@ -1291,7 +1487,9 @@ document.write(`
         <span class="c1"># Prune</span>
         <span class="c1">#</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pruned</span><span class="p">:</span>
-            <span class="n">X</span><span class="p">,</span> <span class="n">perturb_rows</span><span class="p">,</span> <span class="n">perturb_cols</span> <span class="o">=</span> <span class="n">prune</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">)</span>
+            <span class="n">X</span><span class="p">,</span> <span class="n">pruned_rows</span><span class="p">,</span> <span class="n">pruned_cols</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_params</span> <span class="o">=</span> <span class="n">prune</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> 
+                                                <span class="n">use_gpu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span> 
+                                                <span class="n">other</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nmf_params</span><span class="p">,</span> <span class="n">keys_to_check_other</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;MASK&quot;</span><span class="p">])</span>
 
             <span class="c1"># check for K after prune and adjust if needed</span>
             <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">min</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
@@ -1320,7 +1518,7 @@ document.write(`
                     <span class="n">append_to_note</span><span class="p">([</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">perturb_rows</span><span class="p">,</span> <span class="n">perturb_cols</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="n">pruned_rows</span><span class="p">,</span> <span class="n">pruned_cols</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">:</span>
             <span class="n">take_note_fmat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">note_name</span><span class="p">,</span> <span class="n">lock</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">,</span> <span class="o">**</span><span class="n">stats_header</span><span class="p">)</span>
@@ -1334,6 +1532,7 @@ document.write(`
             <span class="s2">&quot;n_perturbs&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_perturbs</span><span class="p">,</span>
             <span class="s2">&quot;nmf&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">nmf</span><span class="p">,</span>
             <span class="s2">&quot;nmf_params&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">nmf_params</span><span class="p">,</span>
+            <span class="s2">&quot;clustering_obj_params&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">clustering_obj_params</span><span class="p">,</span>
             <span class="s2">&quot;init_type&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="p">,</span>
             <span class="s2">&quot;X&quot;</span><span class="p">:</span><span class="n">X</span><span class="p">,</span>
             <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span>
@@ -1345,8 +1544,8 @@ document.write(`
             <span class="s2">&quot;predict_k&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_k</span><span class="p">,</span>
             <span class="s2">&quot;predict_k_method&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">predict_k_method</span><span class="p">,</span>
             <span class="s2">&quot;pruned&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">pruned</span><span class="p">,</span>
-            <span class="s2">&quot;perturb_rows&quot;</span><span class="p">:</span><span class="n">perturb_rows</span><span class="p">,</span>
-            <span class="s2">&quot;perturb_cols&quot;</span><span class="p">:</span><span class="n">perturb_cols</span><span class="p">,</span>
+            <span class="s2">&quot;pruned_rows&quot;</span><span class="p">:</span><span class="n">pruned_rows</span><span class="p">,</span>
+            <span class="s2">&quot;pruned_cols&quot;</span><span class="p">:</span><span class="n">pruned_cols</span><span class="p">,</span>
             <span class="s2">&quot;save_output&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">,</span>
             <span class="s2">&quot;save_path&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="p">,</span>
             <span class="s2">&quot;collect_output&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">collect_output</span><span class="p">,</span>
@@ -1359,20 +1558,25 @@ document.write(`
             <span class="s2">&quot;note_name&quot;</span><span class="p">:</span><span class="n">note_name</span><span class="p">,</span>
             <span class="s2">&quot;n_nodes&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span><span class="p">,</span>
             <span class="s2">&quot;rank&quot;</span><span class="p">:</span><span class="n">rank</span><span class="p">,</span>
+            <span class="s2">&quot;factor_thresholding_obj_params&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding_obj_params</span><span class="p">,</span>
+            <span class="s2">&quot;factor_thresholding_H_regression_obj_params&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding_H_regression_obj_params</span><span class="p">,</span>
+            <span class="s2">&quot;factor_thresholding_H_regression&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">factor_thresholding_H_regression</span><span class="p">,</span>
+            <span class="s2">&quot;clustering_method&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">clustering_method</span><span class="p">,</span>
+            <span class="s2">&quot;thresholding_function&quot;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">thresholding_function</span><span class="p">,</span>
         <span class="p">}</span>
         
         <span class="c1"># Single job or parallel over perturbations</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturb_multiprocessing</span><span class="p">:</span>
             <span class="n">all_k_results</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">Ks</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
-                <span class="n">k_result</span> <span class="o">=</span> <span class="n">_nmf_parallel_wrapper</span><span class="p">(</span><span class="n">gpuid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">K_search_settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">K_search_settings</span><span class="p">,</span> <span class="o">**</span><span class="n">job_data</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">kidx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">Ks</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">Ks</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
+                <span class="n">k_result</span> <span class="o">=</span> <span class="n">_nmf_parallel_wrapper</span><span class="p">(</span><span class="n">gpuid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">[</span><span class="n">kidx</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)],</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">K_search_settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">K_search_settings</span><span class="p">,</span> <span class="o">**</span><span class="n">job_data</span><span class="p">)</span>
                 <span class="n">all_k_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k_result</span><span class="p">)</span>
         
         <span class="c1"># multiprocessing over each K</span>
         <span class="k">else</span><span class="p">:</span>   
             <span class="n">executor</span> <span class="o">=</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">)</span>
             <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
-                <span class="n">_nmf_parallel_wrapper</span><span class="p">,</span> <span class="n">gpuid</span><span class="o">=</span><span class="n">kidx</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">K_search_settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">K_search_settings</span><span class="p">,</span> <span class="o">**</span><span class="n">job_data</span>
+                <span class="n">_nmf_parallel_wrapper</span><span class="p">,</span> <span class="n">gpuid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">[</span><span class="n">kidx</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)],</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">K_search_settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">K_search_settings</span><span class="p">,</span> <span class="o">**</span><span class="n">job_data</span>
                 <span class="p">)</span> <span class="k">for</span> <span class="n">kidx</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Ks</span><span class="p">)]</span>
             <span class="n">all_k_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">Ks</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)]</span>
 
@@ -1481,16 +1685,16 @@ document.write(`
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">consensus_mat</span><span class="p">:</span>
 
                 <span class="c1"># * save the plot</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">:</span>
-                    <span class="n">con_fig_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="si">}</span><span class="s1">/k_</span><span class="si">{</span><span class="n">Ks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">Ks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">_cophenetic_coeff.png&#39;</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">:</span> 
+                    <span class="n">con_fig_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;k_</span><span class="si">{</span><span class="n">Ks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">Ks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">_cophenetic_coeff.png&#39;</span><span class="p">)</span>
                     <span class="n">plot_cophenetic_coeff</span><span class="p">(</span><span class="n">Ks</span><span class="p">,</span> <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;cophenetic_coeff&quot;</span><span class="p">],</span> <span class="n">con_fig_name</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_pac</span><span class="p">:</span>
                     
                     <span class="c1"># load reordered consensus matrices from each k</span>
                     <span class="n">reordered_con_matrices</span> <span class="o">=</span> <span class="p">[]</span>
-                    <span class="k">for</span> <span class="n">curr_k_to_load</span> <span class="ow">in</span> <span class="n">Ks</span><span class="p">:</span>
-                        <span class="n">reordered_con_matrices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="si">}</span><span class="s1">/WH_k=</span><span class="si">{</span><span class="n">curr_k_to_load</span><span class="si">}</span><span class="s1">.npz&#39;</span><span class="p">)[</span><span class="s2">&quot;reordered_con_mat&quot;</span><span class="p">])</span>
+                    <span class="k">for</span> <span class="n">curr_k_to_load</span> <span class="ow">in</span> <span class="n">Ks</span><span class="p">:</span> 
+                        <span class="n">reordered_con_matrices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path_full</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;WH_k=</span><span class="si">{</span><span class="n">curr_k_to_load</span><span class="si">}</span><span class="s1">.npz&#39;</span><span class="p">))[</span><span class="s2">&quot;reordered_con_mat&quot;</span><span class="p">])</span>
                     <span class="n">consensus_tensor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">reordered_con_matrices</span><span class="p">)</span>
                     <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;pac&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">get_pac</span><span class="p">(</span><span class="n">consensus_tensor</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_gpu</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">))</span>
                     <span class="n">consensus_tensor</span><span class="p">,</span> <span class="n">reordered_con_matrices</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
@@ -1500,12 +1704,9 @@ document.write(`
                 <span class="n">results</span><span class="p">[</span><span class="s2">&quot;k_predict&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k_predict</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_output</span><span class="p">:</span>
-                        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">][</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;Ks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k_predict</span><span class="p">)]</span>
-                        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">][</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;Ks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k_predict</span><span class="p">)]</span>
-
-                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nmf_method</span> <span class="o">==</span> <span class="s2">&quot;nmf_recommender&quot;</span><span class="p">:</span>
-                            <span class="n">results</span><span class="p">[</span><span class="s2">&quot;other_results&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;other_results&quot;</span><span class="p">][</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;Ks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k_predict</span><span class="p">)]</span>
-
+                        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;other_results&quot;</span><span class="p">]:</span>
+                            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">combined_result</span><span class="p">:</span>
+                                <span class="n">results</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined_result</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">combined_result</span><span class="p">[</span><span class="s2">&quot;Ks&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">k_predict</span><span class="p">)]</span>
             <span class="c1"># final plot</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">:</span>
                 <span class="n">plot_NMFk</span><span class="p">(</span>
@@ -1555,8 +1756,8 @@ document.write(`
               
               
               
-                <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                <footer class="prev-next-footer d-print-none">
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -1581,6 +1782,7 @@ By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Bour
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2022, LANL.
@@ -1607,8 +1809,8 @@ By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Bour
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
   </footer>

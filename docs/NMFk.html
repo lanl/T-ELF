@@ -2,45 +2,48 @@
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="./" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF.factorization.NMFk: Non-negative Matrix Factorization with Automatic Model Determination &#8212; TELF 0.0.20 documentation</title>
+    <title>TELF.factorization.NMFk: Non-negative Matrix Factorization with Automatic Model Determination &#8212; TELF 0.0.34 documentation</title>
   
   
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=362ab14a" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
-  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=30839ccb"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/documentation_options.js?v=d15f0e27"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'NMFk';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -48,6 +51,7 @@
     <link rel="prev" title="Tensor Extraction of Latent Features (T-ELF)" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -55,32 +59,16 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -88,7 +76,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -96,16 +83,25 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -118,6 +114,9 @@
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
+  
+    
   
 
 <a class="navbar-brand logo" href="index.html">
@@ -127,10 +126,17 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.20 documentation</p>
+    <p class="title logo__title">TELF 0.0.34 documentation</p>
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
@@ -163,22 +169,22 @@
 <li class="toctree-l1"><a class="reference internal" href="Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
 
 
-<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">TELF</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="TELF.html">TELF package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.factorization.html">TELF.factorization package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="TELF.html">TELF package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.factorization.html">TELF.factorization package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
 </ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.pre_processing.html">TELF.pre_processing package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.pre_processing.html">TELF.pre_processing package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
 </ul>
-</li>
+</details></li>
 </ul>
-</li>
+</details></li>
 </ul>
-</li>
+</details></li>
 </ul>
 
     </div>
@@ -194,7 +200,7 @@
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -203,14 +209,14 @@
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -285,26 +291,20 @@
 </button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
-  </button>
-`);
-</script>
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</label>
+</button>
 </div></div>
       
     </div>
@@ -345,7 +345,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section id="telf-factorization-nmfk-non-negative-matrix-factorization-with-automatic-model-determination">
 <h1><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination<a class="headerlink" href="#telf-factorization-nmfk-non-negative-matrix-factorization-with-automatic-model-determination" title="Link to this heading">#</a></h1>
@@ -400,7 +400,7 @@ document.write(`
 </section>
 <section id="available-functions">
 <h1>Available Functions<a class="headerlink" href="#available-functions" title="Link to this heading">#</a></h1>
-<table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">NMFk.__init__</span></code>([n_perturbs, n_iters, ...])</p></td>
 <td><p>NMFk is a Non-negative Matrix Factorization module with the capability to do automatic model determination.</p></td>
@@ -410,6 +410,7 @@ document.write(`
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 <section id="module-TELF.factorization.NMFk">
 <span id="module-contents"></span><h1>Module Contents<a class="headerlink" href="#module-TELF.factorization.NMFk" title="Link to this heading">#</a></h1>
@@ -424,7 +425,7 @@ derivative works, distribute copies to the public, perform publicly and display 
 others to do so.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="TELF.factorization.NMFk.NMFk">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.factorization.NMFk.</span></span><span class="sig-name descname"><span class="pre">NMFk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_perturbs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.015</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturb_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uniform'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nnsvd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collect_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predict_k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predict_k_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WH_sill'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmf_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturb_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sill_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmf_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmf_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nmf_fro_mu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmf_obj_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pruned</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculate_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturb_multiprocessing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consensus_mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_consensus_stopping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculate_pac</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_plot_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simple_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_search_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H_sill_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/NMFk.html#NMFk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.NMFk.NMFk" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.factorization.NMFk.</span></span><span class="sig-name descname"><span class="pre">NMFk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_perturbs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.015</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturb_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uniform'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nnsvd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collect_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predict_k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predict_k_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WH_sill'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmf_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturb_verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sill_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmf_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmf_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nmf_fro_mu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clustering_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kmeans'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmf_obj_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clustering_obj_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pruned</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculate_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturb_multiprocessing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consensus_mat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_consensus_stopping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculate_pac</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_plot_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simple_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_search_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H_sill_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor_thresholding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor_thresholding_H_regression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor_thresholding_obj_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor_thresholding_H_regression_obj_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/NMFk.html#NMFk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.NMFk.NMFk" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>NMFk is a Non-negative Matrix Factorization module with the capability to do automatic model determination.</p>
 <dl class="field-list simple">
@@ -432,35 +433,52 @@ others to do so.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_perturbs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of bootstrap operations, or random matrices generated around the original matrix. The default is 20.</p></li>
 <li><p><strong>n_iters</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of NMF iterations. The default is 100.</p></li>
-<li><p><strong>epsilon</strong> (<em>float</em><em>, </em><em>optional</em>) – <p>Error amount for the random matrices generated around the original matrix. The default is 0.015.</p>
-<p><code class="docutils literal notranslate"><span class="pre">epsilon</span></code> is used when <code class="docutils literal notranslate"><span class="pre">perturb_type='uniform'</span></code>.</p>
+<li><p><strong>epsilon</strong> (<em>float</em><em> or </em><em>tuple</em><em> of </em><em>two elements</em><em>, </em><em>optional</em>) – <p>Error amount for the random matrices generated around the original matrix. The default is 0.015.</p>
+<p>The default when <code class="docutils literal notranslate"><span class="pre">perturb_type='bool'</span></code> or <code class="docutils literal notranslate"><span class="pre">perturb_type='boolean'</span></code> is (epsilon, epsilon).</p>
+<p><code class="docutils literal notranslate"><span class="pre">epsilon</span></code> is used when <code class="docutils literal notranslate"><span class="pre">perturb_type='uniform'</span></code> or <code class="docutils literal notranslate"><span class="pre">perturb_type='bool'</span></code> or <code class="docutils literal notranslate"><span class="pre">perturb_type='boolean'</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">perturb_type='bool'</span></code> or <code class="docutils literal notranslate"><span class="pre">perturb_type='boolean'</span></code>, use <code class="docutils literal notranslate"><span class="pre">`epsilon=tuple()`</span></code> where</p>
+<p>positive noise: flip 0s to 1s (additive noise), negative noise: flip 1s to 0s (subtractive noise).</p>
+</div>
 </p></li>
-<li><p><strong>perturb_type</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Type of error sampling to perform for the bootstrap operation. The default is “uniform”.</p>
+<li><p><strong>perturb_type</strong> – <p>Type of error sampling to perform for the bootstrap operation. The default is “uniform”.</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">perturb_type='uniform'</span></code> will use uniform distribution for sampling.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">perturb_type='poisson'</span></code> will use Poission distribution for sampling.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">perturb_type='bool'</span></code> or <code class="docutils literal notranslate"><span class="pre">perturb_type='boolean'</span></code> will use Boolean perturbations.</p></li>
 </ul>
 </p></li>
-<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of parallel jobs. Use -1 to use all available resources. The default is 1.</p></li>
-<li><p><strong>n_nodes</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of HPC nodes. The default is 1.</p></li>
-<li><p><strong>init</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Initilization of matrices for NMF procedure. The default is “nnsvd”.</p>
-<ul>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>n_jobs<span class="classifier">int, optional</span></dt><dd><p>Number of parallel jobs. Use -1 to use all available resources. The default is 1.</p>
+</dd>
+<dt>n_nodes<span class="classifier">int, optional</span></dt><dd><p>Number of HPC nodes. The default is 1.</p>
+</dd>
+<dt>init<span class="classifier">str, optional</span></dt><dd><p>Initilization of matrices for NMF procedure. The default is “nnsvd”.</p>
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">init='nnsvd'</span></code> will use NNSVD for initilization.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">init='random'</span></code> will use random sampling for initilization.</p></li>
 </ul>
-</p></li>
-<li><p><strong>use_gpu</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, uses GPU for operations. The default is True.</p></li>
-<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Location to save output. The default is “./”.</p></li>
-<li><p><strong>save_output</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, saves the resulting latent factors and plots. The default is True.</p></li>
-<li><p><strong>collect_output</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, collectes the resulting latent factors to be returned from <code class="docutils literal notranslate"><span class="pre">fit()</span></code> operation. The default is False.</p></li>
-<li><p><strong>predict_k</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>If True, performs automatic prediction of the number of latent factors. The default is False.</p>
+</dd>
+<dt>use_gpu<span class="classifier">bool, optional</span></dt><dd><p>If True, uses GPU for operations. The default is True.</p>
+</dd>
+<dt>save_path<span class="classifier">str, optional</span></dt><dd><p>Location to save output. The default is “”.</p>
+</dd>
+<dt>save_output<span class="classifier">bool, optional</span></dt><dd><p>If True, saves the resulting latent factors and plots. The default is True.</p>
+</dd>
+<dt>collect_output<span class="classifier">bool, optional</span></dt><dd><p>If True, collectes the resulting latent factors to be returned from <code class="docutils literal notranslate"><span class="pre">fit()</span></code> operation. The default is False.</p>
+</dd>
+<dt>predict_k<span class="classifier">bool, optional</span></dt><dd><p>If True, performs automatic prediction of the number of latent factors. The default is False.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Even when <code class="docutils literal notranslate"><span class="pre">predict_k=False</span></code>, number of latent factors can be estimated using the figures saved in <code class="docutils literal notranslate"><span class="pre">save_path</span></code>.</p>
 </div>
-</p></li>
-<li><p><strong>predict_k_method</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Method to use when performing automatic k prediction. Default is “WH_sill”.</p>
-<ul>
+</dd>
+<dt>predict_k_method<span class="classifier">str, optional</span></dt><dd><p>Method to use when performing automatic k prediction. Default is “WH_sill”.</p>
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">predict_k_method='pvalue'</span></code> will use L-Statistics with column-wise error for automatically estimating the number of latent factors.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">predict_k_method='WH_sill'</span></code> will use Silhouette scores from minimum of W and H latent factors for estimating the number of latent factors.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">predict_k_method='W_sill'</span></code> will use Silhouette scores from W latent factor for estimating the number of latent factors.</p></li>
@@ -471,33 +489,61 @@ others to do so.</p>
 <p class="admonition-title">Warning</p>
 <p><code class="docutils literal notranslate"><span class="pre">predict_k_method='pvalue'</span></code> prediction will result in significantly longer processing time, altough it is more accurate! <code class="docutils literal notranslate"><span class="pre">predict_k_method='WH_sill'</span></code>, on the other hand, will be much faster.</p>
 </div>
-</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, shows progress in each k. The default is True.</p></li>
-<li><p><strong>nmf_verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, shows progress in each NMF operation. The default is False.</p></li>
-<li><p><strong>perturb_verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, it shows progress in each perturbation. The default is False.</p></li>
-<li><p><strong>transpose</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, transposes the input matrix before factorization. The default is False.</p></li>
-<li><p><strong>sill_thresh</strong> (<em>float</em><em>, </em><em>optional</em>) – Threshold for the Silhouette score when performing automatic prediction of the number of latent factors. The default is 0.8.</p></li>
-<li><p><strong>nmf_func</strong> (<em>object</em><em>, </em><em>optional</em>) – If not None, and if <code class="docutils literal notranslate"><span class="pre">nmf_method=func</span></code>, used for passing NMF function. The default is None.</p></li>
-<li><p><strong>nmf_method</strong> – <p>What NMF to use. The default is “nmf_fro_mu”.</p>
-<ul>
+</dd>
+<dt>verbose<span class="classifier">bool, optional</span></dt><dd><p>If True, shows progress in each k. The default is True.</p>
+</dd>
+<dt>nmf_verbose<span class="classifier">bool, optional</span></dt><dd><p>If True, shows progress in each NMF operation. The default is False.</p>
+</dd>
+<dt>perturb_verbose<span class="classifier">bool, optional</span></dt><dd><p>If True, it shows progress in each perturbation. The default is False.</p>
+</dd>
+<dt>transpose<span class="classifier">bool, optional</span></dt><dd><p>If True, transposes the input matrix before factorization. The default is False.</p>
+</dd>
+<dt>sill_thresh<span class="classifier">float, optional</span></dt><dd><p>Threshold for the Silhouette score when performing automatic prediction of the number of latent factors. The default is 0.8.</p>
+</dd>
+<dt>nmf_func<span class="classifier">object, optional</span></dt><dd><p>If not None, and if <code class="docutils literal notranslate"><span class="pre">nmf_method=func</span></code>, used for passing NMF function. The default is None.</p>
+</dd>
+<dt>nmf_method<span class="classifier">str, optional</span></dt><dd><p>What NMF to use. The default is “nmf_fro_mu”.</p>
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nmf_method='nmf_fro_mu'</span></code> will use NMF with Frobenious Norm.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">nmf_method='nmf_kl_mu'</span></code> will use NMF with Multiplicative Update rules with KL-Divergence.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">nmf_method='func'</span></code> will use the custom NMF function passed using the <code class="docutils literal notranslate"><span class="pre">nmf_func</span></code> parameter.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">nmf_method='nmf_recommender'</span></code> will use the Recommender NMF method for collaborative filtering.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">nmf_method='wnmf'</span></code> will use the Weighted NMF for missing value completion.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nmf_method='bnmf'</span></code> will use the Boolean NMF for missing value completion on boolean matrix.</p></li>
 </ul>
-</p></li>
-</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using <code class="docutils literal notranslate"><span class="pre">nmf_method='nmf_recommender'</span></code>, RNMFk prediction method can be done using <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">TELF.factorization</span> <span class="pre">import</span> <span class="pre">RNMFk_predict</span></code>.</p>
+<p>Here <code class="docutils literal notranslate"><span class="pre">RNMFk_predict(W,</span> <span class="pre">H,</span> <span class="pre">global_mean,</span> <span class="pre">bu,</span> <span class="pre">bi,</span> <span class="pre">u,</span> <span class="pre">i)</span></code>, <code class="docutils literal notranslate"><span class="pre">W</span></code> and <code class="docutils literal notranslate"><span class="pre">H</span></code> are the latent factors, <code class="docutils literal notranslate"><span class="pre">global_mean</span></code>, <code class="docutils literal notranslate"><span class="pre">bu</span></code>, and <code class="docutils literal notranslate"><span class="pre">bi</span></code> are the biases returned from <code class="docutils literal notranslate"><span class="pre">nmf_recommender</span></code> method.</p>
+<p>Finally, <code class="docutils literal notranslate"><span class="pre">u</span></code> and <code class="docutils literal notranslate"><span class="pre">i</span></code> are the indices to perform prediction on.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using <code class="docutils literal notranslate"><span class="pre">nmf_method='wnmf'</span></code>, pass <code class="docutils literal notranslate"><span class="pre">nmf_obj_params={&quot;WEIGHTS&quot;:P}</span></code> where <code class="docutils literal notranslate"><span class="pre">P</span></code> is a matrix of size <code class="docutils literal notranslate"><span class="pre">X</span></code> and carries the weights for each item in <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
+<p>For example, here <code class="docutils literal notranslate"><span class="pre">P</span></code> can be used as a mask where 1s in <code class="docutils literal notranslate"><span class="pre">P</span></code> are the known entries, and 0s are the missing values in <code class="docutils literal notranslate"><span class="pre">X</span></code> that we want to predict (i.e. a recommender system).</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">nmf_method='wnmf'</span></code> does not support sparse matrices currently.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using <code class="docutils literal notranslate"><span class="pre">nmf_method='bnmf'</span></code>, pass <code class="docutils literal notranslate"><span class="pre">nmf_obj_params={&quot;MASK&quot;:P}</span></code> where <code class="docutils literal notranslate"><span class="pre">P</span></code> is a mask matrix of size <code class="docutils literal notranslate"><span class="pre">X</span></code> where 0s and 1s in <code class="docutils literal notranslate"><span class="pre">P</span></code> are the known and unknown locations in <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
+<p>0s in <code class="docutils literal notranslate"><span class="pre">P</span></code> are the places we would like to predict.</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">nmf_method='bnmf'</span></code> does not support sparse matrices currently.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">nmf_method='bnmf'</span></code>, <code class="docutils literal notranslate"><span class="pre">perturb_type='bool'</span></code> or <code class="docutils literal notranslate"><span class="pre">perturb_type='boolean'</span></code> is recommended to use. It will not set it automatically but raise warning if not used.</p>
+</div>
 </dd>
-</dl>
-<dl>
+<dt>clustering_method<span class="classifier">str, optional</span></dt><dd><p>Clustering used on the W patterns. Default is “kmeans”.
+Options are “kmeans” and “bool” or “boolean”</p>
+</dd>
 <dt>nmf_obj_params<span class="classifier">dict, optional</span></dt><dd><p>Parameters used by NMF function. The default is {}.</p>
+</dd>
+<dt>clustering_obj_params: dict, optinal</dt><dd><p>Parameters used by custom clustering functions. The default is {}.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">nmf_method='bnmf'</span></code>, <code class="docutils literal notranslate"><span class="pre">max_iters:int</span></code> and <code class="docutils literal notranslate"><span class="pre">distance:str</span></code> can be passed here. <code class="docutils literal notranslate"><span class="pre">distance</span></code> can be <code class="docutils literal notranslate"><span class="pre">'hamming'</span></code>, <code class="docutils literal notranslate"><span class="pre">'FN'</span></code>, or <code class="docutils literal notranslate"><span class="pre">'FP'</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">hamming</span></code>.</p>
+<p>For all nmf methods passed in <code class="docutils literal notranslate"><span class="pre">nmf_method</span></code>, <code class="docutils literal notranslate"><span class="pre">max_iters</span></code> can also be passed.</p>
 </dd>
 <dt>pruned<span class="classifier">bool, optional</span></dt><dd><p>When True, removes columns and rows from the input matrix that has only 0 values. The default is True.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <ul class="simple">
-<li><p>Pruning should not be used with <code class="docutils literal notranslate"><span class="pre">nmf_method='nmf_recommender'</span></code>.</p></li>
 <li><p>If after pruning decomposition is not possible (for example if the number of samples left is 1, or K range is empty based on the rule <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&lt;</span> <span class="pre">min(X.shape)</span></code>, <code class="docutils literal notranslate"><span class="pre">fit()</span></code> will return <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 </ul>
 </div>
@@ -535,6 +581,28 @@ others to do so.</p>
 <p>When searching for the optimal rank with binary search using <code class="docutils literal notranslate"><span class="pre">k_search='bst_post'</span></code> or <code class="docutils literal notranslate"><span class="pre">k_search='bst_pre'</span></code>, this hyper-parameter can be used to cut off higher ranks from search space.</p>
 <p>The cut-off of higher ranks from the search space is based on threshold for H silhouette. When a H silhouette below <code class="docutils literal notranslate"><span class="pre">H_sill_thresh</span></code> is found for a given rank or K, all higher ranks are removed from the search space.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">H_sill_thresh=None</span></code>, it is not used. The default is None.</p>
+</dd>
+<dt>factor_thresholding<span class="classifier">str, optional</span></dt><dd><p>If not None, W and H factors are thresholded using a thresholding method specified to be boolean. Default is None.</p>
+<p>Options are <code class="docutils literal notranslate"><span class="pre">WH_thresh</span></code> and <code class="docutils literal notranslate"><span class="pre">coord_desc_thresh</span></code> and <code class="docutils literal notranslate"><span class="pre">otsu_thresh</span></code> and <code class="docutils literal notranslate"><span class="pre">kmeans_thresh</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">nmf_method='bnmf'</span></code>, <code class="docutils literal notranslate"><span class="pre">factor_thresholding='otsu_thresh'</span></code> is used by default.</p>
+</dd>
+<dt>factor_thresholding_H_regression<span class="classifier">str, optional</span></dt><dd><p>If not None, H factor is thresholded using a thresholding method specified to be boolean. Default is None.</p>
+<p>Options are <code class="docutils literal notranslate"><span class="pre">coord_desc_thresh</span></code>, <code class="docutils literal notranslate"><span class="pre">otsu_thresh</span></code>, and <code class="docutils literal notranslate"><span class="pre">kmeans_thresh</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">nmf_method='bnmf'</span></code>, <code class="docutils literal notranslate"><span class="pre">factor_thresholding='kmeans_thresh'</span></code> is used by default.</p>
+</dd>
+<dt>factor_thresholding_obj_params<span class="classifier">dict, optional</span></dt><dd><p>Extra settings used for the thresholding used in <code class="docutils literal notranslate"><span class="pre">factor_thresholding</span></code>. Default is {}.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">factor_thresholding='coord_desc_thresh'</span></code>, options include <code class="docutils literal notranslate"><span class="pre">max_iter:int</span></code>, <code class="docutils literal notranslate"><span class="pre">wt</span></code>, and <code class="docutils literal notranslate"><span class="pre">ht</span></code>.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">factor_thresholding='WH_thresh'</span></code>, options include <code class="docutils literal notranslate"><span class="pre">npoint</span></code>.</p>
+</dd>
+<dt>factor_thresholding_H_regression_obj_params<span class="classifier">dict, optional</span></dt><dd><p>Extra settings used for the thresholding used in <code class="docutils literal notranslate"><span class="pre">factor_thresholding_H_regression</span></code>. Default is {}.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">factor_thresholding='coord_desc_thresh'</span></code>, options include <code class="docutils literal notranslate"><span class="pre">max_iter:int</span></code>, <code class="docutils literal notranslate"><span class="pre">wt</span></code>, and <code class="docutils literal notranslate"><span class="pre">ht</span></code>.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">factor_thresholding='WH_thresh'</span></code>, options include <code class="docutils literal notranslate"><span class="pre">npoint</span></code>.</p>
+</dd>
+<dt>device<span class="classifier">int or list, optional</span></dt><dd><p>CUDA device or list of CUDA devices (GPUs) to use. Default is -1.</p>
+<p>When device is a positive integer such as <code class="docutils literal notranslate"><span class="pre">device=0</span></code> it will use the given GPU with the id.</p>
+<p>When device is -1, it will use all devices.</p>
+<p>When device is a list of devices, it will use those devices.</p>
+<p>If device is negative integer other than -1, it will use number if GPUs minues the device + 1.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
@@ -585,8 +653,8 @@ others to do so.</p>
               
               
               
-                <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                <footer class="prev-next-footer d-print-none">
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="index.html"
@@ -613,7 +681,9 @@ others to do so.</p>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
 
   <div class="sidebar-secondary-item">
   <div class="page-toc tocsection onthispage">
@@ -653,6 +723,7 @@ By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Bour
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2022, LANL.
@@ -679,8 +750,8 @@ By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Bour
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
   </footer>

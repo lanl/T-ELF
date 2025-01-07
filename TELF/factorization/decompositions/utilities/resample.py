@@ -2,6 +2,37 @@ import numpy as np
 import scipy
 from .generic_utils import get_np, get_scipy
 
+def boolean(X, epsilon, use_gpu=False, random_state=None):
+    """
+    positive noise: flip 0s to 1s (additive noise), negative noise: flip 1s to 0s (subtractive noise)
+
+    Args:
+        X (ndarray, sparse matrix): Array of which to find a perturbation.
+        epsilon (float): The perturbation amount.
+        random_state (int): Random seed
+
+    Returns:
+        Y (ndarray): The perturbed matrix.
+
+    """
+    np = get_np(X, use_gpu=use_gpu)
+    np.random.seed(random_state)
+
+    dtype = X.dtype
+    X = X.astype(bool)
+    n, m = X.shape
+    X = X.ravel()
+    pos_noisepercent = epsilon[0]
+    neg_noisepercent = epsilon[1]
+
+    for s, p in zip([True, False], [neg_noisepercent, pos_noisepercent]):
+        I = np.where(X == s)[0]
+        flipidx = np.random.choice(I.size, int(p * I.size), replace=False)
+        X[I[flipidx]] = ~X[I[flipidx]]
+
+    X = X.reshape(n, m)
+    return X.astype(dtype)
+
 
 def uniform_product(X, epsilon, use_gpu=False, random_state=None):
     """
@@ -10,6 +41,7 @@ def uniform_product(X, epsilon, use_gpu=False, random_state=None):
     Args:
         X (ndarray, sparse matrix): Array of which to find a perturbation.
         epsilon (float): The perturbation amount.
+        random_state (int): Random seed
 
     Returns:
         Y (ndarray): The perturbed matrix.
@@ -33,6 +65,7 @@ def poisson(X, use_gpu=False, random_state=None):
 
     Args:
         X (ndarray, sparse matrix): Array of which to find a perturbation.
+        random_state (int): Random seed
 
     Returns:
         Y (ndarray): The perturbed matrix.

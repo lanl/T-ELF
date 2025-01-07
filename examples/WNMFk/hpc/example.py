@@ -22,7 +22,7 @@ def main():
         "n_jobs":1,
         "init":"nnsvd", 
         "use_gpu":False,
-        "save_path":"../../results/", 
+        "save_path":os.path.join("..", "..", "results"), 
         "save_output":True,
         "collect_output":True,
         "predict_k_method":"sill",

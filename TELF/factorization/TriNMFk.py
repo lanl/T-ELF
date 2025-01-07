@@ -265,7 +265,7 @@ class TriNMFk():
         # Prune
         #
         if self.pruned:
-            X, rows, cols = prune(X, use_gpu=self.use_gpu)
+            X, rows, cols, _ = prune(X, use_gpu=self.use_gpu)
         else:
             rows, cols = None, None
 
@@ -322,12 +322,8 @@ class TriNMFk():
         }
 
         # save the results
-        np.savez_compressed(
-                    self.save_path_full
-                    + "/WSH"
-                    + "_k="
-                    + str(k1k2)
-                    + ".npz",
+        np.savez_compressed( 
+                    os.path.join(f'{self.save_path_full}', f'WSH_k={k1k2}.npz'),
                     **results)
 
         return results

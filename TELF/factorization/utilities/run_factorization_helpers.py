@@ -28,6 +28,26 @@ def run_symnmf(Y, W, nmf, nmf_params, use_gpu:bool, gpuid:int):
         W, obj = nmf(Y, W=W, **nmf_params)
     return W, obj
 
+def run_thresholding(Y, W, H, factor_thresholding_obj_params, thresholding_function, use_gpu, gpuid):
+    if use_gpu:
+        with cp.cuda.Device(gpuid):
+            dtype = Y.dtype
+            thresh_results = thresholding_function(Y, W, H, use_gpu=use_gpu, **factor_thresholding_obj_params)
+            
+            if isinstance(thresh_results["wt"], np.ndarray):
+                thresh_results["wt"] = cp.array(thresh_results["wt"])
+            if isinstance(thresh_results["ht"], np.ndarray):
+                thresh_results["ht"] = cp.array(thresh_results["ht"])
+
+            W = (W >= thresh_results["wt"]).astype(dtype)
+            H = (H >= thresh_results["ht"]).astype(dtype)
+    else:
+        dtype = Y.dtype
+        thresh_results = thresholding_function(Y, W, H, use_gpu=use_gpu, **factor_thresholding_obj_params)
+        W = (W >= thresh_results["wt"]).astype(dtype)
+        H = (H >= thresh_results["ht"]).astype(dtype)
+    return W, H
+
 #
 # Tensor operations
 #

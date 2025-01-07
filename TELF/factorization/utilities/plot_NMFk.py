@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import time
+import os 
 
 def plot_RESCALk(data, k_predict, name, path, plot_predict=False, plot_final=False, simple_plot=False, calculate_error=True):
 
@@ -106,14 +106,12 @@ def plot_RESCALk(data, k_predict, name, path, plot_predict=False, plot_final=Fal
     # save
     if plot_final:
         plt.savefig(
-            str(path) + "/FINAL_k=" +
-            str(min(list(data["Ks"]))) + "-" + str(max(list(data["Ks"]))) + ".png",
+            os.path.join(f'{path}', f'FINAL_k={min(list(data["Ks"]))}-{max(list(data["Ks"]))}.png'),
             bbox_inches="tight",
         )
     else:
         plt.savefig(
-            str(path) + "/k=" + str(min(list(data["Ks"]))) +
-            "-" + str(max(list(data["Ks"]))) + ".png",
+            os.path.join(f'{path}', f'k={min(list(data["Ks"]))}-{max(list(data["Ks"]))}.png'),
             bbox_inches="tight",
         )
     plt.close("all")
@@ -189,14 +187,12 @@ def plot_SymNMFk(data, name, path, plot_final=False):
     # save
     if plot_final:
         plt.savefig(
-            str(path) + "/FINAL_k=" +
-            str(min(list(data["Ks"]))) + "-" + str(max(list(data["Ks"]))) + ".png",
+            os.path.join(f'{path}', f'FINAL_k={min(list(data["Ks"]))}-{max(list(data["Ks"]))}.png'),
             bbox_inches="tight",
         )
     else:
         plt.savefig(
-            str(path) + "/k=" + str(min(list(data["Ks"]))) +
-            "-" + str(max(list(data["Ks"]))) + ".png",
+            os.path.join(f'{path}', f'k={min(list(data["Ks"]))}-{max(list(data["Ks"]))}.png'),
             bbox_inches="tight",
         )
     plt.close("all")
@@ -223,7 +219,7 @@ def plot_BNMFk(Ks, sils, bool_err, path=None, name=None):
     plt.ioff()
     if path is not None:
         plt.savefig(
-            str(path) + "/k=" + str(min(list(Ks))) + "-" + str(max(list(Ks))) + ".png",
+            os.path.join(f'{path}', f'k={min(list(Ks))}-{max(list(Ks))}.png'),
             bbox_inches="tight",
         )
 
@@ -397,14 +393,12 @@ def plot_NMFk(
             kmax = max(list(data["Ks"]))
 
         plt.savefig(
-            str(path) + "/FINAL_k=" +
-            str(kmin) + "-" + str(kmax) + ".png",
+            os.path.join(f'{path}', f'FINAL_k={kmin}-{kmax}.png'),
             bbox_inches="tight",
         )
     else:
         plt.savefig(
-            str(path) + "/k=" + str(min(list(data["Ks"]))) +
-            "-" + str(max(list(data["Ks"]))) + ".png",
+            os.path.join(f'{path}', f'k={min(list(data["Ks"]))}-{max(list(data["Ks"]))}.png'),
             bbox_inches="tight",
         )
     plt.close("all")

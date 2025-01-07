@@ -1,5 +1,5 @@
 import sys
-sys.path += ["Cheetah/"]
+sys.path += ["Cheetah"]
 
 # Cheetah
 from .Cheetah.cheetah import Cheetah
