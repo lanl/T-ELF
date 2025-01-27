@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.applications.Cheetah.cheetah &#8212; TELF 0.0.34 documentation</title>
+    <title>TELF.applications.Cheetah.cheetah &#8212; TELF 0.0.35 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../../_static/documentation_options.js?v=d15f0e27"></script>
+    <script src="../../../../_static/documentation_options.js?v=6aa38c3a"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.34 documentation</p>
+    <p class="title logo__title">TELF 0.0.35 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -1128,7 +1128,15 @@
             
             <span class="k">for</span> <span class="n">affil_id</span><span class="p">,</span> <span class="n">affil_info_dict</span> <span class="ow">in</span> <span class="n">curr_info_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">affil_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">affil_id</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-                <span class="n">country</span> <span class="o">=</span> <span class="n">affil_info_dict</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                
+                <span class="c1"># Check type and country of affiliation</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">affil_info_dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">country</span> <span class="o">=</span> <span class="n">affil_info_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;country&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">country</span><span class="p">:</span>
+                    <span class="n">country</span> <span class="o">=</span> <span class="n">country</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">country</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
                 
                 <span class="c1"># affiliation</span>
                 <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">affil_id</span><span class="p">)</span> <span class="ow">in</span> <span class="n">affiliation_index_tmp</span><span class="p">:</span>
