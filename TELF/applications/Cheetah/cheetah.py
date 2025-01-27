@@ -833,7 +833,15 @@ class Cheetah:
             
             for affil_id, affil_info_dict in curr_info_dict.items():
                 affil_id = str(affil_id).strip().lower()
-                country = affil_info_dict["country"].strip().lower()
+                
+                # Check type and country of affiliation
+                if not isinstance(affil_info_dict, dict):
+                    continue
+                country = affil_info_dict.get("country")
+                if country:
+                    country = country.strip().lower()
+                else:
+                    country = ''
                 
                 # affiliation
                 if str(affil_id) in affiliation_index_tmp:
