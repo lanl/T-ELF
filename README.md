@@ -97,20 +97,35 @@ python post_install.py # use the following, for example, for GPU system: <python
 |           WNMFk           | :heavy_check_mark: |                    | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: | :heavy_check_mark: |                         NMFk with weighting - used for recommendation system     |   [Link](examples/WNMFk/WNMFk.ipynb)          |       :white_check_mark:       |
 |           HNMFk           | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: | :heavy_check_mark: |                         Hierarchical NMFk                                        |   [Link](examples/HNMFk/HNMFk.ipynb)       |       :white_check_mark:       |
 |           BNMFk           | :heavy_check_mark: |                    | :heavy_check_mark: | :heavy_check_mark: |  :heavy_check_mark: | :heavy_check_mark: |                           Boolean NMFk                                           |   [Link](examples/BNMFk/BNMFk.ipynb) |       :white_check_mark:       |
- 
+|           LMF             | :heavy_check_mark: |                    | :heavy_check_mark: | :heavy_check_mark: |                     |                    |                           Logistic Matrix Factorization                          |   [Link](examples/LMF/LMF.ipynb) |       :white_check_mark:       |
+|         SPLIT NMFk        |                    |                    |                    |                    |                     |                    |        Joint NMFk factorization of multiple data via SPLIT                       |             |       :soon:       |
+| SPLIT Transfer Classifier |                    |                    |                    |                    |                     |                    |      Supervised transfer learning method via SPLIT and NMFk                      |             |       :soon:       |
+
 ### TELF.pre_processing
 
 | **Method** | **Multiprocessing** |       **HPC**       |                           **Description**                          | **Example** | **Release Status** |
 |:----------:|:-------------------:|:-------------------:|:------------------------------------------------------------------:|:-----------:|:------------------:|
 |   Vulture  | :heavy_check_mark:  | :heavy_check_mark:  |         Advanced text processing tool for cleaning and NLP         |  [Link](examples/Vulture)  | :white_check_mark: |
 |   Beaver   | :heavy_check_mark:  | :heavy_check_mark:  |        Fast matrix and tensor building tool for text mining        |  [Link](examples/Beaver)  | :white_check_mark: |
+|  iPenguin  |                     |                     |         Online Semantic Scholar information retrieval tool         |             |       :soon:       |
+|    Orca    |                     |                     | Duplicate author detector for text mining and information retrival |             |       :soon:       |
 
+### TELF.post_processing
+
+| **Method** |                       **Description**                      | **Example** | **Release Status** |
+|:----------:|:----------------------------------------------------------:|:-----------:|:------------------:|
+|   Peacock  | Data visualization and generation of actionable statistics |             |       :soon:       |
+|    Wolf    |              Graph centrality and ranking tool             |             |       :soon:       |
+|    Fox    |              Report generation tool for text data            |             |       :soon:       |
+|    SeaLion    |              Generic report generation tool            |             |       :soon:       |
 
 ### TELF.applications
 
 | **Method** |                            **Description**                           | **Example** | **Release Status** |
 |:----------:|:--------------------------------------------------------------------:|:-----------:|:------------------:|
 |   Cheetah  |                        Fast search by keywords and phrases                       |    [Link](examples/Cheetah)         |       :white_check_mark:      |
+|    Bunny   | Dataset generation tool for documents and their citations/references |             |       :soon:       |
+|    Termite   | Knowladge graph building tool |             |       :soon:       |
 
 
 ## How to Cite T-ELF?
