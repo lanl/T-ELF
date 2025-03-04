@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.35 documentation</title>
+    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.36 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=6aa38c3a"></script>
+    <script src="../../../_static/documentation_options.js?v=7dd70c5c"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.35 documentation</p>
+    <p class="title logo__title">TELF 0.0.36 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -315,18 +315,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">node_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_node</span> <span class="o">=</span> <span class="n">parent_node</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">child_nodes</span> <span class="o">=</span> <span class="n">child_nodes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_child_nodes</span> <span class="o">=</span> <span class="n">child_nodes</span>
     
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">persistent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-
-        <span class="k">if</span> <span class="n">persistent</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                 <span class="bp">self</span><span class="o">.</span><span class="n">node_data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span>
-            
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_data</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span></div>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span></div>
 
 
 
@@ -364,6 +356,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_node_k</span> <span class="o">=</span> <span class="n">parent_node_k</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent_node_name</span> <span class="o">=</span> <span class="n">parent_node_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">child_node_names</span> <span class="o">=</span> <span class="n">child_node_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_child_node_names</span> <span class="o">=</span> <span class="n">child_node_names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">original_indices</span> <span class="o">=</span> <span class="n">original_indices</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">=</span> <span class="n">num_samples</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="n">leaf</span>
@@ -398,7 +391,8 @@
                  <span class="n">n_nodes</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">comm_buff_size</span><span class="o">=</span><span class="mi">10000000</span><span class="p">,</span>
-                 <span class="n">random_identifiers</span><span class="o">=</span><span class="kc">False</span>
+                 <span class="n">random_identifiers</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">root_node_name</span> <span class="o">=</span> <span class="s2">&quot;Root&quot;</span>
                  <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.</span>
@@ -443,6 +437,8 @@
 <span class="sd">            If True, it prints progress. The default is True.</span>
 <span class="sd">        random_identifiers : bool, optional</span>
 <span class="sd">            If True, model will use randomly generated strings as the identifiers of the nodes. Otherwise, it will use the k for ancestry naming convention. </span>
+<span class="sd">        root_node_name : str, optional</span>
+<span class="sd">            Naming convention to be used when saving the root name. Default is &quot;Root&quot;.</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None.</span>
@@ -463,6 +459,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comm_buff_size</span> <span class="o">=</span> <span class="n">comm_buff_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">random_identifiers</span> <span class="o">=</span> <span class="n">random_identifiers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_node_name</span> <span class="o">=</span> <span class="n">root_node_name</span>
 
         <span class="n">organized_nmfk_params</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">nmfk_params</span><span class="p">:</span>
@@ -603,7 +600,7 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_identifiers</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span><span class="p">())</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span> <span class="o">=</span> <span class="s2">&quot;*&quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_node_name</span>
                     
                 <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                     <span class="s2">&quot;parent_node_name&quot;</span><span class="p">:</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
@@ -1024,6 +1021,119 @@
         <span class="k">return</span> <span class="n">return_data</span></div>
 
     
+<div class="viewcode-block" id="HNMFk.traverse_tiny_leaf_topics">
+<a class="viewcode-back" href="../../../HNMFk.html#TELF.factorization.HNMFk.HNMFk.traverse_tiny_leaf_topics">[docs]</a>
+    <span class="k">def</span> <span class="nf">traverse_tiny_leaf_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Graph iterator with thresholding on number of documents. Returns a list of nodes where number of documents are less than the threshold.\n</span>
+<span class="sd">        This operation is online, only the nodes that are outliers based on the number of documents are kept in the memory.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        threshold : int</span>
+<span class="sd">            Minimum number of documents each node should have.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data : list</span>
+<span class="sd">            List of dictionarys that are format of node for each entry in the list.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_all_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_traversal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">small_docs_thresh</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
+        <span class="n">return_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_nodes</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_all_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">return</span> <span class="n">return_data</span></div>
+
+    
+<div class="viewcode-block" id="HNMFk.get_tiny_leaf_topics">
+<a class="viewcode-back" href="../../../HNMFk.html#TELF.factorization.HNMFk.HNMFk.get_tiny_leaf_topics">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_tiny_leaf_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Graph iterator for tiny documents if processed already with self.process_tiny_leaf_topics(threshold:int).\n</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tiny_leafs : list</span>
+<span class="sd">            List of dictionarys that are format of node for each entry in the list.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="s2">&quot;tiny_leafs.p&quot;</span><span class="p">),</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Could not load the tiny leafs. Did you call process_tiny_leaf_topics(threshold:int)?&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+    
+<div class="viewcode-block" id="HNMFk.process_tiny_leaf_topics">
+<a class="viewcode-back" href="../../../HNMFk.html#TELF.factorization.HNMFk.HNMFk.process_tiny_leaf_topics">[docs]</a>
+    <span class="k">def</span> <span class="nf">process_tiny_leaf_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Graph post-processing with thresholding on number of documents.\n</span>
+<span class="sd">        Returns a list of all tiny nodes, with all the nodes that had number of documents less than the threshold.\n</span>
+<span class="sd">        Removes these outlier nodes from child-node lists on the original graph from their parents.\n</span>
+<span class="sd">        Graph is re-set each time this function is called such that original child nodes are re-assigned.\n</span>
+<span class="sd">        If threshold=None, this function will re-assign the original child indices only, and return None.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        threshold : int</span>
+<span class="sd">            Minimum number of documents each node should have.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tiny_leafs : list</span>
+<span class="sd">            List of dictionarys that are format of node for each entry in the list.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># set the old child nodes on each node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_child_nodes_traversal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+       
+        <span class="c1"># remove the old saved tiny leafs </span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="s2">&quot;tiny_leafs.p&quot;</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># if threshold is none, we reversed everything</span>
+        <span class="k">if</span> <span class="n">threshold</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        
+        <span class="n">tiny_leafs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">traverse_tiny_leaf_topics</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tiny_leafs</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="s2">&quot;tiny_leafs.p&quot;</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+
+        <span class="c1"># remove tinly leafs from its parents</span>
+        <span class="k">for</span> <span class="n">tf</span> <span class="ow">in</span> <span class="n">tiny_leafs</span><span class="p">:</span>
+            <span class="n">my_name</span> <span class="o">=</span> <span class="n">tf</span><span class="p">[</span><span class="s2">&quot;node_name&quot;</span><span class="p">]</span>
+            <span class="n">parent_name</span> <span class="o">=</span> <span class="n">tf</span><span class="p">[</span><span class="s2">&quot;parent_node_name&quot;</span><span class="p">]</span>
+            <span class="n">parent_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_traversal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">parent_name</span><span class="p">)</span>
+
+            <span class="c1"># remove from online iterator</span>
+            <span class="n">parent_node</span><span class="o">.</span><span class="n">child_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">parent_node</span><span class="o">.</span><span class="n">child_nodes</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">node_name</span> <span class="o">!=</span> <span class="n">my_name</span><span class="p">]</span>
+            
+            <span class="c1"># also need to remove from saved node data</span>
+            <span class="n">parent_node_loaded</span> <span class="o">=</span> <span class="n">parent_node</span><span class="p">()</span>
+            <span class="n">parent_node_loaded</span><span class="o">.</span><span class="n">child_node_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_name</span> <span class="k">for</span> <span class="n">node_name</span> <span class="ow">in</span> <span class="n">parent_node_loaded</span><span class="o">.</span><span class="n">child_node_names</span> <span class="k">if</span> <span class="n">node_name</span> <span class="o">!=</span> <span class="n">my_name</span><span class="p">]</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">parent_node_loaded</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">parent_node_loaded</span><span class="o">.</span><span class="n">node_save_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]),</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">tiny_leafs</span></div>
+
+    
+    <span class="k">def</span> <span class="nf">_update_child_nodes_traversal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        
+        <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">original_child_nodes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_child_nodes_traversal</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">child_nodes</span> <span class="o">!=</span> <span class="n">node</span><span class="o">.</span><span class="n">original_child_nodes</span><span class="p">:</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">child_nodes</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">original_child_nodes</span>
+
+        <span class="n">node_loaded</span> <span class="o">=</span> <span class="n">node</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">node_loaded</span><span class="o">.</span><span class="n">original_child_node_names</span> <span class="o">!=</span> <span class="n">node_loaded</span><span class="o">.</span><span class="n">child_node_names</span><span class="p">:</span>
+            <span class="n">node_loaded</span><span class="o">.</span><span class="n">child_node_names</span> <span class="o">=</span> <span class="n">node_loaded</span><span class="o">.</span><span class="n">original_child_node_names</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">node_loaded</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">node_loaded</span><span class="o">.</span><span class="n">node_save_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]),</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+    
     <span class="k">def</span> <span class="nf">_search_traversal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         
         <span class="c1"># Base case: if the current node matches the target name</span>
@@ -1041,12 +1151,17 @@
         <span class="c1"># If the node is not found in this branch, return None</span>
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">_get_traversal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_traversal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">small_docs_thresh</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
         <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">child_nodes</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_get_traversal</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_traversal</span><span class="p">(</span><span class="n">nn</span><span class="p">,</span> <span class="n">small_docs_thresh</span><span class="o">=</span><span class="n">small_docs_thresh</span><span class="p">)</span>
 
-        <span class="n">data</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">node</span><span class="p">(</span><span class="n">persistent</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">small_docs_thresh</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmp_node_data</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">node</span><span class="p">())</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">tmp_node_data</span><span class="p">[</span><span class="s2">&quot;leaf&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">tmp_node_data</span><span class="p">[</span><span class="s2">&quot;num_samples&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">small_docs_thresh</span><span class="p">):</span>
+                <span class="k">return</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">node</span><span class="p">())</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
         <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_name&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>

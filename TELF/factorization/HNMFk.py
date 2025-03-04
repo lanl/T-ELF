@@ -32,18 +32,10 @@ class OnlineNode():
         self.node_name = node_name
         self.parent_node = parent_node
         self.child_nodes = child_nodes
-        self.node_data = None
+        self.original_child_nodes = child_nodes
     
-    def __call__(self, persistent=False):
-
-        if persistent:
-            if self.node_data is None:
-                 self.node_data = pickle.load(open(self.node_path, "rb"))
-            
-            return self.node_data
-
-        else:
-            return pickle.load(open(self.node_path, "rb"))
+    def __call__(self):
+        return pickle.load(open(self.node_path, "rb"))
 
 
 class Node():
@@ -78,6 +70,7 @@ class Node():
         self.parent_node_k = parent_node_k
         self.parent_node_name = parent_node_name
         self.child_node_names = child_node_names
+        self.original_child_node_names = child_node_names
         self.original_indices = original_indices
         self.num_samples = num_samples
         self.leaf = leaf
@@ -109,7 +102,8 @@ class HNMFk():
                  n_nodes=1,
                  verbose=True,
                  comm_buff_size=10000000,
-                 random_identifiers=False
+                 random_identifiers=False,
+                 root_node_name = "Root"
                  ):
         """
         HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.
@@ -154,6 +148,8 @@ class HNMFk():
             If True, it prints progress. The default is True.
         random_identifiers : bool, optional
             If True, model will use randomly generated strings as the identifiers of the nodes. Otherwise, it will use the k for ancestry naming convention. 
+        root_node_name : str, optional
+            Naming convention to be used when saving the root name. Default is "Root".
         Returns
         -------
         None.
@@ -174,6 +170,7 @@ class HNMFk():
         self.verbose = verbose
         self.comm_buff_size = comm_buff_size
         self.random_identifiers = random_identifiers
+        self.root_node_name = root_node_name
 
         organized_nmfk_params = []
         for params in nmfk_params:
@@ -309,7 +306,7 @@ class HNMFk():
                 if self.random_identifiers:
                     self.root_name = str(uuid.uuid1())
                 else:
-                    self.root_name = "*"
+                    self.root_name = self.root_node_name
                     
                 self.target_jobs[self.root_name] = {
                     "parent_node_name":"None",
@@ -726,6 +723,110 @@ class HNMFk():
 
         return return_data
     
+    def traverse_tiny_leaf_topics(self, threshold=5):
+        """
+        Graph iterator with thresholding on number of documents. Returns a list of nodes where number of documents are less than the threshold.\n
+        This operation is online, only the nodes that are outliers based on the number of documents are kept in the memory.
+        
+        Parameters
+        ----------
+        threshold : int
+            Minimum number of documents each node should have.
+
+        Returns
+        -------
+        data : list
+            List of dictionarys that are format of node for each entry in the list.
+
+        """
+        self._all_nodes = []
+        self._get_traversal(self.root, small_docs_thresh=threshold)
+        return_data = self._all_nodes.copy()
+        self._all_nodes = []
+
+        return return_data
+    
+    def get_tiny_leaf_topics(self):
+        """
+        Graph iterator for tiny documents if processed already with self.process_tiny_leaf_topics(threshold:int).\n
+
+        Returns
+        -------
+        tiny_leafs : list
+            List of dictionarys that are format of node for each entry in the list.
+
+        """
+        try:
+            return pickle.load(open(os.path.join(self.experiment_name, "tiny_leafs.p"), "rb"))
+        except Exception as e:
+            print("Could not load the tiny leafs. Did you call process_tiny_leaf_topics(threshold:int)?", e)
+            return None
+    
+    def process_tiny_leaf_topics(self, threshold=5):
+        """
+        Graph post-processing with thresholding on number of documents.\n
+        Returns a list of all tiny nodes, with all the nodes that had number of documents less than the threshold.\n
+        Removes these outlier nodes from child-node lists on the original graph from their parents.\n
+        Graph is re-set each time this function is called such that original child nodes are re-assigned.\n
+        If threshold=None, this function will re-assign the original child indices only, and return None.
+
+        Parameters
+        ----------
+        threshold : int
+            Minimum number of documents each node should have.
+
+        Returns
+        -------
+        tiny_leafs : list
+            List of dictionarys that are format of node for each entry in the list.
+
+        """
+        
+        # set the old child nodes on each node
+        self._update_child_nodes_traversal(self.root)
+       
+        # remove the old saved tiny leafs 
+        try:
+            os.remove(os.path.join(self.experiment_name, "tiny_leafs.p"))
+        except:
+            pass
+
+        # if threshold is none, we reversed everything
+        if threshold is None:
+            return
+        
+        tiny_leafs = self.traverse_tiny_leaf_topics(threshold=threshold)
+        pickle.dump(tiny_leafs, open(os.path.join(self.experiment_name, "tiny_leafs.p"), "wb"))
+
+        # remove tinly leafs from its parents
+        for tf in tiny_leafs:
+            my_name = tf["node_name"]
+            parent_name = tf["parent_node_name"]
+            parent_node = self._search_traversal(self.root, parent_name)
+
+            # remove from online iterator
+            parent_node.child_nodes = [node for node in parent_node.child_nodes if node.node_name != my_name]
+            
+            # also need to remove from saved node data
+            parent_node_loaded = parent_node()
+            parent_node_loaded.child_node_names = [node_name for node_name in parent_node_loaded.child_node_names if node_name != my_name]
+            pickle.dump(parent_node_loaded, open(os.path.join(self.experiment_name, *parent_node_loaded.node_save_path.split(os.sep)[1:]), "wb"))
+
+        return tiny_leafs
+    
+    def _update_child_nodes_traversal(self, node):
+        
+        for nn in node.original_child_nodes:
+            self._update_child_nodes_traversal(nn)
+        
+        if node.child_nodes != node.original_child_nodes:
+            node.child_nodes = node.original_child_nodes
+
+        node_loaded = node()
+        if node_loaded.original_child_node_names != node_loaded.child_node_names:
+            node_loaded.child_node_names = node_loaded.original_child_node_names
+            pickle.dump(node_loaded, open(os.path.join(self.experiment_name, *node_loaded.node_save_path.split(os.sep)[1:]), "wb"))
+    
     def _search_traversal(self, node, name):
         
         # Base case: if the current node matches the target name
@@ -743,12 +844,17 @@ class HNMFk():
         # If the node is not found in this branch, return None
         return None
 
-    def _get_traversal(self, node):
+    def _get_traversal(self, node, small_docs_thresh=None):
 
         for nn in node.child_nodes:
-            self._get_traversal(nn)
+            self._get_traversal(nn, small_docs_thresh=small_docs_thresh)
 
-        data = vars(node(persistent=True)).copy()
+        if small_docs_thresh is not None:
+            tmp_node_data = vars(node()).copy()
+            if not (tmp_node_data["leaf"] and tmp_node_data["num_samples"] < small_docs_thresh):
+                return
+
+        data = vars(node()).copy()
         data["node_save_path"] = os.path.join(self.experiment_name, *data["node_save_path"].split(os.sep)[1:])
         if data["node_name"] != self.root_name:
             data["parent_node_save_path"] = os.path.join(self.experiment_name, *data["parent_node_save_path"].split(os.sep)[1:])
