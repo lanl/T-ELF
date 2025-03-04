@@ -877,7 +877,7 @@ class Beaver():
             for widx, token in tqdm(enumerate(highlighting), disable=not verbose):
                 idxs = np.where(vocabulary == token)[0]
                 if len(idxs):
-                    X[idxs[0]] = X[idxs[0]] * weights[widx]
+                    X[:, idxs] = X[:, idxs] * weights[widx]
 
         # convert to pydata sparse for consistency across all beaver methods
         X = sparse.COO.from_scipy_sparse(X)
