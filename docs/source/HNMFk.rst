@@ -12,6 +12,14 @@ Available Functions
 .. autosummary::
    HNMFk.__init__
    HNMFk.fit
+   HNMFk.traverse_nodes
+   HNMFk.go_to_root
+   HNMFk.get_node
+   HNMFk.go_to_parent
+   HNMFk.go_to_children
+   HNMFk.traverse_tiny_leaf_topics
+   HNMFk.process_tiny_leaf_topics
+   HNMFk.get_tiny_leaf_topics
    
 
 Module Contents

@@ -205,6 +205,9 @@ Tests can be ran from this folder using ``python -m pytest *``.
    Beaver
    Vulture
    Cheetah
+   Orca
+   Wolf
+   iPenguin
    modules
 
 

@@ -107,15 +107,15 @@ python post_install.py # use the following, for example, for GPU system: <python
 |:----------:|:-------------------:|:-------------------:|:------------------------------------------------------------------:|:-----------:|:------------------:|
 |   Vulture  | :heavy_check_mark:  | :heavy_check_mark:  |         Advanced text processing tool for cleaning and NLP         |  [Link](examples/Vulture)  | :white_check_mark: |
 |   Beaver   | :heavy_check_mark:  | :heavy_check_mark:  |        Fast matrix and tensor building tool for text mining        |  [Link](examples/Beaver)  | :white_check_mark: |
-|  iPenguin  |                     |                     |         Online Semantic Scholar information retrieval tool         |             |       :soon:       |
-|    Orca    |                     |                     | Duplicate author detector for text mining and information retrival |             |       :soon:       |
+|  iPenguin  | :heavy_check_mark:  |                     |         Online information retrieval tool for Scopus, SemanticScholar, and OSTI         | [Link](examples/iPenguin) |       :white_check_mark:       |
+|    Orca    | :heavy_check_mark:  |                     | Duplicate author detector for text mining and information retrieval |   [Link](examples/Orca)          |       :white_check_mark:       |
 
 ### TELF.post_processing
 
 | **Method** |                       **Description**                      | **Example** | **Release Status** |
 |:----------:|:----------------------------------------------------------:|:-----------:|:------------------:|
+|    Wolf    |              Graph centrality and ranking tool             |      [Link](examples/Wolf)       |       :white_check_mark:       |
 |   Peacock  | Data visualization and generation of actionable statistics |             |       :soon:       |
-|    Wolf    |              Graph centrality and ranking tool             |             |       :soon:       |
 |    Fox    |              Report generation tool for text data            |             |       :soon:       |
 |    SeaLion    |              Generic report generation tool            |             |       :soon:       |
 

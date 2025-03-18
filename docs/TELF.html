@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF package &#8212; TELF 0.0.36 documentation</title>
+    <title>TELF package &#8212; TELF 0.0.37 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=7dd70c5c"></script>
+    <script src="_static/documentation_options.js?v=c62b8e41"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -127,7 +127,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.36 documentation</p>
+    <p class="title logo__title">TELF 0.0.37 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -168,6 +168,19 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Orca.html"><strong>TELF.pre_processing.Orca:</strong> Duplicate author detector for text mining and information retrival</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Wolf.html"><strong>TELF.post_processing.Wolf:</strong> Graph centrality and ranking tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="iPenguin.html"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</a></li>
+
+
+
+
 
 
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">TELF</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
@@ -350,28 +363,177 @@
 <li class="toctree-l1"><a class="reference internal" href="TELF.factorization.html">TELF.factorization package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="TELF.factorization.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html">TELF.factorization.decompositions.utilities package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#telf-factorization-decompositions-utilities-bool-clustering-module">TELF.factorization.decompositions.utilities.bool_clustering module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#telf-factorization-decompositions-utilities-bool-noise-module">TELF.factorization.decompositions.utilities.bool_noise module</a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.clustering">TELF.factorization.decompositions.utilities.clustering module</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.clustering.custom_bool_clustering"><code class="docutils literal notranslate"><span class="pre">custom_bool_clustering()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.clustering.custom_k_means"><code class="docutils literal notranslate"><span class="pre">custom_k_means()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.concensus_matrix">TELF.factorization.decompositions.utilities.concensus_matrix module</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.concensus_matrix.compute_connectivity_mat"><code class="docutils literal notranslate"><span class="pre">compute_connectivity_mat()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.concensus_matrix.compute_consensus_matrix"><code class="docutils literal notranslate"><span class="pre">compute_consensus_matrix()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.concensus_matrix.reorder_con_mat"><code class="docutils literal notranslate"><span class="pre">reorder_con_mat()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.data_reshaping">TELF.factorization.decompositions.utilities.data_reshaping module</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.data_reshaping.fold"><code class="docutils literal notranslate"><span class="pre">fold()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.data_reshaping.move_axis"><code class="docutils literal notranslate"><span class="pre">move_axis()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.data_reshaping.unfold"><code class="docutils literal notranslate"><span class="pre">unfold()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.generic_utils">TELF.factorization.decompositions.utilities.generic_utils module</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.bary_proj"><code class="docutils literal notranslate"><span class="pre">bary_proj()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_cupyx"><code class="docutils literal notranslate"><span class="pre">get_cupyx()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_np"><code class="docutils literal notranslate"><span class="pre">get_np()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_scipy"><code class="docutils literal notranslate"><span class="pre">get_scipy()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.grid_eval"><code class="docutils literal notranslate"><span class="pre">grid_eval()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.update_opts"><code class="docutils literal notranslate"><span class="pre">update_opts()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.math_utils">TELF.factorization.decompositions.utilities.math_utils module</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.bary_coords"><code class="docutils literal notranslate"><span class="pre">bary_coords()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.fro_norm"><code class="docutils literal notranslate"><span class="pre">fro_norm()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.get_pac"><code class="docutils literal notranslate"><span class="pre">get_pac()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.kl_divergence"><code class="docutils literal notranslate"><span class="pre">kl_divergence()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.masked_nmf"><code class="docutils literal notranslate"><span class="pre">masked_nmf()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.nan_to_num"><code class="docutils literal notranslate"><span class="pre">nan_to_num()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.norm_X"><code class="docutils literal notranslate"><span class="pre">norm_X()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.nz_indices"><code class="docutils literal notranslate"><span class="pre">nz_indices()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.prune"><code class="docutils literal notranslate"><span class="pre">prune()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.relative_error"><code class="docutils literal notranslate"><span class="pre">relative_error()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.relative_error_rescal"><code class="docutils literal notranslate"><span class="pre">relative_error_rescal()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.relative_trinmf_error"><code class="docutils literal notranslate"><span class="pre">relative_trinmf_error()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.sparse_divide_product"><code class="docutils literal notranslate"><span class="pre">sparse_divide_product()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.sparse_dot_product"><code class="docutils literal notranslate"><span class="pre">sparse_dot_product()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.unprune"><code class="docutils literal notranslate"><span class="pre">unprune()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.nnsvd">TELF.factorization.decompositions.utilities.nnsvd module</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.nnsvd.nnsvd"><code class="docutils literal notranslate"><span class="pre">nnsvd()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.resample">TELF.factorization.decompositions.utilities.resample module</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.resample.boolean"><code class="docutils literal notranslate"><span class="pre">boolean()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.resample.poisson"><code class="docutils literal notranslate"><span class="pre">poisson()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.resample.uniform_product"><code class="docutils literal notranslate"><span class="pre">uniform_product()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities.silhouettes">TELF.factorization.decompositions.utilities.silhouettes module</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.silhouettes.silhouettes"><code class="docutils literal notranslate"><span class="pre">silhouettes()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.silhouettes.silhouettes_with_distance"><code class="docutils literal notranslate"><span class="pre">silhouettes_with_distance()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.factorization.decompositions.utilities.html#module-TELF.factorization.decompositions.utilities">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.nmf_fro_admm">TELF.factorization.decompositions.nmf_fro_admm module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.nmf_fro_mu">TELF.factorization.decompositions.nmf_fro_mu module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.nmf_kl_admm">TELF.factorization.decompositions.nmf_kl_admm module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.nmf_kl_mu">TELF.factorization.decompositions.nmf_kl_mu module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.nmf_mc_fro_mu">TELF.factorization.decompositions.nmf_mc_fro_mu module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.rescal_fro_mu">TELF.factorization.decompositions.rescal_fro_mu module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.tri_nmf_fro_mu">TELF.factorization.decompositions.tri_nmf_fro_mu module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.nmf_fro_admm">TELF.factorization.decompositions.nmf_fro_admm module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_admm.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_admm.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_admm.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.nmf_fro_mu">TELF.factorization.decompositions.nmf_fro_mu module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_mu.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_mu.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_mu.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.nmf_kl_admm">TELF.factorization.decompositions.nmf_kl_admm module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_kl_admm.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_kl_admm.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_kl_admm.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.nmf_kl_mu">TELF.factorization.decompositions.nmf_kl_mu module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_kl_mu.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_kl_mu.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_kl_mu.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.nmf_mc_fro_mu">TELF.factorization.decompositions.nmf_mc_fro_mu module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.H_update_ADMM"><code class="docutils literal notranslate"><span class="pre">H_update_ADMM()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.H_update_MU"><code class="docutils literal notranslate"><span class="pre">H_update_MU()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.W_update_ADMM"><code class="docutils literal notranslate"><span class="pre">W_update_ADMM()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.W_update_MU"><code class="docutils literal notranslate"><span class="pre">W_update_MU()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh"><code class="docutils literal notranslate"><span class="pre">coord_desc_thresh()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh_onefactor"><code class="docutils literal notranslate"><span class="pre">coord_desc_thresh_onefactor()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.find_thres_WH"><code class="docutils literal notranslate"><span class="pre">find_thres_WH()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.nmf"><code class="docutils literal notranslate"><span class="pre">nmf()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.nmf_with_ADMM"><code class="docutils literal notranslate"><span class="pre">nmf_with_ADMM()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.old_find_thres_WH"><code class="docutils literal notranslate"><span class="pre">old_find_thres_WH()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.old_nmf"><code class="docutils literal notranslate"><span class="pre">old_nmf()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.roc_W_H"><code class="docutils literal notranslate"><span class="pre">roc_W_H()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.thres_norm"><code class="docutils literal notranslate"><span class="pre">thres_norm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.rescal_fro_mu">TELF.factorization.decompositions.rescal_fro_mu module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.rescal_fro_mu.A_update"><code class="docutils literal notranslate"><span class="pre">A_update()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.rescal_fro_mu.R_update"><code class="docutils literal notranslate"><span class="pre">R_update()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.rescal_fro_mu.rescal"><code class="docutils literal notranslate"><span class="pre">rescal()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions.tri_nmf_fro_mu">TELF.factorization.decompositions.tri_nmf_fro_mu module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.tri_nmf_fro_mu.H_update"><code class="docutils literal notranslate"><span class="pre">H_update()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.tri_nmf_fro_mu.S_update"><code class="docutils literal notranslate"><span class="pre">S_update()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.tri_nmf_fro_mu.W_update"><code class="docutils literal notranslate"><span class="pre">W_update()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.tri_nmf_fro_mu.trinmf"><code class="docutils literal notranslate"><span class="pre">trinmf()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html#module-TELF.factorization.decompositions">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="TELF.factorization.utilities.html">TELF.factorization.utilities package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.clustering">TELF.factorization.utilities.clustering module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.co_occurance_matrix">TELF.factorization.utilities.co_occurance_matrix module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.organize_n_jobs">TELF.factorization.utilities.organize_n_jobs module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.plot_NMFk">TELF.factorization.utilities.plot_NMFk module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.pvalue_analysis">TELF.factorization.utilities.pvalue_analysis module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.sppmi_matrix">TELF.factorization.utilities.sppmi_matrix module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.take_note">TELF.factorization.utilities.take_note module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.vectorize">TELF.factorization.utilities.vectorize module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.clustering">TELF.factorization.utilities.clustering module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.clustering.H_clustering"><code class="docutils literal notranslate"><span class="pre">H_clustering()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.clustering.plot_H_clustering"><code class="docutils literal notranslate"><span class="pre">plot_H_clustering()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.co_occurance_matrix">TELF.factorization.utilities.co_occurance_matrix module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.co_occurance_matrix.co_occurrence"><code class="docutils literal notranslate"><span class="pre">co_occurrence()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.organize_n_jobs">TELF.factorization.utilities.organize_n_jobs module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.organize_n_jobs.organize_devices"><code class="docutils literal notranslate"><span class="pre">organize_devices()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.organize_n_jobs.organize_n_jobs"><code class="docutils literal notranslate"><span class="pre">organize_n_jobs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.plot_NMFk">TELF.factorization.utilities.plot_NMFk module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_BNMFk"><code class="docutils literal notranslate"><span class="pre">plot_BNMFk()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_NMFk"><code class="docutils literal notranslate"><span class="pre">plot_NMFk()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_RESCALk"><code class="docutils literal notranslate"><span class="pre">plot_RESCALk()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_SymNMFk"><code class="docutils literal notranslate"><span class="pre">plot_SymNMFk()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_consensus_mat"><code class="docutils literal notranslate"><span class="pre">plot_consensus_mat()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_cophenetic_coeff"><code class="docutils literal notranslate"><span class="pre">plot_cophenetic_coeff()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.pvalue_analysis">TELF.factorization.utilities.pvalue_analysis module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.pvalue_analysis.pvalue_analysis"><code class="docutils literal notranslate"><span class="pre">pvalue_analysis()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.sppmi_matrix">TELF.factorization.utilities.sppmi_matrix module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.sppmi_matrix.sppmi"><code class="docutils literal notranslate"><span class="pre">sppmi()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.take_note">TELF.factorization.utilities.take_note module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.append_to_note"><code class="docutils literal notranslate"><span class="pre">append_to_note()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.format_note"><code class="docutils literal notranslate"><span class="pre">format_note()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.take_note"><code class="docutils literal notranslate"><span class="pre">take_note()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.take_note_fmat"><code class="docutils literal notranslate"><span class="pre">take_note_fmat()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.vectorize">TELF.factorization.utilities.vectorize module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.vectorize.count"><code class="docutils literal notranslate"><span class="pre">count()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.factorization.utilities.html#TELF.factorization.utilities.vectorize.tfidf"><code class="docutils literal notranslate"><span class="pre">tfidf()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html#module-TELF.factorization.utilities">Module contents</a></li>
 </ul>
 </li>
@@ -407,19 +569,81 @@
 <li class="toctree-l2"><a class="reference internal" href="TELF.pre_processing.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html#module-TELF.pre_processing.Beaver.beaver">TELF.pre_processing.Beaver.beaver module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html#module-TELF.pre_processing.Beaver.cooccurrence">TELF.pre_processing.Beaver.cooccurrence module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html#module-TELF.pre_processing.Beaver.sppmi">TELF.pre_processing.Beaver.sppmi module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html#module-TELF.pre_processing.Beaver.tenmat">TELF.pre_processing.Beaver.tenmat module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html#module-TELF.pre_processing.Beaver.vectorize">TELF.pre_processing.Beaver.vectorize module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html#module-TELF.pre_processing.Beaver.beaver">TELF.pre_processing.Beaver.beaver module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver"><code class="docutils literal notranslate"><span class="pre">Beaver</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.SUPPORTED_OUTPUT_FORMATS"><code class="docutils literal notranslate"><span class="pre">Beaver.SUPPORTED_OUTPUT_FORMATS</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.citation_tensor"><code class="docutils literal notranslate"><span class="pre">Beaver.citation_tensor()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.coauthor_tensor"><code class="docutils literal notranslate"><span class="pre">Beaver.coauthor_tensor()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.cocitation_tensor"><code class="docutils literal notranslate"><span class="pre">Beaver.cocitation_tensor()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.cooccurrence_matrix"><code class="docutils literal notranslate"><span class="pre">Beaver.cooccurrence_matrix()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.documents_words"><code class="docutils literal notranslate"><span class="pre">Beaver.documents_words()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.get_ngrams"><code class="docutils literal notranslate"><span class="pre">Beaver.get_ngrams()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.get_vocabulary"><code class="docutils literal notranslate"><span class="pre">Beaver.get_vocabulary()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.n_jobs"><code class="docutils literal notranslate"><span class="pre">Beaver.n_jobs</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.n_nodes"><code class="docutils literal notranslate"><span class="pre">Beaver.n_nodes</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.participation_tensor"><code class="docutils literal notranslate"><span class="pre">Beaver.participation_tensor()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.something_words"><code class="docutils literal notranslate"><span class="pre">Beaver.something_words()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.something_words_time"><code class="docutils literal notranslate"><span class="pre">Beaver.something_words_time()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html#module-TELF.pre_processing.Beaver.cooccurrence">TELF.pre_processing.Beaver.cooccurrence module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.cooccurrence.co_occurrence"><code class="docutils literal notranslate"><span class="pre">co_occurrence()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html#module-TELF.pre_processing.Beaver.sppmi">TELF.pre_processing.Beaver.sppmi module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.sppmi.sppmi"><code class="docutils literal notranslate"><span class="pre">sppmi()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html#module-TELF.pre_processing.Beaver.tenmat">TELF.pre_processing.Beaver.tenmat module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.tenmat.fold"><code class="docutils literal notranslate"><span class="pre">fold()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.tenmat.unfold"><code class="docutils literal notranslate"><span class="pre">unfold()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html#module-TELF.pre_processing.Beaver.vectorize">TELF.pre_processing.Beaver.vectorize module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.vectorize.count"><code class="docutils literal notranslate"><span class="pre">count()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.vectorize.tfidf"><code class="docutils literal notranslate"><span class="pre">tfidf()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html#module-TELF.pre_processing.Beaver">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.pre_processing.Vulture.tokens_analysis.html">TELF.pre_processing.Vulture.tokens_analysis package</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.tokens_analysis.html#submodules">Submodules</a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.tokens_analysis.html#module-TELF.pre_processing.Vulture.tokens_analysis.top_words">TELF.pre_processing.Vulture.tokens_analysis.top_words module</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="TELF.pre_processing.Vulture.tokens_analysis.html#TELF.pre_processing.Vulture.tokens_analysis.top_words.get_top_words"><code class="docutils literal notranslate"><span class="pre">get_top_words()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.tokens_analysis.html#module-TELF.pre_processing.Vulture.tokens_analysis">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html#module-TELF.pre_processing.Vulture.modules">TELF.pre_processing.Vulture.modules module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html#module-TELF.pre_processing.Vulture.vulture">TELF.pre_processing.Vulture.vulture module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html#module-TELF.pre_processing.Vulture.vulture">TELF.pre_processing.Vulture.vulture module</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture"><code class="docutils literal notranslate"><span class="pre">Vulture</span></code></a><ul>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_OPERATOR_PIPELINE"><code class="docutils literal notranslate"><span class="pre">Vulture.DEFAULT_OPERATOR_PIPELINE</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_PIPELINE"><code class="docutils literal notranslate"><span class="pre">Vulture.DEFAULT_PIPELINE</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.PARALLEL_BACKEND_OPTIONS"><code class="docutils literal notranslate"><span class="pre">Vulture.PARALLEL_BACKEND_OPTIONS</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.cache"><code class="docutils literal notranslate"><span class="pre">Vulture.cache</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.clean"><code class="docutils literal notranslate"><span class="pre">Vulture.clean()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.clean_dataframe"><code class="docutils literal notranslate"><span class="pre">Vulture.clean_dataframe()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.n_jobs"><code class="docutils literal notranslate"><span class="pre">Vulture.n_jobs</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.n_nodes"><code class="docutils literal notranslate"><span class="pre">Vulture.n_nodes</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.operate"><code class="docutils literal notranslate"><span class="pre">Vulture.operate()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.parallel_backend"><code class="docutils literal notranslate"><span class="pre">Vulture.parallel_backend</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.save_path"><code class="docutils literal notranslate"><span class="pre">Vulture.save_path</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.use_mpi"><code class="docutils literal notranslate"><span class="pre">Vulture.use_mpi()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.verbose"><code class="docutils literal notranslate"><span class="pre">Vulture.verbose</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.chunk_tuple_list"><code class="docutils literal notranslate"><span class="pre">chunk_tuple_list()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html#module-TELF.pre_processing.Vulture">Module contents</a></li>
 </ul>
 </li>

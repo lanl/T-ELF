@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "TELF"
-version = "0.0.36"
+version = "0.0.37"
 description = "T-ELF is one of the machine learning software packages developed as part of the R&D 100 winning SmartTensors AI project at Los Alamos National Laboratory (LANL). T-ELF presents an array of customizable software solutions crafted for analysis of datasets. Acting as a comprehensive toolbox, T-ELF specializes in data pre-processing, extraction of latent features, and structuring results to facilitate informed decision-making. Leveraging high-performance computing and cutting-edge GPU architectures, our toolbox is optimized for analyzing large datasets from diverse set of problems."
 authors = ["Maksim E. Eren"]
 license = "BST-3"
@@ -33,6 +33,9 @@ spacy = "^3.8.2"
 mat73 = "^0.65"
 spacy-transformers = "^1.3.5"
 rapidfuzz = "^3.10.0"
+plotly = "^6.0.0"
+wordcloud = "^1.9.4"
+httpx = "^0.28.1"
 
 [build-system]
 requires = ["poetry-core"]

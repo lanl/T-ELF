@@ -5,7 +5,11 @@
 - **RESCALk:** RESCAL with Automatic Model Determination. RESCALk has HPC and multi-processing capabilities for both CPU and GPU systems.
 - **TriNMFk:** NMF with Automatic Model Determination for Clusters and Patterns. 
 - **SymNMFk:** NMFk with symmetric clustering.
-- **WNMFk:** NMFk with weighting - used for recommendation system
-- **BNMFk:** Boolean NMFk
-- **RNMFk:** Recommender NMFk
-- **Cheetah:** Fast search by keywords and phrases
+- **WNMFk:** NMFk with weighting - used for recommendation system.
+- **BNMFk:** Boolean NMFk.
+- **RNMFk:** Recommender NMFk.
+- **Cheetah:** Fast search by keywords and phrases.
+- **LMF:** Logistic Matrix Factorization.
+- **Wolf:** Graph centrality and ranking tool.
+- **Orca:** Duplicate author detector for text mining and information retrival.
+- **iPenguin:** Online information retrieval tool for Scopus, SemanticScholar, and OSTI.

@@ -1,0 +1,655 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>TELF.post_processing.Wolf: Graph centrality and ranking tool &#8212; TELF 0.0.37 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=c62b8e41"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Wolf';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TELF.pre_processing.iPenguin: Online information retrieval tool for Scopus, SemanticScholar, and OSTI" href="iPenguin.html" />
+    <link rel="prev" title="TELF.pre_processing.Orca: Duplicate author detector for text mining and information retrival" href="Orca.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.37 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="HNMFk.html"><strong>TELF.factorization.HNMFk:</strong> Hierarchical Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Orca.html"><strong>TELF.pre_processing.Orca:</strong> Duplicate author detector for text mining and information retrival</a></li>
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>TELF.post_processing.Wolf:</strong> Graph centrality and ranking tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="iPenguin.html"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</a></li>
+
+
+
+
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="TELF.html">TELF package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.factorization.html">TELF.factorization package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.pre_processing.html">TELF.pre_processing package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Wolf.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>TELF.post_processing.Wolf: Graph centrality and ranking tool</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>TELF.post_processing.Wolf:</strong> Graph centrality and ranking tool</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.post_processing.Wolf.wolf">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf"><code class="docutils literal notranslate"><span class="pre">Wolf</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.PARALLEL_BACKEND_OPTIONS"><code class="docutils literal notranslate"><span class="pre">Wolf.PARALLEL_BACKEND_OPTIONS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.TARGET_STATS"><code class="docutils literal notranslate"><span class="pre">Wolf.TARGET_STATS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.attributes"><code class="docutils literal notranslate"><span class="pre">Wolf.attributes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.create_graph"><code class="docutils literal notranslate"><span class="pre">Wolf.create_graph()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.get_community_ranks"><code class="docutils literal notranslate"><span class="pre">Wolf.get_community_ranks()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.get_ranks"><code class="docutils literal notranslate"><span class="pre">Wolf.get_ranks()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.n_jobs"><code class="docutils literal notranslate"><span class="pre">Wolf.n_jobs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.node_ids"><code class="docutils literal notranslate"><span class="pre">Wolf.node_ids</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.parallel_backend"><code class="docutils literal notranslate"><span class="pre">Wolf.parallel_backend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.verbose"><code class="docutils literal notranslate"><span class="pre">Wolf.verbose</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="telf-post-processing-wolf-graph-centrality-and-ranking-tool">
+<h1><strong>TELF.post_processing.Wolf:</strong> Graph centrality and ranking tool<a class="headerlink" href="#telf-post-processing-wolf-graph-centrality-and-ranking-tool" title="Link to this heading">#</a></h1>
+<p>Graph centrality and ranking tool</p>
+</section>
+<section id="available-functions">
+<h1>Available Functions<a class="headerlink" href="#available-functions" title="Link to this heading">#</a></h1>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Wolf.__init__</span></code>([n_jobs, parallel_backend, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.post_processing.Wolf.wolf.Wolf.create_graph" title="TELF.post_processing.Wolf.wolf.Wolf.create_graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Wolf.create_graph</span></code></a>(X[, node_ids, attributes, ...])</p></td>
+<td><p>Create a graph from a matrix.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.post_processing.Wolf.wolf.Wolf.get_ranks" title="TELF.post_processing.Wolf.wolf.Wolf.get_ranks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Wolf.get_ranks</span></code></a>(X[, stats, slice_ids, ...])</p></td>
+<td><p>Compute graph statistics for a tensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.post_processing.Wolf.wolf.Wolf.get_community_ranks" title="TELF.post_processing.Wolf.wolf.Wolf.get_community_ranks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Wolf.get_community_ranks</span></code></a>(X, A[, stats, ...])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="module-TELF.post_processing.Wolf.wolf">
+<span id="module-contents"></span><h1>Module Contents<a class="headerlink" href="#module-TELF.post_processing.Wolf.wolf" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="TELF.post_processing.Wolf.wolf.Wolf">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.post_processing.Wolf.wolf.</span></span><span class="sig-name descname"><span class="pre">Wolf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel_backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'loky'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nbytes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100M'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/post_processing/Wolf/wolf.html#Wolf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.post_processing.Wolf.wolf.Wolf" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.post_processing.Wolf.wolf.Wolf.PARALLEL_BACKEND_OPTIONS">
+<span class="sig-name descname"><span class="pre">PARALLEL_BACKEND_OPTIONS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'loky',</span> <span class="pre">'multiprocessing',</span> <span class="pre">'threading'}</span></em><a class="headerlink" href="#TELF.post_processing.Wolf.wolf.Wolf.PARALLEL_BACKEND_OPTIONS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.post_processing.Wolf.wolf.Wolf.TARGET_STATS">
+<span class="sig-name descname"><span class="pre">TARGET_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'betweenness_centrality',</span> <span class="pre">'degree',</span> <span class="pre">'hubs_authorities',</span> <span class="pre">'in_closeness',</span> <span class="pre">'in_degree',</span> <span class="pre">'in_weight',</span> <span class="pre">'out_closeness',</span> <span class="pre">'out_degree',</span> <span class="pre">'out_weight',</span> <span class="pre">'page_rank'}</span></em><a class="headerlink" href="#TELF.post_processing.Wolf.wolf.Wolf.TARGET_STATS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.post_processing.Wolf.wolf.Wolf.attributes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attributes</span></span><a class="headerlink" href="#TELF.post_processing.Wolf.wolf.Wolf.attributes" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.post_processing.Wolf.wolf.Wolf.create_graph">
+<span class="sig-name descname"><span class="pre">create_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_weighted_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/post_processing/Wolf/wolf.html#Wolf.create_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.post_processing.Wolf.wolf.Wolf.create_graph" title="Link to this definition">#</a></dt>
+<dd><p>Create a graph from a matrix. The matrix can either be sparse or dense.
+Note that the matrix cannot have entries on the diagonal. A diagonal entry would cause
+a loop in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em><em>, </em><em>scipy.sparse</em><em>, </em><em>pydata.sparse</em>) – A dense or sparse 2-dimensional matrix. Non-zero entries in the matrix serve as an edge
+between the row, col entry.</p></li>
+<li><p><strong>node_ids</strong> (<em>dict</em><em>, </em><em>optional</em>) – A map that can be used to replace the enumerated node identifiers with custom ids in the
+graph.</p></li>
+<li><p><strong>attributes</strong> (<em>dict</em><em>, </em><em>optional</em>) – A map that contains the attributes for the graph.</p></li>
+<li><p><strong>target_nodes</strong> (<em>list</em><em>, </em><em>NoneType</em>) – List of node ids from which to create a subgraph. If the intersection of target_nodes and
+node_ids is None, an empty graph will be created. If target_nodes is None, no subgraph
+will be taken. Default=None.</p></li>
+<li><p><strong>alpha</strong> (<em>int</em><em>, </em><em>NoneType</em>) – A masking value that is used to remove noise from the matrix prior to creating the graph.
+For an entry (i,j) into the matrix X, the entry is zeroed if it is less than alpha.
+Default=None.</p></li>
+<li><p><strong>use_weighted_value</strong> (<em>bool</em>) – Flag that determines if an edge in the graph is given a custom weight. If True, the weight
+for an edge between nodes i and j in the graph is the value at X(i,j). If false, every edge
+has a weight of 1. Default=True.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Arbitrary keyword arguments that will be stored as attributes of the graph. If the keyword is
+a reserved member variable of Graph, a ValueError will be thrown.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>graph</strong> – The created graph object. The output is also stored in the graphs attribute of the Wolf object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Graph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.post_processing.Wolf.wolf.Wolf.get_community_ranks">
+<span class="sig-name descname"><span class="pre">get_community_ranks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/post_processing/Wolf/wolf.html#Wolf.get_community_ranks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.post_processing.Wolf.wolf.Wolf.get_community_ranks" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.post_processing.Wolf.wolf.Wolf.get_ranks">
+<span class="sig-name descname"><span class="pre">get_ranks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_weighted_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/post_processing/Wolf/wolf.html#Wolf.get_ranks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.post_processing.Wolf.wolf.Wolf.get_ranks" title="Link to this definition">#</a></dt>
+<dd><p>Compute graph statistics for a tensor.</p>
+<p>For each slice of a tensor, create a graph and evaluate said graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em><em>, </em><em>pydata.sparse</em>) – A dense or sparse 3-dimensional tensor</p></li>
+<li><p><strong>stats</strong> (<em>list</em><em>, </em><em>dict</em>) – The graph stats that should be calculated for the given tensor. If a list, each item in the
+list should be a valid Graph stat function name. The arguments for this function will be kept
+as default. If a dict, the keys should be the function names and the values should be dicts
+of keyword arguments that should be passed to the respective stat function. If None, all
+stats will be computed using the default arguments. Default=None.</p></li>
+<li><p><strong>slice_ids</strong> (<em>dict</em><em>, </em><em>NoneType</em>) – A map of labels for the third dimension of the tensor. The keys should be consecutive integers
+starting with 0 and counting up to o for a tensor X of shape m by n by o. If slice_ids is None,
+the enumeration of the slices will be used as the id.
+&gt;&gt;&gt; slice_ids = {0: 2020, 1: 2021, 2: 2022, 3: 2023}</p></li>
+<li><p><strong>node_ids</strong> (<em>dict</em><em>, </em><em>[</em><em>dict</em><em>, </em><em>dict</em><em>]</em><em>, </em><em>NoneType</em>) – A map that can be used to replace the enumerated node identifiers with custom ids in the
+graph. The input is expected to be a dictionary, a list or tuple of two dictionaries, or None.
+If the input is a dict, it is assumed that both matrix dimensions share the same ids. If the
+input is a list/tuple the first dict is used for the first dimension and the second for the
+second. If the input is None, the enumerated ids are not replaced. Note that the keys of the
+value should be sequential integers representing the original enumerated ids and the values
+should be the replacement ids. This argument is intended for use cases where the entries in
+the matrix have unique identifiers that are more specific than the enumerated index values of
+the matrix. For example, in the case of an documents x documents matrix, the enumerated ids can be
+replaced with document ids. Default=None.</p></li>
+<li><p><strong>attributes</strong> (<em>dict</em><em>, </em><em>[</em><em>dict</em><em>, </em><em>dict</em><em>]</em><em>, </em><em>NoneType</em>) – A map that contains the attributes for the graph. The input is expected to be a dictionary,
+a list or tuple of two dictionaries, or None. If the input is a dict, it is assumed that both
+matrix dimensions share the same attributes. If the input is a list/tuple the first dict is
+used for the first dimension and the second for the second. The key in this map is the id of
+the node that will house the particular attribute(s). The values are dicts where the key is
+the name of the attribute and the value is the attribute value. The node id for this argument
+should match the format used by node_ids. If no attributes are provided, no attributes will
+be set on the graph. Default=None.</p></li>
+<li><p><strong>alpha</strong> (<em>int</em><em>, </em><em>NoneType</em>) – A masking value that is used to remove noise from the matrix prior to creating the graph.
+For an entry (i,j) into the matrix X, the entry is zeroed if it is less than alpha.
+Default=None.</p></li>
+<li><p><strong>use_weighted_value</strong> (<em>bool</em>) – Flag that determines if an edge in the graph is given a custom weight. If True, the weight
+for an edge between nodes i and j in the graph is the value at X(i,j). If false, every edge
+has a weight of 1. Default=True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary where the keys are slices (either enumerated ids or more specific ids provided
+by the dimension map <cite>slice_ids</cite>). The values are pandas DataFrames that contain graph
+statistics for the corresponding slice of the tensor.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.post_processing.Wolf.wolf.Wolf.n_jobs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_jobs</span></span><a class="headerlink" href="#TELF.post_processing.Wolf.wolf.Wolf.n_jobs" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.post_processing.Wolf.wolf.Wolf.node_ids">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node_ids</span></span><a class="headerlink" href="#TELF.post_processing.Wolf.wolf.Wolf.node_ids" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.post_processing.Wolf.wolf.Wolf.parallel_backend">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parallel_backend</span></span><a class="headerlink" href="#TELF.post_processing.Wolf.wolf.Wolf.parallel_backend" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.post_processing.Wolf.wolf.Wolf.verbose">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">verbose</span></span><a class="headerlink" href="#TELF.post_processing.Wolf.wolf.Wolf.verbose" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Orca.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>TELF.pre_processing.Orca:</strong> Duplicate author detector for text mining and information retrival</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="iPenguin.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>TELF.post_processing.Wolf:</strong> Graph centrality and ranking tool</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.post_processing.Wolf.wolf">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf"><code class="docutils literal notranslate"><span class="pre">Wolf</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.PARALLEL_BACKEND_OPTIONS"><code class="docutils literal notranslate"><span class="pre">Wolf.PARALLEL_BACKEND_OPTIONS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.TARGET_STATS"><code class="docutils literal notranslate"><span class="pre">Wolf.TARGET_STATS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.attributes"><code class="docutils literal notranslate"><span class="pre">Wolf.attributes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.create_graph"><code class="docutils literal notranslate"><span class="pre">Wolf.create_graph()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.get_community_ranks"><code class="docutils literal notranslate"><span class="pre">Wolf.get_community_ranks()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.get_ranks"><code class="docutils literal notranslate"><span class="pre">Wolf.get_ranks()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.n_jobs"><code class="docutils literal notranslate"><span class="pre">Wolf.n_jobs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.node_ids"><code class="docutils literal notranslate"><span class="pre">Wolf.node_ids</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.parallel_backend"><code class="docutils literal notranslate"><span class="pre">Wolf.parallel_backend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.Wolf.wolf.Wolf.verbose"><code class="docutils literal notranslate"><span class="pre">Wolf.verbose</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

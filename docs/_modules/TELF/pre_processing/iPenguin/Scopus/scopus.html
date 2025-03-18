@@ -1,0 +1,873 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TELF.pre_processing.iPenguin.Scopus.scopus &#8212; TELF 0.0.37 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=4ae1632d" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../../../../../_static/documentation_options.js?v=c62b8e41"></script>
+    <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/pre_processing/iPenguin/Scopus/scopus';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.37 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../../HNMFk.html"><strong>TELF.factorization.HNMFk:</strong> Hierarchical Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../../RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../../TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../../SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Orca.html"><strong>TELF.pre_processing.Orca:</strong> Duplicate author detector for text mining and information retrival</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../../Wolf.html"><strong>TELF.post_processing.Wolf:</strong> Graph centrality and ranking tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../../iPenguin.html"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</a></li>
+
+
+
+
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../../modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../../TELF.html">TELF package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../../TELF.factorization.html">TELF.factorization package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../../TELF.pre_processing.html">TELF.pre_processing package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../../TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for TELF.pre_processing.iPenguin.Scopus.scopus</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">httpx</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+
+<span class="c1"># import interal libraries</span>
+<span class="kn">from</span> <span class="nn">.scopusAPI</span> <span class="kn">import</span> <span class="n">ScopusAPI</span>
+<span class="kn">from</span> <span class="nn">.parser</span> <span class="kn">import</span> <span class="n">ScopusQueryParser</span>
+<span class="kn">from</span> <span class="nn">.process_scopus_json</span> <span class="kn">import</span> <span class="n">form_df</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">gen_chunks</span>
+
+<div class="viewcode-block" id="Scopus">
+<a class="viewcode-back" href="../../../../../iPenguin.html#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus">[docs]</a>
+<span class="k">class</span> <span class="nc">Scopus</span><span class="p">:</span>
+    
+    <span class="n">MODES</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fs&#39;</span><span class="p">}</span>
+    
+    <span class="c1"># Scopus sets a sneaky search limit on how many papers can be acquired</span>
+    <span class="c1"># This search limit can be overcome (in some cases) but requires some extra work</span>
+    <span class="n">SEARCH_LIMIT</span> <span class="o">=</span> <span class="mi">2000</span>
+    <span class="n">QUERY_LIMIT</span> <span class="o">=</span> <span class="mi">10000</span>  <span class="c1"># how many different parameters can be in a single query</span>
+    
+    <span class="c1"># Set a verbosity level that will trigger debug print</span>
+    <span class="n">DEBUG_MODE</span> <span class="o">=</span> <span class="mi">10</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+                 <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;fs&#39;</span><span class="p">,</span> 
+                 <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;scopus&#39;</span><span class="p">,</span> 
+                 <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">ignore</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the iPenguin.Scopus instance with the specified keys, mode, and optional settings.</span>
+
+<span class="sd">        This constructor method sets up the Scopus instance by initializing the keys, mode, name, papers to ignore,</span>
+<span class="sd">        verbosity of output, and number of jobs for parallel processing (if applicable). It then attempts to </span>
+<span class="sd">        establish a connection to the Scopus API to validate the keys</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        keys: list</span>
+<span class="sd">            The list of API keys to be used for this instance. The list must contain one or more valid API keys.</span>
+<span class="sd">            An error will be thrown if any of the keys fail to validate.</span>
+<span class="sd">        mode: str, (optional)</span>
+<span class="sd">            The mode in which the Scopus instance should operate in. Currently one mode is supported, &#39;fs&#39;. This</span>
+<span class="sd">            is the file system mode and will download papers to the directory path provided with `name`.</span>
+<span class="sd">        name: str, (optional):</span>
+<span class="sd">            The name associated with the instance. In the case of &#39;fs&#39; `mode` (the default), this parameter is </span>
+<span class="sd">            expected to be the path to the directory where the downloaded files will be saved</span>
+<span class="sd">        ignore: set, list, Iterable, None, (optional)</span>
+<span class="sd">            This parameter allows for certain papers to be skipped and not downloaded. This is useful for speeding</span>
+<span class="sd">            up download times by skipping previously downloaded papers and saving on API keys. If None, the </span>
+<span class="sd">            ignore papers will be determined depending on the mode that this instance is operating in. If defined,</span>
+<span class="sd">            this parameter needs to be a data structure that has the __contains__ method implemented. Default is</span>
+<span class="sd">            None.</span>
+<span class="sd">        n_jobs: int, (optional)</span>
+<span class="sd">            The number of jobs for parallel processing. Default is -1 (use all available cores).</span>
+<span class="sd">        verbose: bool, int (optional)</span>
+<span class="sd">            If set to True, the class will print additional output for debugging or information purposes. </span>
+<span class="sd">            Can also be an int where verbose &gt;= 1 means True with a higher integer controlling the level </span>
+<span class="sd">            of verbosity. Values above 10 will activate debug for this higher level class. Values </span>
+<span class="sd">            above 100 will activate debug print for the lower level ScopusAPI class. Values above 1000 </span>
+<span class="sd">            will provide a full debug print and should only be used for testing. Default is True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keys</span> <span class="o">=</span> <span class="n">keys</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore</span> <span class="o">=</span> <span class="n">ignore</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pbar_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+        <span class="c1"># create dictionaries of helper functions for supported modes</span>
+        <span class="n">prefixes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;_prepare_&#39;</span><span class="p">,</span> <span class="s1">&#39;_save_&#39;</span><span class="p">,</span> <span class="s1">&#39;_read_&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">prefixes</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">_funcs&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__generate_func_dict</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+
+            
+<div class="viewcode-block" id="Scopus.get_df">
+<a class="viewcode-back" href="../../../../../iPenguin.html#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.get_df">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_df</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s1">&#39;threading&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parallelized function for generating a pandas DataFrame from Scopus JSON data. The data  </span>
+<span class="sd">        is also processed to adhere to SLIC standards. </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str, pathlib.Path</span>
+<span class="sd">            The path to the directory where the JSON files are stored</span>
+<span class="sd">        targets : set, list; optional</span>
+<span class="sd">            A collection of eids (Scopus paper unique identifiers) that need to be present in the </span>
+<span class="sd">            DataFrame. A warning will be provided if all targets cannot be found at the given path.</span>
+<span class="sd">            If targets is None, no filtering is performed and the DataFrame is formed from all json</span>
+<span class="sd">            data stored at `path`.</span>
+<span class="sd">        n_jobs : int; optional</span>
+<span class="sd">            How many parallel processes to use for this function. Default is 1 (single core)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            Resulting DataFrame. If no valid files are able to processed to form the DataFrame, </span>
+<span class="sd">            this function will return None</span>
+<span class="sd">        targets</span>
+<span class="sd">            The list of Scopus paper ids that were expected to be downloaded</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The `path` parameter must be a path to an existing directory&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">n_jobs</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;`n_jobs` must be a positive integer&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">targets</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">):</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Scopus]: Requested </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span><span class="si">}</span><span class="s1"> papers but only found &#39;</span> \
+                              <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span><span class="si">}</span><span class="s1"> stored at `path`&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.json&quot;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">files</span><span class="p">:</span>  <span class="c1"># if no valid files found, terminate execution here by returning None</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">targets</span>
+
+        <span class="c1"># chunk the files for parallel processing</span>
+        <span class="n">n_jobs</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>  
+        <span class="n">chunks</span> <span class="o">=</span> <span class="n">gen_chunks</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
+        
+        <span class="c1"># generate dataframe slices in parallel</span>
+        <span class="n">jobs</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">form_df</span><span class="p">)(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">jobs</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">targets</span></div>
+
+    
+    
+<div class="viewcode-block" id="Scopus.split_query">
+<a class="viewcode-back" href="../../../../../iPenguin.html#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.split_query">[docs]</a>
+    <span class="k">def</span> <span class="nf">split_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">helper</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+            <span class="n">parser</span> <span class="o">=</span> <span class="n">ScopusQueryParser</span><span class="p">()</span>
+            <span class="n">query_str</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            
+            <span class="n">case1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">query</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">QUERY_LIMIT</span>  <span class="c1"># base case #1</span>
+            <span class="k">if</span> <span class="n">case1</span><span class="p">:</span>
+                
+                <span class="c1">### temporary workaround for api count failing with large queries</span>
+                <span class="c1"># when a query has a large number of elements that each produce multiple papers (lets say many authors)</span>
+                <span class="c1"># being joined by OR, Scopus cannot process the query and simply times out during the attempt. This</span>
+                <span class="c1"># heuristic will try to avoid this by splitting the query if it is too long and recieving an erronous</span>
+                <span class="c1"># count from Scopus (-1) </span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">query</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">:</span>  <span class="c1"># arbitrary big number</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEBUG_MODE</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[DEBUG]: Query too long! api_count manually set to SEARCH LIMIT!&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                    <span class="n">api_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SEARCH_LIMIT</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">api_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">query_str</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">api_count</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>  <span class="c1"># temporary solution for api not returning count</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEBUG_MODE</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[DEBUG]: API returned -1! api_count manually set to SEARCH LIMIT!&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                        <span class="n">api_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SEARCH_LIMIT</span>
+                
+                <span class="c1">#case2 = api_count &lt; self.SEARCH_LIMIT  # base case #2</span>
+                <span class="n">case2</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># temporarily dropping second condition to test cursor pagination</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEBUG_MODE</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[DEBUG]: split_query() - </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="si">=}</span><span class="s1">, </span><span class="si">{</span><span class="n">api_count</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">case2</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEBUG_MODE</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[DEBUG]: Successfully reached base case!&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="p">[</span><span class="n">query</span><span class="p">]</span>
+
+            <span class="n">split</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">split</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">split</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">s2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># could not split previous query, terminate</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEBUG_MODE</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[DEBUG]: Cannot further split the query </span><span class="si">{</span><span class="n">parser</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span><span class="si">!r}</span><span class="s1">! Skipping!&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">s1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">helper</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span> <span class="o">+</span> <span class="n">helper</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+
+        <span class="c1"># process the input string and start the recursion</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">ScopusQueryParser</span><span class="p">()</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">expression</span><span class="p">)</span>
+        <span class="n">split</span> <span class="o">=</span> <span class="n">helper</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">parser</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">split</span><span class="p">]</span></div>
+
+    
+    
+<div class="viewcode-block" id="Scopus.count">
+<a class="viewcode-back" href="../../../../../iPenguin.html#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.count">[docs]</a>
+    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pop_key</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">verbose</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">verbose</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        
+        <span class="n">num_papers</span> <span class="o">=</span>  <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_query_coroutine</span><span class="p">(</span><span class="n">query</span><span class="p">),</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Scopus]: Found </span><span class="si">{</span><span class="n">num_papers</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> papers in </span><span class="si">{</span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">num_papers</span></div>
+
+    
+    
+<div class="viewcode-block" id="Scopus.num_query_coroutine">
+<a class="viewcode-back" href="../../../../../iPenguin.html#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.num_query_coroutine">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">num_query_coroutine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+            <span class="n">api</span> <span class="o">=</span> <span class="n">ScopusAPI</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">api</span><span class="o">.</span><span class="n">get_num_papers_from_query</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">__num_papers_coroutine</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">results</span><span class="p">))</span> <span class="c1"># start both handlers concurrently</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="n">count</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># api.run() does not return anything, get the actual results at index 1</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span></div>
+
+    
+    
+<div class="viewcode-block" id="Scopus.search">
+<a class="viewcode-back" href="../../../../../iPenguin.html#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.search">[docs]</a>
+    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pop_key</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pbar_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># split queries to avoid Scopus search limits</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">ScopusQueryParser</span><span class="p">()</span>
+        <span class="n">queries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_query</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">paper_counts</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">paper_counts</span><span class="p">,</span> <span class="n">queries</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEBUG_MODE</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[DEBUG]: search() - query= </span><span class="se">\n\n</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            
+            <span class="c1"># get the parsed version the string for length check</span>
+            <span class="n">q_parsed</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Scopus could not accept the subquery </span><span class="si">{</span><span class="n">q</span><span class="p">[:</span><span class="mi">150</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;... (truncated)&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">150</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">q</span><span class="si">!r}</span><span class="s1">. &#39;</span> \
+                                 <span class="sa">f</span><span class="s1">&#39;This means that this query is either too long or poorly formatted&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">q_parsed</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">QUERY_LIMIT</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;One or more subqueries exceed the Scopus query limit of &#39;</span> \
+                                 <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">SEARCH_LIMIT</span><span class="si">}</span><span class="s1"> parameters and cannot be chunked any further&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">SEARCH_LIMIT</span> <span class="ow">and</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">SEARCH_LIMIT</span><span class="p">):</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Scopus]: The subquery </span><span class="si">{</span><span class="n">q</span><span class="p">[:</span><span class="mi">150</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;... (truncated)&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">150</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">q</span><span class="si">!r}</span><span class="s1"> &#39;</span> \
+                              <span class="sa">f</span><span class="s1">&#39;exceeds the Scopus search limit. Only the top </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">SEARCH_LIMIT</span><span class="si">}</span><span class="s1"> papers will be returned for this subquery.&#39;</span><span class="p">)</span>
+        
+        <span class="n">num_papers</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">paper_counts</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">num_papers</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No Scopus papers for `query` can be found. If you expect &#39;</span> \
+                             <span class="s1">&#39;results for this query, check your syntax&#39;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">paper_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+
+            <span class="c1"># prepare search </span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__pop_key</span><span class="p">()</span>
+            <span class="n">ignore</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prepare</span><span class="p">()</span>
+            
+            <span class="c1"># search</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_coroutine</span><span class="p">(</span><span class="n">queries</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">query_index</span><span class="p">:],</span> 
+                                                  <span class="n">ignore</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">num_papers</span><span class="p">),</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+                <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cleanup_coroutine</span><span class="p">(),</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">KeyboardInterrupt</span>
+
+            <span class="c1"># if verbose, wait for all scopusAPI messages to finish printing</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                
+            <span class="c1"># process</span>
+            <span class="k">if</span> <span class="n">ScopusAPI</span><span class="o">.</span><span class="n">get_quota</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Scopus]: Hit Scopus API quota with </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># hit key quota</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">paper_ids</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">num_papers</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;[Scopus]: Scopus API returned with less papers than expected. . .&#39;</span><span class="p">)</span> 
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Scopus]: Finished downloading </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">paper_ids</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> &quot;</span>
+                  <span class="sa">f</span><span class="s2">&quot;papers in </span><span class="si">{</span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">,</span>  <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__read</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">paper_ids</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+    
+    
+<div class="viewcode-block" id="Scopus.search_coroutine">
+<a class="viewcode-back" href="../../../../../iPenguin.html#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.search_coroutine">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">search_coroutine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ignore</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">num_papers</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleanup_coroutine</span><span class="p">()</span>
+        
+        <span class="n">client</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="n">ScopusAPI</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="n">ignore</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEBUG_MODE</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[DEBUG]: search_coroutine() - query = </span><span class="si">{</span><span class="n">d</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">find_papers_by_query</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span><span class="c1">#n=min(n, self.SEARCH_LIMIT))</span>
+
+            <span class="c1">#  start both handlers concurrently</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">run</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">__search_coroutine</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">results</span><span class="p">,</span> <span class="n">num_papers</span><span class="p">))</span> 
+            <span class="n">papers</span><span class="p">,</span> <span class="n">errno</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># api.run() does not return anything, get the actual results at index 1    </span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">paper_ids</span> <span class="o">|=</span> <span class="n">papers</span>
+            <span class="k">if</span> <span class="n">errno</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Scopus]: Early search termination with errno </span><span class="si">{</span><span class="n">errno</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># no error, update query index</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">query_index</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleanup_coroutine</span><span class="p">()</span></div>
+
+    
+    
+<div class="viewcode-block" id="Scopus.cleanup_coroutine">
+<a class="viewcode-back" href="../../../../../iPenguin.html#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.cleanup_coroutine">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">cleanup_coroutine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    
+    
+    <span class="c1">### Helpers</span>
+    
+    
+    <span class="k">def</span> <span class="nf">__pop_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="kc">None</span>
+                
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;No more Scopus API keys left to try&#39;</span><span class="p">)</span>
+        
+            
+    <span class="k">def</span> <span class="nf">__generate_func_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__strip_prefix</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__is_valid_function</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+        <span class="p">}</span>
+    
+    <span class="k">def</span> <span class="nf">__strip_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">name</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">):]</span>
+
+    
+    <span class="k">def</span> <span class="nf">__is_valid_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)))</span> <span class="ow">and</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">__strip_prefix</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span> <span class="ow">in</span> <span class="n">Scopus</span><span class="o">.</span><span class="n">MODES</span>
+                
+    
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">__search_coroutine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">num_papers</span><span class="p">):</span>
+        <span class="n">use_pbar</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">use_pbar</span><span class="p">:</span>
+             <span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">initial</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">paper_ids</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="n">num_papers</span><span class="p">)</span>
+        
+        <span class="n">errno</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">found_papers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                    <span class="n">errno</span> <span class="o">=</span> <span class="n">result</span>
+                    <span class="k">if</span> <span class="n">use_pbar</span><span class="p">:</span>
+                        <span class="n">pbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                    <span class="k">break</span>
+                
+                <span class="n">op</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">paper</span> <span class="o">=</span> <span class="n">result</span>
+                <span class="k">if</span> <span class="n">use_pbar</span> <span class="ow">and</span> <span class="n">pid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">paper_ids</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pbar_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                
+                <span class="n">found_papers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">paper</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__save</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+                
+                <span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>  <span class="c1"># signal that the queue item has been processed</span>
+            <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">found_papers</span><span class="p">),</span> <span class="n">errno</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEBUG_MODE</span><span class="p">:</span>
+            <span class="n">pid_counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">found_papers</span><span class="p">)</span>
+            <span class="n">duplicate_count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">pid_counts</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[DEBUG]: __search_coroutine() - ScopusAPI has returned </span><span class="si">{</span><span class="n">duplicate_count</span><span class="si">}</span><span class="s1"> duplicate papers&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            
+            <span class="c1"># determine the maximum length of the item names for alignment</span>
+            <span class="n">max_pid_length</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span> <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">pid_counts</span><span class="p">)</span>
+
+            <span class="c1"># pretty print debug info</span>
+            <span class="k">for</span> <span class="n">pid</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">pid_counts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">pid</span><span class="si">:</span><span class="s1">&lt;</span><span class="si">{</span><span class="n">max_pid_length</span><span class="si">}}</span><span class="s1"> - </span><span class="si">{</span><span class="n">count</span><span class="si">:</span><span class="s1">&gt;4</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                    
+        <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="n">found_papers</span><span class="p">),</span> <span class="n">errno</span>
+    
+    
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">__num_papers_coroutine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queue</span><span class="p">):</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">break</span>
+                
+                <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="n">result</span>
+                <span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>  <span class="c1"># signal that the queue item has been processed</span>
+            <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">count</span>
+        <span class="k">return</span> <span class="n">count</span>
+            
+        
+    <span class="k">def</span> <span class="nf">__prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">prepare_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_funcs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">prepare_func</span><span class="p">()</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_prepare_fs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span> 
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The path </span><span class="si">{</span><span class="n">path</span><span class="si">!r}</span><span class="s1"> is not a directory&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">stem</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.json&#39;</span><span class="p">)}</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">x</span><span class="p">[</span><span class="mi">7</span><span class="p">:]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">files</span><span class="p">}</span>
+    
+    
+    <span class="k">def</span> <span class="nf">__save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">save_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_funcs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">save_func</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_save_fs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">op</span><span class="p">,</span> <span class="n">eid</span><span class="p">,</span> <span class="n">paper</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">eid</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">paper</span><span class="p">,</span> <span class="n">fh</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+         
+        
+    <span class="k">def</span> <span class="nf">__read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paper_ids</span><span class="p">):</span>
+        <span class="n">read_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_funcs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">read_func</span><span class="p">(</span><span class="n">paper_ids</span><span class="p">)</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_read_fs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paper_ids</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_df</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">targets</span><span class="o">=</span><span class="n">paper_ids</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+
+    
+    <span class="c1">### Setters / Getters</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span>
+    
+    
+    <span class="nd">@keys</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+                    <span class="n">api</span> <span class="o">=</span> <span class="n">ScopusAPI</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The key &quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&quot; was rejected by the Scopus API&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    
+    
+    <span class="nd">@n_jobs</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">n_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">):</span>
+        <span class="n">cpu_count</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;n_jobs must be an int&#39;</span><span class="p">)</span>
+
+        <span class="n">limit</span> <span class="o">=</span> <span class="n">cpu_count</span> <span class="o">+</span> <span class="n">n_jobs</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">limit</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">cpu_count</span> <span class="o">&lt;</span> <span class="n">limit</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;n_jobs must take a value on [-</span><span class="si">{</span><span class="n">cpu_count</span><span class="si">}</span><span class="s1">, -1] or [1, </span><span class="si">{</span><span class="n">cpu_count</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">n_jobs</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span> <span class="o">=</span> <span class="n">cpu_count</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

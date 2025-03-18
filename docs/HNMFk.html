@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF.factorization.HNMFk: Hierarchical Non-negative Matrix Factorization with Automatic Model Determination &#8212; TELF 0.0.36 documentation</title>
+    <title>TELF.factorization.HNMFk: Hierarchical Non-negative Matrix Factorization with Automatic Model Determination &#8212; TELF 0.0.37 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=7dd70c5c"></script>
+    <script src="_static/documentation_options.js?v=c62b8e41"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.36 documentation</p>
+    <p class="title logo__title">TELF 0.0.37 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -167,6 +167,19 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Orca.html"><strong>TELF.pre_processing.Orca:</strong> Duplicate author detector for text mining and information retrival</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Wolf.html"><strong>TELF.post_processing.Wolf:</strong> Graph centrality and ranking tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="iPenguin.html"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</a></li>
+
+
+
+
 
 
 <li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -371,6 +384,30 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#TELF.factorization.HNMFk.HNMFk.fit" title="TELF.factorization.HNMFk.HNMFk.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HNMFk.fit</span></code></a>(X, Ks[, from_checkpoint, ...])</p></td>
 <td><p>Factorize the input matrix <code class="docutils literal notranslate"><span class="pre">X</span></code> for the each given K value in <code class="docutils literal notranslate"><span class="pre">Ks</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.factorization.HNMFk.HNMFk.traverse_nodes" title="TELF.factorization.HNMFk.HNMFk.traverse_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HNMFk.traverse_nodes</span></code></a>()</p></td>
+<td><p>Graph iterator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.factorization.HNMFk.HNMFk.go_to_root" title="TELF.factorization.HNMFk.HNMFk.go_to_root"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HNMFk.go_to_root</span></code></a>()</p></td>
+<td><p>Graph iterator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.factorization.HNMFk.HNMFk.get_node" title="TELF.factorization.HNMFk.HNMFk.get_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HNMFk.get_node</span></code></a>()</p></td>
+<td><p>Graph iterator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.factorization.HNMFk.HNMFk.go_to_parent" title="TELF.factorization.HNMFk.HNMFk.go_to_parent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HNMFk.go_to_parent</span></code></a>()</p></td>
+<td><p>Graph iterator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.factorization.HNMFk.HNMFk.go_to_children" title="TELF.factorization.HNMFk.HNMFk.go_to_children"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HNMFk.go_to_children</span></code></a>(idx)</p></td>
+<td><p>Graph iterator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.factorization.HNMFk.HNMFk.traverse_tiny_leaf_topics" title="TELF.factorization.HNMFk.HNMFk.traverse_tiny_leaf_topics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HNMFk.traverse_tiny_leaf_topics</span></code></a>([threshold])</p></td>
+<td><p>Graph iterator with thresholding on number of documents.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.factorization.HNMFk.HNMFk.process_tiny_leaf_topics" title="TELF.factorization.HNMFk.HNMFk.process_tiny_leaf_topics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HNMFk.process_tiny_leaf_topics</span></code></a>([threshold])</p></td>
+<td><p>Graph post-processing with thresholding on number of documents.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.factorization.HNMFk.HNMFk.get_tiny_leaf_topics" title="TELF.factorization.HNMFk.HNMFk.get_tiny_leaf_topics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HNMFk.get_tiny_leaf_topics</span></code></a>()</p></td>
+<td><p>Graph iterator for tiny documents if processed already with self.process_tiny_leaf_topics(threshold:int).</p></td>
 </tr>
 </tbody>
 </table>

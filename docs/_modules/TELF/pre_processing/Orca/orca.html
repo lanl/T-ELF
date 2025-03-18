@@ -1,0 +1,1303 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TELF.pre_processing.Orca.orca &#8212; TELF 0.0.37 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../../../../_static/documentation_options.js?v=c62b8e41"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/pre_processing/Orca/orca';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.37 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../HNMFk.html"><strong>TELF.factorization.HNMFk:</strong> Hierarchical Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Orca.html"><strong>TELF.pre_processing.Orca:</strong> Duplicate author detector for text mining and information retrival</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Wolf.html"><strong>TELF.post_processing.Wolf:</strong> Graph centrality and ranking tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../iPenguin.html"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</a></li>
+
+
+
+
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../TELF.html">TELF package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../TELF.factorization.html">TELF.factorization package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../TELF.pre_processing.html">TELF.pre_processing package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for TELF.pre_processing.Orca.orca</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">warnings</span> 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span> 
+
+<span class="kn">from</span> <span class="nn">.AuthorMatcher</span> <span class="kn">import</span> <span class="n">AuthorMatcher</span>
+
+<div class="viewcode-block" id="Orca">
+<a class="viewcode-back" href="../../../../Orca.html#TELF.pre_processing.Orca.orca.Orca">[docs]</a>
+<span class="k">class</span> <span class="nc">Orca</span><span class="p">:</span>
+
+    <span class="c1">#Code where we have a precomputed duplicates.</span>
+    <span class="c1"># Pre-computed Scopus duplicates file containing entries.</span>
+    <span class="c1"># If no duplicates are computed with DAF, this file will be used instead for duplicate removal</span>
+    <span class="c1">#DUPLICATES_1M = &#39;scopus_1m_cited_collab_matches.p&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duplicates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">s2_duplicates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slic_df</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duplicates</span> <span class="o">=</span> <span class="n">duplicates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s2_duplicates</span> <span class="o">=</span> <span class="n">s2_duplicates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_run_scopus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function for creating a SLIC map file for a dataset that only contains Scopus information</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="c1"># generate a map of scopus ids to affiliations</span>
+        <span class="n">affiliations_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__generate_affiliations_map</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        
+        <span class="c1"># generate author maps</span>
+        <span class="n">scopus_author_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__generate_author_map</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;author_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;authors&#39;</span><span class="p">)</span>
+            
+        <span class="c1"># correct duplicates</span>
+        <span class="n">duplicates</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">duplicates</span><span class="p">:</span>    
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">entry</span> <span class="o">&amp;</span> <span class="n">scopus_author_map</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">continue</span>
+            
+            <span class="n">entry</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># avoid modifying duplicates in place</span>
+            <span class="n">best_id</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">scopus_author_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">merged_affiliations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__merge_scopus_affiliations</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">affiliations_map</span><span class="p">)</span>
+            <span class="n">affiliations_map</span><span class="p">[</span><span class="n">best_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">merged_affiliations</span>
+
+            <span class="c1"># remove old duplicate ids from both maps</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">best_id</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">scopus_author_map</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+                <span class="k">del</span> <span class="n">affiliations_map</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+                
+            <span class="c1"># add duplicates for tracking purposes</span>
+            <span class="n">duplicates</span><span class="p">[</span><span class="n">best_id</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+            
+        
+        <span class="c1">## generate SLIC IDs</span>
+        <span class="n">slic_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">slic_df</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;slic_id&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;slic_name&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;scopus_ids&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;scopus_names&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;scopus_affiliations&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;s2_ids&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;s2_names&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="p">}</span>
+    
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">scopus_id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scopus_author_map</span><span class="p">):</span>
+            <span class="n">scopus_name</span> <span class="o">=</span> <span class="n">scopus_author_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">scopus_id</span><span class="p">)</span>
+            <span class="n">scopus_affiliations</span> <span class="o">=</span> <span class="n">affiliations_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">scopus_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">scopus_id</span> <span class="ow">in</span> <span class="n">duplicates</span><span class="p">:</span>
+                <span class="n">scopus_id</span> <span class="o">=</span> <span class="s1">&#39;;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">scopus_id</span><span class="p">]</span> <span class="o">+</span> <span class="n">duplicates</span><span class="p">[</span><span class="n">scopus_id</span><span class="p">])</span>
+            
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;slic_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;S</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;slic_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scopus_name</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;scopus_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scopus_id</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;scopus_names&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scopus_name</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;scopus_affiliations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scopus_affiliations</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;s2_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;s2_names&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            
+        <span class="n">slic_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">slic_df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">slic_df</span>
+    
+    
+<div class="viewcode-block" id="Orca.run">
+<a class="viewcode-back" href="../../../../Orca.html#TELF.pre_processing.Orca.orca.Orca.run">[docs]</a>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">scopus_duplicates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">s2_duplicates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">known_matches</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run Orca and form SLIC ids for a given dataset</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df: pandas.DataFrame</span>
+<span class="sd">            The SLIC dataframe for which author SLIC ids need to be created</span>
+<span class="sd">        scopus_duplicates: list(set), optional</span>
+<span class="sd">            A list of sets where each set contains scopus author ids that refer to the same person. In the ideal case, each </span>
+<span class="sd">            author only has one scopus id. However, this ideal does not hold up in practice and some authors are represented</span>
+<span class="sd">            by two or more scopus ids. Duplicate authors can be found using the Orca.DuplicateAuthorFinder tool. If not provided,</span>
+<span class="sd">            a pre-computed scopus duplicate map is used (pre-computed from 1 million Scopus papers). If provided, this map is</span>
+<span class="sd">            overriden by the user input. Default is None.</span>
+<span class="sd">        s2_duplicates: list(set), optional</span>
+<span class="sd">            A list of sets where each set contains s2 author ids that refer to the same person. If not provided, s2 author ids</span>
+<span class="sd">            are not scanned for duplicates / only compared against scopus matches as duplicate detection. Default is None.</span>
+<span class="sd">        known_matches: dict, optional</span>
+<span class="sd">            A dict of s2 id keys to scopus id values. This dictionary is used to override the author matching if groundtruth </span>
+<span class="sd">            is known. This is useful for helping the tool work around edge cases. Default is None.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># process duplicates (if passed)</span>
+        <span class="k">if</span> <span class="n">scopus_duplicates</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">duplicates</span> <span class="o">=</span> <span class="n">scopus_duplicates</span>
+        <span class="k">if</span> <span class="n">s2_duplicates</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">s2_duplicates</span> <span class="o">=</span> <span class="n">s2_duplicates</span>
+        
+        <span class="n">valid</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__verify_df</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>  <span class="c1"># make sure that the passed dataframe meets expected </span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">valid</span><span class="p">:</span>
+            <span class="k">if</span> <span class="kc">False</span><span class="p">:</span>  <span class="c1"># TODO: set valid flag to check if Scopus only data here</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">slic_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_scopus</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">slic_df</span>
+        
+        <span class="c1"># generate a map of scopus ids to affiliations</span>
+        <span class="n">affiliations_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__generate_affiliations_map</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+        <span class="c1"># generate author maps</span>
+        <span class="n">s2_author_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__generate_author_map</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;s2_author_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;s2_authors&#39;</span><span class="p">)</span>
+        <span class="n">scopus_author_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__generate_author_map</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;author_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;authors&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># match scopus author ids to s2 author ids</span>
+        <span class="n">known_matches</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">known_matches</span> <span class="k">else</span> <span class="n">known_matches</span>
+        <span class="n">am</span> <span class="o">=</span> <span class="n">AuthorMatcher</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">am_df</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">known_matches</span><span class="o">=</span><span class="n">known_matches</span><span class="p">)</span>
+    
+        <span class="c1"># process scopus duplicates</span>
+        <span class="n">am_enriched</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__add_scopus_duplicates</span><span class="p">(</span><span class="n">am_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">duplicates</span><span class="p">)</span>
+        <span class="n">am_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">am_df</span><span class="p">,</span> <span class="n">am_enriched</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1">## generate SLIC IDs</span>
+        <span class="n">slic_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">slic_df</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;slic_id&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;slic_name&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;scopus_ids&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;scopus_names&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;scopus_affiliations&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;s2_ids&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;s2_names&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="p">}</span>
+        
+        <span class="c1"># 1. assign SLIC IDs to author ids that have correspondence between s2 and scopus</span>
+        <span class="n">seen_s2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">seen_scopus</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__uncouple_author_matches</span><span class="p">(</span><span class="n">am_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_duplicates</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="n">s2_ids</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;s2&#39;</span><span class="p">]</span>
+            <span class="n">s2_names</span> <span class="o">=</span> <span class="p">{</span><span class="n">s2_author_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s2_ids</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s2_author_map</span><span class="p">}</span>
+            <span class="n">scopus_ids</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;scopus&#39;</span><span class="p">]</span>
+            <span class="n">scopus_names</span> <span class="o">=</span> <span class="p">{</span><span class="n">scopus_author_map</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">scopus_ids</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">scopus_author_map</span><span class="p">}</span>
+            <span class="n">scopus_affiliations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__merge_scopus_affiliations</span><span class="p">(</span><span class="n">scopus_ids</span><span class="p">,</span> <span class="n">affiliations_map</span><span class="p">)</span>
+            <span class="n">slic_name</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+            
+            <span class="n">seen_s2</span> <span class="o">|=</span> <span class="n">s2_ids</span>
+            <span class="n">seen_scopus</span> <span class="o">|=</span> <span class="n">scopus_ids</span>
+
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;slic_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;S</span><span class="si">{</span><span class="n">slic_count</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;slic_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slic_name</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;scopus_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">scopus_ids</span><span class="p">))</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;scopus_names&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">scopus_names</span><span class="p">))</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;scopus_affiliations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scopus_affiliations</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;s2_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s2_ids</span><span class="p">))</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;s2_names&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s2_names</span><span class="p">))</span>
+            <span class="n">slic_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="c1"># 2. assign SLIC IDs to scopus ids that did not have correspondence</span>
+        <span class="n">df_scopus_authors</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">author_ids</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)}</span>
+        <span class="n">df_scopus_authors</span> <span class="o">-=</span> <span class="n">seen_scopus</span>
+        <span class="k">for</span> <span class="n">scopus_id</span> <span class="ow">in</span> <span class="n">df_scopus_authors</span><span class="p">:</span>
+            <span class="n">scopus_name</span> <span class="o">=</span> <span class="n">scopus_author_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">scopus_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;slic_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;S</span><span class="si">{</span><span class="n">slic_count</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;slic_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scopus_name</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;scopus_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scopus_id</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;scopus_names&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scopus_name</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;scopus_affiliations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">affiliations_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">scopus_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;s2_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;s2_names&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">slic_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="c1"># 3. assign SLIC Ids to remaining s2 authors</span>
+        <span class="n">df_s2_authors</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">s2_author_ids</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">y</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)}</span>
+        <span class="n">df_s2_authors</span> <span class="o">-=</span> <span class="n">seen_s2</span>
+        <span class="k">for</span> <span class="n">s2_id</span> <span class="ow">in</span> <span class="n">df_s2_authors</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s2_id</span> <span class="ow">in</span> <span class="n">seen_s2</span><span class="p">:</span>
+                <span class="k">continue</span>
+            
+            <span class="c1"># update the common fields</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;slic_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;S</span><span class="si">{</span><span class="n">slic_count</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;scopus_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;scopus_names&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;scopus_affiliations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            
+            <span class="c1"># handle s2 duplicates if they exist</span>
+            <span class="n">s2_dup_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_duplicates</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">s2_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">s2_dup_ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">s2_ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">s2_id</span><span class="p">}</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">s2_dup_ids</span><span class="p">)</span>
+                <span class="n">s2_names</span> <span class="o">=</span> <span class="p">{</span><span class="n">s2_author_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s2_ids</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s2_author_map</span><span class="p">}</span>
+                <span class="k">if</span> <span class="n">s2_names</span> <span class="o">==</span> <span class="p">{</span><span class="s1">&#39;Unknown&#39;</span><span class="p">}:</span>  <span class="c1"># handle case where all name missing</span>
+                    <span class="n">s2_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                
+                <span class="c1"># get the slic name</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">slic_name</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">s2_names</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span> 
+                    <span class="n">slic_name</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">slic_name</span> <span class="o">==</span> <span class="s1">&#39;Unknown&#39;</span> <span class="k">else</span> <span class="n">slic_name</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span> 
+                    <span class="n">slic_name</span> <span class="o">=</span> <span class="kc">None</span>
+                
+                <span class="c1"># update the data map</span>
+                <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;slic_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slic_name</span><span class="p">)</span>
+                <span class="n">s2_ids_str</span> <span class="o">=</span> <span class="s1">&#39;;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s2_ids</span><span class="p">)</span> <span class="k">if</span> <span class="n">s2_ids</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;s2_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2_ids_str</span><span class="p">)</span>
+                <span class="n">s2_names</span> <span class="o">=</span> <span class="s1">&#39;;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s2_names</span><span class="p">)</span> <span class="k">if</span> <span class="n">s2_names</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;s2_names&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2_names</span><span class="p">)</span>
+                <span class="n">seen_s2</span> <span class="o">|=</span> <span class="n">s2_ids</span>
+                
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">s2_name</span> <span class="o">=</span> <span class="n">s2_author_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">s2_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;slic_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2_name</span><span class="p">)</span>
+                <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;s2_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2_id</span><span class="p">)</span>
+                <span class="n">slic_df</span><span class="p">[</span><span class="s1">&#39;s2_names&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2_name</span><span class="p">)</span>
+                <span class="n">seen_s2</span> <span class="o">|=</span> <span class="n">s2_ids</span>
+                
+            <span class="c1"># incremenet the slic id identifier</span>
+            <span class="n">slic_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="n">slic_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">slic_df</span><span class="p">)</span>
+        <span class="n">slic_df</span> <span class="o">=</span> <span class="n">slic_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">slic_df</span><span class="o">.</span><span class="n">slic_name</span> <span class="o">!=</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slic_df</span> <span class="o">=</span> <span class="n">slic_df</span>
+        <span class="k">return</span> <span class="n">slic_df</span></div>
+
+    
+    
+<div class="viewcode-block" id="Orca.apply">
+<a class="viewcode-back" href="../../../../Orca.html#TELF.pre_processing.Orca.orca.Orca.apply">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">slic_df</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the SLIC id mapping to a SLIC papers dataframe</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df: pandas.DataFrame</span>
+<span class="sd">            The SLIC dataframe for which author SLIC ids need to be created</span>
+<span class="sd">        slic_df: pandas.DataFrame, optional</span>
+<span class="sd">            A pre-computed DataFrame with SLIC id mappings. This parameter is provided in the rare cases that a SLIC map is</span>
+<span class="sd">            being used between multiple datasets (i.e. dataset B is a subset of A and slic_df was computed for A). Be aware that</span>
+<span class="sd">            setting a value for slic_df is not recommended! If using this parameter, verify that all desired scopus/s2 authors</span>
+<span class="sd">            have existing SLIC ids. To be sure of the validity of your results, use Orca.run() before using Orca.apply() and </span>
+<span class="sd">            do not pass a value for this parameter.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        orca_df: pandas.DataFrame</span>
+<span class="sd">            df with standarized author information (columns for &#39;SLIC_ids&#39; and &#39;SLIC_affiliations&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">slic_df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">slic_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No SLIC ID map found. First, compute the map with Orca.run()&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">slic_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">slic_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;[Orca]: slic_df was passed as an argument however this Orca object already has a &#39;</span> \
+                          <span class="s1">&#39;stored slic_df object.</span><span class="se">\n\t\t</span><span class="s1">Overwriting stored slic_df with given argument. If this &#39;</span> \
+                          <span class="s1">&#39;message is unexpected, use Orca.apply() without specifying `slic_df`&#39;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">slic_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slic_df</span> <span class="o">=</span> <span class="n">slic_df</span>
+    
+        <span class="c1"># verify that paper scopus ids and s2ids are unique</span>
+        <span class="k">if</span> <span class="s1">&#39;eid&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="n">df</span><span class="o">.</span><span class="n">eid</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="o">.</span><span class="n">eid</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]):</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;eid&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;eid&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;[Orca]: Encountered duplicate Scopus IDs (`eid`) in df. Dropping duplicate papers.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;s2id&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="n">df</span><span class="o">.</span><span class="n">s2id</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="o">.</span><span class="n">s2id</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]):</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;s2id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;s2id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;[Orca]: Encountered duplicate S2 IDs (`s2id`) in df. Dropping duplicate papers.&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># replace scopus and s2 author ids respectively</span>
+        <span class="k">if</span> <span class="s1">&#39;s2id&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">&#39;eid&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">scopus_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__compute_slic_scopus</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="n">s2_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__compute_slic_s2</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+            <span class="c1"># merge and build output dataframe</span>
+            <span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">scopus_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;eid&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+            <span class="n">df3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="n">s2_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;s2id&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+            <span class="n">orca_df</span> <span class="o">=</span> <span class="n">df3</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">orca_df</span><span class="p">[</span><span class="s1">&#39;slic_author_ids&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orca_df</span><span class="p">[</span><span class="s1">&#39;slic_author_ids_x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">combine_first</span><span class="p">(</span><span class="n">orca_df</span><span class="p">[</span><span class="s1">&#39;slic_author_ids_y&#39;</span><span class="p">])</span>
+            <span class="n">orca_df</span> <span class="o">=</span> <span class="n">orca_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;slic_author_ids_x&#39;</span><span class="p">,</span> <span class="s1">&#39;slic_author_ids_y&#39;</span><span class="p">])</span>
+            
+        <span class="k">elif</span> <span class="s1">&#39;s2id&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">s2_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__compute_slic_s2</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="n">orca_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">s2_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;s2id&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">scopus_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__compute_slic_scopus</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="n">orca_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">scopus_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;eid&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+                
+        <span class="k">if</span> <span class="n">orca_df</span><span class="o">.</span><span class="n">slic_author_ids</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">original_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">orca_df</span><span class="p">)</span>
+            <span class="n">orca_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;slic_author_ids&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Orca]: Found </span><span class="si">{</span><span class="n">original_len</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">orca_df</span><span class="p">)</span><span class="si">}</span><span class="s1"> papers with missing &#39;</span> \
+                           <span class="s1">&#39;SLIC author IDs. Dropping these papers.&#39;</span><span class="p">)</span>
+                
+        <span class="c1"># add a column of slic author names using the matched slic ids</span>
+        <span class="n">slic_authors</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slic_df</span><span class="o">.</span><span class="n">slic_id</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">slic_df</span><span class="o">.</span><span class="n">slic_name</span><span class="o">.</span><span class="n">to_list</span><span class="p">())}</span>
+        <span class="k">def</span> <span class="nf">map_ids_to_names</span><span class="p">(</span><span class="n">ids</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">ids</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">slic_authors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ids</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)]</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">if</span> <span class="n">name</span><span class="p">]</span>
+            <span class="k">return</span> <span class="s1">&#39;;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+        <span class="n">orca_df</span><span class="p">[</span><span class="s1">&#39;slic_authors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orca_df</span><span class="p">[</span><span class="s1">&#39;slic_author_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">map_ids_to_names</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">orca_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+        
+        
+    <span class="k">def</span> <span class="nf">__verify_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Verify that the given papers dataframe matches the SLIC standard and can be used with Orca</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df: pandas.DataFrame</span>
+<span class="sd">            The SLIC papers DataFrame for which author SLIC ids need to be created</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        flag: bool</span>
+<span class="sd">            If true, df passes the test and can be used with Orca</span>
+<span class="sd">        error: str, None</span>
+<span class="sd">            If flag is True, None is returned. Otherwise a string with the encountered error is provided</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">must_have</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;eid&#39;</span><span class="p">,</span> <span class="s1">&#39;authors&#39;</span><span class="p">,</span> <span class="s1">&#39;author_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;affiliations&#39;</span><span class="p">,</span> <span class="s1">&#39;s2_authors&#39;</span><span class="p">,</span> <span class="s1">&#39;s2_author_ids&#39;</span><span class="p">}</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">columns</span> <span class="o">&amp;</span> <span class="n">must_have</span> <span class="o">!=</span> <span class="n">must_have</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;The columns </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">must_have</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s1"> are missing in `df`&#39;</span>
+        
+        <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span>
+    
+    
+    <span class="k">def</span> <span class="nf">__verify_slic_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slic_df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Verify that the given papers dataframe matches the SLIC standard and can be used with Orca</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        slic_df: pandas.DataFrame</span>
+<span class="sd">            A pre-computed DataFrame with SLIC id mappings.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        flag: bool</span>
+<span class="sd">            If true, df passes the test and can be used with Orca</span>
+<span class="sd">        error: str, None</span>
+<span class="sd">            If flag is True, None is returned. Otherwise a string with the encountered error is provided</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">must_have</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;slic_id&#39;</span><span class="p">,</span> <span class="s1">&#39;slic_name&#39;</span><span class="p">,</span> <span class="s1">&#39;scopus_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;scopus_names&#39;</span><span class="p">,</span> <span class="s1">&#39;s2_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;s2_names&#39;</span><span class="p">}</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">slic_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">columns</span> <span class="o">&amp;</span> <span class="n">must_have</span> <span class="o">!=</span> <span class="n">must_have</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;The columns </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">must_have</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s1"> are missing in `slic_df`&#39;</span>
+        
+        <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span>
+        
+        
+    <span class="k">def</span> <span class="nf">__add_scopus_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auth_df</span><span class="p">,</span> <span class="n">duplicates</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function that enriches the results of AuthorMatcher with any previously detected Scopus </span>
+<span class="sd">        duplicates. These duplicates are given a shared S2 id that will be used to connect them in the</span>
+<span class="sd">        succeeding SLIC id creation steps.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        auth_df: pandas.DataFrame</span>
+<span class="sd">            The results of AuthorMatcher on the working DataFrame</span>
+<span class="sd">        duplicates: list(set), optional</span>
+<span class="sd">            A list of sets where each set contains scopus author ids that refer to the same person. In the ideal case, each </span>
+<span class="sd">            author only has one scopus id. However, this ideal does not hold up in practice and some authors are represented</span>
+<span class="sd">            by two or more scopus ids. Duplicate authors can be found using the Orca.DuplicateAuthorFinder tool. </span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        out_df: pandas.DataFrame</span>
+<span class="sd">            DataFrame that matches the shape of auth_df but contains entries to flag scopus duplicates</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">auth_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">all_df_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">auth_df</span><span class="o">.</span><span class="n">SCOPUS_Author_ID</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[Orca]: Scanning for Scopus duplicates in dataset. . .&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">scopus_ids</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">duplicates</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">duplicates</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">scopus_ids</span> <span class="o">&amp;</span> <span class="n">all_df_ids</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">tmp_df</span> <span class="o">=</span> <span class="n">auth_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">auth_df</span><span class="o">.</span><span class="n">SCOPUS_Author_ID</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">scopus_ids</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp_df</span><span class="o">.</span><span class="n">SCOPUS_Author_ID</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">row</span> <span class="o">=</span> <span class="n">tmp_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">scopus_id</span> <span class="ow">in</span> <span class="n">tmp_df</span><span class="o">.</span><span class="n">SCOPUS_Author_ID</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">SCOPUS_Author_ID</span> <span class="o">==</span> <span class="n">scopus_id</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">new_row</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                        <span class="n">new_row</span><span class="o">.</span><span class="n">SCOPUS_Author_ID</span> <span class="o">=</span> <span class="n">scopus_id</span>
+                        <span class="n">out_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">out_df</span><span class="p">,</span> <span class="n">new_row</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out_df</span>
+    
+    
+    <span class="k">def</span> <span class="nf">__add_s2_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duplicates</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts a list of sets into a dictionary such that each key in the dictionary </span>
+<span class="sd">        is an element from a set, and its value is a list of the other elements in that set.</span>
+<span class="sd">        Each set should contain s2 author ids that are known duplicates of each other. No </span>
+<span class="sd">        two pairs of sets can share an author id. All known duplicate of an s2 author id should</span>
+<span class="sd">        be contained within a single set. Sets with a single id (non-duplicates) will be ignored.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        duplicates: list(set())</span>
+<span class="sd">            A list of sets of s2 authors ids to be processed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        dict: </span>
+<span class="sd">            The processed s2 duplicates which will be resolved in a further processinf step.</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError: </span>
+<span class="sd">            If an id appears in more than one set within the list.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; self.__add_s2_duplicates([{1,2}, {3,4}, {5}])</span>
+<span class="sd">        {1: [2], 2: [1], 3: [4], 4: [3]}</span>
+<span class="sd">        &gt;&gt;&gt; self.__add_s2_duplicates([{1,2}, {2,3}])</span>
+<span class="sd">        ValueError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">duplicates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">elem</span> <span class="ow">in</span> <span class="n">seen</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">s</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Detected multiple entries for s2 duplicates across sets. </span><span class="se">\</span>
+<span class="s2">                                  Make sure that all known duplicates are constrained to a single set&quot;</span><span class="p">)</span>
+            <span class="n">seen</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">continue</span>
+                
+            <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+                <span class="n">out_dict</span><span class="p">[</span><span class="n">element</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">element</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">out_dict</span>
+
+    
+    <span class="k">def</span> <span class="nf">__propagate_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a_map</span><span class="p">,</span> <span class="n">a_duplicates</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Propagate the ids associated with keys in a_map to their duplicate keys.</span>
+
+<span class="sd">        For each key in a_map, if duplicate keys exist in a_duplicates, </span>
+<span class="sd">        the associated values from a_map are propagated to these duplicate keys.</span>
+<span class="sd">        The &#39;a&#39;/&#39;b&#39; notation is used to keep this function generic so that is can be used </span>
+<span class="sd">        to go from s2 --&gt; scopus or scopus  --&gt; s2.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        a_map: dict</span>
+<span class="sd">            The main author dictionary that is to be updated.</span>
+<span class="sd">        a_duplicates: dict</span>
+<span class="sd">            Dictionary mapping keys to lists of their duplicates.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        None</span>
+<span class="sd">            a_map is modified in place.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">a_map_update</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># create an update map based on duplicates</span>
+        <span class="k">for</span> <span class="n">a_id</span><span class="p">,</span> <span class="n">b_ids</span> <span class="ow">in</span> <span class="n">a_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">a_id</span> <span class="ow">in</span> <span class="n">a_duplicates</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">dup_a_id</span> <span class="ow">in</span> <span class="n">a_duplicates</span><span class="p">[</span><span class="n">a_id</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">dup_a_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">a_map_update</span><span class="p">:</span>
+                        <span class="n">a_map_update</span><span class="p">[</span><span class="n">dup_a_id</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                    <span class="n">a_map_update</span><span class="p">[</span><span class="n">dup_a_id</span><span class="p">]</span> <span class="o">|=</span> <span class="nb">set</span><span class="p">(</span><span class="n">b_ids</span><span class="p">)</span>
+
+        <span class="c1"># convert set to list for each key in the update map</span>
+        <span class="k">for</span> <span class="n">dup_a_id</span> <span class="ow">in</span> <span class="n">a_map_update</span><span class="p">:</span>
+            <span class="n">a_map_update</span><span class="p">[</span><span class="n">dup_a_id</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">a_map_update</span><span class="p">[</span><span class="n">dup_a_id</span><span class="p">])</span>
+
+        <span class="c1"># update the main map in place</span>
+        <span class="n">a_map</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">a_map_update</span><span class="p">)</span>
+
+    
+    <span class="k">def</span> <span class="nf">__uncouple_author_matches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auth_df</span><span class="p">,</span> <span class="n">s2_duplicates</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function that takes the authors DataFrame produced by AuthorMatcher (could be enriched with scopus duplicates</span>
+<span class="sd">        or not) and finds out which sets of authors ids represent the same individual. This is done by building a graph of</span>
+<span class="sd">        author ids relationships.</span>
+
+<span class="sd">        Take for example the following two maps. In this case letters are scopus IDs and numbers are S2 IDs. Each map presents</span>
+<span class="sd">        the relationship between scopus and S2 from the perspective of the key dataset. There are only 2 authors but they are </span>
+<span class="sd">        represented by 2 scopus / 3 S2 IDs for the first author and 1 scopus / 2 S2 IDs for the second author. </span>
+
+<span class="sd">        &gt;&gt;&gt; scopus_map = {&#39;A&#39;: [1,2], </span>
+<span class="sd">                          &#39;B&#39;: [4], </span>
+<span class="sd">                          &#39;C&#39;: [3,5]}</span>
+
+<span class="sd">        &gt;&gt;&gt; s2_map = {1: [&#39;A&#39;], </span>
+<span class="sd">                      2: [&#39;A&#39;], </span>
+<span class="sd">                      3: [&#39;C&#39;], </span>
+<span class="sd">                      4: [&#39;A&#39;], </span>
+<span class="sd">                      5: [&#39;C&#39;]}</span>
+
+<span class="sd">        For bigger datasets, these relationships can grow complex and are best modeled by a graph. Both scopus and S2 IDs are </span>
+<span class="sd">        nodes in this graph and  their relationship can be modeled with egdes between them. This graph is very disconnected as </span>
+<span class="sd">        there will be many unique authors in any given SLIC dataset. However, weakly connected components of the graph will </span>
+<span class="sd">        signify that all author id nodes in said component belong to the same author.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        auth_df: pandas.DataFrame</span>
+<span class="sd">            The results of AuthorMatcher on the working DataFrame</span>
+<span class="sd">        s2_duplicates:</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        matches: list</span>
+<span class="sd">            A list of dictionaries. Each dictionary in the list contains 2 keys: &#39;scopus&#39; and &#39;s2&#39;. The values are sets of </span>
+<span class="sd">            corresponding scopus/s2 ids</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># create the two maps necessary for processing</span>
+        <span class="n">s2_map</span> <span class="o">=</span> <span class="n">auth_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;S2_Author_ID&#39;</span><span class="p">)[</span><span class="s1">&#39;SCOPUS_Author_ID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">scopus_map</span> <span class="o">=</span> <span class="n">auth_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;SCOPUS_Author_ID&#39;</span><span class="p">)[</span><span class="s1">&#39;S2_Author_ID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        
+        <span class="c1"># handle s2 duplicates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__propagate_duplicates</span><span class="p">(</span><span class="n">s2_map</span><span class="p">,</span> <span class="n">s2_duplicates</span><span class="p">)</span>
+        
+        <span class="c1"># ensure that no s2 id == scopus id by coincidence</span>
+        <span class="n">s2_map</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s1">&#39;B_</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="p">{</span><span class="sa">f</span><span class="s1">&#39;A_</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="p">}</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">s2_map</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">scopus_map</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s1">&#39;A_</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="p">{</span><span class="sa">f</span><span class="s1">&#39;B_</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="p">}</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">scopus_map</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="c1"># also create a name map which we will use </span>
+        <span class="n">s2_name_map</span> <span class="o">=</span> <span class="n">auth_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;S2_Author_ID&#39;</span><span class="p">)[</span><span class="s1">&#39;S2_Author_Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">))</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+
+        <span class="c1"># setup the graph</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v_set</span> <span class="ow">in</span> <span class="n">scopus_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">v_set</span><span class="p">:</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v_set</span> <span class="ow">in</span> <span class="n">s2_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">v_set</span><span class="p">:</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+        <span class="c1"># get the list of components and process them</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">weakly_connected_components</span><span class="p">(</span><span class="n">G</span><span class="p">))</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">component_set</span> <span class="ow">in</span> <span class="n">components</span><span class="p">:</span>
+            <span class="n">mdict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;scopus&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">(),</span> <span class="s1">&#39;s2&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">()}</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">component_set</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;A_&#39;</span><span class="p">):</span>
+                    <span class="n">mdict</span><span class="p">[</span><span class="s1">&#39;scopus&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">mdict</span><span class="p">[</span><span class="s1">&#39;s2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+
+            <span class="c1"># get the longest s2 name to use as slic name</span>
+            <span class="n">str_gen</span> <span class="o">=</span> <span class="p">((</span><span class="n">pid</span><span class="p">,</span> <span class="n">s2_name_map</span><span class="p">[</span><span class="n">pid</span><span class="p">])</span> <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">mdict</span><span class="p">[</span><span class="s1">&#39;s2&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">s2_name_map</span><span class="p">)</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">str_gen</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">))</span>
+            <span class="n">mdict</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+            <span class="n">matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mdict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">matches</span>
+    
+    
+    <span class="k">def</span> <span class="nf">__generate_author_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">id_col</span><span class="p">,</span> <span class="n">name_col</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function that generates a map of author ids to author names</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df: pandas.DataFrame</span>
+<span class="sd">            The SLIC papers DataFrame for which author SLIC ids need to be created</span>
+<span class="sd">        id_col: str</span>
+<span class="sd">            The author ids column. Options are [&#39;author_ids&#39;, &#39;s2_author_ids&#39;]</span>
+<span class="sd">        name_col: str</span>
+<span class="sd">            The author names column. Options are [&#39;authors&#39;, &#39;s2_authors&#39;]</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        auth_map: dict</span>
+<span class="sd">            Map where keys are author ids and values are author names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Orca]: Generating </span><span class="si">{</span><span class="n">id_col</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">name_col</span><span class="si">}</span><span class="s1"> map. . .&#39;</span><span class="p">)</span>
+        
+        <span class="n">auth_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">tmp_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="n">id_col</span><span class="p">,</span> <span class="n">name_col</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">id_list</span><span class="p">,</span> <span class="n">auth_list</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">tmp_df</span><span class="p">[</span><span class="n">id_col</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">tmp_df</span><span class="p">[</span><span class="n">name_col</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">tmp_df</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">auth_id</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">id_list</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">),</span> <span class="n">auth_list</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">auth_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">auth_map</span><span class="p">:</span>
+                    <span class="n">auth_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">return</span> <span class="n">auth_map</span>
+    
+    
+    <span class="k">def</span> <span class="nf">__compute_slic_scopus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function applies the SLIC id map to papers that have scopus information</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df: pandas.DataFrame</span>
+<span class="sd">            The SLIC papers DataFrame for which author SLIC ids need to be created</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        scopus_df: pandas.DataFrame</span>
+<span class="sd">            papers DataFrame that contains SLIC id and affiliation information </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tmp_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;eid&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span>  <span class="c1"># get only scopus papers</span>
+        
+        <span class="c1"># create maps for scopus author an</span>
+        <span class="n">scopus_authors</span><span class="p">,</span> <span class="n">scopus_affiliations</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">eid</span><span class="p">,</span> <span class="n">author_ids</span><span class="p">,</span> <span class="n">affiliations</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tmp_df</span><span class="p">[</span><span class="s1">&#39;eid&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> 
+                                                 <span class="n">tmp_df</span><span class="p">[</span><span class="s1">&#39;author_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> 
+                                                 <span class="n">tmp_df</span><span class="p">[</span><span class="s1">&#39;affiliations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">author_ids</span><span class="p">):</span>
+                <span class="n">scopus_authors</span><span class="p">[</span><span class="n">eid</span><span class="p">]</span> <span class="o">=</span> <span class="n">author_ids</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">affiliations</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">affiliations</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="n">affiliations</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">affiliations</span><span class="p">)</span>
+                <span class="n">scopus_affiliations</span><span class="p">[</span><span class="n">eid</span><span class="p">]</span> <span class="o">=</span> <span class="n">affiliations</span>
+            
+        <span class="n">scopus_df</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;eid&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;slic_author_ids&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;slic_affiliations&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="p">}</span>
+        
+        <span class="c1"># compute map of scopus author id to slic author id</span>
+        <span class="n">scopus_to_slic</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slic_df</span><span class="o">.</span><span class="n">slic_id</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">slic_df</span><span class="o">.</span><span class="n">scopus_ids</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span> 
+                          <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)}</span>
+        
+
+        <span class="n">missing_authors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">eid</span> <span class="ow">in</span> <span class="n">tmp_df</span><span class="o">.</span><span class="n">eid</span><span class="o">.</span><span class="n">to_list</span><span class="p">():</span>
+
+            <span class="n">slic_author_ids</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># first replace author_ids information </span>
+            <span class="n">author_ids</span> <span class="o">=</span> <span class="n">scopus_authors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">eid</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">author_ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">scopus_id</span> <span class="ow">in</span> <span class="n">author_ids</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">):</span>
+                    <span class="n">scopus_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">scopus_id</span><span class="p">)</span>  <span class="c1"># should already be string but hard cast to make sure</span>
+                    <span class="n">slic_id</span> <span class="o">=</span> <span class="n">scopus_to_slic</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">scopus_id</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">slic_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">missing_authors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">scopus_id</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">slic_author_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">slic_id</span><span class="p">))</span>
+
+            <span class="n">aff_dict</span><span class="p">,</span> <span class="n">del_dict</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">[]</span>  <span class="c1"># next update affiliations structure</span>
+            <span class="n">affiliations</span> <span class="o">=</span> <span class="n">scopus_affiliations</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">eid</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">affiliations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">aff_id</span><span class="p">,</span> <span class="n">aff_info_shallow</span> <span class="ow">in</span> <span class="n">affiliations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">del_list</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># items to remove</span>
+                    <span class="n">aff_info</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">aff_info_shallow</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">aff_info</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])):</span>
+                        <span class="n">scopus_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">aff_info</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="n">scopus_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">scopus_to_slic</span><span class="p">:</span>
+                            <span class="n">del_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scopus_id</span><span class="p">)</span>
+                            <span class="n">missing_authors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">scopus_id</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">aff_info</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">scopus_to_slic</span><span class="p">[</span><span class="n">scopus_id</span><span class="p">]</span>
+
+                    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">del_list</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">d</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">aff_info</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">]:</span>
+                            <span class="n">aff_info</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                             <span class="n">aff_info</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">aff_info</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">]:</span>
+                        <span class="n">del_dict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aff_id</span><span class="p">)</span> 
+                    <span class="n">aff_dict</span><span class="p">[</span><span class="n">aff_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">aff_info</span>
+
+                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">del_dict</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="n">aff_dict</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+
+            <span class="n">scopus_df</span><span class="p">[</span><span class="s1">&#39;eid&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eid</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">slic_author_ids</span><span class="p">:</span>
+                <span class="n">scopus_df</span><span class="p">[</span><span class="s1">&#39;slic_author_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">scopus_df</span><span class="p">[</span><span class="s1">&#39;slic_author_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">slic_author_ids</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">aff_dict</span><span class="p">:</span>
+                <span class="n">scopus_df</span><span class="p">[</span><span class="s1">&#39;slic_affiliations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">scopus_df</span><span class="p">[</span><span class="s1">&#39;slic_affiliations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aff_dict</span><span class="p">)</span> 
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_authors</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Orca]: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">missing_authors</span><span class="p">)</span><span class="si">}</span><span class="s1"> Scopus IDs did not have corresponding SLIC ID and were removed&#39;</span><span class="p">)</span>
+        
+        <span class="n">scopus_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">scopus_df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">scopus_df</span>
+    
+    
+    <span class="k">def</span> <span class="nf">__compute_slic_s2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function applies the SLIC id map to papers that have S2 information</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df: pandas.DataFrame</span>
+<span class="sd">            The SLIC papers DataFrame for which author SLIC ids need to be created</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        s2_df: pandas.DataFrame</span>
+<span class="sd">            papers DataFrame that contains SLIC id and affiliation information </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#tmp_df = df.loc[df[&#39;eid&#39;].isnull()]  # get only s2 papers</span>
+        <span class="n">tmp_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;s2id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span>
+        
+        <span class="c1"># compute map of s2 author id to slic author id</span>
+        <span class="n">s2_to_slic</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slic_df</span><span class="o">.</span><span class="n">slic_id</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">slic_df</span><span class="o">.</span><span class="n">s2_ids</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span> 
+                      <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)}</span>
+        
+        <span class="n">s2_df</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;s2id&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;slic_author_ids&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="p">}</span>
+        
+        <span class="n">missing_authors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">s2id</span><span class="p">,</span> <span class="n">s2_author_ids</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tmp_df</span><span class="p">[</span><span class="s1">&#39;s2id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">tmp_df</span><span class="p">[</span><span class="s1">&#39;s2_author_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()):</span>
+            <span class="n">slic_author_ids</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">s2_author_ids</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">s2_auth_id</span> <span class="ow">in</span> <span class="n">s2_author_ids</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">s2_auth_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">s2_to_slic</span><span class="p">:</span>
+                        <span class="n">missing_authors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">s2_auth_id</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">slic_author_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2_to_slic</span><span class="p">[</span><span class="n">s2_auth_id</span><span class="p">])</span>
+            
+            <span class="k">if</span> <span class="n">slic_author_ids</span><span class="p">:</span>
+                <span class="n">s2_df</span><span class="p">[</span><span class="s1">&#39;s2id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2id</span><span class="p">)</span>
+                <span class="n">s2_df</span><span class="p">[</span><span class="s1">&#39;slic_author_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">slic_author_ids</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">s2_df</span><span class="p">[</span><span class="s1">&#39;s2id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2id</span><span class="p">)</span>
+                <span class="n">s2_df</span><span class="p">[</span><span class="s1">&#39;slic_author_ids&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_authors</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Orca]: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">missing_authors</span><span class="p">)</span><span class="si">}</span><span class="s1"> S2 IDs did not have corresponding SLIC ID and were removed&#39;</span><span class="p">)</span>
+        
+        <span class="n">s2_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">s2_df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s2_df</span>
+
+
+    <span class="k">def</span> <span class="nf">__load_pickle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function for loading pickle files saved in data package</span>
+<span class="sd">        If upgrading to python &gt;=3.9, change this function make use of importlib.resources</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fn: str</span>
+<span class="sd">            The file name to be loaded</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        python object stored in the pickle file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">((</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_dir</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">fn</span><span class="p">)),</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+
+
+    <span class="k">def</span> <span class="nf">__generate_affiliations_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function for computing a map of affiliations for scopus authors. </span>
+<span class="sd">        The output map is a dict that adheres to the following structure:</span>
+<span class="sd">        {</span>
+<span class="sd">            SCOPUS_AUTHOR_ID:</span>
+<span class="sd">            {</span>
+<span class="sd">                SCOPUS_AFFILIATION_ID:</span>
+<span class="sd">                {</span>
+<span class="sd">                    &#39;name&#39;: NAME,  # the name of the affiliation</span>
+<span class="sd">                    &#39;country&#39;: COUNTRY  # country associated with the affiliation</span>
+<span class="sd">                    &#39;first_seen&#39;: XXXX  # the year when first known paper was published by author with given affiliation</span>
+<span class="sd">                    &#39;last_seen&#39;: XXXX  # the year when last known paper was published by author with given affiliation</span>
+<span class="sd">                    &#39;papers&#39;: XXXX  # list of known papers with this affiliation. NOT guaranteed to contain all papers</span>
+<span class="sd">                },</span>
+<span class="sd">                ...</span>
+<span class="sd">            },</span>
+<span class="sd">            ...</span>
+<span class="sd">        }</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df: pandas.DataFrame</span>
+<span class="sd">            The SLIC papers DataFrame for which author SLIC ids need to be created</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        affiliations_map: dict,</span>
+<span class="sd">            The created map</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">affiliations_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">eid</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">affiliations</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">eid</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">df</span><span class="o">.</span><span class="n">year</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">df</span><span class="o">.</span><span class="n">affiliations</span><span class="o">.</span><span class="n">to_list</span><span class="p">()):</span>
+            
+            <span class="c1"># handle missing / unconverted affiliations</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">affiliations</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">affiliations</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">affiliations</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">affiliations</span><span class="p">)</span>
+            
+            <span class="c1"># get the year</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">year</span><span class="p">):</span>
+                <span class="n">year</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+                
+            <span class="k">for</span> <span class="n">aff_id</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">affiliations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">aff_name</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span>
+                <span class="n">aff_country</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">auth_id</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;authors&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+                    <span class="k">if</span> <span class="n">auth_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">affiliations_map</span><span class="p">:</span>
+                        <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="k">if</span> <span class="n">aff_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">]:</span>
+                        <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">first_seen</span> <span class="o">=</span> <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;first_seen&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span>
+                    <span class="n">last_seen</span> <span class="o">=</span> <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;last_seen&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="s1">&#39;name&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">]:</span>
+                        <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aff_name</span>
+                        <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">][</span><span class="s1">&#39;country&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">aff_country</span>
+                        <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">][</span><span class="s1">&#39;first_seen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span>
+                        <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">][</span><span class="s1">&#39;last_seen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span>
+                        <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">][</span><span class="s1">&#39;papers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">eid</span><span class="p">}</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">][</span><span class="s1">&#39;papers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">eid</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">year</span> <span class="o">&lt;</span> <span class="n">first_seen</span> <span class="ow">or</span> <span class="n">first_seen</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">][</span><span class="s1">&#39;first_seen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span>
+                        <span class="k">elif</span> <span class="n">year</span> <span class="o">&gt;</span> <span class="n">last_seen</span> <span class="ow">or</span> <span class="n">last_seen</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">][</span><span class="s1">&#39;last_seen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">year</span>
+
+        <span class="c1"># handle the missing years </span>
+        <span class="k">for</span> <span class="n">auth_id</span> <span class="ow">in</span> <span class="n">affiliations_map</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">aff_id</span><span class="p">,</span> <span class="n">aff_info</span> <span class="ow">in</span> <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">aff_info</span><span class="p">[</span><span class="s1">&#39;first_seen&#39;</span><span class="p">]:</span>
+                    <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">][</span><span class="s1">&#39;first_seen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">aff_info</span><span class="p">[</span><span class="s1">&#39;last_seen&#39;</span><span class="p">]:</span>
+                    <span class="n">affiliations_map</span><span class="p">[</span><span class="n">auth_id</span><span class="p">][</span><span class="n">aff_id</span><span class="p">][</span><span class="s1">&#39;last_seen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">affiliations_map</span>
+
+
+    <span class="k">def</span> <span class="nf">__merge_scopus_affiliations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scopus_ids</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function for merging the scopus affiliation maps for entries where multiple scopus</span>
+<span class="sd">        ids correspond to the same author</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        scopus_ids: list</span>
+<span class="sd">            A list of scopus author ids</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            The scopus affiliations map</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        merged: dict</span>
+<span class="sd">            A dictionary that is a result of merging the dictionaries associated with the </span>
+<span class="sd">            duplicate author ids. For shared items, &#39;first_seen&#39; is the earliest and &#39;last_seen&#39; is </span>
+<span class="sd">            the latest among all the dictionaries. For unshared items, their details are kept </span>
+<span class="sd">            as is. If &#39;first_seen&#39; or &#39;last_seen&#39; is &#39;Unknown&#39; in one dictionary but has a valid </span>
+<span class="sd">            integer value in another, the integer value is considered. If no valid integer value </span>
+<span class="sd">            exists for &#39;first_seen&#39; or &#39;last_seen&#39;, &#39;Unknown&#39; is set as the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">merged</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">all_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">k</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">scopus_ids</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">all_keys</span><span class="p">:</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">scopus_ids</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span> <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">]</span>
+            <span class="n">countries</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;country&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span> <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;country&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">]</span>
+            <span class="n">papers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;papers&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">]))</span>
+            <span class="n">merged</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">names</span> <span class="k">else</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">,</span>  <span class="c1"># use first valid affiliation name, or &#39;Unknown&#39; if no valid names</span>
+                <span class="s1">&#39;country&#39;</span><span class="p">:</span> <span class="n">countries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">countries</span> <span class="k">else</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">,</span>  <span class="c1"># use first valid affiliation country, or &#39;Unknown&#39; if no valid countries</span>
+                <span class="s1">&#39;first_seen&#39;</span><span class="p">:</span> <span class="nb">min</span><span class="p">((</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;first_seen&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;first_seen&#39;</span><span class="p">],</span> <span class="nb">int</span><span class="p">)),</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;Unknown&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;last_seen&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">((</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;last_seen&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;last_seen&#39;</span><span class="p">],</span> <span class="nb">int</span><span class="p">)),</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;Unknown&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;papers&#39;</span><span class="p">:</span> <span class="n">papers</span>
+            <span class="p">}</span>
+        <span class="n">merged</span> <span class="o">=</span> <span class="n">merged</span> <span class="k">if</span> <span class="n">merged</span> <span class="k">else</span> <span class="kc">None</span>  <span class="c1"># {} --&gt; None</span>
+        <span class="k">return</span> <span class="n">merged</span>
+    
+    
+    <span class="c1">### GETTERS / SETTERS</span>
+    
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_duplicates</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">s2_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s2_duplicates</span>
+
+    <span class="nd">@duplicates</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duplicates</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">duplicates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_duplicates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">duplicates</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_duplicates</span> <span class="o">=</span>  <span class="n">duplicates</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duplicates</span><span class="p">)</span><span class="si">}</span><span class="s1"> is an invalid type for `duplicates`&#39;</span><span class="p">)</span>
+<span class="w">        </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Code where we have a precomputed duplicates.</span>
+<span class="sd">    @duplicates.setter</span>
+<span class="sd">    def duplicates(self, duplicates):</span>
+<span class="sd">        if duplicates is None:</span>
+<span class="sd">            self._duplicates = self.__load_pickle(self.DUPLICATES_1M)</span>
+<span class="sd">        elif isinstance(duplicates, list):</span>
+<span class="sd">            self._duplicates = self.__load_pickle(self.DUPLICATES_1M) + duplicates</span>
+<span class="sd">        else:</span>
+<span class="sd">            raise TypeError(f&#39; {type(duplicates)} is an invalid type for `duplicates`&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    
+    <span class="nd">@s2_duplicates</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">s2_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s2_duplicates</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">s2_duplicates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_s2_duplicates</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s2_duplicates</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_s2_duplicates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__add_s2_duplicates</span><span class="p">(</span><span class="n">s2_duplicates</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">s2_duplicates</span><span class="p">)</span><span class="si">}</span><span class="s1"> is an invalid type for `s2_duplicates`&#39;</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
