@@ -108,7 +108,7 @@ python post_install.py # use the following, for example, for GPU system: <python
 |   Vulture  | :heavy_check_mark:  | :heavy_check_mark:  |         Advanced text processing tool for cleaning and NLP         |  [Link](examples/Vulture)  | :white_check_mark: |
 |   Beaver   | :heavy_check_mark:  | :heavy_check_mark:  |        Fast matrix and tensor building tool for text mining        |  [Link](examples/Beaver)  | :white_check_mark: |
 |  iPenguin  | :heavy_check_mark:  |                     |         Online information retrieval tool for Scopus, SemanticScholar, and OSTI         | [Link](examples/iPenguin) |       :white_check_mark:       |
-|    Orca    | :heavy_check_mark:  |                     | Duplicate author detector for text mining and information retrival |   [Link](examples/Orca)          |       :white_check_mark:       |
+|    Orca    | :heavy_check_mark:  |                     | Duplicate author detector for text mining and information retrieval |   [Link](examples/Orca)          |       :white_check_mark:       |
 
 ### TELF.post_processing
 
