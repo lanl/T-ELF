@@ -1,0 +1,760 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TELF.post_processing.Wolf.wolf &#8212; TELF 0.0.37 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../../../../_static/documentation_options.js?v=c62b8e41"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/post_processing/Wolf/wolf';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.37 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../HNMFk.html"><strong>TELF.factorization.HNMFk:</strong> Hierarchical Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Orca.html"><strong>TELF.pre_processing.Orca:</strong> Duplicate author detector for text mining and information retrival</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Wolf.html"><strong>TELF.post_processing.Wolf:</strong> Graph centrality and ranking tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../iPenguin.html"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</a></li>
+
+
+
+
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../TELF.html">TELF package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../TELF.factorization.html">TELF.factorization package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../TELF.pre_processing.html">TELF.pre_processing package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for TELF.post_processing.Wolf.wolf</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+
+<span class="kn">from</span> <span class="nn">.graph</span> <span class="kn">import</span> <span class="n">Graph</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">values_have_duplicates</span><span class="p">,</span> <span class="n">keys_are_sequential</span><span class="p">,</span> <span class="n">verify_matrix</span><span class="p">,</span> <span class="n">verify_n_jobs</span><span class="p">,</span> <span class="n">verify_stats</span>
+
+
+
+<div class="viewcode-block" id="Wolf">
+<a class="viewcode-back" href="../../../../Wolf.html#TELF.post_processing.Wolf.wolf.Wolf">[docs]</a>
+<span class="k">class</span> <span class="nc">Wolf</span><span class="p">:</span>
+
+    <span class="n">PARALLEL_BACKEND_OPTIONS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;loky&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;multiprocessing&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;threading&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">TARGET_STATS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;in_weight&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;out_weight&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;degree&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;in_degree&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;out_degree&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;page_rank&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;in_closeness&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;out_closeness&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;hubs_authorities&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;betweenness_centrality&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">parallel_backend</span><span class="o">=</span><span class="s1">&#39;loky&#39;</span><span class="p">,</span> <span class="n">max_nbytes</span><span class="o">=</span><span class="s1">&#39;100M&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graphs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span> <span class="o">=</span> <span class="n">parallel_backend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_nbytes</span> <span class="o">=</span> <span class="n">max_nbytes</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+        
+<div class="viewcode-block" id="Wolf.create_graph">
+<a class="viewcode-back" href="../../../../Wolf.html#TELF.post_processing.Wolf.wolf.Wolf.create_graph">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">node_ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_weighted_value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a graph from a matrix. The matrix can either be sparse or dense. </span>
+<span class="sd">        Note that the matrix cannot have entries on the diagonal. A diagonal entry would cause</span>
+<span class="sd">        a loop in the graph. </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: np.ndarray, scipy.sparse, pydata.sparse</span>
+<span class="sd">            A dense or sparse 2-dimensional matrix. Non-zero entries in the matrix serve as an edge</span>
+<span class="sd">            between the row, col entry.</span>
+<span class="sd">        node_ids: dict, optional</span>
+<span class="sd">            A map that can be used to replace the enumerated node identifiers with custom ids in the</span>
+<span class="sd">            graph. </span>
+<span class="sd">        attributes: dict, optional</span>
+<span class="sd">            A map that contains the attributes for the graph.</span>
+<span class="sd">        target_nodes: list, NoneType</span>
+<span class="sd">            List of node ids from which to create a subgraph. If the intersection of target_nodes and </span>
+<span class="sd">            node_ids is None, an empty graph will be created. If target_nodes is None, no subgraph</span>
+<span class="sd">            will be taken. Default=None.</span>
+<span class="sd">        alpha: int, NoneType</span>
+<span class="sd">            A masking value that is used to remove noise from the matrix prior to creating the graph. </span>
+<span class="sd">            For an entry (i,j) into the matrix X, the entry is zeroed if it is less than alpha.</span>
+<span class="sd">            Default=None. </span>
+<span class="sd">        use_weighted_value: bool</span>
+<span class="sd">            Flag that determines if an edge in the graph is given a custom weight. If True, the weight</span>
+<span class="sd">            for an edge between nodes i and j in the graph is the value at X(i,j). If false, every edge</span>
+<span class="sd">            has a weight of 1. Default=True.</span>
+<span class="sd">        kwargs: dict</span>
+<span class="sd">            Arbitrary keyword arguments that will be stored as attributes of the graph. If the keyword is</span>
+<span class="sd">            a reserved member variable of Graph, a ValueError will be thrown.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        graph: Graph</span>
+<span class="sd">            The created graph object. The output is also stored in the graphs attribute of the Wolf object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        
+        <span class="c1"># verify function input</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">verify_matrix</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">alpha</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># update node ids and attributes if provided</span>
+        <span class="k">if</span> <span class="n">node_ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span> <span class="o">=</span> <span class="n">node_ids</span>
+        <span class="k">if</span> <span class="n">attributes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="n">attributes</span>
+            
+        <span class="n">X</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">data</span> <span class="o">&lt;</span> <span class="n">alpha</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">nnz_coords</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
+        <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">nnz_coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nnz_coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># add nodes</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">g</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">has_node</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="n">node_attributes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="o">=</span><span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">node_attributes</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">g</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">has_node</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="n">node_attributes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node</span><span class="o">=</span><span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">node_attributes</span><span class="p">)</span>
+
+        <span class="c1"># add edges</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">nnz</span><span class="p">):</span>
+            <span class="n">n1</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">rows</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+            <span class="n">n2</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">use_weighted_value</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
+
+        <span class="c1"># get subgraph</span>
+        <span class="k">if</span> <span class="n">target_nodes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">subgraph</span><span class="p">(</span><span class="n">target_nodes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">g</span></div>
+
+
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_apply_stats</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">stats</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">stats</span><span class="p">:</span>
+                <span class="n">kwargs</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">get_stat</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">stats</span><span class="p">:</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">get_stat</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">g</span><span class="o">.</span><span class="n">output_stats</span><span class="p">()</span>
+    
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_ranks_helper</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">stats</span><span class="p">,</span> <span class="n">node_ids</span><span class="p">,</span> <span class="n">attributes</span><span class="p">,</span> <span class="n">target_nodes</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">use_weighted_value</span><span class="p">,</span> <span class="n">slice_id</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">Wolf</span><span class="o">.</span><span class="n">create_graph</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> 
+                              <span class="n">node_ids</span> <span class="o">=</span> <span class="n">node_ids</span><span class="p">,</span>
+                              <span class="n">attributes</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">,</span>
+                              <span class="n">target_nodes</span> <span class="o">=</span> <span class="n">target_nodes</span><span class="p">,</span>
+                              <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span><span class="p">,</span> 
+                              <span class="n">use_weighted_value</span> <span class="o">=</span> <span class="n">use_weighted_value</span><span class="p">,</span>
+                              <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">slice_id</span><span class="p">,</span> <span class="n">Wolf</span><span class="o">.</span><span class="n">_apply_stats</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">stats</span><span class="p">))</span>
+    
+    
+<div class="viewcode-block" id="Wolf.get_ranks">
+<a class="viewcode-back" href="../../../../Wolf.html#TELF.post_processing.Wolf.wolf.Wolf.get_ranks">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_ranks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">slice_ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">node_ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                  <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_weighted_value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute graph statistics for a tensor.</span>
+<span class="sd">        </span>
+<span class="sd">        For each slice of a tensor, create a graph and evaluate said graph.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X: np.ndarray, pydata.sparse </span>
+<span class="sd">            A dense or sparse 3-dimensional tensor</span>
+<span class="sd">        stats: list, dict</span>
+<span class="sd">            The graph stats that should be calculated for the given tensor. If a list, each item in the </span>
+<span class="sd">            list should be a valid Graph stat function name. The arguments for this function will be kept</span>
+<span class="sd">            as default. If a dict, the keys should be the function names and the values should be dicts</span>
+<span class="sd">            of keyword arguments that should be passed to the respective stat function. If None, all</span>
+<span class="sd">            stats will be computed using the default arguments. Default=None.</span>
+<span class="sd">        slice_ids: dict, NoneType</span>
+<span class="sd">            A map of labels for the third dimension of the tensor. The keys should be consecutive integers </span>
+<span class="sd">            starting with 0 and counting up to o for a tensor X of shape m by n by o. If slice_ids is None, </span>
+<span class="sd">            the enumeration of the slices will be used as the id.</span>
+<span class="sd">            &gt;&gt;&gt; slice_ids = {0: 2020, 1: 2021, 2: 2022, 3: 2023}</span>
+<span class="sd">        node_ids: dict, [dict, dict], NoneType</span>
+<span class="sd">            A map that can be used to replace the enumerated node identifiers with custom ids in the</span>
+<span class="sd">            graph. The input is expected to be a dictionary, a list or tuple of two dictionaries, or None.</span>
+<span class="sd">            If the input is a dict, it is assumed that both matrix dimensions share the same ids. If the</span>
+<span class="sd">            input is a list/tuple the first dict is used for the first dimension and the second for the</span>
+<span class="sd">            second. If the input is None, the enumerated ids are not replaced. Note that the keys of the </span>
+<span class="sd">            value should be sequential integers representing the original enumerated ids and the values</span>
+<span class="sd">            should be the replacement ids. This argument is intended for use cases where the entries in </span>
+<span class="sd">            the matrix have unique identifiers that are more specific than the enumerated index values of </span>
+<span class="sd">            the matrix. For example, in the case of an documents x documents matrix, the enumerated ids can be </span>
+<span class="sd">            replaced with document ids. Default=None.</span>
+<span class="sd">        attributes: dict, [dict, dict], NoneType</span>
+<span class="sd">            A map that contains the attributes for the graph. The input is expected to be a dictionary, </span>
+<span class="sd">            a list or tuple of two dictionaries, or None. If the input is a dict, it is assumed that both </span>
+<span class="sd">            matrix dimensions share the same attributes. If the input is a list/tuple the first dict is </span>
+<span class="sd">            used for the first dimension and the second for the second. The key in this map is the id of </span>
+<span class="sd">            the node that will house the particular attribute(s). The values are dicts where the key is </span>
+<span class="sd">            the name of the attribute and the value is the attribute value. The node id for this argument </span>
+<span class="sd">            should match the format used by node_ids. If no attributes are provided, no attributes will </span>
+<span class="sd">            be set on the graph. Default=None.</span>
+<span class="sd">        alpha: int, NoneType</span>
+<span class="sd">            A masking value that is used to remove noise from the matrix prior to creating the graph. </span>
+<span class="sd">            For an entry (i,j) into the matrix X, the entry is zeroed if it is less than alpha.</span>
+<span class="sd">            Default=None. </span>
+<span class="sd">        use_weighted_value: bool</span>
+<span class="sd">            Flag that determines if an edge in the graph is given a custom weight. If True, the weight</span>
+<span class="sd">            for an edge between nodes i and j in the graph is the value at X(i,j). If false, every edge</span>
+<span class="sd">            has a weight of 1. Default=True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict:</span>
+<span class="sd">            A dictionary where the keys are slices (either enumerated ids or more specific ids provided </span>
+<span class="sd">            by the dimension map `slice_ids`). The values are pandas DataFrames that contain graph </span>
+<span class="sd">            statistics for the corresponding slice of the tensor. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">stats</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Wolf</span><span class="o">.</span><span class="n">TARGET_STATS</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">slice_ids</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">slice_ids</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c1"># verify the function input</span>
+        <span class="n">verify_stats</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span> <span class="o">=</span> <span class="n">node_ids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="n">attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+
+        <span class="c1"># form the graphs in parallel</span>
+        <span class="n">slices</span> <span class="o">=</span> <span class="p">[</span><span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])]</span>
+    
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">slices</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">slices</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
+                <span class="n">slice_id</span> <span class="o">=</span> <span class="n">slice_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">slice_id</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ranks_helper</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> 
+                                                           <span class="n">stats</span><span class="o">=</span><span class="n">stats</span><span class="p">,</span>
+                                                           <span class="n">node_ids</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span><span class="p">,</span> 
+                                                           <span class="n">attributes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> 
+                                                           <span class="n">target_nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                                                           <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> 
+                                                           <span class="n">use_weighted_value</span><span class="o">=</span><span class="n">use_weighted_value</span><span class="p">,</span>
+                                                           <span class="n">slice_id</span><span class="o">=</span><span class="n">slice_id</span><span class="p">)</span>
+                <span class="n">output</span><span class="p">[</span><span class="n">slice_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span>
+            <span class="k">return</span> <span class="n">output</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">max_nbytes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_nbytes</span><span class="p">,</span> 
+                               <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)(</span>
+                          <span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_ranks_helper</span><span class="p">)(</span>
+                              <span class="n">X</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> 
+                              <span class="n">stats</span><span class="o">=</span><span class="n">stats</span><span class="p">,</span>
+                              <span class="n">node_ids</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span><span class="p">,</span> 
+                              <span class="n">attributes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> 
+                              <span class="n">target_nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                              <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> 
+                              <span class="n">use_weighted_value</span><span class="o">=</span><span class="n">use_weighted_value</span><span class="p">,</span>
+                              <span class="n">slice_id</span> <span class="o">=</span> <span class="n">slice_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+                          <span class="p">)</span>
+                          <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">slices</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">results</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Wolf.get_community_ranks">
+<a class="viewcode-back" href="../../../../Wolf.html#TELF.post_processing.Wolf.wolf.Wolf.get_community_ranks">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_community_ranks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">node_ids</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        
+        <span class="c1"># compute the year groups</span>
+        <span class="n">third_dim_groups</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
+            <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
+                <span class="n">third_dim_groups</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">item</span><span class="p">,</span> <span class="n">group</span><span class="p">))</span>
+
+        <span class="c1"># verify the function stats</span>
+        <span class="k">if</span> <span class="n">stats</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Wolf</span><span class="o">.</span><span class="n">TARGET_STATS</span><span class="p">)</span>
+        <span class="n">verify_stats</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span> <span class="o">=</span> <span class="n">node_ids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attributes</span> <span class="o">=</span> <span class="n">attributes</span>
+        
+        <span class="n">target_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">top_n</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="s2">&quot;If using A, pass integer top_n!&quot;</span>
+        <span class="k">for</span> <span class="n">yg</span> <span class="ow">in</span> <span class="n">third_dim_groups</span><span class="p">:</span>
+            <span class="n">target_indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">A</span><span class="p">[:,</span> <span class="n">yg</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[</span><span class="o">-</span><span class="n">top_n</span><span class="p">:][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">node_ids</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">target_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target_indices</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">target_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">node_ids</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">target_indices</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">yg</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">third_dim_groups</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">third_dim_groups</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
+                <span class="n">slice_id</span> <span class="o">=</span> <span class="n">yg</span>
+                <span class="n">slice_id</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ranks_helper</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">yg</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                                                           <span class="n">stats</span><span class="o">=</span><span class="n">stats</span><span class="p">,</span>
+                                                           <span class="n">node_ids</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span><span class="p">,</span> 
+                                                           <span class="n">attributes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> 
+                                                           <span class="n">target_nodes</span><span class="o">=</span><span class="n">target_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                                           <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> 
+                                                           <span class="n">use_weighted_value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                           <span class="n">slice_id</span><span class="o">=</span><span class="n">slice_id</span><span class="p">,</span>
+                                                           <span class="n">year</span><span class="o">=</span><span class="n">yg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+                                                           <span class="n">group</span><span class="o">=</span><span class="n">yg</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">output</span><span class="p">[</span><span class="n">slice_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span>
+            <span class="k">return</span> <span class="n">output</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">max_nbytes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_nbytes</span><span class="p">,</span> 
+                               <span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parallel_backend</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)(</span>
+                          <span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_ranks_helper</span><span class="p">)(</span>
+                              <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">yg</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                              <span class="n">stats</span><span class="o">=</span><span class="n">stats</span><span class="p">,</span>
+                              <span class="n">node_ids</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span><span class="p">,</span> 
+                              <span class="n">attributes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">,</span> 
+                              <span class="n">target_nodes</span><span class="o">=</span><span class="n">target_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                              <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> 
+                              <span class="n">use_weighted_value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">slice_id</span><span class="o">=</span><span class="n">yg</span><span class="p">,</span>
+                              <span class="n">year</span><span class="o">=</span><span class="n">yg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+                              <span class="n">group</span><span class="o">=</span><span class="n">yg</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                          <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">yg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">third_dim_groups</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">results</span><span class="p">)</span></div>
+
+        
+        
+    <span class="c1">### GETTERS / SETTERS</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">node_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_ids</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parallel_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_backend</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">verbose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span>
+
+    
+    <span class="c1">### Setters</span>
+
+
+    <span class="nd">@node_ids</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">node_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_ids</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_ids</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>  <span class="c1"># single dictionary, assuming that both dimensions are same</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_node_ids</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_ids</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">node_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">node_ids</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_node_ids</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">:</span> <span class="n">node_ids</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+        <span class="k">elif</span> <span class="n">node_ids</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_node_ids</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">1</span><span class="p">:</span> <span class="p">{}}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;node_ids must be a dictionary, a list or tuple of two dictionaries, or None&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">keys_are_sequential</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span><span class="p">[</span><span class="n">dim</span><span class="p">]):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Keys of node_ids must be sequntial integers representing the index of matrix&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">values_have_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_ids</span><span class="p">[</span><span class="n">dim</span><span class="p">]):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Values of node_ids cannot contain any duplicates&#39;</span><span class="p">)</span>
+
+    <span class="nd">@attributes</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attributes</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>  <span class="c1"># single dictionary, assuming that both dimensions are same</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="n">attributes</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="n">attributes</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">and</span> \
+             <span class="nb">len</span><span class="p">(</span><span class="n">attributes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> \
+             <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">:</span> <span class="n">attributes</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+        <span class="k">elif</span> <span class="n">attributes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="p">{},</span> <span class="mi">1</span><span class="p">:</span> <span class="p">{}}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;attributes must be a dictionary, a list or tuple of two dictionaries, or None&#39;</span><span class="p">)</span>
+
+    <span class="nd">@n_jobs</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">n_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span> <span class="o">=</span> <span class="n">verify_n_jobs</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">)</span>
+        
+    <span class="nd">@parallel_backend</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">parallel_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parallel_backend</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parallel_backend</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;parallel_backend must be an str!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parallel_backend</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARALLEL_BACKEND_OPTIONS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">parallel_backend</span><span class="si">}</span><span class="s1"> is not a valid parallel_backend option!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_backend</span> <span class="o">=</span> <span class="n">parallel_backend</span>
+
+    <span class="nd">@verbose</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">verbose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>  <span class="c1"># convert False to 0, True to 1</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Integer values for verbose must be non-negative!&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;verbose should be of type bool or int!&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -5,10 +5,12 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 10
 
    TELF.factorization
    TELF.pre_processing
+   TELF.post_processing
+   TELF.applications
 
 Submodules
 ----------
