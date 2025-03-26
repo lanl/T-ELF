@@ -208,6 +208,9 @@ Tests can be ran from this folder using ``python -m pytest *``.
    Orca
    Wolf
    iPenguin
+   Penguin
+   Bunny
+   SeaLion
    modules
 
 

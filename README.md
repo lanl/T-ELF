@@ -115,16 +115,17 @@ python post_install.py # use the following, for example, for GPU system: <python
 | **Method** |                       **Description**                      | **Example** | **Release Status** |
 |:----------:|:----------------------------------------------------------:|:-----------:|:------------------:|
 |    Wolf    |              Graph centrality and ranking tool             |      [Link](examples/Wolf)       |       :white_check_mark:       |
-|   Peacock  | Data visualization and generation of actionable statistics |             |       :soon:       |
+|   Peacock  | Data visualization and generation of actionable statistics |  [Link](examples/Peacock) |       :white_check_mark:       |
+|    SeaLion    |              Generic report generation tool            | [Link](examples/SeaLion) |       :white_check_mark:       |
 |    Fox    |              Report generation tool for text data            |             |       :soon:       |
-|    SeaLion    |              Generic report generation tool            |             |       :soon:       |
 
 ### TELF.applications
 
 | **Method** |                            **Description**                           | **Example** | **Release Status** |
 |:----------:|:--------------------------------------------------------------------:|:-----------:|:------------------:|
 |   Cheetah  |                        Fast search by keywords and phrases                       |    [Link](examples/Cheetah)         |       :white_check_mark:      |
-|    Bunny   | Dataset generation tool for documents and their citations/references |             |       :soon:       |
+|    Bunny   | Dataset generation tool for documents and their citations/references |  [Link](examples/Bunny)  |       :white_check_mark:       |
+|  Penguin   |         Text storage tool                                    | [Link](examples/Penguin) |       :white_check_mark:       |
 |    Termite   | Knowladge graph building tool |             |       :soon:       |
 
 

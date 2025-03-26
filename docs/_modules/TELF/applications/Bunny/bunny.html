@@ -1,0 +1,1281 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TELF.applications.Bunny.bunny &#8212; TELF 0.0.38 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../../../../_static/documentation_options.js?v=8c8d0fbf"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/applications/Bunny/bunny';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.38 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../HNMFk.html"><strong>TELF.factorization.HNMFk:</strong> Hierarchical Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Orca.html"><strong>TELF.pre_processing.Orca:</strong> Duplicate author detector for text mining and information retrival</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Wolf.html"><strong>TELF.post_processing.Wolf:</strong> Graph centrality and ranking tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../iPenguin.html"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Penguin.html"><strong>TELF.applications.Penguin:</strong>  Text storage tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Bunny.html"><strong>TELF.applications.Bunny:</strong>   Dataset generation tool for documents and their citations/references</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../SeaLion.html"><strong>TELF.post_processing.SeaLion:</strong> Generic report generation tool</a></li>
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../TELF.html">TELF package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../TELF.factorization.html">TELF.factorization package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../TELF.pre_processing.html">TELF.pre_processing package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for TELF.applications.Bunny.bunny</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;future.no_silent_downcasting&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">...applications.Penguin</span> <span class="kn">import</span> <span class="n">Penguin</span><span class="p">,</span> <span class="n">form_df</span>
+<span class="kn">from</span> <span class="nn">...pre_processing.iPenguin.Scopus</span> <span class="kn">import</span> <span class="n">Scopus</span>
+<span class="kn">from</span> <span class="nn">...pre_processing.iPenguin.SemanticScholar</span> <span class="kn">import</span> <span class="n">SemanticScholar</span>
+<span class="kn">from</span> <span class="nn">...pre_processing.iPenguin.utils</span> <span class="kn">import</span> <span class="n">format_pubyear</span>
+<span class="kn">from</span> <span class="nn">...pre_processing.Orca.AuthorMatcher</span> <span class="kn">import</span> <span class="n">AuthorMatcher</span>
+
+<div class="viewcode-block" id="BunnyFilter">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.BunnyFilter">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BunnyFilter</span><span class="p">:</span>
+    <span class="n">filter_type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">filter_value</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">Bunny</span><span class="o">.</span><span class="n">FILTERS</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_type</span> <span class="o">!=</span> <span class="s1">&#39;DOI&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid filter_type &quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filter_type</span><span class="si">}</span><span class="s1">&quot;. Allowed values are </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">Bunny</span><span class="o">.</span><span class="n">FILTERS</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="BunnyOperation">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.BunnyOperation">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BunnyOperation</span><span class="p">:</span>
+    <span class="n">operator</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">operands</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BunnyFilter</span><span class="p">,</span> <span class="s1">&#39;BunnyOperation&#39;</span><span class="p">]]</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;AND&quot;</span><span class="p">,</span> <span class="s2">&quot;OR&quot;</span><span class="p">}:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid operator &quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">operator</span><span class="si">}</span><span class="s1">&quot;. Only &quot;AND&quot; and &quot;OR&quot; are allowed.&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">operand</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">operands</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">operand</span><span class="p">,</span> <span class="p">(</span><span class="n">BunnyFilter</span><span class="p">,</span> <span class="n">BunnyOperation</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid operand </span><span class="si">{</span><span class="n">operand</span><span class="si">}</span><span class="s2">. Operands must be instances of Filter or Operation.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="is_valid_query">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.is_valid_query">[docs]</a>
+<span class="k">def</span> <span class="nf">is_valid_query</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validates the structure of a Bunny filter query.</span>
+
+<span class="sd">    The function checks whether a given input follows the intended structure of Bunny filter</span>
+<span class="sd">    queries. Each element in the query is evaluated recursively, making sure that only BunnyFilter</span>
+<span class="sd">    and BunnyOperation objects are present. </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    query: (Filter/Operation)</span>
+<span class="sd">        The query to be validated. The query can be an instance of BunnyFilter or BunnyOperation dataclass.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool: </span>
+<span class="sd">        True if the query is valid, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">BunnyFilter</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">query</span><span class="o">.</span><span class="n">filter_type</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">query</span><span class="o">.</span><span class="n">filter_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">BunnyOperation</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">query</span><span class="o">.</span><span class="n">operator</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">query</span><span class="o">.</span><span class="n">operands</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">operand</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">operands</span><span class="p">:</span>  <span class="c1"># check each operand recursively</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_query</span><span class="p">(</span><span class="n">operand</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># if part of a query is not a BunnyFilter or BunnyOperation, it&#39;s invalid</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="evaluate_query_to_string">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.evaluate_query_to_string">[docs]</a>
+<span class="k">def</span> <span class="nf">evaluate_query_to_string</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a Bunny query into a string that can be accepted by Scopus.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    query: BunnyFilter, BunnyOperation</span>
+<span class="sd">        The query object. This can be an instance of BunnyFilter or BunnyOperation.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        A string representation of the query that can be processed by Scopus</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># If the query is a Filter, just return its string representation</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">BunnyFilter</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">query</span><span class="o">.</span><span class="n">filter_type</span> <span class="o">==</span> <span class="s1">&#39;PUBYEAR&#39;</span><span class="p">:</span>
+            <span class="n">year</span><span class="p">,</span> <span class="n">fmat</span> <span class="o">=</span> <span class="n">format_pubyear</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">filter_value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">year</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">query</span><span class="o">.</span><span class="n">filter_value</span><span class="si">}</span><span class="s1">&quot; is an invalid PUBYEAR. Options are [&quot;YEAR&quot;, &quot;-YEAR&quot;, &quot;YEAR-&quot;]&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">query</span><span class="o">.</span><span class="n">filter_type</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">fmat</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">query</span><span class="o">.</span><span class="n">filter_type</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">query</span><span class="o">.</span><span class="n">filter_value</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="c1"># If the query is an Operation, recursively evaluate each operand</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">BunnyOperation</span><span class="p">):</span>
+        <span class="n">subquery_strings</span> <span class="o">=</span> <span class="p">[</span><span class="n">evaluate_query_to_string</span><span class="p">(</span><span class="n">subquery</span><span class="p">)</span> <span class="k">for</span> <span class="n">subquery</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">operands</span><span class="p">]</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">query</span><span class="o">.</span><span class="n">operator</span><span class="si">}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">subquery_strings</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+    
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid query type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="find_doi">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.find_doi">[docs]</a>
+<span class="k">def</span> <span class="nf">find_doi</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper function that attempts to extract the DOI from a Scopus paper XML file</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f: str</span>
+<span class="sd">        Path to the Scopus XML file</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    doi: str, None</span>
+<span class="sd">        Returns DOI if found, else None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>  <span class="c1"># read only first 2048 bytes</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1536</span><span class="p">)</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># if splitting multibyte character, try to read less</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="ne">UnicodeDecodeError</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">pattern</span> <span class="o">=</span> <span class="s1">&#39;&lt;prism:doi&gt;(.*?)&lt;/prism:doi&gt;&#39;</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">match</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="gen_chunks">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.gen_chunks">[docs]</a>
+<span class="k">def</span> <span class="nf">gen_chunks</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield n number of sequential chunks from l.&quot;&quot;&quot;</span>
+    <span class="n">d</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">si</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">i</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">r</span> <span class="k">else</span> <span class="n">r</span><span class="p">)</span> <span class="o">+</span> <span class="n">d</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">r</span> <span class="k">else</span> <span class="n">i</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">l</span><span class="p">[</span><span class="n">si</span><span class="p">:</span><span class="n">si</span><span class="o">+</span><span class="p">(</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">r</span> <span class="k">else</span> <span class="n">d</span><span class="p">)]</span></div>
+
+
+
+<div class="viewcode-block" id="Bunny">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.Bunny">[docs]</a>
+<span class="k">class</span> <span class="nc">Bunny</span><span class="p">():</span>
+    
+    <span class="n">MODES</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;references&#39;</span><span class="p">,</span> <span class="s1">&#39;citations&#39;</span><span class="p">,</span> <span class="s1">&#39;s2_author_ids&#39;</span><span class="p">}</span>
+    <span class="n">FILTERS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;AFFILCOUNTRY&#39;</span><span class="p">:</span> <span class="s1">&#39;Country&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;AFFILORG&#39;</span><span class="p">:</span> <span class="s1">&#39;Affiliation&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;AF-ID&#39;</span><span class="p">:</span> <span class="s1">&#39;Affiliation ID&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;PUBYEAR&#39;</span><span class="p">:</span> <span class="s1">&#39;Publication Year&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;AU-ID&#39;</span><span class="p">:</span> <span class="s1">&#39;Scopus Author ID&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;KEY&#39;</span><span class="p">:</span> <span class="s1">&#39;Keyword&#39;</span><span class="p">,}</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s2_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scopus_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">penguin_settings</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">=</span> <span class="n">output_dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s2_key</span> <span class="o">=</span> <span class="n">s2_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scopus_keys</span> <span class="o">=</span> <span class="n">scopus_keys</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">penguin_settings</span> <span class="o">=</span> <span class="n">penguin_settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="c1"># create a dictionary of supported filters and their callable load functions</span>
+        <span class="n">filters</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;_filter_</span><span class="si">{</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">Bunny</span><span class="o">.</span><span class="n">FILTERS</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filter_funcs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">filters</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">))}</span>
+        
+    
+    <span class="k">def</span> <span class="nf">__init_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="n">sep</span><span class="p">):</span>
+        <span class="n">lookup</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">series</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">)]</span>
+        <span class="n">lookup_freq</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">lookup</span><span class="p">)</span>
+        <span class="n">unique_lookup</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">lookup_freq</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># sort based on priority</span>
+        <span class="k">if</span> <span class="n">priority</span> <span class="o">==</span> <span class="s1">&#39;random&#39;</span><span class="p">:</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">unique_lookup</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">priority</span> <span class="o">==</span> <span class="s1">&#39;frequency&#39;</span><span class="p">:</span>
+            <span class="n">unique_lookup</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">lookup_freq</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`priority` should be in [&#39;random&#39;, &#39;frequency&#39;]&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">unique_lookup</span>
+        
+    
+    <span class="k">def</span> <span class="nf">__hop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">hop</span><span class="p">,</span> <span class="n">hop_focus</span><span class="p">,</span> <span class="n">s2_dir</span><span class="p">,</span> <span class="n">sep</span><span class="p">,</span> <span class="n">max_papers</span><span class="p">,</span> <span class="n">hop_priority</span><span class="p">):</span>
+        <span class="c1"># setup access to Penguin cache</span>
+        <span class="n">ignore</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">penguin_settings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ignore</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_penguin_cache</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s1">&#39;s2&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># setup ipenguin object</span>
+        <span class="n">ip</span> <span class="o">=</span> <span class="n">SemanticScholar</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">s2_key</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;fs&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">s2_dir</span><span class="p">),</span> 
+                             <span class="n">ignore</span><span class="o">=</span><span class="n">ignore</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+        
+        <span class="c1"># drop the papers that were not matched by either doi or title</span>
+        <span class="n">tmp_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+        <span class="n">tmp_df</span> <span class="o">=</span> <span class="n">tmp_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tmp_df</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">hop</span><span class="p">]</span>
+        <span class="n">lookup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__init_lookup</span><span class="p">(</span><span class="n">tmp_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">hop_priority</span><span class="p">,</span> <span class="n">sep</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">hop_focus</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lookup</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">lookup</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">hop_focus</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">lookup</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Nothing to lookup!&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># make the hop</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;citations&#39;</span><span class="p">,</span> <span class="s1">&#39;references&#39;</span><span class="p">):</span>
+            <span class="n">hop_df</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">lookup</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;paper&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">max_papers</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;s2_author_ids&#39;</span><span class="p">):</span>
+            <span class="n">hop_df</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">lookup</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;author&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">max_papers</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hop_df</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">penguin_settings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">penguin</span> <span class="o">=</span> <span class="n">Penguin</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">penguin_settings</span><span class="p">)</span>
+            <span class="n">penguin</span><span class="o">.</span><span class="n">add_many_documents</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">s2_dir</span><span class="p">),</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;s2&#39;</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">hop_df</span> <span class="o">=</span> <span class="n">penguin</span><span class="o">.</span><span class="n">id_search</span><span class="p">(</span>
+                <span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;s2id:</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">],</span>
+                <span class="n">as_pandas</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">hop_df</span>
+
+
+<div class="viewcode-block" id="Bunny.estimate_hop">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.Bunny.estimate_hop">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">estimate_hop</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s1">&#39;citations&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Predict the maximum number of papers that will be in the DataFrame if another hop is performed. </span>
+<span class="sd">        The numbers of papers in the next hop is guaranteed to be less than or equal to this number</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df: pandas.DataFrame</span>
+<span class="sd">            The target Bunny DataFrame</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Maximum possible number of papers contained in the next hop</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hop_ids</span> <span class="o">=</span> <span class="p">(</span><span class="nb">set</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">set</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">x</span><span class="p">)]))</span>
+        <span class="n">current_ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">s2id</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">x</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">hop_ids</span> <span class="o">|</span> <span class="n">current_ids</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Bunny.suggest_filter_values">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.Bunny.suggest_filter_values">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">suggest_filter_values</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;AFFILCOUNTRY&#39;</span><span class="p">,</span> <span class="s1">&#39;AFFILORG&#39;</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate the possible Bunny filtering values for some options.</span>
+<span class="sd">        Note that these values do not conclusively map all possible filter values used by Scopus</span>
+<span class="sd">        but instead produce all filter values currently used by the given DataFrame df</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df: pandas.DataFrame</span>
+<span class="sd">            The target Bunny DataFrame</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        suggestions: dict</span>
+<span class="sd">            A dictionary where the keys are the filter types and the values are a set of suggested filter</span>
+<span class="sd">            values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">supported_options</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;AFFILCOUNTRY&#39;</span><span class="p">,</span> <span class="s1">&#39;AFFILORG&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">opt</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">opt</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported_options</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown option &quot;</span><span class="si">{</span><span class="n">opt</span><span class="si">}</span><span class="s1">&quot; provided!. Supported options include </span><span class="si">{</span><span class="n">supported_options</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">suggestions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">opt</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+            <span class="n">suggestions</span><span class="p">[</span><span class="n">opt</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;affiliations&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">aff</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">affiliations</span><span class="o">.</span><span class="n">to_list</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">aff</span><span class="p">)</span> <span class="ow">or</span> <span class="n">aff</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">aff</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span> <span class="ow">or</span> <span class="n">aff</span> <span class="o">==</span> <span class="s1">&#39;nan&#39;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+    
+                <span class="n">org_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                <span class="n">country_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aff</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="n">aff</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">aff</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">aff_id</span> <span class="ow">in</span> <span class="n">aff</span><span class="p">:</span>
+                    <span class="n">org_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">aff</span><span class="p">[</span><span class="n">aff_id</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+                    <span class="n">country_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">aff</span><span class="p">[</span><span class="n">aff_id</span><span class="p">][</span><span class="s1">&#39;country&#39;</span><span class="p">])</span>
+                <span class="k">if</span> <span class="s1">&#39;AFFILORG&#39;</span> <span class="ow">in</span> <span class="n">suggestions</span><span class="p">:</span>
+                    <span class="n">suggestions</span><span class="p">[</span><span class="s1">&#39;AFFILORG&#39;</span><span class="p">]</span> <span class="o">|=</span> <span class="n">org_set</span>
+                <span class="k">if</span> <span class="s1">&#39;AFFILCOUNTRY&#39;</span> <span class="ow">in</span> <span class="n">suggestions</span><span class="p">:</span>
+                    <span class="n">suggestions</span><span class="p">[</span><span class="s1">&#39;AFFILCOUNTRY&#39;</span><span class="p">]</span> <span class="o">|=</span> <span class="n">country_set</span>
+        <span class="k">return</span> <span class="n">suggestions</span></div>
+
+
+    
+<div class="viewcode-block" id="Bunny.form_core_scopus">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.Bunny.form_core_scopus">[docs]</a>
+    <span class="k">def</span> <span class="nf">form_core_scopus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">s2_dir</span><span class="o">=</span><span class="s1">&#39;s2&#39;</span><span class="p">,</span> <span class="n">scopus_dir</span><span class="o">=</span><span class="s1">&#39;scopus&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">data_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;scopus_author_id&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid data type: &quot;</span><span class="si">{</span><span class="n">data_type</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
+        
+        <span class="n">scopus</span> <span class="o">=</span> <span class="n">Scopus</span><span class="p">(</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="n">keys</span><span class="p">,</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;fs&#39;</span><span class="p">,</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">scopus_dir</span><span class="p">),</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span>
+        <span class="p">)</span>
+        
+        <span class="n">query</span> <span class="o">=</span> <span class="n">BunnyOperation</span><span class="p">(</span><span class="s1">&#39;OR&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">BunnyFilter</span><span class="p">(</span><span class="s1">&#39;AU-ID&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">])</span>
+        <span class="n">query_str</span> <span class="o">=</span> <span class="n">evaluate_query_to_string</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        
+        <span class="c1"># get the scopus dataframe</span>
+        <span class="n">scopus_df</span> <span class="o">=</span> <span class="n">scopus</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query_str</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        
+        <span class="c1"># drop papers with missing authors, affiliations</span>
+        <span class="n">scopus_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;author_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;affiliations&#39;</span><span class="p">,</span> <span class="s1">&#39;doi&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">scopus_df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">scopus_df</span><span class="p">)</span>
+        
+        <span class="c1"># extract dois</span>
+        <span class="n">dois</span> <span class="o">=</span> <span class="n">scopus_df</span><span class="o">.</span><span class="n">doi</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+
+        <span class="c1"># get s2df</span>
+        <span class="n">s2</span> <span class="o">=</span> <span class="n">SemanticScholar</span><span class="p">(</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_key</span><span class="p">,</span> 
+            <span class="n">mode</span> <span class="o">=</span><span class="s1">&#39;fs&#39;</span><span class="p">,</span> 
+            <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">s2_dir</span><span class="p">),</span> 
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span>
+        <span class="p">)</span>
+        
+        <span class="n">dois</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;DOI:</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dois</span><span class="p">]</span>
+        <span class="n">s2_df</span> <span class="o">=</span> <span class="n">s2</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">dois</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;paper&#39;</span><span class="p">)</span>        
+        <span class="n">s2_df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">s2_df</span><span class="p">)</span>
+        
+        <span class="c1"># add scopus info back in</span>
+        <span class="n">s2_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;doi&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">s2_df</span><span class="o">.</span><span class="n">doi</span> <span class="o">=</span> <span class="n">s2_df</span><span class="o">.</span><span class="n">doi</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">s2_dois</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">s2_df</span><span class="o">.</span><span class="n">doi</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        
+        <span class="n">scopus_df</span><span class="o">.</span><span class="n">doi</span> <span class="o">=</span> <span class="n">scopus_df</span><span class="o">.</span><span class="n">doi</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">scopus_df</span> <span class="o">=</span> <span class="n">scopus_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">scopus_df</span><span class="o">.</span><span class="n">doi</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">s2_dois</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">s2_join_scopus</span><span class="p">(</span><span class="n">s2_df</span><span class="p">,</span> <span class="n">scopus_df</span><span class="p">)</span></div>
+
+
+    
+<div class="viewcode-block" id="Bunny.form_core">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.Bunny.form_core">[docs]</a>
+    <span class="k">def</span> <span class="nf">form_core</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">s2_dir</span><span class="o">=</span><span class="s1">&#39;s2&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Bunny object was not initialized with an S2 API key.&#39;</span><span class="p">)</span>
+        <span class="c1">#if data_type not in (&#39;doi&#39;, &#39;s2id&#39;, &#39;bibtex&#39;, &#39;s2_author_id&#39;):</span>
+        <span class="k">if</span> <span class="n">data_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;paper&#39;</span><span class="p">,</span> <span class="s1">&#39;author&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid data type: &quot;</span><span class="si">{</span><span class="n">data_type</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># setup ipenguin object</span>
+        <span class="n">ip</span> <span class="o">=</span> <span class="n">SemanticScholar</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">s2_key</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;fs&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">s2_dir</span><span class="p">),</span> 
+                             <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s1">&#39;paper&#39;</span><span class="p">:</span>
+            <span class="n">core_df</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;paper&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s1">&#39;author&#39;</span><span class="p">:</span>
+            <span class="n">core_df</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;author&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">core_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>  <span class="c1"># no results for given input paper uids</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">core_df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">core_df</span><span class="p">)</span>  <span class="c1"># add a type column to the core df</span>
+            <span class="k">return</span> <span class="n">core_df</span></div>
+
+    
+    
+<div class="viewcode-block" id="Bunny.hop">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.Bunny.hop">[docs]</a>
+    <span class="k">def</span> <span class="nf">hop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">hops</span><span class="p">,</span> <span class="n">modes</span><span class="p">,</span> <span class="n">use_scopus</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hop_focus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scopus_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+            <span class="n">s2_dir</span><span class="o">=</span><span class="s1">&#39;s2&#39;</span><span class="p">,</span> <span class="n">scopus_dir</span><span class="o">=</span><span class="s1">&#39;scopus&#39;</span><span class="p">,</span> <span class="n">filter_in_core</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_papers</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hop_priority</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform one or more hops along the citation network</span>
+
+<span class="sd">        This function allows the user to perform one or more hops on the citation network, using either </span>
+<span class="sd">        references or citations as the method of expansion. The user can also optionally specify filters</span>
+<span class="sd">        (using BunnyFilter format) to limit the scope of the search to some area. Note that if filters are</span>
+<span class="sd">        being used, the user must specify Scopus API keys as only the Scopus API can provide filtering</span>
+<span class="sd">        in the Bunny implementation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df: pandas.DataFrame</span>
+<span class="sd">            The target Bunny DataFrame</span>
+<span class="sd">        hops: int</span>
+<span class="sd">            How many hops to perform. Must be &gt;= 1</span>
+<span class="sd">        modes: (list, set, tuple)</span>
+<span class="sd">            Which mode(s) to use Bunny in. Can either be &#39;citations&#39;, &#39;references&#39;, &#39;s2_author_ids&#39;</span>
+<span class="sd">        use_scopus: boolean</span>
+<span class="sd">            Flag that determines if Scopus API should be called to fill in more detailed information such as affiliation,</span>
+<span class="sd">            country of origin, keywords (PACs), etc. scopus_keys must be provided if this flag is set to True.</span>
+<span class="sd">        filters: BunnyFilter or BunnyQuery</span>
+<span class="sd">            Specialized dataclass used for representing a boolean query at any level of nesting. See example notebooks</span>
+<span class="sd">            to see how these filters can be created. use_scopus must be True and scopus_keys need to be provided to use</span>
+<span class="sd">            Bunny filters. Default=None. </span>
+<span class="sd">        scopus_keys: list</span>
+<span class="sd">            List of Scopus API keys which are used to call on the Scopus API to enrich hop-expanded DataFrame. Default=None.</span>
+<span class="sd">        scopus_dir: str, Path</span>
+<span class="sd">            The directory at which to create a Scopus paper archive. This will cache previosly downloaded papers to save time</span>
+<span class="sd">            and API call limits. The directory is expectd to exist inside Bunny.output_dir and a new directory will be created</span>
+<span class="sd">            at Bunny.output_dir/scopus_dir if it cannot be found. Default=scopus.</span>
+<span class="sd">        filter_in_core: bool</span>
+<span class="sd">            Flag that determines whether any filters should be applied to the core. This option is only needed if filters are</span>
+<span class="sd">            specified. If True, core papers can be filtered and removed from the Bunny DataFrame. Default=True.</span>
+<span class="sd">        scopus_batch_size: int</span>
+<span class="sd">            The maximum batch size for looking up papers using the Scopus API. Note that Scopus sets a maximum Boolean query </span>
+<span class="sd">            at 10,000. The size of the Boolean query can be calculated approximately using (num filters + 1) * scopus_batch_size.</span>
+<span class="sd">            Care should be taken to decrease the batch size if many filters are being used. </span>
+<span class="sd">        max_papers: int</span>
+<span class="sd">            This variable is used to set an upper limit on how many papers can be featured in a hop. If set to 0, no upper</span>
+<span class="sd">            limit will be used. Default is 0.</span>
+<span class="sd">        hop_priority: str</span>
+<span class="sd">            If `max_papers` is not 0, this variable is used to prioritize which papers are selected for the hop. Options are </span>
+<span class="sd">            in [&#39;random&#39;, &#39;frequency&#39;]. Default is &#39;random&#39;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            Hop-expanded result DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Bunny object was not initialized with an S2 API key.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">modes</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">modes</span> <span class="o">=</span> <span class="p">[</span><span class="n">modes</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">m</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">MODES</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid expansion mode &quot;</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s1">&quot; selected for hop. Valid modes include: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">MODES</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hops</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">hops</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid value for hops &quot;</span><span class="si">{hops}</span><span class="s1">&quot;. This argument must be an int &gt;= 1.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">use_scopus</span> <span class="ow">and</span> <span class="n">scopus_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;scopus_keys must be provided when use_scopus=True.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scopus_keys</span> <span class="ow">and</span> <span class="n">filters</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;[Bunny]: scopus_keys and filters were provided but &#39;</span> 
+                          <span class="s1">&#39;use_scopus was set to False. Setting use_scopus=True.&#39;</span><span class="p">)</span>
+            <span class="n">use_scopus</span><span class="o">=</span><span class="kc">True</span>
+        
+        <span class="c1"># clean hop column</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        
+        <span class="c1"># establish how many hops to make and where to start</span>
+        <span class="n">first_hop</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">type</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">hop_focus</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">hop_focus</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">}</span>
+        
+        <span class="c1"># make the hops </span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">first_hop</span><span class="p">,</span> <span class="n">hops</span><span class="o">+</span><span class="n">first_hop</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Bunny]: Downloading papers for hop </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="n">hop_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__hop</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">hop</span><span class="o">=</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">hop_focus</span><span class="o">=</span><span class="n">hop_focus</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">s2_dir</span><span class="o">=</span><span class="n">s2_dir</span><span class="p">,</span> 
+                                    <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="n">max_papers</span><span class="o">=</span><span class="n">max_papers</span><span class="p">,</span> <span class="n">hop_priority</span><span class="o">=</span><span class="n">hop_priority</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">hop_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">hop_df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">hop_df</span><span class="p">)</span>
+                    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">hop_df</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: hop_df is None for i = </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+        <span class="n">s2_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;s2id&#39;</span><span class="p">],</span> <span class="n">keep</span><span class="o">=</span><span class="s1">&#39;first&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">use_scopus</span><span class="p">:</span>  <span class="c1"># get scopus info / filter</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_affiliations</span><span class="p">(</span><span class="n">s2_df</span><span class="p">,</span> <span class="n">scopus_keys</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">scopus_dir</span><span class="p">,</span> <span class="n">filter_in_core</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s2_df</span></div>
+
+
+
+    <span class="k">def</span> <span class="nf">__downloaded_scopus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dois</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">keys</span><span class="p">,</span> <span class="n">filters</span><span class="p">):</span>
+        <span class="n">ignore</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">penguin_settings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ignore</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_penguin_cache</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s1">&#39;scopus&#39;</span><span class="p">)</span>
+        
+        <span class="n">scopus</span> <span class="o">=</span> <span class="n">Scopus</span><span class="p">(</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="n">keys</span><span class="p">,</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;fs&#39;</span><span class="p">,</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
+            <span class="n">ignore</span> <span class="o">=</span> <span class="n">ignore</span><span class="p">,</span>
+            <span class="n">verbose</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span>
+        <span class="p">)</span>
+        
+        <span class="n">query</span> <span class="o">=</span> <span class="n">BunnyOperation</span><span class="p">(</span><span class="s1">&#39;OR&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">BunnyFilter</span><span class="p">(</span><span class="s1">&#39;DOI&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dois</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">filters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_query</span><span class="p">(</span><span class="n">filters</span><span class="p">):</span>  <span class="c1"># validate the Bunny filter query </span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The provided Bunny filters could not be validated.&#39;</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">BunnyOperation</span><span class="p">(</span><span class="s1">&#39;AND&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">query</span><span class="p">,</span> <span class="n">filters</span><span class="p">])</span>
+
+        <span class="n">query_str</span> <span class="o">=</span> <span class="n">evaluate_query_to_string</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">scopus</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">query_str</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">penguin_settings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">penguin</span> <span class="o">=</span> <span class="n">Penguin</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">penguin_settings</span><span class="p">)</span>
+            <span class="n">penguin</span><span class="o">.</span><span class="n">add_many_documents</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="n">source</span><span class="o">=</span><span class="s1">&#39;scopus&#39;</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">penguin</span><span class="o">.</span><span class="n">id_search</span><span class="p">(</span>
+                <span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;eid:</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">],</span>
+                <span class="n">as_pandas</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+    
+
+    <span class="k">def</span> <span class="nf">__verify_s2_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine if the provided DataFrame matches the structure expected of a Bunny Semantic Scholar</span>
+<span class="sd">        DataFrame.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df : pandas.DataFrame</span>
+<span class="sd">            The DataFrame in question</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if valid. False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+
+    <span class="k">def</span> <span class="nf">__verify_scopus_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine if the provided DataFrame matches the structure expected of a Bunny Scopus</span>
+<span class="sd">        DataFrame.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df : pandas.DataFrame</span>
+<span class="sd">            The DataFrame in question</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if valid. False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+
+<div class="viewcode-block" id="Bunny.get_affiliations">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.Bunny.get_affiliations">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_affiliations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">scopus_keys</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">save_dir</span><span class="o">=</span><span class="s1">&#39;scopus&#39;</span><span class="p">,</span> <span class="n">filter_in_core</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">do_author_match</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">df_order</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;eid&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;s2id&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;doi&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;title&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;abstract&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;year&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;authors&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;author_ids&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;affiliations&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;funding&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;PACs&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;publication_name&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;subject_areas&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;s2_authors&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;s2_author_ids&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;citations&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;num_citations&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;references&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;num_references&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+        
+        <span class="k">if</span> <span class="s1">&#39;eid&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>  <span class="c1"># DataFrame already has column(s) for Scopus information</span>
+            <span class="c1"># make sure that df matches the format of Bunny with Scopus info</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__verify_scopus_df</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Input DataFrame does not match expected format!&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># split data into data with scopus information and data without scopus information</span>
+            <span class="n">s2_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">eid</span><span class="o">.</span><span class="n">isnull</span><span class="p">())</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">df</span><span class="o">.</span><span class="n">doi</span><span class="o">.</span><span class="n">isnull</span><span class="p">())]</span>
+            <span class="n">scopus_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">s2_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+            <span class="c1"># lookup papers on scopus by doi</span>
+            <span class="n">dois</span> <span class="o">=</span> <span class="n">s2_df</span><span class="o">.</span><span class="n">doi</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">dois</span><span class="p">:</span>
+                <span class="n">processed_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__downloaded_scopus</span><span class="p">(</span><span class="n">dois</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">scopus_keys</span><span class="p">,</span> <span class="n">filters</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">processed_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">processed_df</span><span class="o">.</span><span class="n">empty</span> <span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Bunny]: Joining S2 and Scopus DataFrames. . .&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                    <span class="n">processed_df</span> <span class="o">=</span> <span class="n">form_df</span><span class="p">(</span><span class="n">s2_df</span><span class="p">,</span> <span class="n">processed_df</span><span class="p">,</span> <span class="n">df_order</span><span class="p">)</span>
+                    <span class="n">joined_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">scopus_df</span><span class="p">,</span> <span class="n">processed_df</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">joined_df</span> <span class="o">=</span> <span class="n">df</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">joined_df</span> <span class="o">=</span> <span class="n">df</span>
+
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># no scopus information is present</span>
+            <span class="c1"># make sure that df matches the format of Bunny with S2 only info</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">__verify_s2_df</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Input DataFrame does not match expected format!&#39;</span><span class="p">)</span>
+            
+            <span class="n">tmp_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;doi&#39;</span><span class="p">])</span>
+            <span class="n">dois</span> <span class="o">=</span> <span class="n">tmp_df</span><span class="o">.</span><span class="n">doi</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+            <span class="n">processed_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__downloaded_scopus</span><span class="p">(</span><span class="n">dois</span><span class="p">,</span> <span class="n">save_dir</span><span class="p">,</span> <span class="n">scopus_keys</span><span class="p">,</span> <span class="n">filters</span><span class="p">)</span>
+            <span class="n">joined_df</span> <span class="o">=</span> <span class="n">form_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">processed_df</span><span class="p">,</span> <span class="n">df_order</span><span class="p">)</span>
+
+
+        <span class="k">if</span> <span class="n">filters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[Bunny]: Applying filters. . .&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__filter</span><span class="p">(</span><span class="n">joined_df</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">filter_in_core</span><span class="p">,</span> <span class="n">do_author_match</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">joined_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">joined_df</span><span class="o">.</span><span class="n">s2id</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span></div>
+
+    
+    
+    <span class="k">def</span> <span class="nf">_filter_pubyear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">auth_map</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;year&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;&quot;year&quot; not found in df&#39;</span><span class="p">)</span>
+
+        <span class="n">pids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">year</span><span class="p">,</span> <span class="n">fmat</span> <span class="o">=</span> <span class="n">format_pubyear</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unexpected format for PUBYEAR: &quot;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
+        
+        <span class="n">year_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">fmat</span> <span class="o">==</span> <span class="s1">&#39;IS&#39;</span><span class="p">:</span>
+            <span class="n">pids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">year</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="n">fmat</span> <span class="o">==</span> <span class="s1">&#39;AFT&#39;</span><span class="p">:</span>
+            <span class="n">pids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;</span> <span class="n">year</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">year</span> <span class="o">&lt;</span> <span class="n">year</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">pids</span>
+    
+
+    <span class="k">def</span> <span class="nf">_filter_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">auth_map</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">keyword</span> <span class="o">=</span> <span class="n">f</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;abstract&#39;</span><span class="p">,</span> <span class="s1">&#39;PACs&#39;</span><span class="p">]</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">mask</span> <span class="o">|=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\b&#39;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">keyword</span><span class="p">)</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;\b&#39;</span><span class="p">,</span> <span class="n">case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">pids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">mask</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pids</span>
+
+
+    <span class="k">def</span> <span class="nf">_filter_auid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">auth_map</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">pids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pids</span>
+
+    
+    <span class="k">def</span> <span class="nf">_filter_affilcountry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">auth_map</span><span class="p">):</span> 
+        <span class="k">if</span> <span class="s1">&#39;affiliations&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;&quot;affiliations&quot; not found in df&#39;</span><span class="p">)</span>
+
+        <span class="n">country</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">pids</span><span class="p">,</span> <span class="n">aids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(),</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">aff_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;affiliations&#39;</span><span class="p">])</span>
+        <span class="n">affiliations</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">aff_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">aff_df</span><span class="o">.</span><span class="n">affiliations</span><span class="o">.</span><span class="n">to_list</span><span class="p">())}</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">affiliation</span> <span class="ow">in</span> <span class="n">affiliations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">affiliation</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">affiliation</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">affiliation</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">aff_id</span><span class="p">,</span> <span class="n">aff</span> <span class="ow">in</span> <span class="n">affiliation</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">aff</span><span class="p">[</span><span class="s1">&#39;country&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">country</span><span class="p">:</span>
+                    <span class="n">pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+                    <span class="n">aids</span> <span class="o">|=</span> <span class="nb">set</span><span class="p">(</span><span class="n">aff</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span>
+                    <span class="k">break</span>
+        
+        <span class="k">if</span> <span class="n">auth_map</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">s2_aids</span> <span class="o">=</span> <span class="p">{</span><span class="n">auth_map</span><span class="p">[</span><span class="n">aid</span><span class="p">]</span> <span class="k">for</span> <span class="n">aid</span> <span class="ow">in</span> <span class="n">aids</span> <span class="k">if</span> <span class="n">aid</span> <span class="ow">in</span> <span class="n">auth_map</span><span class="p">}</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">scopus_authors</span><span class="p">,</span> <span class="n">s2_authors</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">df</span><span class="o">.</span><span class="n">author_ids</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">df</span><span class="o">.</span><span class="n">s2_author_ids</span><span class="o">.</span><span class="n">to_list</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scopus_authors</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">scopus_authors</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">aids</span><span class="p">:</span>
+                    <span class="n">pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s2_authors</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">s2_authors</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">s2_aids</span><span class="p">:</span>
+                    <span class="n">pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>    
+        <span class="k">return</span> <span class="n">pids</span>
+    
+
+    <span class="k">def</span> <span class="nf">_filter_affilorg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">auth_map</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;affiliations&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;&quot;affiliations&quot; not found in df&#39;</span><span class="p">)</span>
+
+        <span class="n">org</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">pids</span><span class="p">,</span> <span class="n">aids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(),</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">aff_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;affiliations&#39;</span><span class="p">])</span>
+        <span class="n">affiliations</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">aff_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">aff_df</span><span class="o">.</span><span class="n">affiliations</span><span class="o">.</span><span class="n">to_list</span><span class="p">())}</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">affiliation</span> <span class="ow">in</span> <span class="n">affiliations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">affiliation</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">affiliation</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">affiliation</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">aff_id</span><span class="p">,</span> <span class="n">aff</span> <span class="ow">in</span> <span class="n">affiliation</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">aff</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">org</span><span class="p">:</span>
+                    <span class="n">pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+                    <span class="n">aids</span> <span class="o">|=</span> <span class="nb">set</span><span class="p">(</span><span class="n">aff</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span>
+                    <span class="k">break</span>
+                    
+        <span class="k">if</span> <span class="n">auth_map</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">s2_aids</span> <span class="o">=</span> <span class="p">{</span><span class="n">auth_map</span><span class="p">[</span><span class="n">aid</span><span class="p">]</span> <span class="k">for</span> <span class="n">aid</span> <span class="ow">in</span> <span class="n">aids</span> <span class="k">if</span> <span class="n">aid</span> <span class="ow">in</span> <span class="n">auth_map</span><span class="p">}</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">scopus_authors</span><span class="p">,</span> <span class="n">s2_authors</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">df</span><span class="o">.</span><span class="n">author_ids</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">df</span><span class="o">.</span><span class="n">s2_author_ids</span><span class="o">.</span><span class="n">to_list</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scopus_authors</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">scopus_authors</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">aids</span><span class="p">:</span>
+                    <span class="n">pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s2_authors</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">s2_authors</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">s2_aids</span><span class="p">:</span>
+                    <span class="n">pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>   
+        <span class="k">return</span> <span class="n">pids</span>
+        
+
+    <span class="k">def</span> <span class="nf">_filter_afid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">auth_map</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;affiliations&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;&quot;affiliations&quot; not found in df&#39;</span><span class="p">)</span>
+
+        <span class="n">afid</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">pids</span><span class="p">,</span> <span class="n">aids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(),</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">aff_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;affiliations&#39;</span><span class="p">])</span>
+        <span class="n">affiliations</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">aff_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">aff_df</span><span class="o">.</span><span class="n">affiliations</span><span class="o">.</span><span class="n">to_list</span><span class="p">())}</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">affiliation</span> <span class="ow">in</span> <span class="n">affiliations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">affiliation</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">affiliation</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">affiliation</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">aff_id</span><span class="p">,</span> <span class="n">aff</span> <span class="ow">in</span> <span class="n">affiliation</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">aff_id</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">afid</span><span class="p">:</span>
+                    <span class="n">pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+                    <span class="n">aids</span> <span class="o">|=</span> <span class="nb">set</span><span class="p">(</span><span class="n">aff</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span>
+                    <span class="k">break</span>
+        
+        <span class="k">if</span> <span class="n">auth_map</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">s2_aids</span> <span class="o">=</span> <span class="p">{</span><span class="n">auth_map</span><span class="p">[</span><span class="n">aid</span><span class="p">]</span> <span class="k">for</span> <span class="n">aid</span> <span class="ow">in</span> <span class="n">aids</span> <span class="k">if</span> <span class="n">aid</span> <span class="ow">in</span> <span class="n">auth_map</span><span class="p">}</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">scopus_authors</span><span class="p">,</span> <span class="n">s2_authors</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">df</span><span class="o">.</span><span class="n">author_ids</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">df</span><span class="o">.</span><span class="n">s2_author_ids</span><span class="o">.</span><span class="n">to_list</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scopus_authors</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">scopus_authors</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">aids</span><span class="p">:</span>
+                    <span class="n">pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s2_authors</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">s2_authors</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">s2_aids</span><span class="p">:</span>
+                    <span class="n">pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>    
+        <span class="k">return</span> <span class="n">pids</span>
+    
+
+    <span class="k">def</span> <span class="nf">__filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">filter_in_core</span><span class="p">,</span> <span class="n">do_author_match</span><span class="p">):</span>
+        <span class="n">all_pids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">do_author_match</span> <span class="ow">and</span> <span class="p">{</span><span class="s1">&#39;s2id&#39;</span><span class="p">,</span> <span class="s1">&#39;eid&#39;</span><span class="p">,</span> <span class="s1">&#39;s2_author_ids&#39;</span><span class="p">,</span> <span class="s1">&#39;s2_authors&#39;</span><span class="p">,</span> <span class="s1">&#39;authors&#39;</span><span class="p">,</span> <span class="s1">&#39;author_ids&#39;</span><span class="p">}</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[Bunny]: Using Orca to match Scopus author IDs to s2 author IDs.&#39;</span><span class="p">)</span>
+            <span class="n">am</span> <span class="o">=</span> <span class="n">AuthorMatcher</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+            <span class="n">auth_match_df</span> <span class="o">=</span> <span class="n">am</span><span class="o">.</span><span class="n">match</span><span class="p">()</span>
+            <span class="n">auth_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">scopus_auth</span><span class="p">:</span> <span class="n">s2_auth</span> <span class="k">for</span> <span class="n">scopus_auth</span><span class="p">,</span> <span class="n">s2_auth</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">auth_match_df</span><span class="p">[</span><span class="s1">&#39;SCOPUS_Author_ID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">auth_match_df</span><span class="p">[</span><span class="s1">&#39;S2_Author_ID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">())}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">auth_map</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="c1"># validate the Bunny filter query </span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_query</span><span class="p">(</span><span class="n">filters</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The provided Bunny filters could not be vaidated.&#39;</span><span class="p">)</span>
+
+        <span class="n">pids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__evaluate_query</span><span class="p">(</span><span class="n">filters</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">auth_map</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">filter_in_core</span><span class="p">:</span>
+            <span class="n">pids</span> <span class="o">|=</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+        <span class="n">filtered_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pids</span><span class="p">)]</span>
+        
+        <span class="k">if</span> <span class="s1">&#39;s2id&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">filtered_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;s2id&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="k">return</span> <span class="n">filtered_df</span>
+
+    <span class="k">def</span> <span class="nf">__evaluate_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">auth_map</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">BunnyFilter</span><span class="p">):</span>
+            <span class="n">ffunc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_funcs</span><span class="p">[</span><span class="n">query</span><span class="o">.</span><span class="n">filter_type</span><span class="p">]</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">ffunc</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">query</span><span class="o">.</span><span class="n">filter_value</span><span class="p">,</span> <span class="n">auth_map</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">BunnyOperation</span><span class="p">):</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__evaluate_query</span><span class="p">(</span><span class="n">operand</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">auth_map</span><span class="p">)</span> <span class="k">for</span> <span class="n">operand</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">operands</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">query</span><span class="o">.</span><span class="n">operator</span> <span class="o">==</span> <span class="s1">&#39;AND&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">query</span><span class="o">.</span><span class="n">operator</span> <span class="o">==</span> <span class="s1">&#39;OR&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">set</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">__form_query_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">BunnyFilter</span><span class="p">):</span>
+            <span class="n">ffunc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_funcs</span><span class="p">[</span><span class="n">query</span><span class="o">.</span><span class="n">filter_type</span><span class="p">]</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">ffunc</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">query</span><span class="o">.</span><span class="n">filter_value</span><span class="p">,</span> <span class="n">auth_map</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">BunnyOperation</span><span class="p">):</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__evaluate_query</span><span class="p">(</span><span class="n">operand</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">auth_map</span><span class="p">)</span> <span class="k">for</span> <span class="n">operand</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">operands</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">query</span><span class="o">.</span><span class="n">operator</span> <span class="o">==</span> <span class="s1">&#39;AND&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">query</span><span class="o">.</span><span class="n">operator</span> <span class="o">==</span> <span class="s1">&#39;OR&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">set</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
+
+    
+<div class="viewcode-block" id="Bunny.apply_filter">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.Bunny.apply_filter">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">filter_in_core</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">do_author_match</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;eid&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span> <span class="ow">and</span> <span class="n">do_author_match</span><span class="p">:</span>
+            <span class="n">do_author_match</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Input DataFrame does not contain Scopus information&#39;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+
+        <span class="n">filtered_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__filter</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">filter_in_core</span><span class="p">,</span> <span class="n">do_author_match</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">filtered_df</span></div>
+
+
+
+<div class="viewcode-block" id="Bunny.add_to_penguin">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.Bunny.add_to_penguin">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_to_penguin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the downloaded papers for a given `source` collection from Penguin, represented as a </span>
+<span class="sd">        fixed memory-size Bloom filter. This can then be given to iPenguin child objects to prevent</span>
+<span class="sd">        re-downloading previously acquired papers.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        source: str</span>
+<span class="sd">            The name of the source collection from which to retrieve IDs. It should correspond to</span>
+<span class="sd">            either SCOPUS_COL or S2_COL.</span>
+<span class="sd">        path: str, pathlike</span>
+<span class="sd">            The path to the directory where the downloaded files are cached, ready to be added into </span>
+<span class="sd">            Penguin.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">penguin_settings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValueEror</span><span class="p">(</span><span class="s1">&#39;Tried to use Penguin when connection details were never provided&#39;</span><span class="p">)</span>
+        <span class="n">penguin</span> <span class="o">=</span> <span class="n">Penguin</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">penguin_settings</span><span class="p">)</span>
+        <span class="n">penguin</span><span class="o">.</span><span class="n">add_many_documents</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+    
+    
+<div class="viewcode-block" id="Bunny.get_penguin_cache">
+<a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.bunny.Bunny.get_penguin_cache">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_penguin_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">max_items</span><span class="o">=</span><span class="mf">1.25</span><span class="p">,</span> <span class="n">false_positive_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the downloaded papers for a given `source` collection from Penguin, represented as a </span>
+<span class="sd">        fixed memory-size Bloom filter. This can then be given to iPenguin child objects to prevent</span>
+<span class="sd">        re-downloading previously acquired papers. For more details on the Bloom filter, see </span>
+<span class="sd">        Penguin.get_id_bloom.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        source: str</span>
+<span class="sd">            The name of the source collection from which to retrieve IDs. It should correspond to</span>
+<span class="sd">            either SCOPUS_COL or S2_COL.</span>
+<span class="sd">        max_items: float, int, (optional)</span>
+<span class="sd">            The maximum number of items expected to be stored in the Bloom filter. This can be a</span>
+<span class="sd">            fixed integer or a float representing a multiplier of the current document count in the</span>
+<span class="sd">            collection. Default is 1.25.</span>
+<span class="sd">        false_positive_rate: float, (optional)</span>
+<span class="sd">            The desired false positive probability for the Bloom filter. Default is 0.001. </span>
+<span class="sd">    </span>
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        rbloom.Bloom</span>
+<span class="sd">            An instance of a Bloom filter populated with IDs from the specified collection.</span>
+<span class="sd">    </span>
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If &#39;source&#39; does not match any of the predefined collection names, or if &#39;max_items&#39;</span>
+<span class="sd">            is not a float or an int.</span>
+
+<span class="sd">            If attempting to use this function without Penguin connection string details provided</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">penguin_settings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValueEror</span><span class="p">(</span><span class="s1">&#39;Tried to use Penguin when connection details were never provided&#39;</span><span class="p">)</span>
+        <span class="n">penguin</span> <span class="o">=</span> <span class="n">Penguin</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">penguin_settings</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">penguin</span><span class="o">.</span><span class="n">get_id_bloom</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+                                    <span class="n">max_items</span><span class="o">=</span><span class="n">max_items</span><span class="p">,</span>
+                                    <span class="n">false_positive_rate</span><span class="o">=</span><span class="n">false_positive_rate</span><span class="p">)</span></div>
+
+    
+    <span class="c1">### Setters / Getters</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">s2_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s2_key</span>
+
+    <span class="nd">@s2_key</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">s2_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s2_key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">s2_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">ip</span> <span class="o">=</span> <span class="n">SemanticScholar</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">s2_key</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The key &quot;</span><span class="si">{</span><span class="n">s2_key</span><span class="si">}</span><span class="s1">&quot; was rejected by the Semantic Scholar API&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s2_key</span> <span class="o">=</span> <span class="n">s2_key</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">penguin_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_penguin_settings</span>
+
+    <span class="nd">@penguin_settings</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">penguin_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">penguin_settings</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">penguin_settings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">penguin_settings</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unsupported type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">penguin_settings</span><span class="p">)</span><span class="si">}</span><span class="s1"> for `penguin_settings`. Expected dict&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s1">&#39;uri&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">penguin_settings</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Key &quot;uri&quot; is required to be passed in penguin_settings&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;db_name&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">penguin_settings</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Key &quot;db_name&quot; is required to be passed in penguin_settings&#39;</span><span class="p">)</span>
+
+            <span class="c1"># set username and password to None if not passed</span>
+            <span class="k">if</span> <span class="s1">&#39;username&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">penguin_settings</span><span class="p">:</span>
+                <span class="n">penguin_settings</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="s1">&#39;password&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">penguin_settings</span><span class="p">:</span>
+                <span class="n">penguin_settings</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_penguin_settings</span> <span class="o">=</span> <span class="n">penguin_settings</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

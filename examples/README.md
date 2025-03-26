@@ -13,3 +13,7 @@
 - **Wolf:** Graph centrality and ranking tool.
 - **Orca:** Duplicate author detector for text mining and information retrival.
 - **iPenguin:** Online information retrieval tool for Scopus, SemanticScholar, and OSTI.
+- **Penguin:** Text storage tool.
+- **Bunny:** Dataset generation tool for documents and their citations/references.
+- **Peacock:** Data visualization and generation of actionable statistics.
+- **SeaLion:** Generic report generation tool.

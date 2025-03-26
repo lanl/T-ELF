@@ -1,0 +1,1582 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TELF.pre_processing.Penguin.penguin &#8212; TELF 0.0.38 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../../../../_static/documentation_options.js?v=8c8d0fbf"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TELF/pre_processing/Penguin/penguin';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.38 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../HNMFk.html"><strong>TELF.factorization.HNMFk:</strong> Hierarchical Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Orca.html"><strong>TELF.pre_processing.Orca:</strong> Duplicate author detector for text mining and information retrival</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Wolf.html"><strong>TELF.post_processing.Wolf:</strong> Graph centrality and ranking tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../iPenguin.html"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Penguin.html"><strong>TELF.pre_processing.Penguin:</strong>  Text matching and storage tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Bunny.html"><strong>TELF.applications.Bunny:</strong>   Dataset generation tool for documents and their citations/references</a></li>
+
+
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../TELF.html">TELF package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../TELF.factorization.html">TELF.factorization package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../TELF.pre_processing.html">TELF.pre_processing package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for TELF.pre_processing.Penguin.penguin</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">rbloom</span> <span class="kn">import</span> <span class="n">Bloom</span>
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+
+<span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">MongoClient</span><span class="p">,</span> <span class="n">ASCENDING</span>
+<span class="kn">from</span> <span class="nn">pymongo.errors</span> <span class="kn">import</span> <span class="n">ConnectionFailure</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">verify_n_jobs</span><span class="p">,</span> <span class="n">verify_attributes</span><span class="p">,</span> <span class="n">create_text_query</span><span class="p">,</span> <span class="n">transform_dict</span>
+<span class="kn">from</span> <span class="nn">.crocodile</span> <span class="kn">import</span> <span class="n">process_scopus_json</span><span class="p">,</span> <span class="n">process_scopus_xml</span><span class="p">,</span> <span class="n">process_s2_json</span> 
+<span class="kn">from</span> <span class="nn">.crocodile</span> <span class="kn">import</span> <span class="n">form_scopus_df</span><span class="p">,</span> <span class="n">form_s2_df</span><span class="p">,</span> <span class="n">form_df</span>
+
+<div class="viewcode-block" id="Penguin">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin">[docs]</a>
+<span class="k">class</span> <span class="nc">Penguin</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A handler class for managing connections and operations with a documents MongoDB database.</span>
+
+<span class="sd">    The purpose of this class it to create a software layer to easily store and query Scopus</span>
+<span class="sd">    and S2 documents. Penguin provides functionality to connect to a MongoDB database, perform read </span>
+<span class="sd">    and write operations, and handle authentication for secure database interactions. It supports </span>
+<span class="sd">    operations such as adding data, retrieving data, and verifying database integrity.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># define the default collection names</span>
+    <span class="n">S2_COL</span> <span class="o">=</span> <span class="s1">&#39;S2&#39;</span>
+    <span class="n">SCOPUS_COL</span> <span class="o">=</span> <span class="s1">&#39;Scopus&#39;</span>
+    
+    <span class="c1">## Define the default search settings</span>
+    <span class="c1"># S2 and Scopus papers are defined </span>
+    <span class="n">DEFAULT_ATTRIBUTES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;S2&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;paperId&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;doi&#39;</span><span class="p">:</span> <span class="s1">&#39;externalIds.DOI&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;abstract&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;author_ids&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;authors&#39;</span><span class="p">,</span> <span class="s1">&#39;authorId&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;citations&#39;</span><span class="p">:</span> <span class="s1">&#39;citations&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;references&#39;</span><span class="p">:</span> <span class="s1">&#39;references&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;Scopus&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;eid&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;doi&#39;</span><span class="p">:</span> <span class="s1">&#39;doi&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;abstract&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;author_ids&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;bibrecord.head.author-group.author&#39;</span><span class="p">,</span> <span class="s1">&#39;@auid&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;citations&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s1">&#39;references&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">,</span> <span class="n">db_name</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the Penguin instance with the specified URI, database name, and optional settings.</span>
+
+<span class="sd">        This constructor method sets up the Penguin instance by initializing the MongoDB URI, database name,</span>
+<span class="sd">        verbosity of output, and number of jobs for parallel processing (if applicable). It then attempts to </span>
+<span class="sd">        establish a connection to the MongoDB database by calling Penguin._connect().</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        uri: str</span>
+<span class="sd">            The MongoDB URI used to establish a connection.</span>
+<span class="sd">        db_name: str</span>
+<span class="sd">            The name of the database to which the connection will be established.</span>
+<span class="sd">        username: str, (optional)</span>
+<span class="sd">            The username for the Mongo database. If None, will try to use DB without authentication. Default is None.</span>
+<span class="sd">        password: str, (optional)</span>
+<span class="sd">            The password for the Mongo database. If None, will try to use DB without authentication. Default is None.</span>
+<span class="sd">        n_jobs: int, (optional)</span>
+<span class="sd">            The number of jobs for parallel processing. Note that this setting is only </span>
+<span class="sd">            used for adding new data to the database and converting documents to SLIC</span>
+<span class="sd">            DataFrame format for output. Default is -1 (use all available cores).</span>
+<span class="sd">        verbose: bool, int (optional)</span>
+<span class="sd">            If set to True, the class will print additional output for debugging or information </span>
+<span class="sd">            purposes. Can also be an int where verbose &gt;= 1 means True with a higher integer</span>
+<span class="sd">            controlling the level of verbosity. Default is True.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError:</span>
+<span class="sd">            Attribute was given an invalid value</span>
+<span class="sd">        TypeError:</span>
+<span class="sd">            Attribute has an invalid type</span>
+<span class="sd">        ConnectionFailure: </span>
+<span class="sd">            If the connection to the MongoDB instance fails during initialization.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">uri</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_name</span> <span class="o">=</span> <span class="n">db_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s2_attributes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_ATTRIBUTES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scopus_attributes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_ATTRIBUTES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">SCOPUS_COL</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connect</span><span class="p">()</span>
+        
+    
+    <span class="c1"># 1. Connecting to the Penguin Database</span>
+        
+        
+    <span class="k">def</span> <span class="nf">_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Establishes a connection to the MongoDB database and validates its structure.</span>
+
+<span class="sd">        This method attempts to connect to a MongoDB instance using the MongoDB URI </span>
+<span class="sd">        and database name provided during the class initialization. It first tries </span>
+<span class="sd">        to establish a client connection to MongoDB and then selects the specified database. </span>
+<span class="sd">        The method then checks if the MongoDB server is reachable by issuing the &#39;ismaster&#39; </span>
+<span class="sd">        command. If the command fails, it raises a ConnectionFailure exception.</span>
+
+<span class="sd">        After establishing a successful connection, the method validates the database structure </span>
+<span class="sd">        by ensuring the presence of the Scopus and S2 collections. The database must contain</span>
+<span class="sd">        these collections if using the database in read-only mode. </span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ConnectionFailure</span>
+<span class="sd">            If the connection to MongoDB fails or the &#39;ismaster&#39; command </span>
+<span class="sd">            cannot be executed, indicating a connection issue.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the database does not contain the required Scopus/S2 collections</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            
+            <span class="c1"># create the uri with authentication if provided</span>
+            <span class="n">uri</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;mongodb://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="si">}</span><span class="s2">@</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;mongodb://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="si">}</span><span class="s2">&quot;</span>
+    
+            <span class="c1"># connect to DB</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">MongoClient</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">db_name</span><span class="p">]</span>
+            
+            <span class="c1"># check if connection is succesful</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">admin</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s1">&#39;ismaster&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ConnectionFailure</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to connect to database </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">db_name</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># make sure databse has expected collections for Scopus and S2 documents</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_database</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SCOPUS_COL</span><span class="p">]):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;MongoDB connection successful, but the database is not valid.&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[Penguin]: MongoDB connection successful and database is valid.&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        
+        <span class="k">except</span> <span class="n">ConnectionFailure</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+            
+    <span class="k">def</span> <span class="nf">_validate_database</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">required_collections</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validates the presence of required collections in the connected MongoDB database.</span>
+
+<span class="sd">        This method checks if all specified collections in &#39;required_collections&#39; exist in the </span>
+<span class="sd">        currently connected MongoDB database. If the database connection has not been established </span>
+<span class="sd">        (&#39;self.db&#39; is None), the validation fails immediately. If any off the collections do not</span>
+<span class="sd">        exist, they are created and an index is set on either the Scopus or S2 id. If all required </span>
+<span class="sd">        collections are present, it returns True.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        required_collections: [str]</span>
+<span class="sd">            A list of collection names that are required to be present in the database.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if all required collections are present in the database, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="n">collection_name</span> <span class="o">=</span> <span class="s1">&#39;your_collection_name&#39;</span>
+        <span class="n">existing_collections</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">list_collection_names</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">required_collections</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">col_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">existing_collections</span><span class="p">:</span>  <span class="c1"># collection does not yet exist</span>
+                <span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">col_name</span><span class="p">]</span>
+                
+                <span class="c1"># create an index on either the scopus or s2 id</span>
+                <span class="k">if</span> <span class="n">col_name</span> <span class="o">==</span> <span class="s1">&#39;S2&#39;</span><span class="p">:</span>
+                    <span class="n">index_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">col_name</span> <span class="o">==</span> <span class="s1">&#39;Scopus&#39;</span><span class="p">:</span>
+                    <span class="n">index_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scopus_attributes</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown collection name: </span><span class="si">{</span><span class="n">col_name</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+                <span class="n">collection</span><span class="o">.</span><span class="n">create_index</span><span class="p">([(</span><span class="n">index_field</span><span class="p">,</span> <span class="n">ASCENDING</span><span class="p">)],</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+         
+        <span class="c1"># validated collection name, added index</span>
+        <span class="k">return</span> <span class="kc">True</span>
+            
+        
+    <span class="c1"># 2. Adding documents to the Penguin Database</span>
+            
+        
+<div class="viewcode-block" id="Penguin.add_many_documents">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin.add_many_documents">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_many_documents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes a directory of document files that need to be added to the database. The</span>
+<span class="sd">        function can add both Scopus and S2 documents depending on the `source` agument. </span>
+<span class="sd">        Documents will be added in parallel </span>
+<span class="sd">        </span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        directory: str, pathlib.Path</span>
+<span class="sd">            The directory containing files to be added</span>
+<span class="sd">        source: str</span>
+<span class="sd">            The data source (either &#39;Scopus&#39; or &#39;S2&#39;)</span>
+<span class="sd">        overwrite: bool, (optional)</span>
+<span class="sd">            If True and paper id already exists in the collection then the associated data </span>
+<span class="sd">            will be updated/overwritten by the new data. Otherwise, this paper id is skipped.</span>
+<span class="sd">            If paper id does not already exist in collection, this flag has no effect.</span>
+<span class="sd">            Default is True.</span>
+<span class="sd">        n_jobs: int, (optional) </span>
+<span class="sd">            The number of jobs to run in parallel. If None, the class default for n_jobs will</span>
+<span class="sd">            be used. Default is None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">n_jobs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span>  <span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_file_path_generator</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;.json&#39;</span><span class="p">,</span> <span class="s1">&#39;.xml&#39;</span><span class="p">]),</span> <span class="n">disable</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_single_document</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s1">&#39;threading&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)(</span>
+                <span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_single_document</span><span class="p">)(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span> 
+                <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file_path_generator</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;.json&#39;</span><span class="p">,</span> <span class="s1">&#39;.xml&#39;</span><span class="p">]))</span></div>
+
+
+        
+<div class="viewcode-block" id="Penguin.add_single_document">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin.add_single_document">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_single_document</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes a single data file and adds / updates its content in the database.</span>
+<span class="sd">        </span>
+<span class="sd">        This function handles the addition of a Scopus or S2 data file. If the file </span>
+<span class="sd">        is from Scopus it will be added to the Scopus collection. If S2, it will be</span>
+<span class="sd">        added to the S2 collection. In the case of Scopus, the function can hande </span>
+<span class="sd">        JSON input (as expected from the Scopus API or iPenguin.Scopus) or XML input</span>
+<span class="sd">        (the format used by the purchased data).</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        file_path: str</span>
+<span class="sd">            The path to the data file to be processed.</span>
+<span class="sd">        source: str</span>
+<span class="sd">            The data source (either &#39;Scopus&#39; or &#39;S2&#39;)</span>
+<span class="sd">        overwrite: bool, (optional)</span>
+<span class="sd">            If True and paper id already exists in the collection then the associated data </span>
+<span class="sd">            will be updated/overwritten by the new data. Otherwise, this paper id is skipped.</span>
+<span class="sd">            If paper id does not already exist in collection, this flag has no effect.</span>
+<span class="sd">            Default is True.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        None</span>
+<span class="sd">            Document is added or updated in the database</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `source` does not match an expected value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">source</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_single_s2_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">SCOPUS_COL</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">source</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_single_scopus_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown `source` </span><span class="si">{</span><span class="n">source</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+    
+    
+    <span class="k">def</span> <span class="nf">_file_path_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">ext</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generator function that yields paths to files with certain extensions in </span>
+<span class="sd">        the given directory.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        directory: str, pathlib.Path</span>
+<span class="sd">            The directory to search for files</span>
+<span class="sd">        ext: str, list</span>
+<span class="sd">            The extension(s) for which to search in the directory. If `ext` is a string</span>
+<span class="sd">            then the function assumes that a single extension is being sought. If `ext` </span>
+<span class="sd">            is a list then it will check for multiple extensions. The file extension(s)</span>
+<span class="sd">            should be provided in the format of &#39;.EXT&#39; (ex: &#39;.json&#39;)</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">        -------</span>
+<span class="sd">        pathlib.Path</span>
+<span class="sd">            Path object representing a file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dir_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ext</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">ext</span> <span class="o">=</span> <span class="p">[</span><span class="n">ext</span><span class="p">]</span>
+        <span class="n">ext_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">dir_path</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">file_path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">file_path</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="n">ext_set</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">file_path</span>
+            
+            
+    <span class="k">def</span> <span class="nf">_add_single_s2_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes a single S2 data file for addition </span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        file_path: str</span>
+<span class="sd">            The path to the data file to be processed.</span>
+<span class="sd">        overwrite: bool, (optional)</span>
+<span class="sd">            If True and paper id already exists in the collection then the associated data </span>
+<span class="sd">            will be updated/overwritten by the new data. Otherwise, this paper id is skipped.</span>
+<span class="sd">            Default is True.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        None</span>
+<span class="sd">            Document is added or updated in the database</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If path is invalid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">):</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">file_path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s1">&#39;.json&#39;</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">process_s2_json</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;S2 `file_path` has an unsupported file extension: </span><span class="si">{</span><span class="n">source</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+        <span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="p">]</span>
+        <span class="n">id_attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">existing_entry</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="n">id_attr</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">id_attr</span><span class="p">]})</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">existing_entry</span><span class="p">:</span>  <span class="c1"># if not exists in collection, add to collection</span>
+                <span class="n">collection</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">overwrite</span><span class="p">:</span>  <span class="c1"># if existing_entry and overwrite, update data for id</span>
+                <span class="n">collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">({</span><span class="n">id_attr</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">id_attr</span><span class="p">]},</span> <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># do nothing if existing_entry and no overwrite</span>
+                <span class="k">pass</span>
+                
+                
+    <span class="k">def</span> <span class="nf">_add_single_scopus_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Processes a single Scopus data file for addition </span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        file_path: str</span>
+<span class="sd">            The path to the data file to be processed.</span>
+<span class="sd">        overwrite: bool, (optional)</span>
+<span class="sd">            If True and paper id already exists in the collection then the associated data </span>
+<span class="sd">            will be updated/overwritten by the new data. Otherwise, this paper id is skipped.</span>
+<span class="sd">            Default is True.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        None</span>
+<span class="sd">            Document is added or updated in the database</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If path is invalid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">):</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">file_path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s1">&#39;.xml&#39;</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">process_scopus_xml</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">file_path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s1">&#39;.json&#39;</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">process_scopus_json</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Scopus `file_path` has an unsupported file extension: </span><span class="si">{</span><span class="n">source</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+        <span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">SCOPUS_COL</span><span class="p">]</span>
+        <span class="n">id_attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scopus_attributes</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">existing_entry</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="n">id_attr</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">id_attr</span><span class="p">]})</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">existing_entry</span><span class="p">:</span>  <span class="c1"># if not exists in collection, add to collection</span>
+                <span class="n">collection</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">overwrite</span><span class="p">:</span>  <span class="c1"># if existing_entry and overwrite, update data for id </span>
+                <span class="n">collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">({</span><span class="n">id_attr</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">id_attr</span><span class="p">]},</span> <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># do nothing if existing_entry and no overwrite</span>
+                <span class="k">pass</span>
+    
+    
+    <span class="c1"># 3. Search the Penguin Database</span>
+
+    
+<div class="viewcode-block" id="Penguin.count_documents">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin.count_documents">[docs]</a>
+    <span class="k">def</span> <span class="nf">count_documents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the number of documents in the Scopus and S2.</span>
+<span class="sd">    </span>
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        dict:</span>
+<span class="sd">            A dictionary with keys &#39;scopus&#39; and &#39;s2&#39; containing the number of documents</span>
+<span class="sd">            in each respective collection.</span>
+<span class="sd">    </span>
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        Exception</span>
+<span class="sd">            If there is an error accessing the database collections.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">scopus_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">SCOPUS_COL</span><span class="p">]</span><span class="o">.</span><span class="n">count_documents</span><span class="p">({})</span>
+            <span class="n">s2_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="p">]</span><span class="o">.</span><span class="n">count_documents</span><span class="p">({})</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s1">&#39;scopus&#39;</span><span class="p">:</span> <span class="n">scopus_count</span><span class="p">,</span>
+                <span class="s1">&#39;s2&#39;</span><span class="p">:</span> <span class="n">s2_count</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error accessing the database collections: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+            
+        
+<div class="viewcode-block" id="Penguin.text_search">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin.text_search">[docs]</a>
+    <span class="k">def</span> <span class="nf">text_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="s1">&#39;OR&#39;</span><span class="p">,</span> <span class="n">scopus</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s2</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">as_pandas</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Search the Penguin database by text matching in either Scopus documents, S2 documents or both.</span>
+
+<span class="sd">        This method allows for searching text across specified fields in the Scopus and S2 collections.</span>
+<span class="sd">        The `scopus` and `s2` parameters specify which text fields within the documents should be used.</span>
+<span class="sd">        By default these fields are the title and abstract attributes for each document. The search objective </span>
+<span class="sd">        is defined by the `target` parameter. This can be a single string or a list of strings to be found </span>
+<span class="sd">        in the text. If this is a list of strings then the relationship between them can be defined using </span>
+<span class="sd">        the `join` parameter. This determines whether the results should be joined with a logical &#39;AND&#39; or </span>
+<span class="sd">        &#39;OR&#39;. When searching for text, a document will be returned if the target string is seen in one or </span>
+<span class="sd">        more of the text fields being searched. This means that this function supports substring matching </span>
+<span class="sd">        and is case insensitive. The results can be returned as a Pandas DataFrame if &#39;as_pandas&#39; is True, </span>
+<span class="sd">        or as MongoDB cursors for each collection if False.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        target: str, [str]</span>
+<span class="sd">            The text or list of text terms to search for within the specified fields.</span>
+<span class="sd">        join : str, optional</span>
+<span class="sd">            The logical join to use across target terms. Can be &#39;OR&#39; or &#39;AND&#39;. Default is &#39;OR&#39;.</span>
+<span class="sd">        scopus: Iterable, bool, (optional)</span>
+<span class="sd">            The fields to search within the first document collection. Expected to be an iterable of valid text</span>
+<span class="sd">            fields found in Scopus. For simplicity, can also be a bool. If True, uses default text attributes </span>
+<span class="sd">            defined by Penguin. If False or an empty list, the collection is not searched. Default is True. </span>
+<span class="sd">        s2: Iterable, bool, (optional)</span>
+<span class="sd">            Same behavior as `scopus` but for the S2 documents.</span>
+<span class="sd">        as_pandas: bool, (optional)</span>
+<span class="sd">            If True, returns the search results as a SLIC DataFrame. If False, returns a dictionary</span>
+<span class="sd">            of MongoDB cursors. Default is True.</span>
+<span class="sd">        n_jobs: int, (optional)</span>
+<span class="sd">            The number of parallel jobs to use for the query. If specified, overrides the instance&#39;s </span>
+<span class="sd">            default n_jobs setting.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        pandas.DataFrame or dict</span>
+<span class="sd">            If &#39;as_pandas&#39; is True, returns a Pandas DataFrame containing the combined search results</span>
+<span class="sd">            from both collections, if applicable. If False, returns a dictionary with keys &#39;scopus&#39; and &#39;s2&#39;</span>
+<span class="sd">            containing the cursors to the search results from the respective collections.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the arguments passed to this function are invalid</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">        ------</span>
+<span class="sd">        - The search is case-insensitive.</span>
+<span class="sd">        - The method can search across multiple fields and terms. Fields are always joined by OR. You cannot</span>
+<span class="sd">          perform a search where a target term is required to be in both the title AND abstract, for example.</span>
+<span class="sd">          The relationship between different target terms, however, can be specified by the operator used for </span>
+<span class="sd">          the `join` parameter.</span>
+<span class="sd">        - When &#39;as_pandas&#39; is False, the method returns cursors, which can be iterated over to access </span>
+<span class="sd">          the individual documents. These cursors do not store the data but can be thought of as pointers</span>
+<span class="sd">          to where the data resides on the server (in the database). As a result they are time sensitive</span>
+<span class="sd">          and become stale if not dereferenced within 10 minutes. They are also useless if conneciton to</span>
+<span class="sd">          the server is lost.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">n_jobs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">join</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="n">join</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;or&#39;</span><span class="p">,</span> <span class="s1">&#39;and&#39;</span><span class="p">}:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;`join` must be in [&quot;or&quot;, &quot;and&quot;]&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">scopus</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">s2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Atleast one of the document collections must be chosen for search&#39;</span><span class="p">)</span>
+            
+        <span class="c1"># setup scopus query</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scopus</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">scopus_query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scopus_attributes</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">scopus</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">scopus_query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scopus_attributes</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span>
+            
+        <span class="c1"># setup s2 query</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">s2_query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">s2</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">s2</span><span class="p">}</span>
+            <span class="n">s2_query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span><span class="p">]</span>
+        
+        <span class="n">s2_query</span> <span class="o">=</span> <span class="n">create_text_query</span><span class="p">(</span><span class="n">s2_query</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">join</span><span class="p">)</span> <span class="k">if</span> <span class="n">s2</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">scopus_query</span> <span class="o">=</span> <span class="n">create_text_query</span><span class="p">(</span><span class="n">scopus_query</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">join</span><span class="p">)</span> <span class="k">if</span> <span class="n">scopus</span> <span class="k">else</span> <span class="kc">None</span>
+        
+        
+        <span class="k">if</span> <span class="n">as_pandas</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query_to_pandas</span><span class="p">(</span><span class="n">scopus_query</span><span class="p">,</span> <span class="n">s2_query</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">out</span><span class="p">[</span><span class="s1">&#39;s2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">s2_query</span><span class="p">)</span> <span class="k">if</span> <span class="n">s2</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">out</span><span class="p">[</span><span class="s1">&#39;scopus&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">SCOPUS_COL</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">scopus_query</span><span class="p">)</span> <span class="k">if</span> <span class="n">scopus</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">out</span></div>
+
+
+    
+<div class="viewcode-block" id="Penguin.id_search">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin.id_search">[docs]</a>
+    <span class="k">def</span> <span class="nf">id_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">as_pandas</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Search the Penguin database by document IDs in either Scopus documents, S2 documents, or both.</span>
+<span class="sd">    </span>
+<span class="sd">        This method allows for searching documents across specified collections based on their IDs.</span>
+<span class="sd">        Each id in `ids` needs to be prefixed with the type of id being evaluted. Current supported </span>
+<span class="sd">        prefixes are [&#39;eid&#39;, &#39;s2id&#39;, &#39;doi&#39;]. This corresponds to Scopus ids, SemanticScholar ids, and </span>
+<span class="sd">        DOIs, respectively. The results can be returned as a Pandas DataFrame </span>
+<span class="sd">        if &#39;as_pandas&#39; is True, or as MongoDB cursors for each collection if False.</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        ids: str, [str]</span>
+<span class="sd">            The ID or list of IDs to search for within the specified collections.</span>
+<span class="sd">        as_pandas: bool, optional</span>
+<span class="sd">            If True, returns the search results as a Pandas DataFrame. If False, returns a dictionary</span>
+<span class="sd">            of MongoDB cursors. Default is True.</span>
+<span class="sd">        n_jobs: int, optional</span>
+<span class="sd">            The number of parallel jobs to use for the query. If specified, overrides the instance&#39;s </span>
+<span class="sd">            default n_jobs setting.</span>
+<span class="sd">    </span>
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        pandas.DataFrame or dict</span>
+<span class="sd">            If &#39;as_pandas&#39; is True, returns a Pandas DataFrame containing the combined search results</span>
+<span class="sd">            from both collections, if applicable. If False, returns a dictionary with keys &#39;scopus&#39; and &#39;s2&#39;</span>
+<span class="sd">            containing the cursors to the search results from the respective collections.</span>
+<span class="sd">    </span>
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the arguments passed to this function are invalid</span>
+<span class="sd">    </span>
+<span class="sd">        Examples:</span>
+<span class="sd">        ---------</span>
+<span class="sd">        &gt;&gt;&gt; penguin.id_search(</span>
+<span class="sd">                ids = [</span>
+<span class="sd">                    &#39;doi:[doi here]&#39;,</span>
+<span class="sd">                    &#39;doi:[doi here]&#39;,</span>
+<span class="sd">                    &#39;s2id:[s2id here]&#39;,</span>
+<span class="sd">                    &#39;eid:[eid here]&#39;, </span>
+<span class="sd">                    &#39;eid:[eid here]&#39;, </span>
+<span class="sd">                ]</span>
+<span class="sd">                as_pandas=True)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">n_jobs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">ids</span><span class="p">]</span>
+     
+        <span class="n">processed_ids</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;eid&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;s2id&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;doi&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">:</span>
+            <span class="n">prefix</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">actual_id</span> <span class="o">=</span> <span class="n">pid</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">prefix</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;eid&#39;</span><span class="p">,</span> <span class="s1">&#39;s2id&#39;</span><span class="p">,</span> <span class="s1">&#39;doi&#39;</span><span class="p">}:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown prefix </span><span class="si">{</span><span class="n">prefix</span><span class="si">:</span><span class="s2">!r</span><span class="si">}</span><span class="s2"> for ID </span><span class="si">{</span><span class="n">pid</span><span class="si">!r}</span><span class="s2">. Valid prefixes are in [&#39;scopus&#39;, &#39;s2&#39;, &#39;doi&#39;]&quot;</span><span class="p">)</span>
+            <span class="n">processed_ids</span><span class="p">[</span><span class="n">prefix</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">actual_id</span><span class="p">)</span>
+
+        <span class="c1"># from query for looking up papers by s2id</span>
+        <span class="n">s2_query</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">processed_ids</span><span class="p">[</span><span class="s1">&#39;s2id&#39;</span><span class="p">]:</span>
+            <span class="n">s2id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+            <span class="n">s2_query</span><span class="p">[</span><span class="n">s2id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;$in&quot;</span><span class="p">:</span> <span class="n">processed_ids</span><span class="p">[</span><span class="s1">&#39;s2id&#39;</span><span class="p">]}</span>
+
+        <span class="c1"># form query for looking up papers by scopus id</span>
+        <span class="n">scopus_query</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">processed_ids</span><span class="p">[</span><span class="s1">&#39;eid&#39;</span><span class="p">]:</span>
+            <span class="n">scopusId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scopus_attributes</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+            <span class="n">scopus_query</span><span class="p">[</span><span class="n">scopusId</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;$in&quot;</span><span class="p">:</span> <span class="n">processed_ids</span><span class="p">[</span><span class="s1">&#39;eid&#39;</span><span class="p">]}</span>
+
+        <span class="c1"># form query for looking up papers by doi</span>
+        <span class="k">if</span> <span class="n">processed_ids</span><span class="p">[</span><span class="s1">&#39;doi&#39;</span><span class="p">]:</span>
+            <span class="n">s2id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span><span class="p">[</span><span class="s1">&#39;doi&#39;</span><span class="p">]</span>
+            <span class="n">s2_query</span><span class="p">[</span><span class="n">s2id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;$in&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">processed_ids</span><span class="p">[</span><span class="s1">&#39;doi&#39;</span><span class="p">]]}</span>
+
+            <span class="n">scopusId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scopus_attributes</span><span class="p">[</span><span class="s1">&#39;doi&#39;</span><span class="p">]</span>
+            <span class="n">scopus_query</span><span class="p">[</span><span class="n">scopusId</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;$in&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">processed_ids</span><span class="p">[</span><span class="s1">&#39;doi&#39;</span><span class="p">]]}</span>
+
+        <span class="c1"># transform queries for mongo use</span>
+        <span class="n">s2_query</span> <span class="o">=</span> <span class="n">transform_dict</span><span class="p">(</span><span class="n">s2_query</span><span class="p">)</span>
+        <span class="n">scopus_query</span> <span class="o">=</span> <span class="n">transform_dict</span><span class="p">(</span><span class="n">scopus_query</span><span class="p">)</span>
+        
+        <span class="c1"># if doi search and id search is involved, add or operator</span>
+        <span class="n">s2_query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$or&#39;</span><span class="p">:</span> <span class="n">s2_query</span><span class="p">}</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s2_query</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">s2_query</span>
+        <span class="n">s2_query</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">s2_query</span> <span class="k">else</span> <span class="n">s2_query</span>
+        <span class="n">scopus_query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$or&#39;</span><span class="p">:</span> <span class="n">scopus_query</span><span class="p">}</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">scopus_query</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">scopus_query</span>
+        <span class="n">scopus_query</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">scopus_query</span> <span class="k">else</span> <span class="n">scopus_query</span>
+        
+        <span class="k">if</span> <span class="n">as_pandas</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query_to_pandas</span><span class="p">(</span><span class="n">scopus_query</span><span class="p">,</span> <span class="n">s2_query</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">out</span><span class="p">[</span><span class="s1">&#39;scopus&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">SCOPUS_COL</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">scopus_query</span><span class="p">)</span> <span class="k">if</span> <span class="n">scopus_query</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">out</span><span class="p">[</span><span class="s1">&#39;s2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">s2_query</span><span class="p">)</span> <span class="k">if</span> <span class="n">s2_query</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">out</span></div>
+
+
+    
+<div class="viewcode-block" id="Penguin.citation_search">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin.citation_search">[docs]</a>
+    <span class="k">def</span> <span class="nf">citation_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">scopus</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">s2</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">as_pandas</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Searches for documents based on citation or reference targets within a specified collection.</span>
+
+<span class="sd">        This method allows for searching citations or references within S2 documents. It accepts a target </span>
+<span class="sd">        paper ID or a list of target paper IDs targets and retrieves documents citing/referencing these targets. </span>
+<span class="sd">        The method can return results as a Pandas DataFrame or a dictionary of cursors, depending on the </span>
+<span class="sd">        `as_pandas` flag. The `scopus` parameter is currently not supported and will trigger a warning</span>
+<span class="sd">        if set to True.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        target: str, [str]</span>
+<span class="sd">            The document paper IDs for which to look up citations/references</span>
+<span class="sd">        scopus: bool, (optional)</span>
+<span class="sd">            Currently not supported. Using this parameter will trigger a warning. This argument is added</span>
+<span class="sd">            to the function to maintain a similar design structure as the other search functions. Default is False.</span>
+<span class="sd">        s2: bool, str, (optional)</span>
+<span class="sd">            Determines the behavior for searching within the S2 collection. If True, uses the default</span>
+<span class="sd">            citation attribute. If a string is provided, it is used as the citation attribute. Since citations</span>
+<span class="sd">            and refences use the same data structure, passing the argument &#39;references&#39; for this parameter</span>
+<span class="sd">            will trigger a reference search. Default is True. </span>
+<span class="sd">        as_pandas: bool, (optional)</span>
+<span class="sd">            If True, returns the search results as a SLIC DataFrame. If False, returns a dictionary</span>
+<span class="sd">            of MongoDB cursors. Default is True.</span>
+<span class="sd">        n_jobs: int, (optional)</span>
+<span class="sd">            The number of parallel jobs to use for the query. If specified, overrides the instance&#39;s </span>
+<span class="sd">            default n_jobs setting.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        pandas.DataFrame or dict</span>
+<span class="sd">            If &#39;as_pandas&#39; is True, returns a Pandas DataFrame containing the combined search results</span>
+<span class="sd">            from both collections, if applicable. If False, returns a dictionary with keys &#39;scopus&#39; and &#39;s2&#39;</span>
+<span class="sd">            containing the cursors to the search results from the respective collections.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `s2` is set to False, indicating that no valid collection is selected for the search.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">n_jobs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+        
+        <span class="c1"># setup scopus query</span>
+        <span class="k">if</span> <span class="n">scopus</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;[Penguin]: citation_search() does not support Scopus!&#39;</span><span class="p">)</span>
+            
+        <span class="c1"># setup s2 query</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">s2_query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span><span class="p">[</span><span class="s1">&#39;citations&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">s2</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;citations&#39;</span><span class="p">:</span> <span class="n">s2</span><span class="p">}</span>
+            <span class="n">s2_query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span><span class="p">[</span><span class="s1">&#39;citations&#39;</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;S2 must be used for citation/reference search!&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># make sure target is a list</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">set</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+            
+        <span class="n">s2id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+        <span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="p">]</span>
+        <span class="n">target_documents</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="n">s2id</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$in&quot;</span><span class="p">:</span> <span class="n">target</span><span class="p">}})</span>
+        <span class="k">if</span> <span class="n">target_documents</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">s2_query</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">item</span><span class="p">[</span><span class="n">s2id</span><span class="p">]</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">target_documents</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">s2_query</span><span class="p">,</span> <span class="p">[])</span> <span class="k">if</span> <span class="n">s2id</span> <span class="ow">in</span> <span class="n">item</span><span class="p">}</span>
+            <span class="n">s2_query</span> <span class="o">=</span> <span class="p">{</span><span class="n">s2id</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$in&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">ids</span><span class="p">)}}</span>
+            
+            
+        <span class="k">if</span> <span class="n">as_pandas</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query_to_pandas</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">s2_query</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">out</span><span class="p">[</span><span class="s1">&#39;s2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">s2_query</span><span class="p">)</span> <span class="k">if</span> <span class="n">s2</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">out</span><span class="p">[</span><span class="s1">&#39;scopus&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">out</span></div>
+
+
+                        
+<div class="viewcode-block" id="Penguin.query_by_author">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin.query_by_author">[docs]</a>
+    <span class="k">def</span> <span class="nf">query_by_author</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection_name</span><span class="p">,</span> <span class="n">doc_id</span><span class="p">,</span> <span class="n">id_attribute</span><span class="o">=</span><span class="s1">&#39;paperId&#39;</span><span class="p">,</span> 
+                        <span class="n">author_attribute_list</span><span class="o">=</span><span class="s1">&#39;authors&#39;</span><span class="p">,</span> <span class="n">author_attribute</span><span class="o">=</span><span class="s1">&#39;authorId&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Query a MongoDB collection for a document by a direct match and then locate all of the other papers</span>
+<span class="sd">        from the authors of the target paper that are present in the DB. </span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        collection_name: str</span>
+<span class="sd">            The name of the MongoDB collection to query.</span>
+<span class="sd">        doc_id: str</span>
+<span class="sd">            The document ID which to look up.</span>
+<span class="sd">        id_attribute: str</span>
+<span class="sd">            The name of the attribute where the document ID is stored. Defaults to &#39;paperId&#39; for S2 papers.</span>
+<span class="sd">        author_attribute: str</span>
+<span class="sd">            The name of the attribute in the documents that contains author information</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        list:</span>
+<span class="sd">            A list of citing papers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># query to find a document with given id</span>
+        <span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">collection_name</span><span class="p">]</span>
+        <span class="n">target_document</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="n">id_attribute</span><span class="p">:</span> <span class="n">doc_id</span><span class="p">})</span>
+        <span class="k">if</span> <span class="n">target_document</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="c1"># extract the list of citing papers</span>
+        <span class="n">author_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="n">author_attribute</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> 
+                      <span class="n">target_document</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">author_attribute_list</span><span class="p">,</span> <span class="p">[])</span> <span class="k">if</span> <span class="n">author_attribute</span> <span class="ow">in</span> <span class="n">item</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">author_attribute_list</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">author_attribute</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$in&quot;</span><span class="p">:</span> <span class="n">author_ids</span><span class="p">}})</span></div>
+
+    
+    
+    <span class="c1"># 4. Tagging </span>
+    
+    
+<div class="viewcode-block" id="Penguin.resolve_document_id">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin.resolve_document_id">[docs]</a>
+    <span class="k">def</span> <span class="nf">resolve_document_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pid</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resolves the collection and unique identifier (uid) for a given document_id.</span>
+<span class="sd">        The document id can either be a Scopus id or a SemanticScholar id.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        document_id: str</span>
+<span class="sd">            The identifier for the document that needs to be resolved. This should be a</span>
+<span class="sd">            document id (either S2 or Scopus). The id should be prepended by either &#39;eid:&#39; to</span>
+<span class="sd">            signify a Scopus document or &#39;s2id:&#39; to signify an S2 document.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        tuple</span>
+<span class="sd">            A tuple containing the unique identifier (uid) and the associated collection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">prefix</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">actual_id</span> <span class="o">=</span> <span class="n">pid</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">actual_id</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Encountered unknown `id`: </span><span class="si">{</span><span class="n">doc_id</span><span class="si">}</span><span class="s1">. Prepend id with eid: or s2id: to specify id type&#39;</span><span class="p">)</span>
+    
+        <span class="n">document</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">collection</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">prefix</span> <span class="o">==</span> <span class="s1">&#39;eid&#39;</span><span class="p">:</span>
+            <span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">SCOPUS_COL</span><span class="p">]</span>
+            <span class="n">secondaryId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scopus_attributes</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="n">secondaryId</span><span class="p">:</span> <span class="n">actual_id</span><span class="p">})</span>            
+        <span class="k">elif</span> <span class="n">prefix</span> <span class="o">==</span> <span class="s1">&#39;s2id&#39;</span><span class="p">:</span>
+            <span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="p">]</span>
+            <span class="n">secondaryId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({</span><span class="n">secondaryId</span><span class="p">:</span> <span class="n">actual_id</span><span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Encountered unknown document id prefix: </span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">. Valid options are in [&quot;eid&quot;, &quot;s2id&quot;]&#39;</span><span class="p">)</span>
+    
+        <span class="k">if</span> <span class="n">document</span><span class="p">:</span>
+            <span class="n">uid</span> <span class="o">=</span> <span class="n">document</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">uid</span><span class="p">,</span> <span class="n">collection</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+    
+    
+<div class="viewcode-block" id="Penguin.add_tag">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin.add_tag">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document_id</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a tag to the specified document.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        document_id: str</span>
+<span class="sd">            The identifier for the document to which the tag will be added. This should be a</span>
+<span class="sd">            document id (either S2 or Scopus). The id should be prepended by either &#39;eid:&#39; to</span>
+<span class="sd">            signify a Scopus document or &#39;s2id:&#39; to signify an S2 document.</span>
+<span class="sd">        tag: str</span>
+<span class="sd">            The tag to be added to the document.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">            None</span>
+<span class="sd">            </span>
+<span class="sd">        Example:</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; penguin.add_tag(&#39;eid:[eid here]&#39;, &#39;tensor&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; penguin.add_tag(&#39;s2id:[s2id here]&#39;, &#39;tensor&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">uid</span><span class="p">,</span> <span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolve_document_id</span><span class="p">(</span><span class="n">document_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">uid</span> <span class="ow">and</span> <span class="n">collection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">uid</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;$addToSet&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="n">tag</span><span class="p">}}</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Document with id </span><span class="si">{</span><span class="n">document_id</span><span class="si">!r}</span><span class="s1"> not found in DB.&#39;</span><span class="p">)</span></div>
+
+    
+    
+<div class="viewcode-block" id="Penguin.remove_tag">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin.remove_tag">[docs]</a>
+    <span class="k">def</span> <span class="nf">remove_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document_id</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Removes a tag from the specified document.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        document_id: str</span>
+<span class="sd">            The identifier for the document to which the tag will be removed. This should be a</span>
+<span class="sd">            document id (either S2 or Scopus). The id should be prepended by either &#39;eid:&#39; to</span>
+<span class="sd">            signify a Scopus document or &#39;s2id:&#39; to signify an S2 document.</span>
+<span class="sd">        tag: str</span>
+<span class="sd">            The tag to be removed from the document.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">            None</span>
+<span class="sd">            </span>
+<span class="sd">        Example:</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; penguin.remove_tag(&#39;eid:[eid here]&#39;, &#39;tensor&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; penguin.remove_tag(&#39;s2id:[s2id here]&#39;, &#39;tensor&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">uid</span><span class="p">,</span> <span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolve_document_id</span><span class="p">(</span><span class="n">document_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">uid</span> <span class="ow">and</span> <span class="n">collection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">uid</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;$pull&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="n">tag</span><span class="p">}}</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Document with id </span><span class="si">{</span><span class="n">document_id</span><span class="si">!r}</span><span class="s1"> not found in DB.&#39;</span><span class="p">)</span></div>
+
+        
+
+<div class="viewcode-block" id="Penguin.update_tags">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin.update_tags">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document_id</span><span class="p">,</span> <span class="n">new_tags</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the tags for the specified document with a new set of tags. Used for </span>
+<span class="sd">        updating the entire list of tags at once</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        document_id: str</span>
+<span class="sd">            The identifier for the document to which the tags will be modified. This should be a</span>
+<span class="sd">            document id (either S2 or Scopus). The id should be prepended by either &#39;eid:&#39; to</span>
+<span class="sd">            signify a Scopus document or &#39;s2id:&#39; to signify an S2 document.</span>
+<span class="sd">        new_tags: list</span>
+<span class="sd">            The new set of tags to be assigned to the document.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">            None</span>
+<span class="sd">            </span>
+<span class="sd">        Example:</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; penguin.update_tags(&#39;eid:[eid here]&#39;, [&#39;tensor&#39;, &#39;PDE&#39;])</span>
+<span class="sd">        &gt;&gt;&gt; penguin.update_tags(&#39;s2id:[s2id here]&#39;, [&#39;tensor&#39;, &#39;PDE&#39;])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">uid</span><span class="p">,</span> <span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolve_document_id</span><span class="p">(</span><span class="n">document_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">uid</span> <span class="ow">and</span> <span class="n">collection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">collection</span><span class="o">.</span><span class="n">update_one</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">uid</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;$set&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="n">new_tags</span><span class="p">}}</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Document with id </span><span class="si">{</span><span class="n">document_id</span><span class="si">!r}</span><span class="s1"> not found in DB.&#39;</span><span class="p">)</span></div>
+
+
+            
+<div class="viewcode-block" id="Penguin.find_by_tag">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin.find_by_tag">[docs]</a>
+    <span class="k">def</span> <span class="nf">find_by_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">as_pandas</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Finds and returns documents that have the specified tag.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        tag: str</span>
+<span class="sd">            The tag to filter documents by.</span>
+<span class="sd">        as_pandas: bool, (optional)</span>
+<span class="sd">            If True, returns the search results as a SLIC DataFrame. If False, returns a dictionary</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        pandas.DataFrame or dict</span>
+<span class="sd">            If &#39;as_pandas&#39; is True, returns a Pandas DataFrame containing the combined search results</span>
+<span class="sd">            from for the tag from Scopus and S2 collections. If False, returns a dictionary with keys </span>
+<span class="sd">            &#39;scopus&#39; and &#39;s2&#39; containing the cursors to the search results from the respective collections.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">as_pandas</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="n">tag</span><span class="p">}</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query_to_pandas</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">out</span><span class="p">[</span><span class="s1">&#39;scopus&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">SCOPUS_COL</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="n">tag</span><span class="p">})</span> 
+            <span class="n">out</span><span class="p">[</span><span class="s1">&#39;s2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="n">tag</span><span class="p">})</span>
+            <span class="k">return</span> <span class="n">out</span></div>
+
+
+    
+    <span class="c1"># 5. iPenguin Hook</span>
+    
+    
+<div class="viewcode-block" id="Penguin.get_id_bloom">
+<a class="viewcode-back" href="../../../../Penguin.html#TELF.pre_processing.Penguin.penguin.Penguin.get_id_bloom">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_id_bloom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">max_items</span><span class="o">=</span><span class="mf">1.25</span><span class="p">,</span> <span class="n">false_positive_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">):</span>  
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes a Bloom filter with IDs from a specified source collection.</span>
+
+<span class="sd">        This method selects a collection based on the &#39;source&#39; parameter, which should match</span>
+<span class="sd">        one of the predefined S2 or Scopus collection names (S2_COL or SCOPUS_COL). It then retrieves </span>
+<span class="sd">        IDs from the selected collection and adds them to a Bloom filter. The Bloom filter is configured </span>
+<span class="sd">        based on the estimated number of items (&#39;max_items&#39;) and the desired false positive rate.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        source: str</span>
+<span class="sd">            The name of the source collection from which to retrieve IDs. It should correspond to</span>
+<span class="sd">            either SCOPUS_COL or S2_COL.</span>
+<span class="sd">        max_items: float, int, (optional)</span>
+<span class="sd">            The maximum number of items expected to be stored in the Bloom filter. This can be a</span>
+<span class="sd">            fixed integer or a float representing a multiplier of the current document count in the</span>
+<span class="sd">            collection. Default is 1.25.</span>
+<span class="sd">        false_positive_rate: float, (optional)</span>
+<span class="sd">            The desired false positive probability for the Bloom filter. Default is 0.001.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        rbloom.Bloom</span>
+<span class="sd">            An instance of a Bloom filter populated with IDs from the specified collection.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If &#39;source&#39; does not match any of the predefined collection names, or if &#39;max_items&#39;</span>
+<span class="sd">            is not a float or an int.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">        ------</span>
+<span class="sd">        - The Bloom filter is a probabilistic data structure that is used to test whether an element</span>
+<span class="sd">          is a member of a set. False positive matches are possible, but false negatives are not.</span>
+<span class="sd">        - The &#39;max_items&#39; parameter impacts the size and the false positive rate of the Bloom filter.</span>
+<span class="sd">          Adjusting this parameter can optimize the performance and accuracy based on the expected</span>
+<span class="sd">          dataset size.</span>
+<span class="sd">        - The function retrieves only the ID attribute from the documents in the collection, </span>
+<span class="sd">          excluding the MongoDB &#39;_id&#39; field, to populate the Bloom filter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">id_attr</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">collection</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">source</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="p">]</span>
+            <span class="n">id_attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">SCOPUS_COL</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">source</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="n">collection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">SCOPUS_COL</span><span class="p">]</span>
+            <span class="n">id_attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scopus_attributes</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown `source` </span><span class="si">{</span><span class="n">source</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+        <span class="n">num_documents</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">count_documents</span><span class="p">({})</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">max_items</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">num_documents</span> <span class="o">=</span> <span class="n">max_items</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">max_items</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">num_documents</span> <span class="o">*=</span> <span class="n">max_items</span>
+            <span class="n">num_documents</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_documents</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;`max_items` is expected to be a float or an int&#39;</span><span class="p">)</span>
+        
+        <span class="n">bf</span> <span class="o">=</span> <span class="n">Bloom</span><span class="p">(</span><span class="n">num_documents</span><span class="p">,</span> <span class="n">false_positive_rate</span><span class="p">)</span>  <span class="c1"># initialize a bloom filter</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">({},</span> <span class="p">{</span><span class="n">id_attr</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>  <span class="c1"># retrieve only eid/s2id attribute and exclude &#39;_id&#39; field</span>
+        <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">cursor</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">id_attr</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="n">id_attr</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">id_attr</span> <span class="o">==</span> <span class="s1">&#39;eid&#39;</span><span class="p">:</span>
+                    <span class="n">bf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="n">id_attr</span><span class="p">][</span><span class="mi">7</span><span class="p">:])</span>  <span class="c1"># remove the &#39;2-s2.0-&#39; prefix from Scopus ids</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">bf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="n">id_attr</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">bf</span></div>
+
+        
+    
+    <span class="k">def</span> <span class="nf">_query_to_pandas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scopus_query</span><span class="p">,</span> <span class="n">s2_query</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves data based on two separate queries to Scopus and S2 collections and transforms them </span>
+<span class="sd">        into a single Pandas DataFrame in SLIC format.</span>
+
+<span class="sd">        This method executes two different queries using the `_query_to_pandas_helper` method for each. </span>
+<span class="sd">        The first query (`scopus_query`) is executed against a collection specified by `self.SCOPUS_COL`, </span>
+<span class="sd">        and the second query (`s2_query`) is executed against another collection specified by `self.S2_COL`. </span>
+<span class="sd">        Each query&#39;s results are independently transformed into a DataFrames using their own handler</span>
+<span class="sd">        functions. The two DataFrames are then combined into a single DataFrame by the `form_df` function, </span>
+<span class="sd">        which is in the standard SLIC format.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        scopus_query: dict</span>
+<span class="sd">            The MongoDB query to be executed against the Scopus documents</span>
+<span class="sd">        s2_query: dict</span>
+<span class="sd">            The MongoDB query to be executed against the S2 documents</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            The joint DataFrame for both Scopus and S2. Formatted to be used with the rest of the Zoo libraries. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scopus_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query_to_pandas_helper</span><span class="p">(</span><span class="n">scopus_query</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SCOPUS_COL</span><span class="p">,</span> <span class="n">form_scopus_df</span><span class="p">)</span>
+        <span class="n">s2_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query_to_pandas_helper</span><span class="p">(</span><span class="n">s2_query</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">S2_COL</span><span class="p">,</span> <span class="n">form_s2_df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">form_df</span><span class="p">(</span><span class="n">scopus_df</span><span class="p">,</span> <span class="n">s2_df</span><span class="p">)</span>
+
+    
+    <span class="k">def</span> <span class="nf">_query_to_pandas_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">processor</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves data from a MongoDB collection based on a query and turns it into a </span>
+<span class="sd">        Pandas DataFrame.</span>
+
+<span class="sd">        This method first divides the result set of the query into multiple cursors for parallel </span>
+<span class="sd">        processing, if applicable. Each cursor represents a subset of the query results. The method </span>
+<span class="sd">        then processes these subsets in parallel, converts them into Pandas DataFrame slices, and </span>
+<span class="sd">        concatenates these slices into a single DataFrame. If the number of jobs (cursors) is one, </span>
+<span class="sd">        it processes the query result without parallelization. If the query is None, it returns an empty </span>
+<span class="sd">        DataFrame with the appropriate S2 or Scopus headers. </span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        query: dict or None</span>
+<span class="sd">            The MongoDB query to execute. If None, an empty DataFrame is returned.</span>
+<span class="sd">        col: str</span>
+<span class="sd">            The name of the MongoDB collection to query.</span>
+<span class="sd">        processor: callable</span>
+<span class="sd">            A function that takes a cursor, an empty list, (or any other iterable) and returns a Pandas DataFrame. </span>
+<span class="sd">            This function is responsible for converting the raw data from MongoDB into a DataFrame format. The</span>
+<span class="sd">            currently available options are `form_scopus_df()` and `form_s2_df()` for the Scopus collection and</span>
+<span class="sd">            the S2 collection respectively.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            A DataFrame containing the data retrieved from MongoDB based on the provided query, processed by the &#39;processor&#39; </span>
+<span class="sd">            function. If the query is None, returns an empty DataFrame with just the header.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">query</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cursors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parallel_cursors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">query</span><span class="p">)</span>
+            <span class="n">n_jobs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cursors</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">n_jobs</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># generate dataframe slices in parallel</span>
+                <span class="n">jobs</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">cursors</span><span class="p">),</span> <span class="n">backend</span><span class="o">=</span><span class="s1">&#39;threading&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)(</span>
+                    <span class="n">delayed</span><span class="p">(</span><span class="n">processor</span><span class="p">)(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cursors</span><span class="p">)</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">jobs</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">processor</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">cursors</span><span class="p">)))</span>  <span class="c1"># single core processing</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">processor</span><span class="p">([])</span>  <span class="c1"># create empty df (just header basically)</span>
+
+    
+    <span class="k">def</span> <span class="nf">_parallel_cursors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collection</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a list of cursors for a MongoDB collection, each pointing to a subset of documents</span>
+<span class="sd">        based on the specified query. The total number of documents matched by the query is divided</span>
+<span class="sd">        as evenly as possible among the specified number of jobs (`self.n_jobs`). </span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        collection : pymongo.collection.Collection</span>
+<span class="sd">            The MongoDB collection to query.</span>
+<span class="sd">        query : dict</span>
+<span class="sd">            The query to execute on the collection.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        list</span>
+<span class="sd">            A list of pymongo.cursor.Cursor objects, each configured with skip and limit to iterate over</span>
+<span class="sd">            a subset of the query results. The division of documents is as even as possible, with any</span>
+<span class="sd">            remainder from the division process distributed among the first cursors in the list.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">        -----</span>
+<span class="sd">        This function is particularly useful for parallel processing of MongoDB query results. Care should be</span>
+<span class="sd">        taken when using a large number of cursors, as each cursor consumes server resources.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">total_docs</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">count_documents</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">n_jobs</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">total_docs</span><span class="p">)</span> <span class="k">if</span> <span class="n">total_docs</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="n">chunk_size</span><span class="p">,</span> <span class="n">extras</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">total_docs</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
+
+        <span class="n">cursors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">skip_amount</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">):</span>
+            <span class="n">limit_amount</span> <span class="o">=</span> <span class="n">chunk_size</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">extras</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">skip</span><span class="p">(</span><span class="n">skip_amount</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit_amount</span><span class="p">)</span>
+            <span class="n">cursors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cursor</span><span class="p">)</span>
+            <span class="n">skip_amount</span> <span class="o">+=</span> <span class="n">limit_amount</span>
+        <span class="k">return</span> <span class="n">cursors</span>
+    
+    
+    <span class="c1"># Setters / Getters</span>
+    
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">uri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uri</span>
+
+    <span class="nd">@uri</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">uri</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;`uri` must be a string!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[a-zA-Z0-9.-]+:[0-9]+$&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`uri` must be in the format &#39;hostname:port&#39;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_uri</span> <span class="o">=</span> <span class="n">value</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">db_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db_name</span>
+
+    <span class="nd">@db_name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">db_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;`db_name` must be a string!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db_name</span> <span class="o">=</span> <span class="n">value</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">username</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_username</span>
+
+    <span class="nd">@username</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">username</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`username` must be a non-empty string or None&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_username</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">password</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_password</span>
+
+    <span class="nd">@password</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`password` must be a non-empty string or None&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_password</span> <span class="o">=</span> <span class="n">value</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span>
+    
+    <span class="nd">@n_jobs</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">n_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_jobs</span> <span class="o">=</span> <span class="n">verify_n_jobs</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">)</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">scopus_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scopus_attributes</span>
+    
+    <span class="nd">@scopus_attributes</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">scopus_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scopus_attributes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scopus_attributes</span> <span class="o">=</span> <span class="n">verify_attributes</span><span class="p">(</span><span class="n">scopus_attributes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scopus_attributes</span><span class="p">,</span> <span class="s1">&#39;scopus_attributes&#39;</span><span class="p">)</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">s2_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s2_attributes</span>
+    
+    <span class="nd">@s2_attributes</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">s2_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s2_attributes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s2_attributes</span> <span class="o">=</span> <span class="n">verify_attributes</span><span class="p">(</span><span class="n">s2_attributes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_attributes</span><span class="p">,</span> <span class="s1">&#39;s2_attributes&#39;</span><span class="p">)</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">verbose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span>
+        
+    <span class="nd">@verbose</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">verbose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>  <span class="c1"># convert False to 0, True to 1</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Integer values for `verbose` must be non-negative!&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;`verbose` should be of type bool or int!&#39;</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

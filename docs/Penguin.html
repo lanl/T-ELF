@@ -1,0 +1,1162 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>TELF.applications.Penguin: Text storage tool &#8212; TELF 0.0.38 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=8c8d0fbf"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Penguin';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TELF.applications.Bunny: Dataset generation tool for documents and their citations/references" href="Bunny.html" />
+    <link rel="prev" title="TELF.pre_processing.iPenguin: Online information retrieval tool for Scopus, SemanticScholar, and OSTI" href="iPenguin.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.38 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="HNMFk.html"><strong>TELF.factorization.HNMFk:</strong> Hierarchical Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Orca.html"><strong>TELF.pre_processing.Orca:</strong> Duplicate author detector for text mining and information retrival</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Wolf.html"><strong>TELF.post_processing.Wolf:</strong> Graph centrality and ranking tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="iPenguin.html"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</a></li>
+
+
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>TELF.applications.Penguin:</strong>  Text storage tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Bunny.html"><strong>TELF.applications.Bunny:</strong>   Dataset generation tool for documents and their citations/references</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="SeaLion.html"><strong>TELF.post_processing.SeaLion:</strong> Generic report generation tool</a></li>
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="TELF.html">TELF package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.factorization.html">TELF.factorization package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.pre_processing.html">TELF.pre_processing package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Penguin.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>TELF.applications.Penguin:  Text storage tool</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>TELF.applications.Penguin:</strong>  Text storage tool</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.applications.Penguin.penguin">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin"><code class="docutils literal notranslate"><span class="pre">Penguin</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.DEFAULT_ATTRIBUTES"><code class="docutils literal notranslate"><span class="pre">Penguin.DEFAULT_ATTRIBUTES</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.S2_COL"><code class="docutils literal notranslate"><span class="pre">Penguin.S2_COL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.SCOPUS_COL"><code class="docutils literal notranslate"><span class="pre">Penguin.SCOPUS_COL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.add_many_documents"><code class="docutils literal notranslate"><span class="pre">Penguin.add_many_documents()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.add_single_document"><code class="docutils literal notranslate"><span class="pre">Penguin.add_single_document()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.add_tag"><code class="docutils literal notranslate"><span class="pre">Penguin.add_tag()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.citation_search"><code class="docutils literal notranslate"><span class="pre">Penguin.citation_search()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.count_documents"><code class="docutils literal notranslate"><span class="pre">Penguin.count_documents()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.db_name"><code class="docutils literal notranslate"><span class="pre">Penguin.db_name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.find_by_tag"><code class="docutils literal notranslate"><span class="pre">Penguin.find_by_tag()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.get_id_bloom"><code class="docutils literal notranslate"><span class="pre">Penguin.get_id_bloom()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.id_search"><code class="docutils literal notranslate"><span class="pre">Penguin.id_search()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.n_jobs"><code class="docutils literal notranslate"><span class="pre">Penguin.n_jobs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.password"><code class="docutils literal notranslate"><span class="pre">Penguin.password</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.query_by_author"><code class="docutils literal notranslate"><span class="pre">Penguin.query_by_author()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.remove_tag"><code class="docutils literal notranslate"><span class="pre">Penguin.remove_tag()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.resolve_document_id"><code class="docutils literal notranslate"><span class="pre">Penguin.resolve_document_id()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.s2_attributes"><code class="docutils literal notranslate"><span class="pre">Penguin.s2_attributes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.scopus_attributes"><code class="docutils literal notranslate"><span class="pre">Penguin.scopus_attributes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.text_search"><code class="docutils literal notranslate"><span class="pre">Penguin.text_search()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.update_tags"><code class="docutils literal notranslate"><span class="pre">Penguin.update_tags()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.uri"><code class="docutils literal notranslate"><span class="pre">Penguin.uri</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.username"><code class="docutils literal notranslate"><span class="pre">Penguin.username</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.verbose"><code class="docutils literal notranslate"><span class="pre">Penguin.verbose</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="telf-applications-penguin-text-storage-tool">
+<h1><strong>TELF.applications.Penguin:</strong>  Text storage tool<a class="headerlink" href="#telf-applications-penguin-text-storage-tool" title="Link to this heading">#</a></h1>
+<blockquote>
+<div><p>Text storage tool.</p>
+</div></blockquote>
+</section>
+<section id="available-functions">
+<h1>Available Functions<a class="headerlink" href="#available-functions" title="Link to this heading">#</a></h1>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.__init__</span></code>(uri, db_name[, username, ...])</p></td>
+<td><p>Initializes the Penguin instance with the specified URI, database name, and optional settings.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.applications.Penguin.penguin.Penguin.add_many_documents" title="TELF.applications.Penguin.penguin.Penguin.add_many_documents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.add_many_documents</span></code></a>(directory, source)</p></td>
+<td><p>Processes a directory of document files that need to be added to the database.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.applications.Penguin.penguin.Penguin.add_single_document" title="TELF.applications.Penguin.penguin.Penguin.add_single_document"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.add_single_document</span></code></a>(file_path, source)</p></td>
+<td><p>Processes a single data file and adds / updates its content in the database.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.applications.Penguin.penguin.Penguin.count_documents" title="TELF.applications.Penguin.penguin.Penguin.count_documents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.count_documents</span></code></a>()</p></td>
+<td><p>Return the number of documents in the Scopus and S2.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.applications.Penguin.penguin.Penguin.text_search" title="TELF.applications.Penguin.penguin.Penguin.text_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.text_search</span></code></a>(target[, join, scopus, ...])</p></td>
+<td><p>Search the Penguin database by text matching in either Scopus documents, S2 documents or both.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.applications.Penguin.penguin.Penguin.id_search" title="TELF.applications.Penguin.penguin.Penguin.id_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.id_search</span></code></a>(ids[, as_pandas, n_jobs])</p></td>
+<td><p>Search the Penguin database by document IDs in either Scopus documents, S2 documents, or both.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.applications.Penguin.penguin.Penguin.citation_search" title="TELF.applications.Penguin.penguin.Penguin.citation_search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.citation_search</span></code></a>(target[, scopus, ...])</p></td>
+<td><p>Searches for documents based on citation or reference targets within a specified collection.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.applications.Penguin.penguin.Penguin.query_by_author" title="TELF.applications.Penguin.penguin.Penguin.query_by_author"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.query_by_author</span></code></a>(collection_name, doc_id)</p></td>
+<td><p>Query a MongoDB collection for a document by a direct match and then locate all of the other papers from the authors of the target paper that are present in the DB.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.applications.Penguin.penguin.Penguin.resolve_document_id" title="TELF.applications.Penguin.penguin.Penguin.resolve_document_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.resolve_document_id</span></code></a>(pid)</p></td>
+<td><p>Resolves the collection and unique identifier (uid) for a given document_id.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.applications.Penguin.penguin.Penguin.add_tag" title="TELF.applications.Penguin.penguin.Penguin.add_tag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.add_tag</span></code></a>(document_id, tag)</p></td>
+<td><p>Adds a tag to the specified document.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.applications.Penguin.penguin.Penguin.remove_tag" title="TELF.applications.Penguin.penguin.Penguin.remove_tag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.remove_tag</span></code></a>(document_id, tag)</p></td>
+<td><p>Removes a tag from the specified document.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.applications.Penguin.penguin.Penguin.update_tags" title="TELF.applications.Penguin.penguin.Penguin.update_tags"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.update_tags</span></code></a>(document_id, new_tags)</p></td>
+<td><p>Updates the tags for the specified document with a new set of tags.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.applications.Penguin.penguin.Penguin.find_by_tag" title="TELF.applications.Penguin.penguin.Penguin.find_by_tag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.find_by_tag</span></code></a>(tag[, as_pandas])</p></td>
+<td><p>Finds and returns documents that have the specified tag.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.applications.Penguin.penguin.Penguin.get_id_bloom" title="TELF.applications.Penguin.penguin.Penguin.get_id_bloom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Penguin.get_id_bloom</span></code></a>(source[, max_items, ...])</p></td>
+<td><p>Initializes a Bloom filter with IDs from a specified source collection.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="module-TELF.applications.Penguin.penguin">
+<span id="module-contents"></span><h1>Module Contents<a class="headerlink" href="#module-TELF.applications.Penguin.penguin" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.applications.Penguin.penguin.</span></span><span class="sig-name descname"><span class="pre">Penguin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A handler class for managing connections and operations with a documents MongoDB database.</p>
+<p>The purpose of this class it to create a software layer to easily store and query Scopus
+and S2 documents. Penguin provides functionality to connect to a MongoDB database, perform read
+and write operations, and handle authentication for secure database interactions. It supports
+operations such as adding data, retrieving data, and verifying database integrity.</p>
+<p>Initializes the Penguin instance with the specified URI, database name, and optional settings.</p>
+<p>This constructor method sets up the Penguin instance by initializing the MongoDB URI, database name,
+verbosity of output, and number of jobs for parallel processing (if applicable). It then attempts to
+establish a connection to the MongoDB database by calling Penguin._connect().</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>uri: str</dt><dd><p>The MongoDB URI used to establish a connection.</p>
+</dd>
+<dt>db_name: str</dt><dd><p>The name of the database to which the connection will be established.</p>
+</dd>
+<dt>username: str, (optional)</dt><dd><p>The username for the Mongo database. If None, will try to use DB without authentication. Default is None.</p>
+</dd>
+<dt>password: str, (optional)</dt><dd><p>The password for the Mongo database. If None, will try to use DB without authentication. Default is None.</p>
+</dd>
+<dt>n_jobs: int, (optional)</dt><dd><p>The number of jobs for parallel processing. Note that this setting is only
+used for adding new data to the database and converting documents to SLIC
+DataFrame format for output. Default is -1 (use all available cores).</p>
+</dd>
+<dt>verbose: bool, int (optional)</dt><dd><p>If set to True, the class will print additional output for debugging or information
+purposes. Can also be an int where verbose &gt;= 1 means True with a higher integer
+controlling the level of verbosity. Default is True.</p>
+</dd>
+</dl>
+</section>
+<section id="raises">
+<h2>Raises:<a class="headerlink" href="#raises" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>ValueError:</dt><dd><p>Attribute was given an invalid value</p>
+</dd>
+<dt>TypeError:</dt><dd><p>Attribute has an invalid type</p>
+</dd>
+<dt>ConnectionFailure:</dt><dd><p>If the connection to the MongoDB instance fails during initialization.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.DEFAULT_ATTRIBUTES">
+<span class="sig-name descname"><span class="pre">DEFAULT_ATTRIBUTES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'S2':</span> <span class="pre">{'author_ids':</span> <span class="pre">('authors',</span> <span class="pre">'authorId'),</span> <span class="pre">'citations':</span> <span class="pre">'citations',</span> <span class="pre">'doi':</span> <span class="pre">'externalIds.DOI',</span> <span class="pre">'id':</span> <span class="pre">'paperId',</span> <span class="pre">'references':</span> <span class="pre">'references',</span> <span class="pre">'text':</span> <span class="pre">['title',</span> <span class="pre">'abstract']},</span> <span class="pre">'Scopus':</span> <span class="pre">{'author_ids':</span> <span class="pre">('bibrecord.head.author-group.author',</span> <span class="pre">'&#64;auid'),</span> <span class="pre">'citations':</span> <span class="pre">None,</span> <span class="pre">'doi':</span> <span class="pre">'doi',</span> <span class="pre">'id':</span> <span class="pre">'eid',</span> <span class="pre">'references':</span> <span class="pre">None,</span> <span class="pre">'text':</span> <span class="pre">['title',</span> <span class="pre">'abstract']}}</span></em><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.DEFAULT_ATTRIBUTES" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.S2_COL">
+<span class="sig-name descname"><span class="pre">S2_COL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'S2'</span></em><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.S2_COL" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.SCOPUS_COL">
+<span class="sig-name descname"><span class="pre">SCOPUS_COL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Scopus'</span></em><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.SCOPUS_COL" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.add_many_documents">
+<span class="sig-name descname"><span class="pre">add_many_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin.add_many_documents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.add_many_documents" title="Link to this definition">#</a></dt>
+<dd><p>Processes a directory of document files that need to be added to the database. The
+function can add both Scopus and S2 documents depending on the <cite>source</cite> agument.
+Documents will be added in parallel</p>
+<section id="id1">
+<h3>Parameters:<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>directory: str, pathlib.Path</dt><dd><p>The directory containing files to be added</p>
+</dd>
+<dt>source: str</dt><dd><p>The data source (either ‘Scopus’ or ‘S2’)</p>
+</dd>
+<dt>overwrite: bool, (optional)</dt><dd><p>If True and paper id already exists in the collection then the associated data
+will be updated/overwritten by the new data. Otherwise, this paper id is skipped.
+If paper id does not already exist in collection, this flag has no effect.
+Default is True.</p>
+</dd>
+<dt>n_jobs: int, (optional)</dt><dd><p>The number of jobs to run in parallel. If None, the class default for n_jobs will
+be used. Default is None.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.add_single_document">
+<span class="sig-name descname"><span class="pre">add_single_document</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin.add_single_document"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.add_single_document" title="Link to this definition">#</a></dt>
+<dd><p>Processes a single data file and adds / updates its content in the database.</p>
+<p>This function handles the addition of a Scopus or S2 data file. If the file
+is from Scopus it will be added to the Scopus collection. If S2, it will be
+added to the S2 collection. In the case of Scopus, the function can hande
+JSON input (as expected from the Scopus API or iPenguin.Scopus) or XML input
+(the format used by the purchased data).</p>
+<section id="id2">
+<h3>Parameters:<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>file_path: str</dt><dd><p>The path to the data file to be processed.</p>
+</dd>
+<dt>source: str</dt><dd><p>The data source (either ‘Scopus’ or ‘S2’)</p>
+</dd>
+<dt>overwrite: bool, (optional)</dt><dd><p>If True and paper id already exists in the collection then the associated data
+will be updated/overwritten by the new data. Otherwise, this paper id is skipped.
+If paper id does not already exist in collection, this flag has no effect.
+Default is True.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns:<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Document is added or updated in the database</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h3>Raises:<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If <cite>source</cite> does not match an expected value</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.add_tag">
+<span class="sig-name descname"><span class="pre">add_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin.add_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.add_tag" title="Link to this definition">#</a></dt>
+<dd><p>Adds a tag to the specified document.</p>
+<section id="id4">
+<h3>Parameters:<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>document_id: str</dt><dd><p>The identifier for the document to which the tag will be added. This should be a
+document id (either S2 or Scopus). The id should be prepended by either ‘eid:’ to
+signify a Scopus document or ‘s2id:’ to signify an S2 document.</p>
+</dd>
+<dt>tag: str</dt><dd><p>The tag to be added to the document.</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h3>Returns:<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>None</p>
+</div></blockquote>
+</section>
+<section id="example">
+<h3>Example:<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">penguin</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="s1">&#39;eid:[eid here]&#39;</span><span class="p">,</span> <span class="s1">&#39;tensor&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">penguin</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="s1">&#39;s2id:[s2id here]&#39;</span><span class="p">,</span> <span class="s1">&#39;tensor&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.citation_search">
+<span class="sig-name descname"><span class="pre">citation_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_pandas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin.citation_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.citation_search" title="Link to this definition">#</a></dt>
+<dd><p>Searches for documents based on citation or reference targets within a specified collection.</p>
+<p>This method allows for searching citations or references within S2 documents. It accepts a target
+paper ID or a list of target paper IDs targets and retrieves documents citing/referencing these targets.
+The method can return results as a Pandas DataFrame or a dictionary of cursors, depending on the
+<cite>as_pandas</cite> flag. The <cite>scopus</cite> parameter is currently not supported and will trigger a warning
+if set to True.</p>
+<section id="id6">
+<h3>Parameters:<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>target: str, [str]</dt><dd><p>The document paper IDs for which to look up citations/references</p>
+</dd>
+<dt>scopus: bool, (optional)</dt><dd><p>Currently not supported. Using this parameter will trigger a warning. This argument is added
+to the function to maintain a similar design structure as the other search functions. Default is False.</p>
+</dd>
+<dt>s2: bool, str, (optional)</dt><dd><p>Determines the behavior for searching within the S2 collection. If True, uses the default
+citation attribute. If a string is provided, it is used as the citation attribute. Since citations
+and refences use the same data structure, passing the argument ‘references’ for this parameter
+will trigger a reference search. Default is True.</p>
+</dd>
+<dt>as_pandas: bool, (optional)</dt><dd><p>If True, returns the search results as a SLIC DataFrame. If False, returns a dictionary
+of MongoDB cursors. Default is True.</p>
+</dd>
+<dt>n_jobs: int, (optional)</dt><dd><p>The number of parallel jobs to use for the query. If specified, overrides the instance’s
+default n_jobs setting.</p>
+</dd>
+</dl>
+</section>
+<section id="id7">
+<h3>Returns:<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>pandas.DataFrame or dict</dt><dd><p>If ‘as_pandas’ is True, returns a Pandas DataFrame containing the combined search results
+from both collections, if applicable. If False, returns a dictionary with keys ‘scopus’ and ‘s2’
+containing the cursors to the search results from the respective collections.</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h3>Raises:<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If <cite>s2</cite> is set to False, indicating that no valid collection is selected for the search.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.count_documents">
+<span class="sig-name descname"><span class="pre">count_documents</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin.count_documents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.count_documents" title="Link to this definition">#</a></dt>
+<dd><p>Return the number of documents in the Scopus and S2.</p>
+<section id="id9">
+<h3>Returns:<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>dict:</dt><dd><p>A dictionary with keys ‘scopus’ and ‘s2’ containing the number of documents
+in each respective collection.</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h3>Raises:<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>Exception</dt><dd><p>If there is an error accessing the database collections.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.db_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">db_name</span></span><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.db_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.find_by_tag">
+<span class="sig-name descname"><span class="pre">find_by_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_pandas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin.find_by_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.find_by_tag" title="Link to this definition">#</a></dt>
+<dd><p>Finds and returns documents that have the specified tag.</p>
+<section id="id11">
+<h3>Parameters:<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>tag: str</dt><dd><p>The tag to filter documents by.</p>
+</dd>
+<dt>as_pandas: bool, (optional)</dt><dd><p>If True, returns the search results as a SLIC DataFrame. If False, returns a dictionary</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h3>Returns:<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>pandas.DataFrame or dict</dt><dd><p>If ‘as_pandas’ is True, returns a Pandas DataFrame containing the combined search results
+from for the tag from Scopus and S2 collections. If False, returns a dictionary with keys
+‘scopus’ and ‘s2’ containing the cursors to the search results from the respective collections.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.get_id_bloom">
+<span class="sig-name descname"><span class="pre">get_id_bloom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">false_positive_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin.get_id_bloom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.get_id_bloom" title="Link to this definition">#</a></dt>
+<dd><p>Initializes a Bloom filter with IDs from a specified source collection.</p>
+<p>This method selects a collection based on the ‘source’ parameter, which should match
+one of the predefined S2 or Scopus collection names (S2_COL or SCOPUS_COL). It then retrieves
+IDs from the selected collection and adds them to a Bloom filter. The Bloom filter is configured
+based on the estimated number of items (‘max_items’) and the desired false positive rate.</p>
+<section id="id13">
+<h3>Parameters:<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>source: str</dt><dd><p>The name of the source collection from which to retrieve IDs. It should correspond to
+either SCOPUS_COL or S2_COL.</p>
+</dd>
+<dt>max_items: float, int, (optional)</dt><dd><p>The maximum number of items expected to be stored in the Bloom filter. This can be a
+fixed integer or a float representing a multiplier of the current document count in the
+collection. Default is 1.25.</p>
+</dd>
+<dt>false_positive_rate: float, (optional)</dt><dd><p>The desired false positive probability for the Bloom filter. Default is 0.001.</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h3>Returns:<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>rbloom.Bloom</dt><dd><p>An instance of a Bloom filter populated with IDs from the specified collection.</p>
+</dd>
+</dl>
+</section>
+<section id="id15">
+<h3>Raises:<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If ‘source’ does not match any of the predefined collection names, or if ‘max_items’
+is not a float or an int.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h3>Notes:<a class="headerlink" href="#notes" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The Bloom filter is a probabilistic data structure that is used to test whether an element
+is a member of a set. False positive matches are possible, but false negatives are not.</p></li>
+<li><p>The ‘max_items’ parameter impacts the size and the false positive rate of the Bloom filter.
+Adjusting this parameter can optimize the performance and accuracy based on the expected
+dataset size.</p></li>
+<li><p>The function retrieves only the ID attribute from the documents in the collection,
+excluding the MongoDB ‘_id’ field, to populate the Bloom filter.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.id_search">
+<span class="sig-name descname"><span class="pre">id_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_pandas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin.id_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.id_search" title="Link to this definition">#</a></dt>
+<dd><p>Search the Penguin database by document IDs in either Scopus documents, S2 documents, or both.</p>
+<p>This method allows for searching documents across specified collections based on their IDs.
+Each id in <cite>ids</cite> needs to be prefixed with the type of id being evaluted. Current supported
+prefixes are [‘eid’, ‘s2id’, ‘doi’]. This corresponds to Scopus ids, SemanticScholar ids, and
+DOIs, respectively. The results can be returned as a Pandas DataFrame
+if ‘as_pandas’ is True, or as MongoDB cursors for each collection if False.</p>
+<section id="id16">
+<h3>Parameters:<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>ids: str, [str]</dt><dd><p>The ID or list of IDs to search for within the specified collections.</p>
+</dd>
+<dt>as_pandas: bool, optional</dt><dd><p>If True, returns the search results as a Pandas DataFrame. If False, returns a dictionary
+of MongoDB cursors. Default is True.</p>
+</dd>
+<dt>n_jobs: int, optional</dt><dd><p>The number of parallel jobs to use for the query. If specified, overrides the instance’s
+default n_jobs setting.</p>
+</dd>
+</dl>
+</section>
+<section id="id17">
+<h3>Returns:<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>pandas.DataFrame or dict</dt><dd><p>If ‘as_pandas’ is True, returns a Pandas DataFrame containing the combined search results
+from both collections, if applicable. If False, returns a dictionary with keys ‘scopus’ and ‘s2’
+containing the cursors to the search results from the respective collections.</p>
+</dd>
+</dl>
+</section>
+<section id="id18">
+<h3>Raises:<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If the arguments passed to this function are invalid</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h3>Examples:<a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">penguin</span><span class="o">.</span><span class="n">id_search</span><span class="p">(</span>
+<span class="go">        ids = [</span>
+<span class="go">            &#39;doi:[doi here]&#39;,</span>
+<span class="go">            &#39;doi:[doi here]&#39;,</span>
+<span class="go">            &#39;s2id:[s2id here]&#39;,</span>
+<span class="go">            &#39;eid:[eid here]&#39;,</span>
+<span class="go">            &#39;eid:[eid here]&#39;,</span>
+<span class="go">        ]</span>
+<span class="go">        as_pandas=True)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.n_jobs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_jobs</span></span><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.n_jobs" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.password">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.password" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.query_by_author">
+<span class="sig-name descname"><span class="pre">query_by_author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doc_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'paperId'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author_attribute_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'authors'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'authorId'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin.query_by_author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.query_by_author" title="Link to this definition">#</a></dt>
+<dd><p>Query a MongoDB collection for a document by a direct match and then locate all of the other papers
+from the authors of the target paper that are present in the DB.</p>
+<section id="id19">
+<h3>Parameters:<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>collection_name: str</dt><dd><p>The name of the MongoDB collection to query.</p>
+</dd>
+<dt>doc_id: str</dt><dd><p>The document ID which to look up.</p>
+</dd>
+<dt>id_attribute: str</dt><dd><p>The name of the attribute where the document ID is stored. Defaults to ‘paperId’ for S2 papers.</p>
+</dd>
+<dt>author_attribute: str</dt><dd><p>The name of the attribute in the documents that contains author information</p>
+</dd>
+</dl>
+</section>
+<section id="id20">
+<h3>Returns:<a class="headerlink" href="#id20" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>list:</dt><dd><p>A list of citing papers</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.remove_tag">
+<span class="sig-name descname"><span class="pre">remove_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin.remove_tag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.remove_tag" title="Link to this definition">#</a></dt>
+<dd><p>Removes a tag from the specified document.</p>
+<section id="id21">
+<h3>Parameters:<a class="headerlink" href="#id21" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>document_id: str</dt><dd><p>The identifier for the document to which the tag will be removed. This should be a
+document id (either S2 or Scopus). The id should be prepended by either ‘eid:’ to
+signify a Scopus document or ‘s2id:’ to signify an S2 document.</p>
+</dd>
+<dt>tag: str</dt><dd><p>The tag to be removed from the document.</p>
+</dd>
+</dl>
+</section>
+<section id="id22">
+<h3>Returns:<a class="headerlink" href="#id22" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>None</p>
+</div></blockquote>
+</section>
+<section id="id23">
+<h3>Example:<a class="headerlink" href="#id23" title="Link to this heading">#</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">penguin</span><span class="o">.</span><span class="n">remove_tag</span><span class="p">(</span><span class="s1">&#39;eid:[eid here]&#39;</span><span class="p">,</span> <span class="s1">&#39;tensor&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">penguin</span><span class="o">.</span><span class="n">remove_tag</span><span class="p">(</span><span class="s1">&#39;s2id:[s2id here]&#39;</span><span class="p">,</span> <span class="s1">&#39;tensor&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.resolve_document_id">
+<span class="sig-name descname"><span class="pre">resolve_document_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin.resolve_document_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.resolve_document_id" title="Link to this definition">#</a></dt>
+<dd><p>Resolves the collection and unique identifier (uid) for a given document_id.
+The document id can either be a Scopus id or a SemanticScholar id.</p>
+<section id="id24">
+<h3>Parameters:<a class="headerlink" href="#id24" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>document_id: str</dt><dd><p>The identifier for the document that needs to be resolved. This should be a
+document id (either S2 or Scopus). The id should be prepended by either ‘eid:’ to
+signify a Scopus document or ‘s2id:’ to signify an S2 document.</p>
+</dd>
+</dl>
+</section>
+<section id="id25">
+<h3>Returns:<a class="headerlink" href="#id25" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>tuple</dt><dd><p>A tuple containing the unique identifier (uid) and the associated collection.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.s2_attributes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">s2_attributes</span></span><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.s2_attributes" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.scopus_attributes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scopus_attributes</span></span><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.scopus_attributes" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.text_search">
+<span class="sig-name descname"><span class="pre">text_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">join</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'OR'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_pandas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin.text_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.text_search" title="Link to this definition">#</a></dt>
+<dd><p>Search the Penguin database by text matching in either Scopus documents, S2 documents or both.</p>
+<p>This method allows for searching text across specified fields in the Scopus and S2 collections.
+The <cite>scopus</cite> and <cite>s2</cite> parameters specify which text fields within the documents should be used.
+By default these fields are the title and abstract attributes for each document. The search objective
+is defined by the <cite>target</cite> parameter. This can be a single string or a list of strings to be found
+in the text. If this is a list of strings then the relationship between them can be defined using
+the <cite>join</cite> parameter. This determines whether the results should be joined with a logical ‘AND’ or
+‘OR’. When searching for text, a document will be returned if the target string is seen in one or
+more of the text fields being searched. This means that this function supports substring matching
+and is case insensitive. The results can be returned as a Pandas DataFrame if ‘as_pandas’ is True,
+or as MongoDB cursors for each collection if False.</p>
+<section id="id26">
+<h3>Parameters:<a class="headerlink" href="#id26" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>target: str, [str]</dt><dd><p>The text or list of text terms to search for within the specified fields.</p>
+</dd>
+<dt>join<span class="classifier">str, optional</span></dt><dd><p>The logical join to use across target terms. Can be ‘OR’ or ‘AND’. Default is ‘OR’.</p>
+</dd>
+<dt>scopus: Iterable, bool, (optional)</dt><dd><p>The fields to search within the first document collection. Expected to be an iterable of valid text
+fields found in Scopus. For simplicity, can also be a bool. If True, uses default text attributes
+defined by Penguin. If False or an empty list, the collection is not searched. Default is True.</p>
+</dd>
+<dt>s2: Iterable, bool, (optional)</dt><dd><p>Same behavior as <cite>scopus</cite> but for the S2 documents.</p>
+</dd>
+<dt>as_pandas: bool, (optional)</dt><dd><p>If True, returns the search results as a SLIC DataFrame. If False, returns a dictionary
+of MongoDB cursors. Default is True.</p>
+</dd>
+<dt>n_jobs: int, (optional)</dt><dd><p>The number of parallel jobs to use for the query. If specified, overrides the instance’s
+default n_jobs setting.</p>
+</dd>
+</dl>
+</section>
+<section id="id27">
+<h3>Returns:<a class="headerlink" href="#id27" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>pandas.DataFrame or dict</dt><dd><p>If ‘as_pandas’ is True, returns a Pandas DataFrame containing the combined search results
+from both collections, if applicable. If False, returns a dictionary with keys ‘scopus’ and ‘s2’
+containing the cursors to the search results from the respective collections.</p>
+</dd>
+</dl>
+</section>
+<section id="id28">
+<h3>Raises:<a class="headerlink" href="#id28" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If the arguments passed to this function are invalid</p>
+</dd>
+</dl>
+</section>
+<section id="id29">
+<h3>Notes:<a class="headerlink" href="#id29" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The search is case-insensitive.</p></li>
+<li><p>The method can search across multiple fields and terms. Fields are always joined by OR. You cannot
+perform a search where a target term is required to be in both the title AND abstract, for example.
+The relationship between different target terms, however, can be specified by the operator used for
+the <cite>join</cite> parameter.</p></li>
+<li><p>When ‘as_pandas’ is False, the method returns cursors, which can be iterated over to access
+the individual documents. These cursors do not store the data but can be thought of as pointers
+to where the data resides on the server (in the database). As a result they are time sensitive
+and become stale if not dereferenced within 10 minutes. They are also useless if conneciton to
+the server is lost.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.update_tags">
+<span class="sig-name descname"><span class="pre">update_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">document_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_tags</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Penguin/penguin.html#Penguin.update_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.update_tags" title="Link to this definition">#</a></dt>
+<dd><p>Updates the tags for the specified document with a new set of tags. Used for
+updating the entire list of tags at once</p>
+<section id="id30">
+<h3>Parameters:<a class="headerlink" href="#id30" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>document_id: str</dt><dd><p>The identifier for the document to which the tags will be modified. This should be a
+document id (either S2 or Scopus). The id should be prepended by either ‘eid:’ to
+signify a Scopus document or ‘s2id:’ to signify an S2 document.</p>
+</dd>
+<dt>new_tags: list</dt><dd><p>The new set of tags to be assigned to the document.</p>
+</dd>
+</dl>
+</section>
+<section id="id31">
+<h3>Returns:<a class="headerlink" href="#id31" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>None</p>
+</div></blockquote>
+</section>
+<section id="id32">
+<h3>Example:<a class="headerlink" href="#id32" title="Link to this heading">#</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">penguin</span><span class="o">.</span><span class="n">update_tags</span><span class="p">(</span><span class="s1">&#39;eid:[eid here]&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;tensor&#39;</span><span class="p">,</span> <span class="s1">&#39;PDE&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">penguin</span><span class="o">.</span><span class="n">update_tags</span><span class="p">(</span><span class="s1">&#39;s2id:[s2id here]&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;tensor&#39;</span><span class="p">,</span> <span class="s1">&#39;PDE&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.uri">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uri</span></span><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.uri" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.username">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">username</span></span><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.username" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Penguin.penguin.Penguin.verbose">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">verbose</span></span><a class="headerlink" href="#TELF.applications.Penguin.penguin.Penguin.verbose" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="iPenguin.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Bunny.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>TELF.applications.Bunny:</strong>   Dataset generation tool for documents and their citations/references</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>TELF.applications.Penguin:</strong>  Text storage tool</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.applications.Penguin.penguin">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin"><code class="docutils literal notranslate"><span class="pre">Penguin</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.DEFAULT_ATTRIBUTES"><code class="docutils literal notranslate"><span class="pre">Penguin.DEFAULT_ATTRIBUTES</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.S2_COL"><code class="docutils literal notranslate"><span class="pre">Penguin.S2_COL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.SCOPUS_COL"><code class="docutils literal notranslate"><span class="pre">Penguin.SCOPUS_COL</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.add_many_documents"><code class="docutils literal notranslate"><span class="pre">Penguin.add_many_documents()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.add_single_document"><code class="docutils literal notranslate"><span class="pre">Penguin.add_single_document()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.add_tag"><code class="docutils literal notranslate"><span class="pre">Penguin.add_tag()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.citation_search"><code class="docutils literal notranslate"><span class="pre">Penguin.citation_search()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.count_documents"><code class="docutils literal notranslate"><span class="pre">Penguin.count_documents()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.db_name"><code class="docutils literal notranslate"><span class="pre">Penguin.db_name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.find_by_tag"><code class="docutils literal notranslate"><span class="pre">Penguin.find_by_tag()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.get_id_bloom"><code class="docutils literal notranslate"><span class="pre">Penguin.get_id_bloom()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.id_search"><code class="docutils literal notranslate"><span class="pre">Penguin.id_search()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.n_jobs"><code class="docutils literal notranslate"><span class="pre">Penguin.n_jobs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.password"><code class="docutils literal notranslate"><span class="pre">Penguin.password</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.query_by_author"><code class="docutils literal notranslate"><span class="pre">Penguin.query_by_author()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.remove_tag"><code class="docutils literal notranslate"><span class="pre">Penguin.remove_tag()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.resolve_document_id"><code class="docutils literal notranslate"><span class="pre">Penguin.resolve_document_id()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.s2_attributes"><code class="docutils literal notranslate"><span class="pre">Penguin.s2_attributes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.scopus_attributes"><code class="docutils literal notranslate"><span class="pre">Penguin.scopus_attributes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.text_search"><code class="docutils literal notranslate"><span class="pre">Penguin.text_search()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.update_tags"><code class="docutils literal notranslate"><span class="pre">Penguin.update_tags()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.uri"><code class="docutils literal notranslate"><span class="pre">Penguin.uri</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.username"><code class="docutils literal notranslate"><span class="pre">Penguin.username</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Penguin.penguin.Penguin.verbose"><code class="docutils literal notranslate"><span class="pre">Penguin.verbose</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
