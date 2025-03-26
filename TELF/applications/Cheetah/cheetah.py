@@ -527,7 +527,15 @@ class Cheetah:
             
             # add set of matching ids for a single query to the output list
             query_proc = [next(iter(x)) for x in query]
-            index_map[" ".join(query_proc)] = set.intersection(*query_indices)
+            
+            # index_map[" ".join(query_proc)] = set.intersection(*query_indices)
+            if query_indices:
+                if len(query_indices) == 1:
+                    index_map[" ".join(query_proc)] = query_indices[0]  # Assign directly if only one set
+                else:
+                    index_map[" ".join(query_proc)] = set.intersection(*query_indices)  # Perform intersection
+            else:
+                index_map[" ".join(query_proc)] = set()  # Assign empty set if no valid queries
 
             
         if link_search:

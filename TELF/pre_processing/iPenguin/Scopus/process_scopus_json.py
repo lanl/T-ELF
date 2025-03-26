@@ -3,11 +3,9 @@ import pathlib
 import warnings
 import pandas as pd
 
-from ..utils import try_int, get_from_dict  # utility functions from iPenguin
+from ..utils import try_int, get_from_dict
 
 IDK = 'Unknown'
-# map for GeoNames place codes to geographical location (country)
-# scopus stores country information as GeoNames links so this map is needed to convert links to country strings
 COUNTRY_CODES = {
     '1814991': 'China',
     '6252001': 'United States',
@@ -113,7 +111,6 @@ COUNTRY_CODES = {
     '934292': 'Mauritius',
     '1282988': 'Nepal',
 }
-
 
 def gen_chunks(l, n):
     """Yield n number of sequential chunks from l."""

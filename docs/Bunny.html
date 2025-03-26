@@ -1,0 +1,997 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>TELF.applications.Bunny: Dataset generation tool for documents and their citations/references &#8212; TELF 0.0.38 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=8c8d0fbf"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Bunny';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TELF.post_processing.SeaLion: Generic report generation tool" href="SeaLion.html" />
+    <link rel="prev" title="TELF.applications.Penguin: Text storage tool" href="Penguin.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">TELF 0.0.38 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="NMFk.html"><strong>TELF.factorization.NMFk:</strong> Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="HNMFk.html"><strong>TELF.factorization.HNMFk:</strong> Hierarchical Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="RESCALk.html"><strong>TELF.factorization.RESCALk:</strong> RESCAL with Automatic Model Determination</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="TriNMFk.html"><strong>TELF.factorization.TriNMFk:</strong> NMFk with Automatic Determination of Latent Clusters and Patterns</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Vulture.html"><strong>TELF.pre_processing.Vulture:</strong> Advanced text pre-processing and cleaning tool for NLP and text-mining</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Cheetah.html"><strong>TELF.applications.Cheetah:</strong> Advanced search by keywords and phrases</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Orca.html"><strong>TELF.pre_processing.Orca:</strong> Duplicate author detector for text mining and information retrival</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Wolf.html"><strong>TELF.post_processing.Wolf:</strong> Graph centrality and ranking tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="iPenguin.html"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Penguin.html"><strong>TELF.applications.Penguin:</strong>  Text storage tool</a></li>
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>TELF.applications.Bunny:</strong>   Dataset generation tool for documents and their citations/references</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="SeaLion.html"><strong>TELF.post_processing.SeaLion:</strong> Generic report generation tool</a></li>
+
+
+<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="TELF.html">TELF package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.factorization.html">TELF.factorization package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.decompositions.html">TELF.factorization.decompositions package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.factorization.utilities.html">TELF.factorization.utilities package</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="TELF.pre_processing.html">TELF.pre_processing package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Beaver.html">TELF.pre_processing.Beaver package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="TELF.pre_processing.Vulture.html">TELF.pre_processing.Vulture package</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Bunny.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>TELF.applications.Bunny:   Dataset generation tool for documents and their citations/references</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>TELF.applications.Bunny:</strong>   Dataset generation tool for documents and their citations/references</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Available Functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.applications.Bunny.bunny">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny"><code class="docutils literal notranslate"><span class="pre">Bunny</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.FILTERS"><code class="docutils literal notranslate"><span class="pre">Bunny.FILTERS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.MODES"><code class="docutils literal notranslate"><span class="pre">Bunny.MODES</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.add_to_penguin"><code class="docutils literal notranslate"><span class="pre">Bunny.add_to_penguin()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.apply_filter"><code class="docutils literal notranslate"><span class="pre">Bunny.apply_filter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.estimate_hop"><code class="docutils literal notranslate"><span class="pre">Bunny.estimate_hop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.form_core"><code class="docutils literal notranslate"><span class="pre">Bunny.form_core()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.form_core_scopus"><code class="docutils literal notranslate"><span class="pre">Bunny.form_core_scopus()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.get_affiliations"><code class="docutils literal notranslate"><span class="pre">Bunny.get_affiliations()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.get_penguin_cache"><code class="docutils literal notranslate"><span class="pre">Bunny.get_penguin_cache()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.hop"><code class="docutils literal notranslate"><span class="pre">Bunny.hop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.penguin_settings"><code class="docutils literal notranslate"><span class="pre">Bunny.penguin_settings</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.s2_key"><code class="docutils literal notranslate"><span class="pre">Bunny.s2_key</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.suggest_filter_values"><code class="docutils literal notranslate"><span class="pre">Bunny.suggest_filter_values()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.BunnyFilter"><code class="docutils literal notranslate"><span class="pre">BunnyFilter</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.BunnyFilter.filter_type"><code class="docutils literal notranslate"><span class="pre">BunnyFilter.filter_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.BunnyFilter.filter_value"><code class="docutils literal notranslate"><span class="pre">BunnyFilter.filter_value</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.BunnyOperation"><code class="docutils literal notranslate"><span class="pre">BunnyOperation</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.BunnyOperation.operands"><code class="docutils literal notranslate"><span class="pre">BunnyOperation.operands</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.BunnyOperation.operator"><code class="docutils literal notranslate"><span class="pre">BunnyOperation.operator</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.evaluate_query_to_string"><code class="docutils literal notranslate"><span class="pre">evaluate_query_to_string()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.find_doi"><code class="docutils literal notranslate"><span class="pre">find_doi()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.gen_chunks"><code class="docutils literal notranslate"><span class="pre">gen_chunks()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.is_valid_query"><code class="docutils literal notranslate"><span class="pre">is_valid_query()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny"><code class="docutils literal notranslate"><span class="pre">AutoBunny</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.CHEETAH_INDEX"><code class="docutils literal notranslate"><span class="pre">AutoBunny.CHEETAH_INDEX</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.cache_dir"><code class="docutils literal notranslate"><span class="pre">AutoBunny.cache_dir</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.cheetah_index"><code class="docutils literal notranslate"><span class="pre">AutoBunny.cheetah_index</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.core"><code class="docutils literal notranslate"><span class="pre">AutoBunny.core</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.output_dir"><code class="docutils literal notranslate"><span class="pre">AutoBunny.output_dir</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.run"><code class="docutils literal notranslate"><span class="pre">AutoBunny.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.s2_key"><code class="docutils literal notranslate"><span class="pre">AutoBunny.s2_key</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.scopus_keys"><code class="docutils literal notranslate"><span class="pre">AutoBunny.scopus_keys</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep"><code class="docutils literal notranslate"><span class="pre">AutoBunnyStep</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.cheetah_settings"><code class="docutils literal notranslate"><span class="pre">AutoBunnyStep.cheetah_settings</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.hop_priority"><code class="docutils literal notranslate"><span class="pre">AutoBunnyStep.hop_priority</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.max_papers"><code class="docutils literal notranslate"><span class="pre">AutoBunnyStep.max_papers</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.modes"><code class="docutils literal notranslate"><span class="pre">AutoBunnyStep.modes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.vulture_settings"><code class="docutils literal notranslate"><span class="pre">AutoBunnyStep.vulture_settings</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="telf-applications-bunny-dataset-generation-tool-for-documents-and-their-citations-references">
+<h1><strong>TELF.applications.Bunny:</strong>   Dataset generation tool for documents and their citations/references<a class="headerlink" href="#telf-applications-bunny-dataset-generation-tool-for-documents-and-their-citations-references" title="Link to this heading">#</a></h1>
+<p>Dataset generation tool for documents and their citations/references.</p>
+</section>
+<section id="available-functions">
+<h1>Available Functions<a class="headerlink" href="#available-functions" title="Link to this heading">#</a></h1>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bunny.__init__</span></code>([s2_key, scopus_keys, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.applications.Bunny.bunny.Bunny.estimate_hop" title="TELF.applications.Bunny.bunny.Bunny.estimate_hop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bunny.estimate_hop</span></code></a>(df[, col])</p></td>
+<td><p>Predict the maximum number of papers that will be in the DataFrame if another hop is performed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.applications.Bunny.bunny.Bunny.suggest_filter_values" title="TELF.applications.Bunny.bunny.Bunny.suggest_filter_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bunny.suggest_filter_values</span></code></a>(df[, options])</p></td>
+<td><p>Generate the possible Bunny filtering values for some options.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.applications.Bunny.bunny.Bunny.form_core_scopus" title="TELF.applications.Bunny.bunny.Bunny.form_core_scopus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bunny.form_core_scopus</span></code></a>(data, data_type, keys)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.applications.Bunny.bunny.Bunny.form_core" title="TELF.applications.Bunny.bunny.Bunny.form_core"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bunny.form_core</span></code></a>(data, data_type[, s2_dir])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.applications.Bunny.bunny.Bunny.hop" title="TELF.applications.Bunny.bunny.Bunny.hop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bunny.hop</span></code></a>(df, hops, modes[, use_scopus, ...])</p></td>
+<td><p>Perform one or more hops along the citation network</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.applications.Bunny.bunny.Bunny.get_affiliations" title="TELF.applications.Bunny.bunny.Bunny.get_affiliations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bunny.get_affiliations</span></code></a>(df, scopus_keys, filters)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.applications.Bunny.bunny.Bunny.add_to_penguin" title="TELF.applications.Bunny.bunny.Bunny.add_to_penguin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bunny.add_to_penguin</span></code></a>(source, path)</p></td>
+<td><p>Get the downloaded papers for a given <cite>source</cite> collection from Penguin, represented as a fixed memory-size Bloom filter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.applications.Bunny.bunny.Bunny.get_penguin_cache" title="TELF.applications.Bunny.bunny.Bunny.get_penguin_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bunny.get_penguin_cache</span></code></a>(source[, max_items, ...])</p></td>
+<td><p>Get the downloaded papers for a given <cite>source</cite> collection from Penguin, represented as a fixed memory-size Bloom filter.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id1">
+<h1>Available Functions<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">AutoBunny.__init__</span></code>(core[, s2_key, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.run" title="TELF.applications.Bunny.auto_bunny.AutoBunny.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AutoBunny.run</span></code></a>(steps, *[, s2_key, ...])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="module-TELF.applications.Bunny.bunny">
+<span id="module-contents"></span><h1>Module Contents<a class="headerlink" href="#module-TELF.applications.Bunny.bunny" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.applications.Bunny.bunny.</span></span><span class="sig-name descname"><span class="pre">Bunny</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s2_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopus_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penguin_settings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#Bunny"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny.FILTERS">
+<span class="sig-name descname"><span class="pre">FILTERS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'AF-ID':</span> <span class="pre">'Affiliation</span> <span class="pre">ID',</span> <span class="pre">'AFFILCOUNTRY':</span> <span class="pre">'Country',</span> <span class="pre">'AFFILORG':</span> <span class="pre">'Affiliation',</span> <span class="pre">'AU-ID':</span> <span class="pre">'Scopus</span> <span class="pre">Author</span> <span class="pre">ID',</span> <span class="pre">'KEY':</span> <span class="pre">'Keyword',</span> <span class="pre">'PUBYEAR':</span> <span class="pre">'Publication</span> <span class="pre">Year'}</span></em><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny.FILTERS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny.MODES">
+<span class="sig-name descname"><span class="pre">MODES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'citations',</span> <span class="pre">'references',</span> <span class="pre">'s2_author_ids'}</span></em><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny.MODES" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny.add_to_penguin">
+<span class="sig-name descname"><span class="pre">add_to_penguin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#Bunny.add_to_penguin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny.add_to_penguin" title="Link to this definition">#</a></dt>
+<dd><p>Get the downloaded papers for a given <cite>source</cite> collection from Penguin, represented as a
+fixed memory-size Bloom filter. This can then be given to iPenguin child objects to prevent
+re-downloading previously acquired papers.</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>source: str</dt><dd><p>The name of the source collection from which to retrieve IDs. It should correspond to
+either SCOPUS_COL or S2_COL.</p>
+</dd>
+<dt>path: str, pathlike</dt><dd><p>The path to the directory where the downloaded files are cached, ready to be added into
+Penguin.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny.apply_filter">
+<span class="sig-name descname"><span class="pre">apply_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_in_core</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_author_match</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#Bunny.apply_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny.apply_filter" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny.estimate_hop">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">estimate_hop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'citations'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#Bunny.estimate_hop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny.estimate_hop" title="Link to this definition">#</a></dt>
+<dd><p>Predict the maximum number of papers that will be in the DataFrame if another hop is performed.
+The numbers of papers in the next hop is guaranteed to be less than or equal to this number</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The target Bunny DataFrame</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Maximum possible number of papers contained in the next hop</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny.form_core">
+<span class="sig-name descname"><span class="pre">form_core</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s2'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#Bunny.form_core"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny.form_core" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny.form_core_scopus">
+<span class="sig-name descname"><span class="pre">form_core_scopus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopus_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scopus'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#Bunny.form_core_scopus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny.form_core_scopus" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny.get_affiliations">
+<span class="sig-name descname"><span class="pre">get_affiliations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopus_keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scopus'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_in_core</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_author_match</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#Bunny.get_affiliations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny.get_affiliations" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny.get_penguin_cache">
+<span class="sig-name descname"><span class="pre">get_penguin_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">false_positive_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#Bunny.get_penguin_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny.get_penguin_cache" title="Link to this definition">#</a></dt>
+<dd><p>Get the downloaded papers for a given <cite>source</cite> collection from Penguin, represented as a
+fixed memory-size Bloom filter. This can then be given to iPenguin child objects to prevent
+re-downloading previously acquired papers. For more details on the Bloom filter, see
+Penguin.get_id_bloom.</p>
+<section id="id2">
+<h2>Parameters:<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>source: str</dt><dd><p>The name of the source collection from which to retrieve IDs. It should correspond to
+either SCOPUS_COL or S2_COL.</p>
+</dd>
+<dt>max_items: float, int, (optional)</dt><dd><p>The maximum number of items expected to be stored in the Bloom filter. This can be a
+fixed integer or a float representing a multiplier of the current document count in the
+collection. Default is 1.25.</p>
+</dd>
+<dt>false_positive_rate: float, (optional)</dt><dd><p>The desired false positive probability for the Bloom filter. Default is 0.001.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading">#</a></h2>
+<dl class="simple">
+<dt>rbloom.Bloom</dt><dd><p>An instance of a Bloom filter populated with IDs from the specified collection.</p>
+</dd>
+</dl>
+</section>
+<section id="raises">
+<h2>Raises:<a class="headerlink" href="#raises" title="Link to this heading">#</a></h2>
+<dl>
+<dt>ValueError</dt><dd><p>If ‘source’ does not match any of the predefined collection names, or if ‘max_items’
+is not a float or an int.</p>
+<p>If attempting to use this function without Penguin connection string details provided</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny.hop">
+<span class="sig-name descname"><span class="pre">hop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hops</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_scopus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hop_focus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopus_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopus_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scopus'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_in_core</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_papers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hop_priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#Bunny.hop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny.hop" title="Link to this definition">#</a></dt>
+<dd><p>Perform one or more hops along the citation network</p>
+<p>This function allows the user to perform one or more hops on the citation network, using either
+references or citations as the method of expansion. The user can also optionally specify filters
+(using BunnyFilter format) to limit the scope of the search to some area. Note that if filters are
+being used, the user must specify Scopus API keys as only the Scopus API can provide filtering
+in the Bunny implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The target Bunny DataFrame</p></li>
+<li><p><strong>hops</strong> (<em>int</em>) – How many hops to perform. Must be &gt;= 1</p></li>
+<li><p><strong>modes</strong> (<em>(</em><em>list</em><em>, </em><em>set</em><em>, </em><em>tuple</em><em>)</em>) – Which mode(s) to use Bunny in. Can either be ‘citations’, ‘references’, ‘s2_author_ids’</p></li>
+<li><p><strong>use_scopus</strong> (<em>boolean</em>) – Flag that determines if Scopus API should be called to fill in more detailed information such as affiliation,
+country of origin, keywords (PACs), etc. scopus_keys must be provided if this flag is set to True.</p></li>
+<li><p><strong>filters</strong> (<a class="reference internal" href="#TELF.applications.Bunny.bunny.BunnyFilter" title="TELF.applications.Bunny.bunny.BunnyFilter"><em>BunnyFilter</em></a><em> or </em><em>BunnyQuery</em>) – Specialized dataclass used for representing a boolean query at any level of nesting. See example notebooks
+to see how these filters can be created. use_scopus must be True and scopus_keys need to be provided to use
+Bunny filters. Default=None.</p></li>
+<li><p><strong>scopus_keys</strong> (<em>list</em>) – List of Scopus API keys which are used to call on the Scopus API to enrich hop-expanded DataFrame. Default=None.</p></li>
+<li><p><strong>scopus_dir</strong> (<em>str</em><em>, </em><em>Path</em>) – The directory at which to create a Scopus paper archive. This will cache previosly downloaded papers to save time
+and API call limits. The directory is expectd to exist inside Bunny.output_dir and a new directory will be created
+at Bunny.output_dir/scopus_dir if it cannot be found. Default=scopus.</p></li>
+<li><p><strong>filter_in_core</strong> (<em>bool</em>) – Flag that determines whether any filters should be applied to the core. This option is only needed if filters are
+specified. If True, core papers can be filtered and removed from the Bunny DataFrame. Default=True.</p></li>
+<li><p><strong>scopus_batch_size</strong> (<em>int</em>) – The maximum batch size for looking up papers using the Scopus API. Note that Scopus sets a maximum Boolean query
+at 10,000. The size of the Boolean query can be calculated approximately using (num filters + 1) * scopus_batch_size.
+Care should be taken to decrease the batch size if many filters are being used.</p></li>
+<li><p><strong>max_papers</strong> (<em>int</em>) – This variable is used to set an upper limit on how many papers can be featured in a hop. If set to 0, no upper
+limit will be used. Default is 0.</p></li>
+<li><p><strong>hop_priority</strong> (<em>str</em>) – If <cite>max_papers</cite> is not 0, this variable is used to prioritize which papers are selected for the hop. Options are
+in [‘random’, ‘frequency’]. Default is ‘random’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Hop-expanded result DataFrame</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny.penguin_settings">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">penguin_settings</span></span><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny.penguin_settings" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny.s2_key">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">s2_key</span></span><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny.s2_key" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.Bunny.suggest_filter_values">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">suggest_filter_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['AFFILCOUNTRY',</span> <span class="pre">'AFFILORG']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#Bunny.suggest_filter_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.Bunny.suggest_filter_values" title="Link to this definition">#</a></dt>
+<dd><p>Generate the possible Bunny filtering values for some options.
+Note that these values do not conclusively map all possible filter values used by Scopus
+but instead produce all filter values currently used by the given DataFrame df</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The target Bunny DataFrame</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>suggestions</strong> – A dictionary where the keys are the filter types and the values are a set of suggested filter
+values</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.BunnyFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.applications.Bunny.bunny.</span></span><span class="sig-name descname"><span class="pre">BunnyFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#BunnyFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.BunnyFilter" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.BunnyFilter.filter_type">
+<span class="sig-name descname"><span class="pre">filter_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#TELF.applications.Bunny.bunny.BunnyFilter.filter_type" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.BunnyFilter.filter_value">
+<span class="sig-name descname"><span class="pre">filter_value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#TELF.applications.Bunny.bunny.BunnyFilter.filter_value" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.BunnyOperation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.applications.Bunny.bunny.</span></span><span class="sig-name descname"><span class="pre">BunnyOperation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operands</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#TELF.applications.Bunny.bunny.BunnyFilter" title="TELF.applications.Bunny.bunny.BunnyFilter"><span class="pre">TELF.applications.Bunny.bunny.BunnyFilter</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ForwardRef</span><span class="p"><span class="pre">(</span></span><span class="s"><span class="pre">'BunnyOperation'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#BunnyOperation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.BunnyOperation" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.BunnyOperation.operands">
+<span class="sig-name descname"><span class="pre">operands</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#TELF.applications.Bunny.bunny.BunnyFilter" title="TELF.applications.Bunny.bunny.BunnyFilter"><span class="pre">BunnyFilter</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#TELF.applications.Bunny.bunny.BunnyOperation" title="TELF.applications.Bunny.bunny.BunnyOperation"><span class="pre">BunnyOperation</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#TELF.applications.Bunny.bunny.BunnyOperation.operands" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.BunnyOperation.operator">
+<span class="sig-name descname"><span class="pre">operator</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#TELF.applications.Bunny.bunny.BunnyOperation.operator" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.evaluate_query_to_string">
+<span class="sig-prename descclassname"><span class="pre">TELF.applications.Bunny.bunny.</span></span><span class="sig-name descname"><span class="pre">evaluate_query_to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#evaluate_query_to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.evaluate_query_to_string" title="Link to this definition">#</a></dt>
+<dd><p>Convert a Bunny query into a string that can be accepted by Scopus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>query</strong> (<a class="reference internal" href="#TELF.applications.Bunny.bunny.BunnyFilter" title="TELF.applications.Bunny.bunny.BunnyFilter"><em>BunnyFilter</em></a><em>, </em><a class="reference internal" href="#TELF.applications.Bunny.bunny.BunnyOperation" title="TELF.applications.Bunny.bunny.BunnyOperation"><em>BunnyOperation</em></a>) – The query object. This can be an instance of BunnyFilter or BunnyOperation.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string representation of the query that can be processed by Scopus</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.find_doi">
+<span class="sig-prename descclassname"><span class="pre">TELF.applications.Bunny.bunny.</span></span><span class="sig-name descname"><span class="pre">find_doi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#find_doi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.find_doi" title="Link to this definition">#</a></dt>
+<dd><p>Helper function that attempts to extract the DOI from a Scopus paper XML file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>f</strong> (<em>str</em>) – Path to the Scopus XML file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>doi</strong> – Returns DOI if found, else None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str, None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.gen_chunks">
+<span class="sig-prename descclassname"><span class="pre">TELF.applications.Bunny.bunny.</span></span><span class="sig-name descname"><span class="pre">gen_chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#gen_chunks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.gen_chunks" title="Link to this definition">#</a></dt>
+<dd><p>Yield n number of sequential chunks from l.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.bunny.is_valid_query">
+<span class="sig-prename descclassname"><span class="pre">TELF.applications.Bunny.bunny.</span></span><span class="sig-name descname"><span class="pre">is_valid_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/bunny.html#is_valid_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.bunny.is_valid_query" title="Link to this definition">#</a></dt>
+<dd><p>Validates the structure of a Bunny filter query.</p>
+<p>The function checks whether a given input follows the intended structure of Bunny filter
+queries. Each element in the query is evaluated recursively, making sure that only BunnyFilter
+and BunnyOperation objects are present.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>query</strong> (<em>(</em><em>Filter/Operation</em><em>)</em>) – The query to be validated. The query can be an instance of BunnyFilter or BunnyOperation dataclass.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the query is valid, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="id3">
+<h1>Module Contents<a class="headerlink" href="#id3" title="Link to this heading">#</a></h1>
+<dl class="py class" id="module-TELF.applications.Bunny.auto_bunny">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunny">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.applications.Bunny.auto_bunny.</span></span><span class="sig-name descname"><span class="pre">AutoBunny</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">core</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopus_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cheetah_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/auto_bunny.html#AutoBunny"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunny" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunny.CHEETAH_INDEX">
+<span class="sig-name descname"><span class="pre">CHEETAH_INDEX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'abstract':</span> <span class="pre">'clean_title_abstract',</span> <span class="pre">'affiliations':</span> <span class="pre">'affiliations',</span> <span class="pre">'author_ids':</span> <span class="pre">'author_ids',</span> <span class="pre">'country':</span> <span class="pre">'affiliations',</span> <span class="pre">'title':</span> <span class="pre">None,</span> <span class="pre">'year':</span> <span class="pre">'year'}</span></em><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.CHEETAH_INDEX" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunny.cache_dir">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cache_dir</span></span><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.cache_dir" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunny.cheetah_index">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cheetah_index</span></span><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.cheetah_index" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunny.core">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">core</span></span><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.core" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunny.output_dir">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">output_dir</span></span><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.output_dir" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunny.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopus_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cheetah_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_papers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">250000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/auto_bunny.html#AutoBunny.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.run" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunny.s2_key">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">s2_key</span></span><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.s2_key" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunny.scopus_keys">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scopus_keys</span></span><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.scopus_keys" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunnyStep">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.applications.Bunny.auto_bunny.</span></span><span class="sig-name descname"><span class="pre">AutoBunnyStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes:</span> <span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_papers:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hop_priority:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cheetah_settings:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vulture_settings:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/applications/Bunny/auto_bunny.html#AutoBunnyStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for keeping track of AutoBunny args</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunnyStep.cheetah_settings">
+<span class="sig-name descname"><span class="pre">cheetah_settings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.cheetah_settings" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunnyStep.hop_priority">
+<span class="sig-name descname"><span class="pre">hop_priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'random'</span></em><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.hop_priority" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunnyStep.max_papers">
+<span class="sig-name descname"><span class="pre">max_papers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.max_papers" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunnyStep.modes">
+<span class="sig-name descname"><span class="pre">modes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.modes" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="TELF.applications.Bunny.auto_bunny.AutoBunnyStep.vulture_settings">
+<span class="sig-name descname"><span class="pre">vulture_settings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.vulture_settings" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Penguin.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>TELF.applications.Penguin:</strong>  Text storage tool</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="SeaLion.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>TELF.post_processing.SeaLion:</strong> Generic report generation tool</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>TELF.applications.Bunny:</strong>   Dataset generation tool for documents and their citations/references</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Available Functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.applications.Bunny.bunny">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny"><code class="docutils literal notranslate"><span class="pre">Bunny</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.FILTERS"><code class="docutils literal notranslate"><span class="pre">Bunny.FILTERS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.MODES"><code class="docutils literal notranslate"><span class="pre">Bunny.MODES</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.add_to_penguin"><code class="docutils literal notranslate"><span class="pre">Bunny.add_to_penguin()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.apply_filter"><code class="docutils literal notranslate"><span class="pre">Bunny.apply_filter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.estimate_hop"><code class="docutils literal notranslate"><span class="pre">Bunny.estimate_hop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.form_core"><code class="docutils literal notranslate"><span class="pre">Bunny.form_core()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.form_core_scopus"><code class="docutils literal notranslate"><span class="pre">Bunny.form_core_scopus()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.get_affiliations"><code class="docutils literal notranslate"><span class="pre">Bunny.get_affiliations()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.get_penguin_cache"><code class="docutils literal notranslate"><span class="pre">Bunny.get_penguin_cache()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.hop"><code class="docutils literal notranslate"><span class="pre">Bunny.hop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.penguin_settings"><code class="docutils literal notranslate"><span class="pre">Bunny.penguin_settings</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.s2_key"><code class="docutils literal notranslate"><span class="pre">Bunny.s2_key</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.Bunny.suggest_filter_values"><code class="docutils literal notranslate"><span class="pre">Bunny.suggest_filter_values()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.BunnyFilter"><code class="docutils literal notranslate"><span class="pre">BunnyFilter</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.BunnyFilter.filter_type"><code class="docutils literal notranslate"><span class="pre">BunnyFilter.filter_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.BunnyFilter.filter_value"><code class="docutils literal notranslate"><span class="pre">BunnyFilter.filter_value</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.BunnyOperation"><code class="docutils literal notranslate"><span class="pre">BunnyOperation</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.BunnyOperation.operands"><code class="docutils literal notranslate"><span class="pre">BunnyOperation.operands</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.BunnyOperation.operator"><code class="docutils literal notranslate"><span class="pre">BunnyOperation.operator</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.evaluate_query_to_string"><code class="docutils literal notranslate"><span class="pre">evaluate_query_to_string()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.find_doi"><code class="docutils literal notranslate"><span class="pre">find_doi()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.gen_chunks"><code class="docutils literal notranslate"><span class="pre">gen_chunks()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.bunny.is_valid_query"><code class="docutils literal notranslate"><span class="pre">is_valid_query()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny"><code class="docutils literal notranslate"><span class="pre">AutoBunny</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.CHEETAH_INDEX"><code class="docutils literal notranslate"><span class="pre">AutoBunny.CHEETAH_INDEX</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.cache_dir"><code class="docutils literal notranslate"><span class="pre">AutoBunny.cache_dir</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.cheetah_index"><code class="docutils literal notranslate"><span class="pre">AutoBunny.cheetah_index</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.core"><code class="docutils literal notranslate"><span class="pre">AutoBunny.core</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.output_dir"><code class="docutils literal notranslate"><span class="pre">AutoBunny.output_dir</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.run"><code class="docutils literal notranslate"><span class="pre">AutoBunny.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.s2_key"><code class="docutils literal notranslate"><span class="pre">AutoBunny.s2_key</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunny.scopus_keys"><code class="docutils literal notranslate"><span class="pre">AutoBunny.scopus_keys</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep"><code class="docutils literal notranslate"><span class="pre">AutoBunnyStep</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.cheetah_settings"><code class="docutils literal notranslate"><span class="pre">AutoBunnyStep.cheetah_settings</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.hop_priority"><code class="docutils literal notranslate"><span class="pre">AutoBunnyStep.hop_priority</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.max_papers"><code class="docutils literal notranslate"><span class="pre">AutoBunnyStep.max_papers</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.modes"><code class="docutils literal notranslate"><span class="pre">AutoBunnyStep.modes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.vulture_settings"><code class="docutils literal notranslate"><span class="pre">AutoBunnyStep.vulture_settings</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Boureima, Erik Skau, Kim Rasmussen, Boian S. Alexandrov
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022, LANL.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; TELF 0.0.37 documentation</title>
+    <title>Index &#8212; TELF 0.0.38 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=c62b8e41"></script>
+    <script src="_static/documentation_options.js?v=8c8d0fbf"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.37 documentation</p>
+    <p class="title logo__title">TELF 0.0.38 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,6 +179,17 @@
 
 
 
+
+
+<li class="toctree-l1"><a class="reference internal" href="Penguin.html"><strong>TELF.applications.Penguin:</strong>  Text storage tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Bunny.html"><strong>TELF.applications.Bunny:</strong>   Dataset generation tool for documents and their citations/references</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="SeaLion.html"><strong>TELF.post_processing.SeaLion:</strong> Generic report generation tool</a></li>
 
 
 <li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -299,6 +310,7 @@
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
@@ -323,6 +335,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.rescal_fro_mu.A_update">A_update() (in module TELF.factorization.decompositions.rescal_fro_mu)</a>
 </li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.add_many_documents">add_many_documents() (TELF.applications.Penguin.penguin.Penguin method)</a>
+</li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.add_single_document">add_single_document() (TELF.applications.Penguin.penguin.Penguin method)</a>
+</li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.add_tag">add_tag() (TELF.applications.Penguin.penguin.Penguin method)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny.add_to_penguin">add_to_penguin() (TELF.applications.Bunny.bunny.Bunny method)</a>
+</li>
       <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.add_with_union_of_others">add_with_union_of_others() (in module TELF.applications.Cheetah.cheetah)</a>
 </li>
   </ul></td>
@@ -331,7 +351,13 @@
 </li>
       <li><a href="Orca.html#TELF.pre_processing.Orca.orca.Orca.apply">apply() (TELF.pre_processing.Orca.orca.Orca method)</a>
 </li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny.apply_filter">apply_filter() (TELF.applications.Bunny.bunny.Bunny method)</a>
+</li>
       <li><a href="Wolf.html#TELF.post_processing.Wolf.wolf.Wolf.attributes">attributes (TELF.post_processing.Wolf.wolf.Wolf property)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunny">AutoBunny (class in TELF.applications.Bunny.auto_bunny)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunnyStep">AutoBunnyStep (class in TELF.applications.Bunny.auto_bunny)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -343,13 +369,19 @@
 </li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.bary_proj">bary_proj() (in module TELF.factorization.decompositions.utilities.generic_utils)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver">Beaver (class in TELF.pre_processing.Beaver.beaver)</a>, <a href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver">[1]</a>
 </li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.resample.boolean">boolean() (in module TELF.factorization.decompositions.utilities.resample)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.BULK_SEARCH_LIMIT">BULK_SEARCH_LIMIT (TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar attribute)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny">Bunny (class in TELF.applications.Bunny.bunny)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.BunnyFilter">BunnyFilter (class in TELF.applications.Bunny.bunny)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.BunnyOperation">BunnyOperation (class in TELF.applications.Bunny.bunny)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -359,9 +391,19 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.cache">cache (TELF.pre_processing.Vulture.vulture.Vulture property)</a>, <a href="Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.cache">[1]</a>
 </li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunny.cache_dir">cache_dir (TELF.applications.Bunny.auto_bunny.AutoBunny property)</a>
+</li>
       <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah">Cheetah (class in TELF.applications.Cheetah.cheetah)</a>
 </li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunny.CHEETAH_INDEX">CHEETAH_INDEX (TELF.applications.Bunny.auto_bunny.AutoBunny attribute)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunny.cheetah_index">cheetah_index (TELF.applications.Bunny.auto_bunny.AutoBunny property)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.cheetah_settings">cheetah_settings (TELF.applications.Bunny.auto_bunny.AutoBunnyStep attribute)</a>
+</li>
       <li><a href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.chunk_tuple_list">chunk_tuple_list() (in module TELF.pre_processing.Vulture.vulture)</a>, <a href="Vulture.html#TELF.pre_processing.Vulture.vulture.chunk_tuple_list">[1]</a>
+</li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.citation_search">citation_search() (TELF.applications.Penguin.penguin.Penguin method)</a>
 </li>
       <li><a href="Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.citation_tensor">citation_tensor() (TELF.pre_processing.Beaver.beaver.Beaver method)</a>, <a href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.citation_tensor">[1]</a>
 </li>
@@ -387,10 +429,10 @@
 </li>
       <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.COLUMNS">COLUMNS (TELF.applications.Cheetah.cheetah.Cheetah attribute)</a>
 </li>
-      <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.columns">columns (TELF.applications.Cheetah.cheetah.Cheetah property)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.columns">columns (TELF.applications.Cheetah.cheetah.Cheetah property)</a>
+</li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.concensus_matrix.compute_connectivity_mat">compute_connectivity_mat() (in module TELF.factorization.decompositions.utilities.concensus_matrix)</a>
 </li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.concensus_matrix.compute_consensus_matrix">compute_consensus_matrix() (in module TELF.factorization.decompositions.utilities.concensus_matrix)</a>
@@ -400,6 +442,8 @@
       <li><a href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh">coord_desc_thresh() (in module TELF.factorization.decompositions.nmf_mc_fro_mu)</a>
 </li>
       <li><a href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh_onefactor">coord_desc_thresh_onefactor() (in module TELF.factorization.decompositions.nmf_mc_fro_mu)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunny.core">core (TELF.applications.Bunny.auto_bunny.AutoBunny property)</a>
 </li>
       <li><a href="TELF.factorization.utilities.html#TELF.factorization.utilities.vectorize.count">count() (in module TELF.factorization.utilities.vectorize)</a>
 
@@ -419,6 +463,8 @@
         <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.count_coroutine">(TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar method)</a>
 </li>
       </ul></li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.count_documents">count_documents() (TELF.applications.Penguin.penguin.Penguin method)</a>
+</li>
       <li><a href="Wolf.html#TELF.post_processing.Wolf.wolf.Wolf.create_graph">create_graph() (TELF.post_processing.Wolf.wolf.Wolf method)</a>
 </li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.clustering.custom_bool_clustering">custom_bool_clustering() (in module TELF.factorization.decompositions.utilities.clustering)</a>
@@ -431,12 +477,16 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.db_name">db_name (TELF.applications.Penguin.penguin.Penguin property)</a>
+</li>
       <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.DEBUG_MODE">DEBUG_MODE (TELF.pre_processing.iPenguin.Scopus.scopus.Scopus attribute)</a>
 </li>
-      <li><a href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_OPERATOR_PIPELINE">DEFAULT_OPERATOR_PIPELINE (TELF.pre_processing.Vulture.vulture.Vulture attribute)</a>, <a href="Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_OPERATOR_PIPELINE">[1]</a>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.DEFAULT_ATTRIBUTES">DEFAULT_ATTRIBUTES (TELF.applications.Penguin.penguin.Penguin attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_OPERATOR_PIPELINE">DEFAULT_OPERATOR_PIPELINE (TELF.pre_processing.Vulture.vulture.Vulture attribute)</a>, <a href="Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_OPERATOR_PIPELINE">[1]</a>
+</li>
       <li><a href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_PIPELINE">DEFAULT_PIPELINE (TELF.pre_processing.Vulture.vulture.Vulture attribute)</a>, <a href="Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.DEFAULT_PIPELINE">[1]</a>
 </li>
       <li><a href="Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.documents_words">documents_words() (TELF.pre_processing.Beaver.beaver.Beaver method)</a>, <a href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.documents_words">[1]</a>
@@ -446,9 +496,31 @@
   </ul></td>
 </tr></table>
 
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny.estimate_hop">estimate_hop() (TELF.applications.Bunny.bunny.Bunny class method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.evaluate_query_to_string">evaluate_query_to_string() (in module TELF.applications.Bunny.bunny)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.BunnyFilter.filter_type">filter_type (TELF.applications.Bunny.bunny.BunnyFilter attribute)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.BunnyFilter.filter_value">filter_value (TELF.applications.Bunny.bunny.BunnyFilter attribute)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny.FILTERS">FILTERS (TELF.applications.Bunny.bunny.Bunny attribute)</a>
+</li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.find_by_tag">find_by_tag() (TELF.applications.Penguin.penguin.Penguin method)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.find_doi">find_doi() (in module TELF.applications.Bunny.bunny)</a>
+</li>
       <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.find_ngram">find_ngram() (TELF.applications.Cheetah.cheetah.Cheetah class method)</a>
 </li>
       <li><a href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.find_thres_WH">find_thres_WH() (in module TELF.factorization.decompositions.nmf_mc_fro_mu)</a>
@@ -475,6 +547,10 @@
         <li><a href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.tenmat.fold">(in module TELF.pre_processing.Beaver.tenmat)</a>
 </li>
       </ul></li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny.form_core">form_core() (TELF.applications.Bunny.bunny.Bunny method)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny.form_core_scopus">form_core_scopus() (TELF.applications.Bunny.bunny.Bunny method)</a>
+</li>
       <li><a href="TELF.factorization.utilities.html#TELF.factorization.utilities.take_note.format_note">format_note() (in module TELF.factorization.utilities.take_note)</a>
 </li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.fro_norm">fro_norm() (in module TELF.factorization.decompositions.utilities.math_utils)</a>
@@ -485,6 +561,10 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.gen_chunks">gen_chunks() (in module TELF.applications.Bunny.bunny)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny.get_affiliations">get_affiliations() (TELF.applications.Bunny.bunny.Bunny method)</a>
+</li>
       <li><a href="Wolf.html#TELF.post_processing.Wolf.wolf.Wolf.get_community_ranks">get_community_ranks() (TELF.post_processing.Wolf.wolf.Wolf method)</a>
 </li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_cupyx">get_cupyx() (in module TELF.factorization.decompositions.utilities.generic_utils)</a>
@@ -499,17 +579,37 @@
       </ul></li>
       <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.SemanticScholar.s2.get_df_helper">get_df_helper() (in module TELF.pre_processing.iPenguin.SemanticScholar.s2)</a>
 </li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_factorization_results">get_factorization_results() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
+</li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_H_clustering">get_H_clustering() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
+</li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_H_correlation">get_H_correlation() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
+</li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.get_id_bloom">get_id_bloom() (TELF.applications.Penguin.penguin.Penguin method)</a>
+</li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_masked_recommendations">get_masked_recommendations() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
+</li>
       <li><a href="Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.get_ngrams">get_ngrams() (TELF.pre_processing.Beaver.beaver.Beaver method)</a>, <a href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.get_ngrams">[1]</a>
 </li>
       <li><a href="HNMFk.html#TELF.factorization.HNMFk.HNMFk.get_node">get_node() (TELF.factorization.HNMFk.HNMFk method)</a>
 </li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_np">get_np() (in module TELF.factorization.decompositions.utilities.generic_utils)</a>
 </li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_original_data">get_original_data() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
+</li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.get_pac">get_pac() (in module TELF.factorization.decompositions.utilities.math_utils)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny.get_penguin_cache">get_penguin_cache() (TELF.applications.Bunny.bunny.Bunny method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Wolf.html#TELF.post_processing.Wolf.wolf.Wolf.get_ranks">get_ranks() (TELF.post_processing.Wolf.wolf.Wolf method)</a>
+</li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_recommendations">get_recommendations() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
+</li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_recommendations_graph">get_recommendations_graph() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
+</li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_S_mixing_patterns">get_S_mixing_patterns() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
 </li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.get_scipy">get_scipy() (in module TELF.factorization.decompositions.utilities.generic_utils)</a>
 </li>
@@ -518,6 +618,18 @@
       <li><a href="TELF.pre_processing.Vulture.tokens_analysis.html#TELF.pre_processing.Vulture.tokens_analysis.top_words.get_top_words">get_top_words() (in module TELF.pre_processing.Vulture.tokens_analysis.top_words)</a>
 </li>
       <li><a href="Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.get_vocabulary">get_vocabulary() (TELF.pre_processing.Beaver.beaver.Beaver method)</a>, <a href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.get_vocabulary">[1]</a>
+</li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_W_correlation">get_W_correlation() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
+</li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_W_plot">get_W_plot() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
+</li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_W_UMAP">get_W_UMAP() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
+</li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_wordclouds">get_wordclouds() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
+</li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_words_probabilities">get_words_probabilities() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
+</li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion.get_X_tilda">get_X_tilda() (TELF.post_processing.SeaLion.sealion.SeaLion method)</a>
 </li>
       <li><a href="HNMFk.html#TELF.factorization.HNMFk.HNMFk.go_to_children">go_to_children() (TELF.factorization.HNMFk.HNMFk method)</a>
 </li>
@@ -557,13 +669,23 @@
 </li>
       <li><a href="HNMFk.html#TELF.factorization.HNMFk.HNMFk">HNMFk (class in TELF.factorization.HNMFk)</a>
 </li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny.hop">hop() (TELF.applications.Bunny.bunny.Bunny method)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.hop_priority">hop_priority (TELF.applications.Bunny.auto_bunny.AutoBunnyStep attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.id_search">id_search() (TELF.applications.Penguin.penguin.Penguin method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.index">index() (TELF.applications.Cheetah.cheetah.Cheetah method)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.is_valid_query">is_valid_query() (in module TELF.applications.Bunny.bunny)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -593,9 +715,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.masked_nmf">masked_nmf() (in module TELF.factorization.decompositions.utilities.math_utils)</a>
 </li>
-      <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.OSTI.osti.OSTI.MODES">MODES (TELF.pre_processing.iPenguin.OSTI.osti.OSTI attribute)</a>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.max_papers">max_papers (TELF.applications.Bunny.auto_bunny.AutoBunnyStep attribute)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.modes">modes (TELF.applications.Bunny.auto_bunny.AutoBunnyStep attribute)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny.MODES">MODES (TELF.applications.Bunny.bunny.Bunny attribute)</a>
 
       <ul>
+        <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.OSTI.osti.OSTI.MODES">(TELF.pre_processing.iPenguin.OSTI.osti.OSTI attribute)</a>
+</li>
         <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.MODES">(TELF.pre_processing.iPenguin.Scopus.scopus.Scopus attribute)</a>
 </li>
         <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.MODES">(TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar attribute)</a>
@@ -607,7 +735,13 @@
       <ul>
         <li><a href="TELF.html#module-TELF">TELF</a>
 </li>
+        <li><a href="Bunny.html#module-TELF.applications.Bunny.auto_bunny">TELF.applications.Bunny.auto_bunny</a>
+</li>
+        <li><a href="Bunny.html#module-TELF.applications.Bunny.bunny">TELF.applications.Bunny.bunny</a>
+</li>
         <li><a href="Cheetah.html#module-TELF.applications.Cheetah.cheetah">TELF.applications.Cheetah.cheetah</a>
+</li>
+        <li><a href="Penguin.html#module-TELF.applications.Penguin.penguin">TELF.applications.Penguin.penguin</a>
 </li>
         <li><a href="TELF.factorization.html#module-TELF.factorization">TELF.factorization</a>
 </li>
@@ -673,6 +807,8 @@
 </li>
         <li><a href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.vectorize">TELF.factorization.utilities.vectorize</a>
 </li>
+        <li><a href="SeaLion.html#module-TELF.post_processing.SeaLion.sealion">TELF.post_processing.SeaLion.sealion</a>
+</li>
         <li><a href="Wolf.html#module-TELF.post_processing.Wolf.wolf">TELF.post_processing.Wolf.wolf</a>
 </li>
         <li><a href="TELF.pre_processing.html#module-TELF.pre_processing">TELF.pre_processing</a>
@@ -720,9 +856,11 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Wolf.html#TELF.post_processing.Wolf.wolf.Wolf.n_jobs">n_jobs (TELF.post_processing.Wolf.wolf.Wolf property)</a>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.n_jobs">n_jobs (TELF.applications.Penguin.penguin.Penguin property)</a>
 
       <ul>
+        <li><a href="Wolf.html#TELF.post_processing.Wolf.wolf.Wolf.n_jobs">(TELF.post_processing.Wolf.wolf.Wolf property)</a>
+</li>
         <li><a href="Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.n_jobs">(TELF.pre_processing.Beaver.beaver.Beaver property)</a>, <a href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.n_jobs">[1]</a>
 </li>
         <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.OSTI.osti.OSTI.n_jobs">(TELF.pre_processing.iPenguin.OSTI.osti.OSTI property)</a>
@@ -746,6 +884,8 @@
 </li>
       <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.ngram_window_size">ngram_window_size (TELF.applications.Cheetah.cheetah.Cheetah property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_fro_admm.nmf">nmf() (in module TELF.factorization.decompositions.nmf_fro_admm)</a>
 
       <ul>
@@ -758,8 +898,6 @@
         <li><a href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.nmf">(in module TELF.factorization.decompositions.nmf_mc_fro_mu)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.nmf_with_ADMM">nmf_with_ADMM() (in module TELF.factorization.decompositions.nmf_mc_fro_mu)</a>
 </li>
       <li><a href="NMFk.html#TELF.factorization.NMFk.NMFk">NMFk (class in TELF.factorization.NMFk)</a>, <a href="TELF.factorization.html#TELF.factorization.NMFk.NMFk">[1]</a>
@@ -788,10 +926,14 @@
 </li>
       <li><a href="HNMFk.html#TELF.factorization.HNMFk.OnlineNode">OnlineNode (class in TELF.factorization.HNMFk)</a>
 </li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.BunnyOperation.operands">operands (TELF.applications.Bunny.bunny.BunnyOperation attribute)</a>
+</li>
       <li><a href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.operate">operate() (TELF.pre_processing.Vulture.vulture.Vulture method)</a>, <a href="Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.operate">[1]</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.BunnyOperation.operator">operator (TELF.applications.Bunny.bunny.BunnyOperation attribute)</a>
+</li>
       <li><a href="Orca.html#TELF.pre_processing.Orca.orca.Orca">Orca (class in TELF.pre_processing.Orca.orca)</a>
 </li>
       <li><a href="TELF.factorization.utilities.html#TELF.factorization.utilities.organize_n_jobs.organize_devices">organize_devices() (in module TELF.factorization.utilities.organize_n_jobs)</a>
@@ -799,6 +941,8 @@
       <li><a href="TELF.factorization.utilities.html#TELF.factorization.utilities.organize_n_jobs.organize_n_jobs">organize_n_jobs() (in module TELF.factorization.utilities.organize_n_jobs)</a>
 </li>
       <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.OSTI.osti.OSTI">OSTI (class in TELF.pre_processing.iPenguin.OSTI.osti)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunny.output_dir">output_dir (TELF.applications.Bunny.auto_bunny.AutoBunny property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -820,14 +964,20 @@
       </ul></li>
       <li><a href="Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.participation_tensor">participation_tensor() (TELF.pre_processing.Beaver.beaver.Beaver method)</a>, <a href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.participation_tensor">[1]</a>
 </li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.password">password (TELF.applications.Penguin.penguin.Penguin property)</a>
+</li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin">Penguin (class in TELF.applications.Penguin.penguin)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny.penguin_settings">penguin_settings (TELF.applications.Bunny.bunny.Bunny property)</a>
+</li>
       <li><a href="TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_BNMFk">plot_BNMFk() (in module TELF.factorization.utilities.plot_NMFk)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_consensus_mat">plot_consensus_mat() (in module TELF.factorization.utilities.plot_NMFk)</a>
 </li>
       <li><a href="TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_cophenetic_coeff">plot_cophenetic_coeff() (in module TELF.factorization.utilities.plot_NMFk)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="TELF.factorization.utilities.html#TELF.factorization.utilities.clustering.plot_H_clustering">plot_H_clustering() (in module TELF.factorization.utilities.clustering)</a>
 </li>
       <li><a href="TELF.factorization.utilities.html#TELF.factorization.utilities.plot_NMFk.plot_NMFk">plot_NMFk() (in module TELF.factorization.utilities.plot_NMFk)</a>
@@ -854,6 +1004,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.query_by_author">query_by_author() (TELF.applications.Penguin.penguin.Penguin method)</a>
+</li>
       <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.QUERY_LIMIT">QUERY_LIMIT (TELF.pre_processing.iPenguin.Scopus.scopus.Scopus attribute)</a>
 </li>
   </ul></td>
@@ -870,31 +1022,57 @@
 </li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.relative_trinmf_error">relative_trinmf_error() (in module TELF.factorization.decompositions.utilities.math_utils)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.remove_tag">remove_tag() (TELF.applications.Penguin.penguin.Penguin method)</a>
+</li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.concensus_matrix.reorder_con_mat">reorder_con_mat() (in module TELF.factorization.decompositions.utilities.concensus_matrix)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.rescal_fro_mu.rescal">rescal() (in module TELF.factorization.decompositions.rescal_fro_mu)</a>
 </li>
       <li><a href="RESCALk.html#TELF.factorization.RESCALk.RESCALk">RESCALk (class in TELF.factorization.RESCALk)</a>, <a href="TELF.factorization.html#TELF.factorization.RESCALk.RESCALk">[1]</a>
 </li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.resolve_document_id">resolve_document_id() (TELF.applications.Penguin.penguin.Penguin method)</a>
+</li>
       <li><a href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.roc_W_H">roc_W_H() (in module TELF.factorization.decompositions.nmf_mc_fro_mu)</a>
 </li>
-      <li><a href="Orca.html#TELF.pre_processing.Orca.orca.Orca.run">run() (TELF.pre_processing.Orca.orca.Orca method)</a>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunny.run">run() (TELF.applications.Bunny.auto_bunny.AutoBunny method)</a>
+
+      <ul>
+        <li><a href="Orca.html#TELF.pre_processing.Orca.orca.Orca.run">(TELF.pre_processing.Orca.orca.Orca method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.s2_attributes">s2_attributes (TELF.applications.Penguin.penguin.Penguin property)</a>
+</li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.S2_COL">S2_COL (TELF.applications.Penguin.penguin.Penguin attribute)</a>
+</li>
       <li><a href="Orca.html#TELF.pre_processing.Orca.orca.Orca.s2_duplicates">s2_duplicates (TELF.pre_processing.Orca.orca.Orca property)</a>
 </li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunny.s2_key">s2_key (TELF.applications.Bunny.auto_bunny.AutoBunny property)</a>
+
+      <ul>
+        <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny.s2_key">(TELF.applications.Bunny.bunny.Bunny property)</a>
+</li>
+      </ul></li>
       <li><a href="TELF.factorization.decompositions.html#TELF.factorization.decompositions.tri_nmf_fro_mu.S_update">S_update() (in module TELF.factorization.decompositions.tri_nmf_fro_mu)</a>
 </li>
       <li><a href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.save_path">save_path (TELF.pre_processing.Vulture.vulture.Vulture property)</a>, <a href="Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.save_path">[1]</a>
 </li>
       <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus">Scopus (class in TELF.pre_processing.iPenguin.Scopus.scopus)</a>
+</li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.scopus_attributes">scopus_attributes (TELF.applications.Penguin.penguin.Penguin property)</a>
+</li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.SCOPUS_COL">SCOPUS_COL (TELF.applications.Penguin.penguin.Penguin attribute)</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunny.scopus_keys">scopus_keys (TELF.applications.Bunny.auto_bunny.AutoBunny property)</a>
+</li>
+      <li><a href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion">SeaLion (class in TELF.post_processing.SeaLion.sealion)</a>
 </li>
       <li><a href="Cheetah.html#TELF.applications.Cheetah.cheetah.Cheetah.search">search() (TELF.applications.Cheetah.cheetah.Cheetah method)</a>
 
@@ -914,14 +1092,14 @@
         <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.search_coroutine">(TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.SEARCH_LIMIT">SEARCH_LIMIT (TELF.pre_processing.iPenguin.Scopus.scopus.Scopus attribute)</a>
 
       <ul>
         <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.SEARCH_LIMIT">(TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="iPenguin.html#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar">SemanticScholar (class in TELF.pre_processing.iPenguin.SemanticScholar.s2)</a>
 </li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.silhouettes.silhouettes">silhouettes() (in module TELF.factorization.decompositions.utilities.silhouettes)</a>
@@ -944,6 +1122,8 @@
         <li><a href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.sppmi.sppmi">(in module TELF.pre_processing.Beaver.sppmi)</a>
 </li>
       </ul></li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.bunny.Bunny.suggest_filter_values">suggest_filter_values() (TELF.applications.Bunny.bunny.Bunny class method)</a>
+</li>
       <li><a href="Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.SUPPORTED_OUTPUT_FORMATS">SUPPORTED_OUTPUT_FORMATS (TELF.pre_processing.Beaver.beaver.Beaver attribute)</a>, <a href="TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.beaver.Beaver.SUPPORTED_OUTPUT_FORMATS">[1]</a>
 </li>
       <li><a href="SymNMFk.html#TELF.factorization.SymNMFk.SymNMFk">SymNMFk (class in TELF.factorization.SymNMFk)</a>
@@ -968,10 +1148,31 @@
 </li>
       </ul></li>
       <li>
+    TELF.applications.Bunny.auto_bunny
+
+      <ul>
+        <li><a href="Bunny.html#module-TELF.applications.Bunny.auto_bunny">module</a>
+</li>
+      </ul></li>
+      <li>
+    TELF.applications.Bunny.bunny
+
+      <ul>
+        <li><a href="Bunny.html#module-TELF.applications.Bunny.bunny">module</a>
+</li>
+      </ul></li>
+      <li>
     TELF.applications.Cheetah.cheetah
 
       <ul>
         <li><a href="Cheetah.html#module-TELF.applications.Cheetah.cheetah">module</a>
+</li>
+      </ul></li>
+      <li>
+    TELF.applications.Penguin.penguin
+
+      <ul>
+        <li><a href="Penguin.html#module-TELF.applications.Penguin.penguin">module</a>
 </li>
       </ul></li>
       <li>
@@ -1142,6 +1343,8 @@
         <li><a href="TELF.factorization.utilities.html#module-TELF.factorization.utilities">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     TELF.factorization.utilities.clustering
 
@@ -1149,8 +1352,6 @@
         <li><a href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.clustering">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     TELF.factorization.utilities.co_occurance_matrix
 
@@ -1198,6 +1399,13 @@
 
       <ul>
         <li><a href="TELF.factorization.utilities.html#module-TELF.factorization.utilities.vectorize">module</a>
+</li>
+      </ul></li>
+      <li>
+    TELF.post_processing.SeaLion.sealion
+
+      <ul>
+        <li><a href="SeaLion.html#module-TELF.post_processing.SeaLion.sealion">module</a>
 </li>
       </ul></li>
       <li>
@@ -1326,6 +1534,8 @@
         <li><a href="TELF.html#module-TELF.version">module</a>
 </li>
       </ul></li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.text_search">text_search() (TELF.applications.Penguin.penguin.Penguin method)</a>
+</li>
       <li><a href="TELF.factorization.utilities.html#TELF.factorization.utilities.vectorize.tfidf">tfidf() (in module TELF.factorization.utilities.vectorize)</a>
 
       <ul>
@@ -1356,13 +1566,19 @@
       </ul></li>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.resample.uniform_product">uniform_product() (in module TELF.factorization.decompositions.utilities.resample)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.math_utils.unprune">unprune() (in module TELF.factorization.decompositions.utilities.math_utils)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="TELF.factorization.decompositions.utilities.html#TELF.factorization.decompositions.utilities.generic_utils.update_opts">update_opts() (in module TELF.factorization.decompositions.utilities.generic_utils)</a>
 </li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.update_tags">update_tags() (TELF.applications.Penguin.penguin.Penguin method)</a>
+</li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.uri">uri (TELF.applications.Penguin.penguin.Penguin property)</a>
+</li>
       <li><a href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.use_mpi">use_mpi() (TELF.pre_processing.Vulture.vulture.Vulture method)</a>, <a href="Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.use_mpi">[1]</a>
+</li>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.username">username (TELF.applications.Penguin.penguin.Penguin property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1370,15 +1586,19 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Wolf.html#TELF.post_processing.Wolf.wolf.Wolf.verbose">verbose (TELF.post_processing.Wolf.wolf.Wolf property)</a>
+      <li><a href="Penguin.html#TELF.applications.Penguin.penguin.Penguin.verbose">verbose (TELF.applications.Penguin.penguin.Penguin property)</a>
 
       <ul>
+        <li><a href="Wolf.html#TELF.post_processing.Wolf.wolf.Wolf.verbose">(TELF.post_processing.Wolf.wolf.Wolf property)</a>
+</li>
         <li><a href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.verbose">(TELF.pre_processing.Vulture.vulture.Vulture property)</a>, <a href="Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture.verbose">[1]</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="TELF.pre_processing.Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture">Vulture (class in TELF.pre_processing.Vulture.vulture)</a>, <a href="Vulture.html#TELF.pre_processing.Vulture.vulture.Vulture">[1]</a>
+</li>
+      <li><a href="Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunnyStep.vulture_settings">vulture_settings (TELF.applications.Bunny.auto_bunny.AutoBunnyStep attribute)</a>
 </li>
   </ul></td>
 </tr></table>
