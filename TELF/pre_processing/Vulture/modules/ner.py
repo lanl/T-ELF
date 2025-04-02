@@ -2,8 +2,7 @@ import re
 import spacy
 import warnings
 
-from TELF.pre_processing.Vulture.modules import VultureModuleBase
-
+from .module_base import VultureModuleBase
 
 class NEDetector(VultureModuleBase):
     """

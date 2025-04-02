@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.38 documentation</title>
+    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.39 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=8c8d0fbf"></script>
+    <script src="../../../_static/documentation_options.js?v=37718da2"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.38 documentation</p>
+    <p class="title logo__title">TELF 0.0.39 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,6 +155,12 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="../../../SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../SPLIT.html"><strong>TELF.factorization.SPLIT:</strong> Joint NMFk factorization of multiple data via SPLIT</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../SPLITTransfer.html"><strong>TELF.factorization.SPLITTransfer:</strong> Supervised transfer learning method via SPLIT and NMFk</a></li>
 
 
 <li class="toctree-l1"><a class="reference internal" href="../../../Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
@@ -190,6 +196,12 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="../../../SeaLion.html"><strong>TELF.post_processing.SeaLion:</strong> Generic report generation tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../Fox.html"><strong>TELF.post_processing.Fox:</strong> Report generation tool for text data from HNMFk using local LLMs</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../ArcticFox.html"><strong>TELF.post_processing.ArcticFox:</strong> Report generation tool for text data from HNMFk using local LLMs</a></li>
 
 
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -303,7 +315,8 @@
                 <article class="bd-article">
                   
   <h1>Source code for TELF.factorization.HNMFk</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">job-schedule - 200</span>
 <span class="sd">job-complete - 300</span>
 <span class="sd">signal-exit  - 400</span>
@@ -318,7 +331,13 @@
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">.utilities.hpc_comm_helpers</span> <span class="kn">import</span> <span class="n">signal_workers_exit</span><span class="p">,</span> <span class="n">worker_check_exit_status</span><span class="p">,</span> <span class="n">get_next_job_at_worker</span><span class="p">,</span> <span class="n">collect_results_from_workers</span><span class="p">,</span> <span class="n">send_job_to_worker_nodes</span>
+<span class="kn">from</span> <span class="nn">.utilities.hpc_comm_helpers</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">signal_workers_exit</span><span class="p">,</span> 
+    <span class="n">worker_check_exit_status</span><span class="p">,</span> 
+    <span class="n">get_next_job_at_worker</span><span class="p">,</span> 
+    <span class="n">collect_results_from_workers</span><span class="p">,</span> 
+    <span class="n">send_job_to_worker_nodes</span>
+<span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
@@ -354,7 +373,9 @@
                  <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">parent_topic</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">parent_node_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">W</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">H</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">W</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                 <span class="n">H</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                 <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">parent_node_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                  <span class="n">child_node_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
                  <span class="n">original_indices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -369,8 +390,7 @@
                  <span class="n">signature</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
                  <span class="n">probabilities</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
                  <span class="n">centroids</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
-                 <span class="n">factors_path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
-                 <span class="p">):</span>
+                 <span class="n">factors_path</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_name</span> <span class="o">=</span> <span class="n">node_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">depth</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">W</span>
@@ -386,9 +406,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="n">leaf</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_node_data</span> <span class="o">=</span> <span class="n">user_node_data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cluster_indices_in_parent</span> <span class="o">=</span> <span class="n">cluster_indices_in_parent</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_save_path</span><span class="o">=</span><span class="n">node_save_path</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parent_node_factors_path</span><span class="o">=</span><span class="n">parent_node_factors_path</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parent_node_save_path</span><span class="o">=</span><span class="n">parent_node_save_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_save_path</span> <span class="o">=</span> <span class="n">node_save_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_node_factors_path</span> <span class="o">=</span> <span class="n">parent_node_factors_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_node_save_path</span> <span class="o">=</span> <span class="n">parent_node_save_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exception</span> <span class="o">=</span> <span class="n">exception</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">signature</span> <span class="o">=</span> <span class="n">signature</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">probabilities</span> <span class="o">=</span> <span class="n">probabilities</span>
@@ -399,8 +419,7 @@
 
 <div class="viewcode-block" id="HNMFk">
 <a class="viewcode-back" href="../../../HNMFk.html#TELF.factorization.HNMFk.HNMFk">[docs]</a>
-<span class="k">class</span> <span class="nc">HNMFk</span><span class="p">():</span>
-
+<span class="k">class</span> <span class="nc">HNMFk</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">nmfk_params</span><span class="o">=</span><span class="p">[{}],</span>
                  <span class="n">cluster_on</span><span class="o">=</span><span class="s2">&quot;H&quot;</span><span class="p">,</span>
@@ -416,8 +435,7 @@
                  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">comm_buff_size</span><span class="o">=</span><span class="mi">10000000</span><span class="p">,</span>
                  <span class="n">random_identifiers</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">root_node_name</span> <span class="o">=</span> <span class="s2">&quot;Root&quot;</span>
-                 <span class="p">):</span>
+                 <span class="n">root_node_name</span><span class="o">=</span><span class="s2">&quot;Root&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.</span>
 
@@ -469,7 +487,6 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># user defined settings</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sample_thresh</span> <span class="o">=</span> <span class="n">sample_thresh</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">depth</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="o">=</span> <span class="n">cluster_on</span>
@@ -477,14 +494,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_max</span> <span class="o">=</span> <span class="n">Ks_deep_max</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Ks_deep_step</span> <span class="o">=</span> <span class="n">Ks_deep_step</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">K2</span> <span class="o">=</span> <span class="n">K2</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">=</span> <span class="n">experiment_name</span>
+        <span class="c1"># Normalize user-specified path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">experiment_name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">generate_X_callback</span> <span class="o">=</span> <span class="n">generate_X_callback</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">=</span> <span class="n">n_nodes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">comm_buff_size</span> <span class="o">=</span> <span class="n">comm_buff_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">random_identifiers</span> <span class="o">=</span> <span class="n">random_identifiers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">root_node_name</span> <span class="o">=</span> <span class="n">root_node_name</span>
-
+        
+        <span class="c1"># organize nmfk_params</span>
         <span class="n">organized_nmfk_params</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">params</span> <span class="ow">in</span> <span class="n">nmfk_params</span><span class="p">:</span>
             <span class="n">organized_nmfk_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_organize_nmfk_params</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
@@ -499,65 +518,166 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_experiment_base</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="c1"># path to save </span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">)</span>
+        <span class="c1"># path to save (always store absolute version)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
                 <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[WARN] Could not create directory: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># HPC job management variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_status</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">],</span> <span class="s2">&quot;Unknown clustering method!&quot;</span>
-        <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">MPI</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_nodes</span> <span class="o">==</span>
-                                                          <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;n_nodes was greater than 1 but MPI is not installed!&quot;</span>
-        
 <div class="viewcode-block" id="HNMFk.load_model">
 <a class="viewcode-back" href="../../../HNMFk.html#TELF.factorization.HNMFk.HNMFk.load_model">[docs]</a>
     <span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Loads existing model from checkpoint file located at self.experiment_name path.\n </span>
-<span class="sd">        This checkpoint file exist if fit(save_checkpoint=True) when the model was run.\n</span>
-<span class="sd">        Use this function to leverage the graph iterator for an existing model.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        None</span>
-
+<span class="sd">        Loads existing model from checkpoint file located at self.experiment_name path.</span>
+<span class="sd">        This checkpoint file exists if fit(save_checkpoint=True) was used.</span>
+<span class="sd">        Use this to leverage the graph iterator for an existing model.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># normalize again</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span>
+
         <span class="n">checkpoint_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_checkpoint_file</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">checkpoint_file</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">backup_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span>
-            <span class="n">backup_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_load_checkpoint</span><span class="p">(</span><span class="n">checkpoint_file</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">=</span> <span class="n">backup_name</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span> <span class="o">=</span> <span class="n">backup_path</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model checkpoint file is not found at: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;checkpoint.p&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        
-        <span class="c1"># correct node save paths</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">checkpoint_file</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Model checkpoint file not found at: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;checkpoint.p&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Load checkpoint into memory</span>
+        <span class="n">backup_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span>
+        <span class="n">backup_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_checkpoint</span><span class="p">(</span><span class="n">checkpoint_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_experiment_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span>
+
+        <span class="c1"># Fix node paths so they do not double up</span>
         <span class="n">new_node_save_paths</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">new_node_save_paths</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> 
-                <span class="o">*</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span> <span class="o">=</span> <span class="n">new_node_save_paths</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="k">del</span> <span class="n">new_node_save_paths</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">old_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">fixed_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fix_node_path</span><span class="p">(</span><span class="n">old_path</span><span class="p">,</span> <span class="n">backup_name</span><span class="p">)</span>
+            <span class="n">new_node_save_paths</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">fixed_path</span>
+        
+        <span class="c1"># revert to user’s original experiment name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">=</span> <span class="n">backup_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span> <span class="o">=</span> <span class="n">backup_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span> <span class="o">=</span> <span class="n">new_node_save_paths</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Root node &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="si">}</span><span class="s2">&#39; not found in node_save_paths. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;keys=</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">root_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">root_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;[HNMFk.load_model] Could not find root node file at: </span><span class="si">{</span><span class="n">root_path</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># prepare online iterator</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">OnlineNode</span><span class="p">(</span>
-            <span class="n">node_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">],</span>
-            <span class="n">node_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">,</span>
+            <span class="n">node_path</span><span class="o">=</span><span class="n">root_path</span><span class="p">,</span>
+            <span class="n">node_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">,</span>
             <span class="n">parent_node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">child_nodes</span><span class="o">=</span><span class="p">[]</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_iterator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span></div>
 
+
+    <span class="k">def</span> <span class="nf">_fix_node_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_base_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adjust the node path when loading from a different directory.</span>
+<span class="sd">        This will calculate the relative path based on the new `self.experiment_name`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">relative_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">old_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">)</span>
+        <span class="n">new_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_base_path</span><span class="p">,</span> <span class="n">relative_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_path</span>
+
+    <span class="k">def</span> <span class="nf">_prepare_iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">node_object</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">],</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span>
+        <span class="n">child_node_names</span> <span class="o">=</span> <span class="n">node_object</span><span class="o">.</span><span class="n">child_node_names</span>
+
+        <span class="k">for</span> <span class="n">child_name</span> <span class="ow">in</span> <span class="n">child_node_names</span><span class="p">:</span>
+            <span class="c1"># check if node is not done</span>
+            <span class="k">if</span> <span class="n">child_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># if done, load</span>
+            <span class="k">if</span> <span class="n">child_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;[HNMFk._prepare_iterator] No path for child: </span><span class="si">{</span><span class="n">child_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="n">child_node_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="p">[</span><span class="n">child_name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">child_node_path</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;[HNMFk._prepare_iterator] Child node not found at </span><span class="si">{</span><span class="n">child_node_path</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">child_node</span> <span class="o">=</span> <span class="n">OnlineNode</span><span class="p">(</span>
+                <span class="n">node_path</span><span class="o">=</span><span class="n">child_node_path</span><span class="p">,</span>
+                <span class="n">node_name</span><span class="o">=</span><span class="n">child_name</span><span class="p">,</span>
+                <span class="n">parent_node</span><span class="o">=</span><span class="n">node</span><span class="p">,</span>
+                <span class="n">child_nodes</span><span class="o">=</span><span class="p">[]</span>
+            <span class="p">)</span>
+            <span class="n">node</span><span class="o">.</span><span class="n">child_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child_node</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_iterator</span><span class="p">(</span><span class="n">child_node</span><span class="p">)</span>
+
+        <span class="k">return</span>
+
+
+    <span class="k">def</span> <span class="nf">_load_checkpoint_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ckpt_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;checkpoint.p&quot;</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ckpt_file</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">saved_class_params</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">saved_class_params</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No checkpoint file found!&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">_load_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saved_class_params</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loading saved object state from checkpoint...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_params</span><span class="p">(</span><span class="n">saved_class_params</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_parameters</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets class variables from the loaded checkpoint&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">parameter</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">class_parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_save_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">class_params</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">del</span> <span class="n">class_params</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_X_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">class_params</span><span class="p">[</span><span class="s2">&quot;generate_X_callback&quot;</span><span class="p">]</span>
+
+        <span class="n">ckpt_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;checkpoint.p&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ckpt_file</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">class_params</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_organize_nmfk_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;collect_output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;save_output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;n_nodes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;predict_k&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">params</span>
+
+    <span class="k">def</span> <span class="nf">_process_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_results</span><span class="p">,</span> <span class="n">save_checkpoint</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">[</span><span class="n">node_results</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="p">[</span><span class="n">node_results</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">node_results</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">next_job</span> <span class="ow">in</span> <span class="n">node_results</span><span class="p">[</span><span class="s2">&quot;target_jobs&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">[</span><span class="n">next_job</span><span class="p">[</span><span class="s2">&quot;node_name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">next_job</span>
+
+        <span class="k">if</span> <span class="n">save_checkpoint</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_save_checkpoint</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="HNMFk.fit">
@@ -759,24 +879,6 @@
 
 
 
-    <span class="k">def</span> <span class="nf">_prepare_iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
-        <span class="n">node_object</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">node_name</span><span class="p">],</span> <span class="s2">&quot;rb&quot;</span><span class="p">))</span>
-        <span class="n">child_node_names</span> <span class="o">=</span> <span class="n">node_object</span><span class="o">.</span><span class="n">child_node_names</span>
-
-        <span class="k">for</span> <span class="n">child_name</span> <span class="ow">in</span> <span class="n">child_node_names</span><span class="p">:</span>
-            <span class="c1"># check if node is not done its job</span>
-            <span class="k">if</span> <span class="n">child_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="c1"># if done, load</span>
-            <span class="n">child_node</span> <span class="o">=</span> <span class="n">OnlineNode</span><span class="p">(</span>
-                <span class="n">node_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="p">[</span><span class="n">child_name</span><span class="p">],</span>
-                <span class="n">node_name</span> <span class="o">=</span> <span class="n">child_name</span><span class="p">,</span>
-                <span class="n">parent_node</span><span class="o">=</span><span class="n">node</span><span class="p">,</span>
-                <span class="n">child_nodes</span><span class="o">=</span><span class="p">[])</span>
-            <span class="n">node</span><span class="o">.</span><span class="n">child_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child_node</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_iterator</span><span class="p">(</span><span class="n">child_node</span><span class="p">)</span>
-
-        <span class="k">return</span>
         
     <span class="k">def</span> <span class="nf">_process_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Ks</span><span class="p">,</span> 
                       <span class="n">depth</span><span class="p">,</span> 
@@ -1140,7 +1242,7 @@
             <span class="c1"># also need to remove from saved node data</span>
             <span class="n">parent_node_loaded</span> <span class="o">=</span> <span class="n">parent_node</span><span class="p">()</span>
             <span class="n">parent_node_loaded</span><span class="o">.</span><span class="n">child_node_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">node_name</span> <span class="k">for</span> <span class="n">node_name</span> <span class="ow">in</span> <span class="n">parent_node_loaded</span><span class="o">.</span><span class="n">child_node_names</span> <span class="k">if</span> <span class="n">node_name</span> <span class="o">!=</span> <span class="n">my_name</span><span class="p">]</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">parent_node_loaded</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">parent_node_loaded</span><span class="o">.</span><span class="n">node_save_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]),</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">parent_node_loaded</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">parent_node_loaded</span><span class="o">.</span><span class="n">node_save_path</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">tiny_leafs</span></div>
 
@@ -1156,7 +1258,7 @@
         <span class="n">node_loaded</span> <span class="o">=</span> <span class="n">node</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">node_loaded</span><span class="o">.</span><span class="n">original_child_node_names</span> <span class="o">!=</span> <span class="n">node_loaded</span><span class="o">.</span><span class="n">child_node_names</span><span class="p">:</span>
             <span class="n">node_loaded</span><span class="o">.</span><span class="n">child_node_names</span> <span class="o">=</span> <span class="n">node_loaded</span><span class="o">.</span><span class="n">original_child_node_names</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">node_loaded</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">node_loaded</span><span class="o">.</span><span class="n">node_save_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]),</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">node_loaded</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">node_loaded</span><span class="o">.</span><span class="n">node_save_path</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
     
     <span class="k">def</span> <span class="nf">_search_traversal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         
@@ -1186,13 +1288,13 @@
                 <span class="k">return</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">node</span><span class="p">())</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_name&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_all_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
@@ -1211,13 +1313,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span>
         <span class="n">data</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">())</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_name&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">data</span></div>
 
@@ -1244,14 +1346,14 @@
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span> <span class="o">=</span> <span class="n">result</span>
             <span class="n">data</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">())</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">])</span>
             
             <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_name&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">:</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">])</span>
 
             <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">])</span>
             
             <span class="k">return</span> <span class="n">data</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1273,13 +1375,13 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">())</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_name&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">data</span></div>
 
@@ -1299,13 +1401,13 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="o">.</span><span class="n">parent_node</span>
             <span class="n">data</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">())</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_name&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">:</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">])</span>
 
             <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">])</span>
 
             <span class="k">return</span> <span class="n">data</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1333,13 +1435,13 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="o">.</span><span class="n">child_nodes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
             <span class="n">data</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">())</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;node_name&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_name</span><span class="p">:</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_save_path&quot;</span><span class="p">])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;parent_node_factors_path&quot;</span><span class="p">])</span>
             
             <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;factors_path&quot;</span><span class="p">])</span>
 
             <span class="k">return</span> <span class="n">data</span>
 
@@ -1347,65 +1449,26 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Children at index &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; from the current does not exist!&quot;</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_organize_nmfk_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_resolve_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original_node_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_experiment_base</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">original_node_path</span>
 
-        <span class="c1">#</span>
-        <span class="c1"># Required</span>
-        <span class="c1">#</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;collect_output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;save_output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;n_nodes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-        
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;predict_k&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># Old base where the model was originally saved</span>
+        <span class="n">old_experiment_base</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">old_experiment_base</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
+        <span class="c1"># New base where you&#39;re now trying to load from</span>
+        <span class="n">new_experiment_base</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">params</span>
-    
-    <span class="k">def</span> <span class="nf">_process_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_results</span><span class="p">,</span> <span class="n">save_checkpoint</span><span class="p">):</span>
-        <span class="c1"># remove the job</span>
-        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">[</span><span class="n">node_results</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>
+        <span class="c1"># The original path saved in the model</span>
+        <span class="n">original_node_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">original_node_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
-        <span class="c1"># save node save paths</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_save_paths</span><span class="p">[</span><span class="n">node_results</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">node_results</span><span class="p">[</span><span class="s2">&quot;node_save_path&quot;</span><span class="p">]</span>
+        <span class="c1"># 1. Get the relative path of the node inside the old experiment base</span>
+        <span class="n">relative_path</span> <span class="o">=</span> <span class="n">original_node_path</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">old_experiment_base</span><span class="p">)</span>
 
-        <span class="c1"># save</span>
-        <span class="k">for</span> <span class="n">next_job</span> <span class="ow">in</span> <span class="n">node_results</span><span class="p">[</span><span class="s2">&quot;target_jobs&quot;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">target_jobs</span><span class="p">[</span><span class="n">next_job</span><span class="p">[</span><span class="s2">&quot;node_name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">next_job</span>
+        <span class="c1"># 2. Combine it with the new experiment base</span>
+        <span class="n">new_node_path</span> <span class="o">=</span> <span class="n">new_experiment_base</span> <span class="o">/</span> <span class="n">relative_path</span>
 
-        <span class="c1"># checkpointing</span>
-        <span class="k">if</span> <span class="n">save_checkpoint</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_save_checkpoint</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">_load_checkpoint_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">saved_class_params</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
-                <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">,</span> <span class="s2">&quot;checkpoint.p&quot;</span><span class="p">),</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
-            <span class="p">)</span>
-            <span class="k">return</span> <span class="n">saved_class_params</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No checkpoint file found!&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="p">{}</span>
-            
-    <span class="k">def</span> <span class="nf">_load_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">saved_class_params</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loading saved object state from checkpoint...&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_params</span><span class="p">(</span><span class="n">saved_class_params</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_parameters</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets class variables from the loaded checkpoint&quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">parameter</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">class_parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_save_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">class_params</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="k">del</span> <span class="n">class_params</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_X_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">del</span> <span class="n">class_params</span><span class="p">[</span><span class="s2">&quot;generate_X_callback&quot;</span><span class="p">]</span>
-
-        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">class_params</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">experiment_save_path</span><span class="p">,</span> <span class="s2">&quot;checkpoint.p&quot;</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="n">new_node_path</span></div>
 
 </pre></div>
 

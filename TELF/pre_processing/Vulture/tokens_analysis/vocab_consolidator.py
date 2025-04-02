@@ -6,8 +6,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from itertools import combinations
 from rapidfuzz.distance import Levenshtein
 
-from TELF.pre_processing.Vulture import Vulture
-from TELF.pre_processing.Vulture.modules import SubstitutionOperator
+from ..vulture import Vulture
+from ..modules.doc_op_substitution import SubstitutionOperator
 
 class VocabularyConsolidator:
     """

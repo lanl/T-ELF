@@ -1,5 +1,6 @@
 import re
-from TELF.pre_processing.Vulture.modules import VultureModuleBase
+
+from .module_base import VultureModuleBase
 
 class SubstitutionOperator(VultureModuleBase):
     """

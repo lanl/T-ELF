@@ -2,8 +2,8 @@ import re
 import spacy
 import warnings
 
-from TELF.pre_processing.Vulture.modules import VultureModuleBase
-from TELF.pre_processing.Vulture.tokens_analysis.top_words import get_top_words
+from .module_base import VultureModuleBase
+from ..tokens_analysis.top_words import get_top_words
 
 FIRST_LETTER = 0
 LAST_PART_INDEX = -1

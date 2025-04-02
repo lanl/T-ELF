@@ -333,17 +333,24 @@ def form_df(files):
 
         adjusted_fobjs = {}
         for i, fobj in enumerate(funding):
-            fids = fobj['funding_id']
+            fids = fobj.get('funding_id', [])
             if not isinstance(fids, list):
                 fids = [fids]
-            fname = fobj['funding_agency']
-            fcountry = fobj.get('funding_country', 'Unknown')
-            if not fcountry:
-                fcountry = 'Unknown'
 
-            if 'http' in fcountry:
-                if fcountry[-1] == '/':
-                    fcountry = fcountry[0:-1]
+            # Normalize all elements to strings, skip bad ones
+            normalized_fids = []
+            for fid in fids:
+                if isinstance(fid, dict) and '$' in fid:
+                    normalized_fids.append(fid['$'])
+                elif isinstance(fid, str):
+                    normalized_fids.append(fid)
+                # else skip (None or unexpected types)
+
+            fname = fobj.get('funding_agency', 'Unknown')
+            fcountry = fobj.get('funding_country', 'Unknown') or 'Unknown'
+
+            if isinstance(fcountry, str) and 'http' in fcountry:
+                fcountry = fcountry.rstrip('/')
                 fcountry = fcountry.rsplit('/')[-1]
                 fcountry = COUNTRY_CODES.get(fcountry, 'Unknown')
 
@@ -353,10 +360,9 @@ def form_df(files):
                     'funding_ids': set(),
                 }
 
-            if isinstance(fids[0], dict):
-                fids = [x['$'] for x in fids if x is not None]
-                
-            adjusted_fobjs[fname]['funding_ids'] |= set(fids)
+            adjusted_fobjs[fname]['funding_ids'].update(normalized_fids)
+
+
         for k in adjusted_fobjs:
             adjusted_fobjs[k]['funding_ids'] = list(adjusted_fobjs[k]['funding_ids'])
         adjusted_funding.append(adjusted_fobjs)

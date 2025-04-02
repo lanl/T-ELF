@@ -7,7 +7,6 @@ Created on Tue Feb 15 17:05:54 2022
 """
 
 import os
-import re
 import sys
 import ast
 import time
@@ -460,107 +459,74 @@ class Cheetah:
         return set.union(*filter_indices)
 
 
-    def _query_search(self, queries:list, in_abstract:bool, in_title:bool, link_search:bool) -> list:
+    def _query_search(self, queries:list, in_abstract:bool, in_title:bool, link_search:bool) -> dict:
         """
         Searches the text data for the given queries in the specified columns.
 
-        Parameters
-        ----------
-        queries: list
-            A list of strings representing the queries to be searched. 
-        in_abstract: bool
-            A boolean value indicating whether to search for queries in the abstract column.
-        in_title: bool
-            A boolean value indicating whether to search for queries in the title column.
-        link_search: bool
-            A flag that controls if the queries should be linked in the positive/negative inclusion
-            step. For example, take a document that contains the queried text "A" and "B". However 
-            positive or negative inclusion partnered with "B" overrides the selection. If this flag
-            is set to True then the inclusion step will be ignored since another query, "A", had 
-            already selected the document as being on-topic (hence linking the search).
-
-        Returns
-        -------
-        index_map: dict
-            A dict of query to record IDs that match the specified queries. Each record ID is a string representing 
-            the key in the original data dictionary for the record.
-
-        Raises
-        ------
-        ValueError
-            If the `in_abstract` and `in_title` parameter are true and not in the data or if both `in_abstract` and 
-            `in_title` are False.
+        Returns a dictionary of query string -> matching record indices set.
+        Ensures that the length of the returned dict matches len(queries).
         """
-
-        # validate input
         if in_abstract:
             assert "abstract" in self.columns, "Attempted abstract search but abstract column does not exist!"
         if in_title:
             assert "title" in self.columns, "Attempted title search but title column does not exist!"
 
-        # warn user if they attempt to search without selecting any search data
         if not in_abstract and not in_title:
-            warnings.warn('Attempting to search a query without any data source. ' \
-                          'Enable search in abstracts and/or title.', RuntimeWarning)
+            warnings.warn('Attempting to search a query without any data source.', RuntimeWarning)
 
-        # init the search results list. each entry in this list will be a set of ids 
-        # corresponding to the searched query. 
-        #
-        # NOTE: n-gram search will be performed later. For now, search results for n-grams just
-        #       mean that each document id in the set contains all tokens from the query
         index_map = {}
+
         for query in queries:
             query_indices = []
-            for q in query:
-                term, negatives, positives = q
-                q_indices = set()
-                
-                if in_title:
-                    q_indices |= self.title_index.get(term, set())
-                    q_indices = self._inclusion_search('title', q_indices, positives, negatives)
-                    
-                if in_abstract:
-                    q_indices |= self.abstract_index.get(term, set())
-                    q_indices = self._inclusion_search('abstract', q_indices, positives, negatives)
-                
-                query_indices.append(q_indices)  # update results for query
-            
-            # add set of matching ids for a single query to the output list
-            query_proc = [next(iter(x)) for x in query]
-            
-            # index_map[" ".join(query_proc)] = set.intersection(*query_indices)
-            if query_indices:
-                if len(query_indices) == 1:
-                    index_map[" ".join(query_proc)] = query_indices[0]  # Assign directly if only one set
-                else:
-                    index_map[" ".join(query_proc)] = set.intersection(*query_indices)  # Perform intersection
-            else:
-                index_map[" ".join(query_proc)] = set()  # Assign empty set if no valid queries
+            query_proc = []
 
-            
+            for q in query:
+                try:
+                    term, negatives, positives = q
+                    query_proc.append(term)
+                    q_indices = set()
+
+                    if in_title:
+                        q_indices |= self.title_index.get(term, set())
+                        q_indices = self._inclusion_search('title', q_indices, positives, negatives)
+
+                    if in_abstract:
+                        q_indices |= self.abstract_index.get(term, set())
+                        q_indices = self._inclusion_search('abstract', q_indices, positives, negatives)
+
+                    query_indices.append(q_indices)
+                except Exception as e:
+                    query_proc.append("<INVALID>")
+                    warnings.warn(f"Error processing query part {q}: {e}")
+                    query_indices.append(set())
+
+            query_key = " ".join(query_proc)
+
+            try:
+                if query_indices:
+                    combined = set.intersection(*query_indices) if len(query_indices) > 1 else query_indices[0]
+                    index_map[query_key] = combined
+                else:
+                    index_map[query_key] = set()
+            except Exception as e:
+                warnings.warn(f"Failed intersection for {query_key}: {e}")
+                index_map[query_key] = set()
+
+        # Link search mode
         if link_search:
             old_index_map = index_map.copy()
             index_map = {}
-            for query in queries:
+            for i, query in enumerate(queries):
+                query_proc = " ".join([x[0] if len(x) > 0 else "<INVALID>" for x in query])
+                query_indices = [self.title_index.get(x[0], set()) | self.abstract_index.get(x[0], set()) for x in query]
+                try:
+                    combined = set.intersection(*query_indices) if len(query_indices) > 1 else query_indices[0]
+                except:
+                    combined = set()
+                index_map[query_proc] = add_with_union_of_others(old_index_map, combined, query_proc)
 
-                query_indices = []
-                for q in query:
-                    term, negatives, positives = q
-
-                    q_indices = set()
-                    if in_title: 
-                        q_indices |= self.title_index.get(term, set())
-                    if in_abstract:
-                        q_indices |= self.abstract_index.get(term, set())
-
-                    query_indices.append(q_indices)  # update results for query
-                
-                query_proc = " ".join([next(iter(x)) for x in query])
-                query_indices = set.intersection(*query_indices)
-                linked_indices = add_with_union_of_others(old_index_map, query_indices, query_proc)
-                index_map[query_proc] = linked_indices
-            
         return index_map
+
 
     
     def _inclusion_search(self, text_index, q_indices, positives, negatives):

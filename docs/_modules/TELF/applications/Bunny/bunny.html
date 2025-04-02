@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.applications.Bunny.bunny &#8212; TELF 0.0.38 documentation</title>
+    <title>TELF.applications.Bunny.bunny &#8212; TELF 0.0.39 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../../_static/documentation_options.js?v=8c8d0fbf"></script>
+    <script src="../../../../_static/documentation_options.js?v=37718da2"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.38 documentation</p>
+    <p class="title logo__title">TELF 0.0.39 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,6 +155,12 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="../../../../SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../SPLIT.html"><strong>TELF.factorization.SPLIT:</strong> Joint NMFk factorization of multiple data via SPLIT</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../SPLITTransfer.html"><strong>TELF.factorization.SPLITTransfer:</strong> Supervised transfer learning method via SPLIT and NMFk</a></li>
 
 
 <li class="toctree-l1"><a class="reference internal" href="../../../../Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
@@ -190,6 +196,12 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="../../../../SeaLion.html"><strong>TELF.post_processing.SeaLion:</strong> Generic report generation tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Fox.html"><strong>TELF.post_processing.Fox:</strong> Report generation tool for text data from HNMFk using local LLMs</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../ArcticFox.html"><strong>TELF.post_processing.ArcticFox:</strong> Report generation tool for text data from HNMFk using local LLMs</a></li>
 
 
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -486,10 +498,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">penguin_settings</span> <span class="o">=</span> <span class="n">penguin_settings</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 
-        <span class="c1"># create a dictionary of supported filters and their callable load functions</span>
-        <span class="n">filters</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;_filter_</span><span class="si">{</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">Bunny</span><span class="o">.</span><span class="n">FILTERS</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filter_funcs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">filters</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">))}</span>
-        
+        <span class="c1"># Explicitly map supported filters to methods</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filter_funcs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;AFFILCOUNTRY&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">df</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">auth_map</span><span class="o">=</span><span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_affil_generic</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column_name</span><span class="o">=</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="n">filter_value</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">auth_map</span><span class="o">=</span><span class="n">auth_map</span><span class="p">),</span>
+            <span class="s1">&#39;AFFILORG&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_affilorg</span><span class="p">,</span>
+            <span class="s1">&#39;AF-ID&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_afid</span><span class="p">,</span>
+            <span class="s1">&#39;PUBYEAR&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_pubyear</span><span class="p">,</span>
+            <span class="s1">&#39;AU-ID&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_auid</span><span class="p">,</span>
+            <span class="s1">&#39;KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_key</span><span class="p">,</span>
+            <span class="s1">&#39;DOI&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">df</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">auth_map</span><span class="o">=</span><span class="kc">None</span><span class="p">:</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;doi&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">f</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span><span class="o">.</span><span class="n">index</span><span class="p">),</span>
+        <span class="p">}</span>
+
     
     <span class="k">def</span> <span class="nf">__init_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">series</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="n">sep</span><span class="p">):</span>
         <span class="n">lookup</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">series</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">)]</span>
@@ -962,23 +981,29 @@
         <span class="k">return</span> <span class="n">pids</span>
 
     
-    <span class="k">def</span> <span class="nf">_filter_affilcountry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">auth_map</span><span class="p">):</span> 
+    <span class="k">def</span> <span class="nf">_filter_affil_generic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">filter_value</span><span class="p">,</span> <span class="n">auth_map</span><span class="p">):</span> 
         <span class="k">if</span> <span class="s1">&#39;affiliations&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;&quot;affiliations&quot; not found in df&#39;</span><span class="p">)</span>
 
-        <span class="n">country</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">filter_value</span> <span class="o">=</span> <span class="n">filter_value</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="n">pids</span><span class="p">,</span> <span class="n">aids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(),</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">aff_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;affiliations&#39;</span><span class="p">])</span>
-        <span class="n">affiliations</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">aff_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">aff_df</span><span class="o">.</span><span class="n">affiliations</span><span class="o">.</span><span class="n">to_list</span><span class="p">())}</span>
+        <span class="n">affiliations</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">aff_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">aff_df</span><span class="o">.</span><span class="n">affiliations</span><span class="o">.</span><span class="n">to_list</span><span class="p">())}</span>
+
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">affiliation</span> <span class="ow">in</span> <span class="n">affiliations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">affiliation</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="n">affiliation</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">affiliation</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">aff_id</span><span class="p">,</span> <span class="n">aff</span> <span class="ow">in</span> <span class="n">affiliation</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">aff</span><span class="p">[</span><span class="s1">&#39;country&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">country</span><span class="p">:</span>
-                    <span class="n">pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
-                    <span class="n">aids</span> <span class="o">|=</span> <span class="nb">set</span><span class="p">(</span><span class="n">aff</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span>
-                    <span class="k">break</span>
-        
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">aff</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">filter_value</span><span class="p">:</span>
+                        <span class="n">pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+                        <span class="n">aids</span> <span class="o">|=</span> <span class="nb">set</span><span class="p">(</span><span class="n">aff</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span>
+                        <span class="k">break</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: &#39;</span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2">&#39; not found in affiliation </span><span class="si">{</span><span class="n">aff_id</span><span class="si">}</span><span class="s2"> for index </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: error processing affiliation </span><span class="si">{</span><span class="n">aff_id</span><span class="si">}</span><span class="s2"> at index </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">auth_map</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">s2_aids</span> <span class="o">=</span> <span class="p">{</span><span class="n">auth_map</span><span class="p">[</span><span class="n">aid</span><span class="p">]</span> <span class="k">for</span> <span class="n">aid</span> <span class="ow">in</span> <span class="n">aids</span> <span class="k">if</span> <span class="n">aid</span> <span class="ow">in</span> <span class="n">auth_map</span><span class="p">}</span>
             <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">scopus_authors</span><span class="p">,</span> <span class="n">s2_authors</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">df</span><span class="o">.</span><span class="n">author_ids</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">df</span><span class="o">.</span><span class="n">s2_author_ids</span><span class="o">.</span><span class="n">to_list</span><span class="p">()):</span>
@@ -986,7 +1011,10 @@
                     <span class="n">pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s2_authors</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">set</span><span class="p">(</span><span class="n">s2_authors</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">s2_aids</span><span class="p">:</span>
                     <span class="n">pids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>    
+
         <span class="k">return</span> <span class="n">pids</span>
+
+
     
 
     <span class="k">def</span> <span class="nf">_filter_affilorg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">auth_map</span><span class="p">):</span>

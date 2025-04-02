@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.applications.Cheetah.cheetah &#8212; TELF 0.0.38 documentation</title>
+    <title>TELF.applications.Cheetah.cheetah &#8212; TELF 0.0.39 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../../_static/documentation_options.js?v=8c8d0fbf"></script>
+    <script src="../../../../_static/documentation_options.js?v=37718da2"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.38 documentation</p>
+    <p class="title logo__title">TELF 0.0.39 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,6 +155,12 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="../../../../SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../SPLIT.html"><strong>TELF.factorization.SPLIT:</strong> Joint NMFk factorization of multiple data via SPLIT</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../SPLITTransfer.html"><strong>TELF.factorization.SPLITTransfer:</strong> Supervised transfer learning method via SPLIT and NMFk</a></li>
 
 
 <li class="toctree-l1"><a class="reference internal" href="../../../../Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
@@ -190,6 +196,12 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="../../../../SeaLion.html"><strong>TELF.post_processing.SeaLion:</strong> Generic report generation tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../Fox.html"><strong>TELF.post_processing.Fox:</strong> Report generation tool for text data from HNMFk using local LLMs</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../ArcticFox.html"><strong>TELF.post_processing.ArcticFox:</strong> Report generation tool for text data from HNMFk using local LLMs</a></li>
 
 
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -312,7 +324,6 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">ast</span>
 <span class="kn">import</span> <span class="nn">time</span>
@@ -779,99 +790,74 @@
         <span class="k">return</span> <span class="nb">set</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="n">filter_indices</span><span class="p">)</span>
 
 
-    <span class="k">def</span> <span class="nf">_query_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queries</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">in_abstract</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">in_title</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">link_search</span><span class="p">:</span><span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_query_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queries</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">in_abstract</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">in_title</span><span class="p">:</span><span class="nb">bool</span><span class="p">,</span> <span class="n">link_search</span><span class="p">:</span><span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Searches the text data for the given queries in the specified columns.</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        queries: list</span>
-<span class="sd">            A list of strings representing the queries to be searched. </span>
-<span class="sd">        in_abstract: bool</span>
-<span class="sd">            A boolean value indicating whether to search for queries in the abstract column.</span>
-<span class="sd">        in_title: bool</span>
-<span class="sd">            A boolean value indicating whether to search for queries in the title column.</span>
-<span class="sd">        link_search: bool</span>
-<span class="sd">            A flag that controls if the queries should be linked in the positive/negative inclusion</span>
-<span class="sd">            step. For example, take a document that contains the queried text &quot;A&quot; and &quot;B&quot;. However </span>
-<span class="sd">            positive or negative inclusion partnered with &quot;B&quot; overrides the selection. If this flag</span>
-<span class="sd">            is set to True then the inclusion step will be ignored since another query, &quot;A&quot;, had </span>
-<span class="sd">            already selected the document as being on-topic (hence linking the search).</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        index_map: dict</span>
-<span class="sd">            A dict of query to record IDs that match the specified queries. Each record ID is a string representing </span>
-<span class="sd">            the key in the original data dictionary for the record.</span>
-
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        ValueError</span>
-<span class="sd">            If the `in_abstract` and `in_title` parameter are true and not in the data or if both `in_abstract` and </span>
-<span class="sd">            `in_title` are False.</span>
+<span class="sd">        Returns a dictionary of query string -&gt; matching record indices set.</span>
+<span class="sd">        Ensures that the length of the returned dict matches len(queries).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># validate input</span>
         <span class="k">if</span> <span class="n">in_abstract</span><span class="p">:</span>
             <span class="k">assert</span> <span class="s2">&quot;abstract&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="s2">&quot;Attempted abstract search but abstract column does not exist!&quot;</span>
         <span class="k">if</span> <span class="n">in_title</span><span class="p">:</span>
             <span class="k">assert</span> <span class="s2">&quot;title&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="s2">&quot;Attempted title search but title column does not exist!&quot;</span>
 
-        <span class="c1"># warn user if they attempt to search without selecting any search data</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">in_abstract</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">in_title</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Attempting to search a query without any data source. &#39;</span> \
-                          <span class="s1">&#39;Enable search in abstracts and/or title.&#39;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Attempting to search a query without any data source.&#39;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
 
-        <span class="c1"># init the search results list. each entry in this list will be a set of ids </span>
-        <span class="c1"># corresponding to the searched query. </span>
-        <span class="c1">#</span>
-        <span class="c1"># NOTE: n-gram search will be performed later. For now, search results for n-grams just</span>
-        <span class="c1">#       mean that each document id in the set contains all tokens from the query</span>
         <span class="n">index_map</span> <span class="o">=</span> <span class="p">{}</span>
+
         <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">:</span>
             <span class="n">query_indices</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">query</span><span class="p">:</span>
-                <span class="n">term</span><span class="p">,</span> <span class="n">negatives</span><span class="p">,</span> <span class="n">positives</span> <span class="o">=</span> <span class="n">q</span>
-                <span class="n">q_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-                
-                <span class="k">if</span> <span class="n">in_title</span><span class="p">:</span>
-                    <span class="n">q_indices</span> <span class="o">|=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
-                    <span class="n">q_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inclusion_search</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="n">q_indices</span><span class="p">,</span> <span class="n">positives</span><span class="p">,</span> <span class="n">negatives</span><span class="p">)</span>
-                    
-                <span class="k">if</span> <span class="n">in_abstract</span><span class="p">:</span>
-                    <span class="n">q_indices</span> <span class="o">|=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
-                    <span class="n">q_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inclusion_search</span><span class="p">(</span><span class="s1">&#39;abstract&#39;</span><span class="p">,</span> <span class="n">q_indices</span><span class="p">,</span> <span class="n">positives</span><span class="p">,</span> <span class="n">negatives</span><span class="p">)</span>
-                
-                <span class="n">query_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q_indices</span><span class="p">)</span>  <span class="c1"># update results for query</span>
-            
-            <span class="c1"># add set of matching ids for a single query to the output list</span>
-            <span class="n">query_proc</span> <span class="o">=</span> <span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">query</span><span class="p">]</span>
-            <span class="n">index_map</span><span class="p">[</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">query_proc</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">*</span><span class="n">query_indices</span><span class="p">)</span>
+            <span class="n">query_proc</span> <span class="o">=</span> <span class="p">[]</span>
 
-            
+            <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">query</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">term</span><span class="p">,</span> <span class="n">negatives</span><span class="p">,</span> <span class="n">positives</span> <span class="o">=</span> <span class="n">q</span>
+                    <span class="n">query_proc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
+                    <span class="n">q_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+                    <span class="k">if</span> <span class="n">in_title</span><span class="p">:</span>
+                        <span class="n">q_indices</span> <span class="o">|=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+                        <span class="n">q_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inclusion_search</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="n">q_indices</span><span class="p">,</span> <span class="n">positives</span><span class="p">,</span> <span class="n">negatives</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">in_abstract</span><span class="p">:</span>
+                        <span class="n">q_indices</span> <span class="o">|=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+                        <span class="n">q_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inclusion_search</span><span class="p">(</span><span class="s1">&#39;abstract&#39;</span><span class="p">,</span> <span class="n">q_indices</span><span class="p">,</span> <span class="n">positives</span><span class="p">,</span> <span class="n">negatives</span><span class="p">)</span>
+
+                    <span class="n">query_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q_indices</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">query_proc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&lt;INVALID&gt;&quot;</span><span class="p">)</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error processing query part </span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">query_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">set</span><span class="p">())</span>
+
+            <span class="n">query_key</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">query_proc</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">query_indices</span><span class="p">:</span>
+                    <span class="n">combined</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">*</span><span class="n">query_indices</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">query_indices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">query_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">index_map</span><span class="p">[</span><span class="n">query_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">index_map</span><span class="p">[</span><span class="n">query_key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed intersection for </span><span class="si">{</span><span class="n">query_key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">index_map</span><span class="p">[</span><span class="n">query_key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="c1"># Link search mode</span>
         <span class="k">if</span> <span class="n">link_search</span><span class="p">:</span>
             <span class="n">old_index_map</span> <span class="o">=</span> <span class="n">index_map</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="n">index_map</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">query</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">queries</span><span class="p">):</span>
+                <span class="n">query_proc</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&lt;INVALID&gt;&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">query</span><span class="p">])</span>
+                <span class="n">query_indices</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">title_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">set</span><span class="p">())</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">set</span><span class="p">())</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">query</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">combined</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">*</span><span class="n">query_indices</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">query_indices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">query_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">combined</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                <span class="n">index_map</span><span class="p">[</span><span class="n">query_proc</span><span class="p">]</span> <span class="o">=</span> <span class="n">add_with_union_of_others</span><span class="p">(</span><span class="n">old_index_map</span><span class="p">,</span> <span class="n">combined</span><span class="p">,</span> <span class="n">query_proc</span><span class="p">)</span>
 
-                <span class="n">query_indices</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">query</span><span class="p">:</span>
-                    <span class="n">term</span><span class="p">,</span> <span class="n">negatives</span><span class="p">,</span> <span class="n">positives</span> <span class="o">=</span> <span class="n">q</span>
-
-                    <span class="n">q_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-                    <span class="k">if</span> <span class="n">in_title</span><span class="p">:</span> 
-                        <span class="n">q_indices</span> <span class="o">|=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
-                    <span class="k">if</span> <span class="n">in_abstract</span><span class="p">:</span>
-                        <span class="n">q_indices</span> <span class="o">|=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
-
-                    <span class="n">query_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">q_indices</span><span class="p">)</span>  <span class="c1"># update results for query</span>
-                
-                <span class="n">query_proc</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">query</span><span class="p">])</span>
-                <span class="n">query_indices</span> <span class="o">=</span> <span class="nb">set</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">*</span><span class="n">query_indices</span><span class="p">)</span>
-                <span class="n">linked_indices</span> <span class="o">=</span> <span class="n">add_with_union_of_others</span><span class="p">(</span><span class="n">old_index_map</span><span class="p">,</span> <span class="n">query_indices</span><span class="p">,</span> <span class="n">query_proc</span><span class="p">)</span>
-                <span class="n">index_map</span><span class="p">[</span><span class="n">query_proc</span><span class="p">]</span> <span class="o">=</span> <span class="n">linked_indices</span>
-            
         <span class="k">return</span> <span class="n">index_map</span>
+
 
     
     <span class="k">def</span> <span class="nf">_inclusion_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text_index</span><span class="p">,</span> <span class="n">q_indices</span><span class="p">,</span> <span class="n">positives</span><span class="p">,</span> <span class="n">negatives</span><span class="p">):</span>

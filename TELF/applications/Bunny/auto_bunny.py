@@ -5,7 +5,7 @@ import pathlib
 import pandas as pd
 from dataclasses import dataclass, field
 
-from .bunny import Bunny
+from .bunny import Bunny, BunnyFilter
 from ..Cheetah import Cheetah
 from ...pre_processing.iPenguin.Scopus import Scopus
 from ...pre_processing.iPenguin.SemanticScholar import SemanticScholar
@@ -42,7 +42,16 @@ class AutoBunny:
         self.verbose = verbose
         
     
-    def run(self, steps, *, s2_key=None, scopus_keys=None, cheetah_index=None, max_papers=250000, checkpoint=True):
+    def run(self, 
+            steps, 
+            *, 
+            s2_key=None, 
+            scopus_keys=None, 
+            cheetah_index=None, 
+            max_papers=250000, 
+            checkpoint=True,
+            filter_type:str=None, # must be a key from Bunny.FILTERS
+            filter_value=None):
         
         # validate input
         if not isinstance(steps, (list, tuple)):
@@ -87,6 +96,15 @@ class AutoBunny:
                 return df
                 
             df = self.__bunny_hop(df, modes, step_max_papers, hop_priority)
+            if filter_value and filter_type:
+                bunny = Bunny()
+                query = BunnyFilter(filter_type, filter_value)
+                subset_df = bunny.apply_filter(df, query, filter_in_core=True, do_author_match=False).reset_index(drop=True)
+                if len(subset_df) < 1:
+                    print("No papers for filter_value, using original df without filter.")
+                else:
+                    df = subset_df
+
             df = self.__vulture_clean(df, vulture_settings)
             df, cheetah_table = self.__cheetah_filter(df, cheetah_settings)
             

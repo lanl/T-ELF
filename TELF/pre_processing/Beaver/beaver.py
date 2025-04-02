@@ -19,23 +19,20 @@ except:
 import os
 import sys
 import warnings
-import datetime
 import numpy as np
 import pandas as pd
 import multiprocessing
-from operator import itemgetter
 from collections import defaultdict, Counter
 from sklearn.feature_extraction.text import TfidfVectorizer
-from numbers import Integral
 import sparse
 from tqdm import tqdm
 import scipy.sparse as ss
 from joblib import Parallel, delayed
 from sklearn.feature_extraction.text import TfidfTransformer
+from pathlib import Path
 
 from .tenmat import fold, unfold
 from .vectorize import tfidf
-from .vectorize import count
 from .cooccurrence import co_occurrence
 from .sppmi import sppmi
 from typing import Union
@@ -119,7 +116,8 @@ class Beaver():
         vocabulary = vectorizer.get_feature_names_out()
 
         if save_path:
-            np.savetxt(os.path.join(save_path, "Vocabulary.txt"), vocabulary,  fmt="%s", encoding="utf-8")
+            self.__check_path(save_path)
+            self.__save_text(vocabulary, save_path, "Vocabulary.txt")
         return vocabulary
 
 
@@ -251,8 +249,9 @@ class Beaver():
 
         X = self.output_funcs[output_mode](X)
         if save_path:
-            np.savetxt(os.path.join(save_path, "Authors.txt"), list(authors_idx_map.keys()),  fmt="%s", encoding="utf-8")
-            np.savetxt(os.path.join(save_path, "Time.txt"), list(time_idx_map.keys()),  fmt="%s", encoding="utf-8")
+            self.__check_path(save_path)
+            self.__save_text(list(authors_idx_map.keys()), save_path, "Authors.txt")
+            self.__save_text(list(time_idx_map.keys()), save_path, "Time.txt")
             self.save_funcs[output_mode](X, os.path.join(save_path, "coauthor.npz"))
         if return_object:
             return (X, list(authors_idx_map.keys()), list(time_idx_map.keys()))
@@ -409,8 +408,9 @@ class Beaver():
         
         X = self.output_funcs[output_mode](X)
         if save_path:
-            np.savetxt(os.path.join(save_path, "Authors.txt"), list(authors_idx_map.keys()),  fmt="%s", encoding="utf-8")
-            np.savetxt(os.path.join(save_path, "Time.txt"), list(time_idx_map.keys()),  fmt="%s", encoding="utf-8")
+            self.__check_path(save_path)
+            self.__save_text(list(authors_idx_map.keys()), save_path, "Authors.txt")
+            self.__save_text(list(time_idx_map.keys()), save_path, "Time.txt")
             self.save_funcs[output_mode](X, os.path.join(save_path, "cocitation.npz"))
         if return_object:
             return (X, list(authors_idx_map.keys()), list(time_idx_map.keys()))
@@ -549,9 +549,10 @@ class Beaver():
 
         X = self.output_funcs[output_mode](X)
         if save_path:
-            np.savetxt(os.path.join(save_path, "Authors.txt"), list(authors_idx_map.keys()),  fmt="%s", encoding="utf-8")
-            np.savetxt(os.path.join(save_path, "Paper.txt"), list(papers_idx_map.keys()),  fmt="%s", encoding="utf-8")
-            np.savetxt(os.path.join(save_path, "Time.txt"), list(time_idx_map.keys()),  fmt="%s", encoding="utf-8")
+            self.__check_path(save_path)
+            self.__save_text(list(authors_idx_map.keys()), save_path, "Authors.txt")
+            self.__save_text(list(papers_idx_map.keys()), save_path, "Paper.txt")
+            self.__save_text(list(time_idx_map.keys()), save_path, "Time.txt")
             self.save_funcs[output_mode](X, os.path.join(save_path, "participation.npz"))
         if return_object:
             return (X, list(authors_idx_map.keys()), list(papers_idx_map.keys()), list(time_idx_map.keys()))
@@ -702,9 +703,10 @@ class Beaver():
 
         X = self.output_funcs[output_mode](X)
         if save_path:
-            np.savetxt(os.path.join(save_path, "Authors.txt"), list(authors_idx_map.keys()),  fmt="%s", encoding="utf-8")
-            np.savetxt(os.path.join(save_path, "Paper.txt"), list(papers_idx_map.keys()),  fmt="%s", encoding="utf-8")
-            np.savetxt(os.path.join(save_path, "Time.txt"), list(time_idx_map.keys()),  fmt="%s", encoding="utf-8")
+            self.__check_path(save_path)
+            self.__save_text(list(authors_idx_map.keys()), save_path, "Authors.txt")
+            self.__save_text(list(papers_idx_map.keys()), save_path, "Paper.txt")
+            self.__save_text(list(time_idx_map.keys()), save_path, "Time.txt")
             self.save_funcs[output_mode](X, os.path.join(save_path, "citation.npz"))
         if return_object:
             return (X, list(authors_idx_map.keys()), list(papers_idx_map.keys()), list(time_idx_map.keys()))
@@ -776,6 +778,7 @@ class Beaver():
         M = self.output_funcs[output_mode](M)
         SPPMI = self.output_funcs[output_mode](SPPMI)
         if save_path:
+            self.__check_path(save_path)
             self.save_funcs[output_mode](M, os.path.join(save_path, "cooccurrence.npz"))
             self.save_funcs[output_mode](SPPMI, os.path.join(save_path, "SPPMI.npz"))
         if return_object:
@@ -848,43 +851,68 @@ class Beaver():
         elif isinstance(weights, int) or isinstance(weights, float):
             weights = [weights] * len(highlighting)
 
-        # get the target documents
+        # Step 1: Get the target documents
         documents = dataset[target_column].values.tolist()
-        
-        # merge the vocabulary with highliting words
-        if (len(highlighting) > 0) and ("vocabulary" in options):
-            vocab_options = options["vocabulary"].copy()
-            vocab_options = dict(zip(vocab_options, [1]*len(vocab_options)))
 
-            added = False
-            for token in highlighting:
-                if token not in vocab_options:
-                    vocab_options[token] = 1
-                    added = True
+        # Step 2: If options already includes a vocabulary, merge in highlighting words now
+        if highlighting and "vocabulary" in options:
+            vocab_set = set(options["vocabulary"])
+            original_vocab_size = len(vocab_set)
 
-            if added:
-                options["vocabulary"] = sorted(list(vocab_options.keys()))
-                warnings.warn("Vocabulary was extended!")
+            vocab_set.update(highlighting)
 
-        # vectorize
+            if len(vocab_set) > original_vocab_size:
+                options["vocabulary"] = sorted(vocab_set)
+                warnings.warn("Vocabulary was extended with highlighting words!")
+
+        # Step 3: Vectorize
         if matrix_type == "tfidf":
             X, vocabulary = tfidf(documents, options)
-
         else:
             X, vocabulary = tfidf(documents, options)
 
-        if len(highlighting) > 0:
+        # Step 4: Check if we need to re-vectorize (only if vocabulary was not user-supplied)
+        if highlighting and "vocabulary" not in options:
+            # Make sure vocabulary is in list form if needed
+            if isinstance(vocabulary, dict):
+                vocab_words = set(vocabulary.keys())
+            else:
+                vocab_words = set(vocabulary)
+
+            missing_tokens = [token for token in highlighting if token not in vocab_words]
+
+            if missing_tokens:
+                # Extend vocabulary
+                extended_vocab = sorted(vocab_words.union(missing_tokens))
+                options["vocabulary"] = extended_vocab
+
+                warnings.warn(f"Re-vectorizing with extended vocabulary (added: {missing_tokens})")
+
+                # Re-vectorize
+                if matrix_type == "tfidf":
+                    X, vocabulary = tfidf(documents, options)
+                else:
+                    X, vocabulary = tfidf(documents, options)
+
+        # Step 5: Apply weights to highlight tokens if they exist in the final vocabulary
+        if highlighting:
             for widx, token in tqdm(enumerate(highlighting), disable=not verbose):
-                idxs = np.where(vocabulary == token)[0]
-                if len(idxs):
-                    X[:, idxs] = X[:, idxs] * weights[widx]
+                if isinstance(vocabulary, dict):
+                    idx = vocabulary.get(token, None)
+                    if idx is not None:
+                        X[:, idx] = X[:, idx] * weights[widx]
+                else:
+                    idxs = np.where(vocabulary == token)[0]
+                    if len(idxs):
+                        X[:, idxs] = X[:, idxs] * weights[widx]
 
         # convert to pydata sparse for consistency across all beaver methods
         X = sparse.COO.from_scipy_sparse(X)
                     
         X = self.output_funcs[output_mode](X)
         if save_path:
-            np.savetxt(os.path.join(save_path, "Vocabulary.txt"), vocabulary,  fmt="%s", encoding="utf-8")
+            self.__check_path(save_path)
+            self.__save_text(vocabulary, save_path, "Vocabulary.txt")
             self.save_funcs[output_mode](X, os.path.join(save_path, "documents_words.npz"))
         if return_object:
             return (X, vocabulary)
@@ -984,8 +1012,9 @@ class Beaver():
                                             )
         
         if save_path:
-            np.savetxt(os.path.join(save_path, f'{target_columns[0]}.txt'), somethings,  fmt="%s", encoding="utf-8")
-            np.savetxt(os.path.join(save_path, "Vocabulary.txt"), vocabulary,  fmt="%s", encoding="utf-8")            
+            self.__check_path(save_path)
+            self.__save_text(somethings, save_path, f'{target_columns[0]}.txt')
+            self.__save_text(vocabulary, save_path, "Vocabulary.txt")  
             self.save_funcs[output_mode](X, os.path.join(save_path, f'{target_columns[0]}_words.npz'))
         if return_object:  # object has already been cast to appropriate mode with call to documents_words 
             return (X, somethings, vocabulary)
@@ -1135,9 +1164,10 @@ class Beaver():
 
         X = self.output_funcs[output_mode](X)
         if save_path:
-            np.savetxt(os.path.join(save_path, f'{target_columns[0]}.txt'), list(something_idx_map.keys()),  fmt="%s", encoding="utf-8")
-            np.savetxt(os.path.join(save_path, "Words.txt"), list(word_idx_map.keys()),  fmt="%s", encoding="utf-8")
-            np.savetxt(os.path.join(save_path, "Time.txt"), list(time_idx_map.keys()),  fmt="%s", encoding="utf-8")
+            self.__check_path(save_path)
+            self.__save_text(list(something_idx_map.keys()), save_path, f'{target_columns[0]}.txt')
+            self.__save_text(list(word_idx_map.keys()), save_path, "Words.txt")
+            self.__save_text(list(time_idx_map.keys()), save_path, "Time.txt")
             self.save_funcs[output_mode](X, os.path.join(save_path, f'{target_columns[0]}_words_time.npz'))
         if return_object:
             return (X, list(something_idx_map.keys()), list(word_idx_map.keys()), list(time_idx_map.keys()))
@@ -1633,6 +1663,18 @@ class Beaver():
                     break
                     
         return ngrams
+    
+    def __save_text(self, text, save_path, filename):
+        filepath = os.path.join(save_path, filename)
+        with open(filepath, "w", encoding="utf-8", newline='') as f:
+            for i, line in enumerate(text):
+                f.write(line.rstrip())
+                if i < len(text) - 1:
+                    f.write('\n')
+
+    def __check_path(self, save_path):
+        if not Path(save_path).is_dir():
+            Path(save_path).mkdir(parents=True)
 
 
     def get_ngrams( self,  dataset: pd.DataFrame, target_column: str=None, n: int=1, 
@@ -1675,6 +1717,7 @@ class Beaver():
         top_ngrams = counter.most_common(limit)
  
         if save_path:
+            self.__check_path(save_path)
             counter_df = pd.DataFrame(list(counter.items()), columns=['Ngram', 'Count'])
             counter_df.to_csv(os.path.join(save_path, "top_ngrams.txt"), index=False)
 

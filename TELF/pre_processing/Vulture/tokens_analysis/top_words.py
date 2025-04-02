@@ -2,8 +2,6 @@
 from collections import defaultdict
 import pandas as pd
 from tqdm import tqdm
-import numpy as np
-import random
 
 def get_top_words(documents,
                   top_n=10,

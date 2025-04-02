@@ -23,13 +23,13 @@ from tqdm import tqdm
 import multiprocessing
 from joblib import Parallel, delayed, parallel_backend
 
-from TELF.pre_processing.Vulture.modules import SimpleCleaner
-from TELF.pre_processing.Vulture.modules import LemmatizeCleaner
-from TELF.pre_processing.Vulture.modules import SubstitutionCleaner
-from TELF.pre_processing.Vulture.modules import RemoveNonEnglishCleaner
-from TELF.pre_processing.Vulture.modules import NEDetector
-from TELF.pre_processing.Vulture.default_stop_words import STOP_WORDS
-from TELF.pre_processing.Vulture.default_stop_phrases import STOP_PHRASES
+from .modules.simple_clean import SimpleCleaner
+from .modules.lemmatize import LemmatizeCleaner
+from .modules.substitute import SubstitutionCleaner
+from .modules.detect_nonenglish import RemoveNonEnglishCleaner
+from .modules.ner import NEDetector
+from .default_stop_words import STOP_WORDS
+from .default_stop_phrases import STOP_PHRASES
 
 try:
     from mpi4py import MPI

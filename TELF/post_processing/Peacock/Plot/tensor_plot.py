@@ -48,8 +48,6 @@ def plot_interaction_grid(R, selected_communities=None, axes_font_size=24, ylim=
 				# set xticks to show every 5 years, starting with first year   
 				plt.xticks(list(range(base_year, base_year + num_years, 5)), rotation=-45)
 			else:
-				#print(i,j)
-
 				# hide axes on empty plots
 				ax.get_xaxis().set_visible(False)
 				ax.get_yaxis().set_visible(False)
