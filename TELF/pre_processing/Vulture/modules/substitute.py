@@ -2,9 +2,8 @@ import re
 import warnings
 import itertools
 import networkx as nx
-
-from TELF.pre_processing.Vulture.modules import VultureModuleBase
-from TELF.pre_processing.Vulture.modules import LemmatizeCleaner
+from .module_base import VultureModuleBase
+from .lemmatize import LemmatizeCleaner
 
 
 class SubstitutionCleaner(VultureModuleBase):

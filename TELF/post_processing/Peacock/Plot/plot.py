@@ -744,11 +744,17 @@ def plot_heatmap_helper(annotate, fname, cmap, colorbar, colorbar_title, colorba
         hover_texts.append(hover_row)
     
     # colorbar settings
-    colorbar_dict = {
-        'title': colorbar_title,
-        'titlefont': {'size': colorbar_title_fontsize} if colorbar_title_fontsize else None,
-        'tickfont': {'size': colorbar_ticks_fontsize} if colorbar_ticks_fontsize else None
-    } if colorbar else None
+    if colorbar:
+        colorbar_dict = {
+            'title': {
+                'text': colorbar_title,
+                'font': {'size': colorbar_title_fontsize} if colorbar_title_fontsize else {}
+            },
+            'tickfont': {'size': colorbar_ticks_fontsize} if colorbar_ticks_fontsize else {}
+        }
+    else:
+        colorbar_dict = None
+
         
     # create heatmap
     fig = go.Figure(data=go.Heatmap(

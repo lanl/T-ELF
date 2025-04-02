@@ -2,7 +2,7 @@ from nltk.stem import PorterStemmer
 import re
 from concurrent.futures import ThreadPoolExecutor
 from tqdm import tqdm
-from TELF.pre_processing.Vulture.tokens_analysis.levenstein import compare_keys
+from .levenstein import compare_keys
 
 """
 SAMPLE USAGE

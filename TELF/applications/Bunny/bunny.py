@@ -161,10 +161,17 @@ class Bunny():
         self.penguin_settings = penguin_settings
         self.enabled = self.s2_key is not None
 
-        # create a dictionary of supported filters and their callable load functions
-        filters = {f: f"_filter_{re.sub('-', '', f.lower())}" for f in Bunny.FILTERS}
-        self.filter_funcs = {k: getattr(self, v) for k,v in filters.items() if callable(getattr(self, v))}
-        
+        # Explicitly map supported filters to methods
+        self.filter_funcs = {
+            'AFFILCOUNTRY': lambda df, f, auth_map=None: self._filter_affil_generic(df, column_name='country', filter_value=f, auth_map=auth_map),
+            'AFFILORG': self._filter_affilorg,
+            'AF-ID': self._filter_afid,
+            'PUBYEAR': self._filter_pubyear,
+            'AU-ID': self._filter_auid,
+            'KEY': self._filter_key,
+            'DOI': lambda df, f, auth_map=None: set(df[df['doi'].str.lower() == f.lower()].index),
+        }
+
     
     def __init_lookup(self, series, priority, sep):
         lookup = [y for x in series for y in x.split(sep)]
@@ -619,23 +626,29 @@ class Bunny():
         return pids
 
     
-    def _filter_affilcountry(self, df, f, auth_map): 
+    def _filter_affil_generic(self, df, column_name, filter_value, auth_map): 
         if 'affiliations' not in df:
             raise ValueError('"affiliations" not found in df')
 
-        country = f.lower()
+        filter_value = filter_value.lower()
         pids, aids = set(), set()
         aff_df = df.dropna(subset=['affiliations'])
-        affiliations = {k:v for k,v in zip(aff_df.index.to_list(), aff_df.affiliations.to_list())}
+        affiliations = {k: v for k, v in zip(aff_df.index.to_list(), aff_df.affiliations.to_list())}
+
         for idx, affiliation in affiliations.items():
             if isinstance(affiliation, str):
                 affiliation = ast.literal_eval(affiliation)
             for aff_id, aff in affiliation.items():
-                if aff['country'].lower() == country:
-                    pids.add(idx)
-                    aids |= set(aff['authors'])
-                    break
-        
+                try:
+                    if aff[column_name].lower() == filter_value:
+                        pids.add(idx)
+                        aids |= set(aff['authors'])
+                        break
+                except KeyError:
+                    print(f"Warning: '{column_name}' not found in affiliation {aff_id} for index {idx}.")
+                except Exception as e:
+                    print(f"Warning: error processing affiliation {aff_id} at index {idx} — {e}")
+
         if auth_map is not None:
             s2_aids = {auth_map[aid] for aid in aids if aid in auth_map}
             for idx, scopus_authors, s2_authors in zip(df.index.to_list(), df.author_ids.to_list(), df.s2_author_ids.to_list()):
@@ -643,7 +656,10 @@ class Bunny():
                     pids.add(idx)
                 if isinstance(s2_authors, str) and set(s2_authors.split(';')) & s2_aids:
                     pids.add(idx)    
+
         return pids
+
+
     
 
     def _filter_affilorg(self, df, f, auth_map):

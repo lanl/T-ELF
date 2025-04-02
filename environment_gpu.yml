@@ -24,3 +24,17 @@ dependencies:
   - cupy
   - networkx
   - spacy-transformers
+  - rapidfuzz
+  - plotly
+  - wordcloud
+  - httpx
+  - xmltodict
+  - rbloom
+  - pymongo
+  - seaborn
+  - umap-learn
+  - pyvis
+  - openai
+  - langchain-ollama
+  - transformers
+  - torch

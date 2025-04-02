@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "TELF"
-version = "0.0.38"
+version = "0.0.39"
 description = "T-ELF is one of the machine learning software packages developed as part of the R&D 100 winning SmartTensors AI project at Los Alamos National Laboratory (LANL). T-ELF presents an array of customizable software solutions crafted for analysis of datasets. Acting as a comprehensive toolbox, T-ELF specializes in data pre-processing, extraction of latent features, and structuring results to facilitate informed decision-making. Leveraging high-performance computing and cutting-edge GPU architectures, our toolbox is optimized for analyzing large datasets from diverse set of problems."
 authors = ["Maksim E. Eren"]
 license = "BST-3"
@@ -41,6 +41,12 @@ rbloom = "^1.5.2"
 pymongo = "^4.11.2"
 seaborn = "^0.13.2"
 umap-learn = "^0.5.7"
+torch = "^2.6.0"
+transformers = "^4.39.3"
+langchain-ollama = "^0.3.0"
+openai = "^1.69.0"
+pyvis = "^0.3.2"
+
 
 [build-system]
 requires = ["poetry-core"]

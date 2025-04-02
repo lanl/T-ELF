@@ -133,7 +133,7 @@ How to Cite T-ELF?
 
 Authors
 ========================================
-- `Maksim E Eren <mailto:maksim@lanl.gov>`_: Advanced Research in Cyber Systems, Los Alamos National Laboratory
+- `Maksim E Eren <mailto:maksim@lanl.gov>`_: Information Systems and Modeling Group, Los Alamos National Laboratory
 - `Nicholas Solovyev <mailto:nks@lanl.gov>`_: Theoretical Division, Los Alamos National Laboratory
 - `Ryan Barron <mailto:barron@lanl.gov>`_: Theoretical Division, Los Alamos National Laboratory
 - `Manish Bhattarai <mailto:ceodspspectrum@lanl.gov>`_: Theoretical Division, Los Alamos National Laboratory
@@ -202,6 +202,8 @@ Tests can be ran from this folder using ``python -m pytest *``.
    RESCALk
    TriNMFk
    SymNMFk
+   SPLIT
+   SPLITTransfer
    Beaver
    Vulture
    Cheetah
@@ -211,6 +213,8 @@ Tests can be ran from this folder using ``python -m pytest *``.
    Penguin
    Bunny
    SeaLion
+   Fox
+   ArcticFox
    modules
 
 

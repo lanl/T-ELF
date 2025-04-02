@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Tensor Extraction of Latent Features (T-ELF) &#8212; TELF 0.0.38 documentation</title>
+    <title>Tensor Extraction of Latent Features (T-ELF) &#8212; TELF 0.0.39 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=8c8d0fbf"></script>
+    <script src="_static/documentation_options.js?v=37718da2"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -128,7 +128,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.38 documentation</p>
+    <p class="title logo__title">TELF 0.0.39 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -158,6 +158,12 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="SymNMFk.html"><strong>TELF.factorization.SymNMFk:</strong> Symmetric Non-negative Matrix Factorization with Automatic Model Determination</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="SPLIT.html"><strong>TELF.factorization.SPLIT:</strong> Joint NMFk factorization of multiple data via SPLIT</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="SPLITTransfer.html"><strong>TELF.factorization.SPLITTransfer:</strong> Supervised transfer learning method via SPLIT and NMFk</a></li>
 
 
 <li class="toctree-l1"><a class="reference internal" href="Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
@@ -193,6 +199,12 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="SeaLion.html"><strong>TELF.post_processing.SeaLion:</strong> Generic report generation tool</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fox.html"><strong>TELF.post_processing.Fox:</strong> Report generation tool for text data from HNMFk using local LLMs</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="ArcticFox.html"><strong>TELF.post_processing.ArcticFox:</strong> Report generation tool for text data from HNMFk using local LLMs</a></li>
 
 
 <li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -476,7 +488,7 @@ python<span class="w"> </span>post_install.py<span class="w"> </span>--gpu<span 
 <section id="authors">
 <h1>Authors<a class="headerlink" href="#authors" title="Link to this heading">#</a></h1>
 <ul class="simple">
-<li><p><a class="reference external" href="mailto:maksim&#37;&#52;&#48;lanl&#46;gov">Maksim E Eren</a>: Advanced Research in Cyber Systems, Los Alamos National Laboratory</p></li>
+<li><p><a class="reference external" href="mailto:maksim&#37;&#52;&#48;lanl&#46;gov">Maksim E Eren</a>: Information Systems and Modeling Group, Los Alamos National Laboratory</p></li>
 <li><p><a class="reference external" href="mailto:nks&#37;&#52;&#48;lanl&#46;gov">Nicholas Solovyev</a>: Theoretical Division, Los Alamos National Laboratory</p></li>
 <li><p><a class="reference external" href="mailto:barron&#37;&#52;&#48;lanl&#46;gov">Ryan Barron</a>: Theoretical Division, Los Alamos National Laboratory</p></li>
 <li><p><a class="reference external" href="mailto:ceodspspectrum&#37;&#52;&#48;lanl&#46;gov">Manish Bhattarai</a>: Theoretical Division, Los Alamos National Laboratory</p></li>
@@ -566,6 +578,18 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 <li class="toctree-l2"><a class="reference internal" href="SymNMFk.html#TELF.factorization.SymNMFk.SymNMFk"><code class="docutils literal notranslate"><span class="pre">SymNMFk</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="SPLIT.html"><strong>TELF.factorization.SPLIT:</strong> Joint NMFk factorization of multiple data via SPLIT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPLIT.html#available-functions">Available Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPLIT.html#module-TELF.factorization.SPLIT">Module Contents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SPLIT.html#TELF.factorization.SPLIT.SPLIT"><code class="docutils literal notranslate"><span class="pre">SPLIT</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SPLITTransfer.html"><strong>TELF.factorization.SPLITTransfer:</strong> Supervised transfer learning method via SPLIT and NMFk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPLITTransfer.html#available-functions">Available Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPLITTransfer.html#module-TELF.factorization.SPLITTransfer">Module Contents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SPLITTransfer.html#TELF.factorization.SPLITTransfer.SPLITTransfer"><code class="docutils literal notranslate"><span class="pre">SPLITTransfer</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="Beaver.html"><strong>TELF.pre_processing.Beaver:</strong> Fast matrix and tensor building tool</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Beaver.html#example">Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Beaver.html#available-functions">Available Functions</a></li>
@@ -647,6 +671,17 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 <li class="toctree-l2"><a class="reference internal" href="SeaLion.html#TELF.post_processing.SeaLion.sealion.SeaLion"><code class="docutils literal notranslate"><span class="pre">SeaLion</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="Fox.html"><strong>TELF.post_processing.Fox:</strong> Report generation tool for text data from HNMFk using local LLMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fox.html#available-functions">Available Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fox.html#module-TELF.post_processing.Fox.fox">Module Contents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Fox.html#TELF.post_processing.Fox.fox.ClusterSummarizer"><code class="docutils literal notranslate"><span class="pre">ClusterSummarizer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fox.html#TELF.post_processing.Fox.fox.DirectoryManager"><code class="docutils literal notranslate"><span class="pre">DirectoryManager</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Fox.html#TELF.post_processing.Fox.fox.Fox"><code class="docutils literal notranslate"><span class="pre">Fox</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ArcticFox.html"><strong>TELF.post_processing.ArcticFox:</strong> Report generation tool for text data from HNMFk using local LLMs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ArcticFox.html#available-functions">Available Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ArcticFox.html#module-contents">Module Contents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">TELF</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="TELF.html">TELF package</a></li>
 </ul>

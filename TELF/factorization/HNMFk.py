@@ -1,3 +1,4 @@
+
 """
 job-schedule - 200
 job-complete - 300
@@ -13,7 +14,13 @@ import time
 import pickle
 import warnings
 
-from .utilities.hpc_comm_helpers import signal_workers_exit, worker_check_exit_status, get_next_job_at_worker, collect_results_from_workers, send_job_to_worker_nodes
+from .utilities.hpc_comm_helpers import (
+    signal_workers_exit, 
+    worker_check_exit_status, 
+    get_next_job_at_worker, 
+    collect_results_from_workers, 
+    send_job_to_worker_nodes
+)
 
 try:
     from mpi4py import MPI
@@ -44,7 +51,9 @@ class Node():
                  depth: int,
                  parent_topic: int,
                  parent_node_k: int,
-                 W: np.ndarray, H: np.ndarray, k: int,
+                 W: np.ndarray, 
+                 H: np.ndarray, 
+                 k: int,
                  parent_node_name: str,
                  child_node_names: list,
                  original_indices: np.ndarray,
@@ -59,8 +68,7 @@ class Node():
                  signature:np.array,
                  probabilities:np.array,
                  centroids:np.array,
-                 factors_path:str,
-                 ):
+                 factors_path:str):
         self.node_name = node_name
         self.depth = depth
         self.W = W
@@ -76,9 +84,9 @@ class Node():
         self.leaf = leaf
         self.user_node_data = user_node_data
         self.cluster_indices_in_parent = cluster_indices_in_parent
-        self.node_save_path=node_save_path
-        self.parent_node_factors_path=parent_node_factors_path
-        self.parent_node_save_path=parent_node_save_path
+        self.node_save_path = node_save_path
+        self.parent_node_factors_path = parent_node_factors_path
+        self.parent_node_save_path = parent_node_save_path
         self.exception = exception
         self.signature = signature
         self.probabilities = probabilities
@@ -86,8 +94,7 @@ class Node():
         self.factors_path = factors_path
 
 
-class HNMFk():
-
+class HNMFk:
     def __init__(self,
                  nmfk_params=[{}],
                  cluster_on="H",
@@ -103,8 +110,7 @@ class HNMFk():
                  verbose=True,
                  comm_buff_size=10000000,
                  random_identifiers=False,
-                 root_node_name = "Root"
-                 ):
+                 root_node_name="Root"):
         """
         HNMFk is a Hierarchical Non-negative Matrix Factorization module with the capability to do automatic model determination.
 
@@ -156,7 +162,6 @@ class HNMFk():
 
         """
 
-        # user defined settings
         self.sample_thresh = sample_thresh
         self.depth = depth
         self.cluster_on = cluster_on
@@ -164,14 +169,16 @@ class HNMFk():
         self.Ks_deep_max = Ks_deep_max
         self.Ks_deep_step = Ks_deep_step
         self.K2 = K2
-        self.experiment_name = experiment_name
+        # Normalize user-specified path
+        self.experiment_name = os.path.normpath(experiment_name)
         self.generate_X_callback = generate_X_callback
         self.n_nodes = n_nodes
         self.verbose = verbose
         self.comm_buff_size = comm_buff_size
         self.random_identifiers = random_identifiers
         self.root_node_name = root_node_name
-
+        
+        # organize nmfk_params
         organized_nmfk_params = []
         for params in nmfk_params:
             organized_nmfk_params.append(self._organize_nmfk_params(params))
@@ -186,62 +193,163 @@ class HNMFk():
         self.root = None
         self.root_name = ""
         self.node_save_paths = {}
+        self.old_experiment_base = None
 
-        # path to save 
-        self.experiment_save_path = os.path.join(self.experiment_name)
+        # path to save (always store absolute version)
+        self.experiment_save_path = str(Path(self.experiment_name).resolve())
         try:
             if not Path(self.experiment_save_path).is_dir():
                 Path(self.experiment_save_path).mkdir(parents=True)
         except Exception as e:
-            print(e)
+            print(f"[WARN] Could not create directory: {self.experiment_save_path}: {e}")
 
         # HPC job management variables
         self.target_jobs = {}
         self.node_status = {}
 
-        assert self.cluster_on in ["W", "H"], "Unknown clustering method!"
-        assert (self.n_nodes > 1 and MPI is not None) or (self.n_nodes ==
-                                                          1), "n_nodes was greater than 1 but MPI is not installed!"
-        
     def load_model(self):
         """
-        Loads existing model from checkpoint file located at self.experiment_name path.\n 
-        This checkpoint file exist if fit(save_checkpoint=True) when the model was run.\n
-        Use this function to leverage the graph iterator for an existing model.
-
-        Returns
-        -------
-        None
-
+        Loads existing model from checkpoint file located at self.experiment_name path.
+        This checkpoint file exists if fit(save_checkpoint=True) was used.
+        Use this to leverage the graph iterator for an existing model.
         """
+        # normalize again
+        self.experiment_name = os.path.normpath(self.experiment_name)
+        self.experiment_save_path = str(Path(self.experiment_name).resolve())
+
         checkpoint_file = self._load_checkpoint_file()
-        if len(checkpoint_file) > 0:
-            backup_name = self.experiment_name
-            backup_path = self.experiment_save_path
-            self._load_checkpoint(checkpoint_file)
-            self.experiment_name = backup_name
-            self.experiment_save_path = backup_path
-        else:
-            raise Exception(f"Model checkpoint file is not found at: {os.path.join(self.experiment_save_path, 'checkpoint.p')}")
-        
-        # correct node save paths
+        if not checkpoint_file:
+            raise Exception(
+                f"Model checkpoint file not found at: "
+                f"{os.path.join(self.experiment_save_path, 'checkpoint.p')}"
+            )
+
+        # Load checkpoint into memory
+        backup_name = self.experiment_name
+        backup_path = self.experiment_save_path
+        self._load_checkpoint(checkpoint_file)
+        self.old_experiment_base = self.experiment_name
+
+        # Fix node paths so they do not double up
         new_node_save_paths = {}
-        for key, path in self.node_save_paths.items():
-            new_node_save_paths[key] = os.path.join(
-                self.experiment_name, 
-                *path.split(os.sep)[1:])
-        self.node_save_paths = new_node_save_paths.copy()
-        del new_node_save_paths
+        for key, old_path in self.node_save_paths.items():
+            fixed_path = self._fix_node_path(old_path, backup_name)
+            new_node_save_paths[key] = fixed_path
+        
+        # revert to user’s original experiment name
+        self.experiment_name = backup_name
+        self.experiment_save_path = backup_path
+        self.node_save_paths = new_node_save_paths
+
+        if self.root_name not in self.node_save_paths:
+            raise FileNotFoundError(
+                f"Root node '{self.root_name}' not found in node_save_paths. "
+                f"keys={list(self.node_save_paths.keys())}"
+            )
+
+        root_path = self.node_save_paths[self.root_name]
+        if not os.path.exists(root_path):
+            raise FileNotFoundError(
+                f"[HNMFk.load_model] Could not find root node file at: {root_path}"
+            )
 
         # prepare online iterator
         self.root = OnlineNode(
-            node_path=self.node_save_paths[self.root_name],
-            node_name = self.root_name,
+            node_path=root_path,
+            node_name=self.root_name,
             parent_node=None,
             child_nodes=[]
         )
         self.iterator = self.root
         self._prepare_iterator(self.root)
+
+    def _fix_node_path(self, old_path: str, new_base_path: str) -> str:
+        """
+        Adjust the node path when loading from a different directory.
+        This will calculate the relative path based on the new `self.experiment_name`.
+        """
+        relative_path = os.path.relpath(old_path, self.experiment_name)
+        new_path = os.path.join(new_base_path, relative_path)
+        return new_path
+
+    def _prepare_iterator(self, node):
+        node_object = pickle.load(open(self.node_save_paths[node.node_name], "rb"))
+        child_node_names = node_object.child_node_names
+
+        for child_name in child_node_names:
+            # check if node is not done
+            if child_name in self.target_jobs:
+                continue
+            # if done, load
+            if child_name not in self.node_save_paths:
+                raise FileNotFoundError(
+                    f"[HNMFk._prepare_iterator] No path for child: {child_name}"
+                )
+            child_node_path = self.node_save_paths[child_name]
+            if not os.path.exists(child_node_path):
+                raise FileNotFoundError(
+                    f"[HNMFk._prepare_iterator] Child node not found at {child_node_path}"
+                )
+
+            child_node = OnlineNode(
+                node_path=child_node_path,
+                node_name=child_name,
+                parent_node=node,
+                child_nodes=[]
+            )
+            node.child_nodes.append(child_node)
+            self._prepare_iterator(child_node)
+
+        return
+
+
+    def _load_checkpoint_file(self):
+        try:
+            ckpt_file = Path(self.experiment_save_path) / "checkpoint.p"
+            with open(ckpt_file, "rb") as f:
+                saved_class_params = pickle.load(f)
+            return saved_class_params
+        except Exception:
+            warnings.warn("No checkpoint file found!")
+            return {}
+
+    def _load_checkpoint(self, saved_class_params):
+        if self.verbose:
+            print("Loading saved object state from checkpoint...")
+        self._set_params(saved_class_params)
+
+    def _set_params(self, class_parameters):
+        """Sets class variables from the loaded checkpoint"""
+        for parameter, value in class_parameters.items():
+            setattr(self, parameter, value)
+
+    def _save_checkpoint(self):
+        class_params = vars(self).copy()
+        del class_params["X"]
+        if self.generate_X_callback is not None:
+            del class_params["generate_X_callback"]
+
+        ckpt_file = Path(self.experiment_save_path) / "checkpoint.p"
+        with open(ckpt_file, "wb") as f:
+            pickle.dump(class_params, f)
+
+    def _organize_nmfk_params(self, params):
+        params["collect_output"] = False
+        params["save_output"] = True
+        params["n_nodes"] = 1
+        if not self.K2:
+            params["predict_k"] = True
+        return params
+
+    def _process_results(self, node_results, save_checkpoint):
+        del self.target_jobs[node_results["name"]]
+        self.node_save_paths[node_results["name"]] = node_results["node_save_path"]
+
+        for next_job in node_results["target_jobs"]:
+            self.target_jobs[next_job["node_name"]] = next_job
+
+        if save_checkpoint:
+            self._save_checkpoint()
 
 
     def fit(self, X, Ks, from_checkpoint=False, save_checkpoint=True):
@@ -440,24 +548,6 @@ class HNMFk():
         return {"time":total_exec_seconds}
 
 
-    def _prepare_iterator(self, node):
-        node_object = pickle.load(open(self.node_save_paths[node.node_name], "rb"))
-        child_node_names = node_object.child_node_names
-
-        for child_name in child_node_names:
-            # check if node is not done its job
-            if child_name in self.target_jobs:
-                continue
-            # if done, load
-            child_node = OnlineNode(
-                node_path=self.node_save_paths[child_name],
-                node_name = child_name,
-                parent_node=node,
-                child_nodes=[])
-            node.child_nodes.append(child_node)
-            self._prepare_iterator(child_node)
-
-        return
         
     def _process_node(self, Ks, 
                       depth, 
@@ -810,7 +900,7 @@ class HNMFk():
             # also need to remove from saved node data
             parent_node_loaded = parent_node()
             parent_node_loaded.child_node_names = [node_name for node_name in parent_node_loaded.child_node_names if node_name != my_name]
-            pickle.dump(parent_node_loaded, open(os.path.join(self.experiment_name, *parent_node_loaded.node_save_path.split(os.sep)[1:]), "wb"))
+            pickle.dump(parent_node_loaded, open(self._resolve_path(parent_node_loaded.node_save_path), "wb"))
 
         return tiny_leafs
     
@@ -825,7 +915,7 @@ class HNMFk():
         node_loaded = node()
         if node_loaded.original_child_node_names != node_loaded.child_node_names:
             node_loaded.child_node_names = node_loaded.original_child_node_names
-            pickle.dump(node_loaded, open(os.path.join(self.experiment_name, *node_loaded.node_save_path.split(os.sep)[1:]), "wb"))
+            pickle.dump(node_loaded, open(self._resolve_path(node_loaded.node_save_path), "wb"))
     
     def _search_traversal(self, node, name):
         
@@ -855,13 +945,13 @@ class HNMFk():
                 return
 
         data = vars(node()).copy()
-        data["node_save_path"] = os.path.join(self.experiment_name, *data["node_save_path"].split(os.sep)[1:])
+        data["node_save_path"] = self._resolve_path(data["node_save_path"])
         if data["node_name"] != self.root_name:
-            data["parent_node_save_path"] = os.path.join(self.experiment_name, *data["parent_node_save_path"].split(os.sep)[1:])
-            data["parent_node_factors_path"] = os.path.join(self.experiment_name, *data["parent_node_factors_path"].split(os.sep)[1:])
+            data["parent_node_save_path"] = self._resolve_path(data["parent_node_save_path"])
+            data["parent_node_factors_path"] = self._resolve_path(data["parent_node_factors_path"])
 
         if data["factors_path"] is not None:
-            data["factors_path"] = os.path.join(self.experiment_name, *data["factors_path"].split(os.sep)[1:])
+            data["factors_path"] = self._resolve_path(data["factors_path"])
 
         self._all_nodes.append(data)
 
@@ -878,13 +968,13 @@ class HNMFk():
         """
         self.iterator = self.root
         data = vars(self.iterator()).copy()
-        data["node_save_path"] = os.path.join(self.experiment_name, *data["node_save_path"].split(os.sep)[1:])
+        data["node_save_path"] = self._resolve_path(data["node_save_path"])
         if data["node_name"] != self.root_name:
-            data["parent_node_save_path"] = os.path.join(self.experiment_name, *data["parent_node_save_path"].split(os.sep)[1:])
-            data["parent_node_factors_path"] = os.path.join(self.experiment_name, *data["parent_node_factors_path"].split(os.sep)[1:])
+            data["parent_node_save_path"] = self._resolve_path(data["parent_node_save_path"])
+            data["parent_node_factors_path"] = self._resolve_path(data["parent_node_factors_path"])
 
         if data["factors_path"] is not None:
-            data["factors_path"] = os.path.join(self.experiment_name, *data["factors_path"].split(os.sep)[1:])
+            data["factors_path"] = self._resolve_path(data["factors_path"])
 
         return data
     
@@ -908,14 +998,14 @@ class HNMFk():
         if result is not None:
             self.iterator = result
             data = vars(self.iterator()).copy()
-            data["node_save_path"] = os.path.join(self.experiment_name, *data["node_save_path"].split(os.sep)[1:])
+            data["node_save_path"] = self._resolve_path(data["node_save_path"])
             
             if data["node_name"] != self.root_name:
-                data["parent_node_save_path"] = os.path.join(self.experiment_name, *data["parent_node_save_path"].split(os.sep)[1:])
-                data["parent_node_factors_path"] = os.path.join(self.experiment_name, *data["parent_node_factors_path"].split(os.sep)[1:])
+                data["parent_node_save_path"] = self._resolve_path(data["parent_node_save_path"])
+                data["parent_node_factors_path"] = self._resolve_path(data["parent_node_factors_path"])
 
             if data["factors_path"] is not None:
-                data["factors_path"] = os.path.join(self.experiment_name, *data["factors_path"].split(os.sep)[1:])
+                data["factors_path"] = self._resolve_path(data["factors_path"])
             
             return data
         else:
@@ -934,13 +1024,13 @@ class HNMFk():
 
         """
         data = vars(self.iterator()).copy()
-        data["node_save_path"] = os.path.join(self.experiment_name, *data["node_save_path"].split(os.sep)[1:])
+        data["node_save_path"] = self._resolve_path(data["node_save_path"])
         if data["node_name"] != self.root_name:
-            data["parent_node_save_path"] = os.path.join(self.experiment_name, *data["parent_node_save_path"].split(os.sep)[1:])
-            data["parent_node_factors_path"] = os.path.join(self.experiment_name, *data["parent_node_factors_path"].split(os.sep)[1:])
+            data["parent_node_save_path"] = self._resolve_path(data["parent_node_save_path"])
+            data["parent_node_factors_path"] = self._resolve_path(data["parent_node_factors_path"])
 
         if data["factors_path"] is not None:
-            data["factors_path"] = os.path.join(self.experiment_name, *data["factors_path"].split(os.sep)[1:])
+            data["factors_path"] = self._resolve_path(data["factors_path"])
 
         return data
 
@@ -957,13 +1047,13 @@ class HNMFk():
         if self.iterator is not None:
             self.iterator = self.iterator.parent_node
             data = vars(self.iterator()).copy()
-            data["node_save_path"] = os.path.join(self.experiment_name, *data["node_save_path"].split(os.sep)[1:])
+            data["node_save_path"] = self._resolve_path(data["node_save_path"])
             if data["node_name"] != self.root_name:
-                data["parent_node_save_path"] = os.path.join(self.experiment_name, *data["parent_node_save_path"].split(os.sep)[1:])
-                data["parent_node_factors_path"] = os.path.join(self.experiment_name, *data["parent_node_factors_path"].split(os.sep)[1:])
+                data["parent_node_save_path"] = self._resolve_path(data["parent_node_save_path"])
+                data["parent_node_factors_path"] = self._resolve_path(data["parent_node_factors_path"])
 
             if data["factors_path"] is not None:
-                data["factors_path"] = os.path.join(self.experiment_name, *data["factors_path"].split(os.sep)[1:])
+                data["factors_path"] = self._resolve_path(data["factors_path"])
 
             return data
         else:
@@ -988,75 +1078,36 @@ class HNMFk():
         try:
             self.iterator = self.iterator.child_nodes[idx]
             data = vars(self.iterator()).copy()
-            data["node_save_path"] = os.path.join(self.experiment_name, *data["node_save_path"].split(os.sep)[1:])
+            data["node_save_path"] = self._resolve_path(data["node_save_path"])
             if data["node_name"] != self.root_name:
-                data["parent_node_save_path"] = os.path.join(self.experiment_name, *data["parent_node_save_path"].split(os.sep)[1:])
-                data["parent_node_factors_path"] = os.path.join(self.experiment_name, *data["parent_node_factors_path"].split(os.sep)[1:])
+                data["parent_node_save_path"] = self._resolve_path(data["parent_node_save_path"])
+                data["parent_node_factors_path"] = self._resolve_path(data["parent_node_factors_path"])
             
             if data["factors_path"] is not None:
-                data["factors_path"] = os.path.join(self.experiment_name, *data["factors_path"].split(os.sep)[1:])
+                data["factors_path"] = self._resolve_path(data["factors_path"])
 
             return data
 
         except:
             print("Children at index "+str(idx)+" from the current does not exist!")
 
-    def _organize_nmfk_params(self, params):
+    def _resolve_path(self, original_node_path: str):
+        if self.old_experiment_base is None:
+            return original_node_path
 
-        #
-        # Required
-        #
-        params["collect_output"] = False
-        params["save_output"] = True
-        params["n_nodes"] = 1
-        
-        if not self.K2:
-            params["predict_k"] = True
+        # Old base where the model was originally saved
+        old_experiment_base = Path(self.old_experiment_base).resolve()
 
+        # New base where you're now trying to load from
+        new_experiment_base = Path(self.experiment_name).resolve()
 
-        return params
-    
-    def _process_results(self, node_results, save_checkpoint):
-        # remove the job
-        del self.target_jobs[node_results["name"]]
+        # The original path saved in the model
+        original_node_path = Path(original_node_path).resolve()
 
-        # save node save paths
-        self.node_save_paths[node_results["name"]] = node_results["node_save_path"]
+        # 1. Get the relative path of the node inside the old experiment base
+        relative_path = original_node_path.relative_to(old_experiment_base)
 
-        # save
-        for next_job in node_results["target_jobs"]:
-            self.target_jobs[next_job["node_name"]] = next_job
+        # 2. Combine it with the new experiment base
+        new_node_path = new_experiment_base / relative_path
 
-        # checkpointing
-        if save_checkpoint:
-            self._save_checkpoint()
-
-    def _load_checkpoint_file(self):
-        try:
-            saved_class_params = pickle.load(
-                open(os.path.join(self.experiment_save_path, "checkpoint.p"), "rb")
-            )
-            return saved_class_params
-        except Exception:
-            warnings.warn("No checkpoint file found!")
-            return {}
-            
-    def _load_checkpoint(self, saved_class_params):
-        if self.verbose:
-            print("Loading saved object state from checkpoint...")
-
-        self._set_params(saved_class_params)
-
-    def _set_params(self, class_parameters):
-        """Sets class variables from the loaded checkpoint"""
-        for parameter, value in class_parameters.items():
-            setattr(self, parameter, value)
-
-    def _save_checkpoint(self):
-        class_params = vars(self).copy()
-        del class_params["X"]
-        if self.generate_X_callback is not None:
-            del class_params["generate_X_callback"]
-
-        pickle.dump(class_params, open(os.path.join(
-            self.experiment_save_path, "checkpoint.p"), "wb"))
+        return new_node_path

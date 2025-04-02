@@ -531,7 +531,6 @@ def aggregate_ostats(data, key, common=None, top_n=10, sort_by='paper_count', co
     stat_df: pd.DataFrame
         The aggregated statistics from data
     """
-    print(filters)
     if key == 'funding_id':
         formatted_df = per_funding_dataframe(data, common=common, col_names=col_names)
     else:
@@ -568,22 +567,24 @@ def aggregate_ostats_time(stat_df, key):
     elif key == 'affiliation_id':
         keys = ['affiliation_id', 'affiliation', 'country']
     elif key == 'funding_id':
-        if 'country' in stat_df:
+        if 'country' in stat_df.columns:
             keys = ['funding_id', 'funding', 'country'] 
         else:
             keys = ['funding_id', 'funding'] 
     elif key == 'country':
         keys = ['country']
     else:
-        raise ValueError(f'"{key}" is a not a valid key. Options are ["author_id", "affiliation_id", "country"')
-    
-    # aggregate over time
-    stat_df = stat_df.groupby(keys).apply(lambda x: pd.Series({
-        'paper_count': np.sum(x.paper_count),
-        'attribution_percentage': np.average(x.attribution_percentage, weights=x.paper_count), 
-        'num_citations': np.sum(x.num_citations),
-    })).reset_index()
-    return stat_df
+        raise ValueError(f'"{key}" is not a valid key. Options: ["author_id", "affiliation_id", "funding_id", "country"]')
+
+    # Drop duplicates before grouping to avoid conflict on insert
+    grouped = stat_df.groupby(keys, as_index=False).agg({
+        'paper_count': 'sum',
+        'num_citations': 'sum',
+        'attribution_percentage': lambda x: np.average(x, weights=stat_df.loc[x.index, 'paper_count'])
+    })
+
+    return grouped
+
 
 
 def count_countries(df, col='affiliations'):
