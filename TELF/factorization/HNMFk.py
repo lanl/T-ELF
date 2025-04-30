@@ -13,6 +13,7 @@ import os
 import time
 import pickle
 import warnings
+from ..helpers.inits import organize_required_params
 
 from .utilities.hpc_comm_helpers import (
     signal_workers_exit, 
@@ -177,11 +178,18 @@ class HNMFk:
         self.comm_buff_size = comm_buff_size
         self.random_identifiers = random_identifiers
         self.root_node_name = root_node_name
+        self.required_params_setting = {
+            "collect_output":False,
+            "save_output":True,
+            "n_nodes":1
+        }
+        if not self.K2:
+            self.required_params_setting["predict_k"] = True
         
         # organize nmfk_params
         organized_nmfk_params = []
         for params in nmfk_params:
-            organized_nmfk_params.append(self._organize_nmfk_params(params))
+            organized_nmfk_params.append(organize_required_params(params, self.required_params_setting))
         self.nmfk_params = organized_nmfk_params
 
         # object variables
@@ -332,14 +340,6 @@ class HNMFk:
         ckpt_file = Path(self.experiment_save_path) / "checkpoint.p"
         with open(ckpt_file, "wb") as f:
             pickle.dump(class_params, f)
-
-    def _organize_nmfk_params(self, params):
-        params["collect_output"] = False
-        params["save_output"] = True
-        params["n_nodes"] = 1
-        if not self.K2:
-            params["predict_k"] = True
-        return params
 
     def _process_results(self, node_results, save_checkpoint):
         del self.target_jobs[node_results["name"]]

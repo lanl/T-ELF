@@ -10,7 +10,9 @@ from joblib import Parallel, delayed
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import ConnectionFailure
 
-from .utils import verify_n_jobs, verify_attributes, create_text_query, transform_dict
+from ...helpers.host import verify_n_jobs
+from ...helpers.data_structures import verify_attributes, transform_dict
+from .utils import create_text_query
 from .crocodile import process_scopus_json, process_scopus_xml, process_s2_json 
 from .crocodile import form_scopus_df, form_s2_df, form_df
 

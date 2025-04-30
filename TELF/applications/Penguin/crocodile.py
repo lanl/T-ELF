@@ -21,8 +21,9 @@ import pandas as pd
 pd.options.mode.chained_assignment = None
 
 from collections import Counter
-from .utils import get_from_dict, try_int, match_lists, merge_frames, \
-                          match_frames_text, reorder_and_add_columns, drop_duplicates
+from ...helpers.data_structures import get_from_dict, try_int
+from ...helpers.frames import (merge_frames_simple, match_frames_text, reorder_and_add_columns, drop_duplicates)
+from ...helpers.data_structures import match_lists
 
 # map for GeoNames place codes to geographical location (country)
 # scopus stores country information as GeoNames links so this map is needed to convert links to country strings
@@ -786,7 +787,7 @@ def form_df(scopus_df, s2_df, df_order=None):
     scopus_df_doi_missing = reorder_and_add_columns(scopus_df_doi_missing, df_order)
     s2_df_doi_not_missing = reorder_and_add_columns(s2_df_doi_not_missing, df_order)
     scopus_df_doi_not_missing = reorder_and_add_columns(scopus_df_doi_not_missing, df_order)
-    doi_merged_df = merge_frames(scopus_df_doi_not_missing, s2_df_doi_not_missing, 'doi')
+    doi_merged_df = merge_frames_simple(scopus_df_doi_not_missing, s2_df_doi_not_missing, 'doi')
     
     # get unmatched documents
     _s2_df = pd.concat([
@@ -820,7 +821,7 @@ def form_df(scopus_df, s2_df, df_order=None):
 
     # merge based on text key
     if not scopus_df_key_not_missing.empty and not s2_df_key_not_missing.empty:
-        text_merged_df = merge_frames(scopus_df_key_not_missing, s2_df_key_not_missing, match_col)
+        text_merged_df = merge_frames_simple(scopus_df_key_not_missing, s2_df_key_not_missing, match_col)
     elif not scopus_df_key_not_missing.empty:
         text_merged_df = scopus_df_key_not_missing.copy()
     elif not s2_df_key_not_missing.empty:

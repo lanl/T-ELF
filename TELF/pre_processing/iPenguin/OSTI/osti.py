@@ -13,7 +13,7 @@ from joblib import Parallel, delayed
 
 # import interal libraries
 from .ostiAPI import OSTIApi
-from ..utils import gen_chunks
+from ....helpers.data_structures import gen_chunks
 from .process_osti_json import form_df
 
 class OSTI:

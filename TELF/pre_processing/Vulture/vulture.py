@@ -30,6 +30,7 @@ from .modules.detect_nonenglish import RemoveNonEnglishCleaner
 from .modules.ner import NEDetector
 from .default_stop_words import STOP_WORDS
 from .default_stop_phrases import STOP_PHRASES
+from ...helpers.file_system import check_path
 
 try:
     from mpi4py import MPI
@@ -101,6 +102,9 @@ class Vulture:
                           'remove_standalone_numbers',
                           'remove_extra_whitespace',
                           'min_characters',
+                          'remove_numbers',
+                          'remove_alphanumeric',
+                          'remove_roman_numerals'
                       ]
                      ),
     ]
@@ -160,10 +164,10 @@ class Vulture:
         all_results = []
         for step in steps:
             if save_path is not None:
-                self.save_path = os.path.join(save_path, file_name, f'_{step.__class__.__name__}.p')
+                self.save_path = os.path.join(save_path, f'{file_name}_{step.__class__.__name__}.p')
             else:
                 self.save_path = save_path
-
+            
             curr_operated_documents = self._clean_helper(operate_documents, [step])
             if self.use_mpi():
                 self._mpi_save_chunk_to_disk(curr_operated_documents, self.rank, is_clean=True, custom_fn=f'{step.__class__.__name__}')
@@ -261,7 +265,7 @@ class Vulture:
         # add the clean data back to the DataFrame
         for col, clean_docs in clean_documents.items():
             df[col] = df.index.map(clean_docs)
-            df[col].replace('', np.nan, inplace=True)  # set null entries to None
+            df[col] = df[col].replace('', np.nan) # set null entries to None
         return df
     
     
@@ -464,6 +468,7 @@ class Vulture:
         if save_path.exists():
             warnings.warn(f'The file "{save_path}" already exists and will be overwritten!')
         self._save_path = save_path
+
         
     @verbose.setter
     def verbose(self, verbose):

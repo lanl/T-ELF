@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF.post_processing.ArcticFox: Report generation tool for text data from HNMFk using local LLMs &#8212; TELF 0.0.39 documentation</title>
+    <title>TELF.post_processing.ArcticFox: Report generation tool for text data from HNMFk using local LLMs &#8212; TELF 0.0.40 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=37718da2"></script>
+    <script src="_static/documentation_options.js?v=a27ffb50"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.39 documentation</p>
+    <p class="title logo__title">TELF 0.0.40 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -363,7 +363,16 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>TELF.post_processing.ArcticFox:</strong> Report generation tool for text data from HNMFk using local LLMs</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.post_processing.ArcticFox.arcticfox">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox"><code class="docutils literal notranslate"><span class="pre">ArcticFox</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_full_pipeline"><code class="docutils literal notranslate"><span class="pre">ArcticFox.run_full_pipeline()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_labeling"><code class="docutils literal notranslate"><span class="pre">ArcticFox.run_labeling()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_postprocessing"><code class="docutils literal notranslate"><span class="pre">ArcticFox.run_postprocessing()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_stats"><code class="docutils literal notranslate"><span class="pre">ArcticFox.run_stats()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             </nav>
@@ -384,12 +393,53 @@
 <h1>Available Functions<a class="headerlink" href="#available-functions" title="Link to this heading">#</a></h1>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArcticFox.__init__</span></code>(model[, embedding_model, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_full_pipeline" title="TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_full_pipeline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArcticFox.run_full_pipeline</span></code></a>(vocab, data_df)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_labeling" title="TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_labeling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArcticFox.run_labeling</span></code></a>(df, top_words_df, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_postprocessing" title="TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_postprocessing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArcticFox.run_postprocessing</span></code></a>(V, D[, col_name])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_stats" title="TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_stats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArcticFox.run_stats</span></code></a>([process_parents, ...])</p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
 </div>
 </section>
-<section id="module-contents">
-<h1>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h1>
+<section id="module-TELF.post_processing.ArcticFox.arcticfox">
+<span id="module-contents"></span><h1>Module Contents<a class="headerlink" href="#module-TELF.post_processing.ArcticFox.arcticfox" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="TELF.post_processing.ArcticFox.arcticfox.ArcticFox">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.post_processing.ArcticFox.arcticfox.</span></span><span class="sig-name descname"><span class="pre">ArcticFox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SCINCL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cosine'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'centroid'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clean_cols_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'clean_title_abstract'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_year</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'year'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'type'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_cluster</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cluster'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_cluster_coords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cluster_coordinates'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_similarity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'similarity_to_cluster_centroid'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/post_processing/ArcticFox/arcticfox.html#ArcticFox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_full_pipeline">
+<span class="sig-name descname"><span class="pre">run_full_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vocab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ollama_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'llama3.2:3b-instruct-fp16'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_visuals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_parents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_completed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_criteria</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/post_processing/ArcticFox/arcticfox.html#ArcticFox.run_full_pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_full_pipeline" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_labeling">
+<span class="sig-name descname"><span class="pre">run_labeling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_words_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ollama_model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_criteria</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/post_processing/ArcticFox/arcticfox.html#ArcticFox.run_labeling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_labeling" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_postprocessing">
+<span class="sig-name descname"><span class="pre">run_postprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/post_processing/ArcticFox/arcticfox.html#ArcticFox.run_postprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_postprocessing" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_stats">
+<span class="sig-name descname"><span class="pre">run_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">process_parents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_completed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/post_processing/ArcticFox/arcticfox.html#ArcticFox.run_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_stats" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -440,7 +490,16 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>TELF.post_processing.ArcticFox:</strong> Report generation tool for text data from HNMFk using local LLMs</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-contents">Module Contents</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.post_processing.ArcticFox.arcticfox">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox"><code class="docutils literal notranslate"><span class="pre">ArcticFox</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_full_pipeline"><code class="docutils literal notranslate"><span class="pre">ArcticFox.run_full_pipeline()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_labeling"><code class="docutils literal notranslate"><span class="pre">ArcticFox.run_labeling()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_postprocessing"><code class="docutils literal notranslate"><span class="pre">ArcticFox.run_postprocessing()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_stats"><code class="docutils literal notranslate"><span class="pre">ArcticFox.run_stats()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
   </nav></div>

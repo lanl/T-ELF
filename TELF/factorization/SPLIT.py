@@ -1,7 +1,8 @@
 from .NMFk import NMFk
 from .decompositions.nmf_fro_mu import H_update as H_update_fro_mu
 from .decompositions.nmf_kl_mu import H_update as H_update_kl_mu
-
+from ..helpers.inits import organize_required_params
+from .utilities.math import MitH
 import numpy as np
 from scipy.sparse import issparse
 from scipy.sparse import hstack as sp_hstack
@@ -40,7 +41,11 @@ class SPLIT():
         self.H_regress_init = H_regress_init
         self.verbose = verbose
         self.random_state = random_state
-        self.split_nmfk_params = self._organize_nmfk_params(split_nmfk_params)
+        self.required_params_setting = {
+            "collect_output":True,
+            "predict_k":True
+        }
+        self.split_nmfk_params = organize_required_params(split_nmfk_params, self.required_params_setting)
         self.return_data = None
 
         #
@@ -69,9 +74,9 @@ class SPLIT():
 
             # NMFk parameters
             if name in nmfk_params:
-                self.information[name]["nmfk_params"] = self._organize_nmfk_params(nmfk_params[name])
+                self.information[name]["nmfk_params"] = organize_required_params(nmfk_params[name], self.required_params_setting)
             else:
-                self.information[name]["nmfk_params"] = self._organize_nmfk_params({})
+                self.information[name]["nmfk_params"] = organize_required_params({}, self.required_params_setting)
 
             # NMFk object
             self.information[name]["nmfk"] = NMFk(**self.information[name]["nmfk_params"])
@@ -170,7 +175,7 @@ class SPLIT():
             # multiply Mi with H known or target
             elif self.H_learn_method == "MitH":
 
-                self.information[name]["H_learned"] = self._MitH(self.information[name]["M"], info["H"])
+                self.information[name]["H_learned"] = MitH(self.information[name]["M"], info["H"])
 
             else:
                 raise Exception("Unknown H learn method!")
@@ -201,22 +206,6 @@ class SPLIT():
     # ====================================================
     # Private Functions
     # ====================================================
-
-    def _init_H_regress(self, X, M, H, k):
-
-        if self.H_regress_init == "random":
-            np.random.seed(self.random_state)
-            return np.random.rand(k, X.shape[1])
-
-        elif self.H_regress_init == "MitH":
-            return self._MitH(M, H)
-
-        else:
-            raise Exception("Unknown H regression initilization!")
-
-    def _MitH(self, M, H):
-        return M @ H
-
     def _H_regression(self, X, W, H):
 
         H_learned_ = self.H_regress_func(
@@ -225,7 +214,7 @@ class SPLIT():
             H=cp.array(H) if self.H_regress_gpu else H,
             opts=self.H_regress_opts,
             use_gpu=self.H_regress_gpu)
-
+        
         if self.H_regress_gpu:
             H_learned = cp.asnumpy(H_learned_)
             del H_learned_
@@ -234,6 +223,18 @@ class SPLIT():
 
         else:
             return H_learned_
+
+    def _init_H_regress(self, X, M, H, k):
+
+        if self.H_regress_init == "random":
+            np.random.seed(self.random_state)
+            return np.random.rand(k, X.shape[1])
+
+        elif self.H_regress_init == "MitH":
+            return MitH(M, H)
+
+        else:
+            raise Exception("Unknown H regression initilization!")
 
     def _get_M(self, num, k):
 
@@ -261,12 +262,3 @@ class SPLIT():
             return sp_hstack(Ws)
         else:
             return np.hstack(Ws)
-
-    def _organize_nmfk_params(self, params):
-        #
-        # Required
-        #
-        params["collect_output"] = True
-        params["predict_k"] = True
-
-        return params

@@ -10,6 +10,7 @@ from ..Cheetah import Cheetah
 from ...pre_processing.iPenguin.Scopus import Scopus
 from ...pre_processing.iPenguin.SemanticScholar import SemanticScholar
 from ...pre_processing.Vulture import Vulture
+from ...helpers.file_system import check_path_var as check_path
 
 @dataclass
 class AutoBunnyStep:
@@ -288,7 +289,7 @@ class AutoBunny:
                 try:
                     ip = Scopus(keys=[key])
                 except ValueError:
-                    raise ValueError(f'The key "{k}" was rejected by the Scopus API')
+                    raise ValueError(f'The key "{key}" was rejected by the Scopus API')
             self._scopus_keys = list(scopus_keys)
         else:
             raise TypeError(f'Unsupported type "{type(key)}" for Scopus key')
@@ -306,41 +307,6 @@ class AutoBunny:
             self._cheetah_index = {**self.CHEETAH_INDEX, **cheetah_index} 
         else:
             raise TypeError(f'Unsupported type "{type(cheetah_index)}" for `cheetah_index`')
-            
-    def __check_path(self, path, var_name):      
-        if path.exists() and path.is_file():  # handle the path already existing as file
-            raise ValueError(f'The path `{var_name}` points to a file instead of a directory')
-        if not path.exists():
-            path.mkdir(parents=True)  # parents=True ensures all missing parent directories are also created
-
-    def __check_path(self, path, var_name):
-        """
-        Checks and ensures the given path exists as a directory. If path does not exist, a new directory
-        will be created. If the path exists but is a file, a ValueError will be raised. A TypeError is
-        raised if the provided path is neither a string nor a `pathlib.Path` object.
-    
-        Parameters:
-        -----------
-        path: str, pathlib.Path
-            The path to be checked and ensured as a directory.
-        
-        Raises:
-        -------
-        TypeError:
-            If the provided path is neither a string nor a `pathlib.Path` object.
-        ValueError: 
-            If the path points to an existing file.
-        """
-        if isinstance(path, str):
-            path = pathlib.Path(path)
-        if not isinstance(path, pathlib.Path):
-            raise TypeError(f'Unsupported type "{type(path)}" for `path`')
-        path = path.resolve()
-        if path.exists():
-            if path.is_file():
-                raise ValueError(f'`{var_name}` points to a file instead of a directory')
-        else:
-            path.mkdir(parents=True, exist_ok=True)
 
     def __process_path(self, path, var_name):
         if path is None:
@@ -351,7 +317,7 @@ class AutoBunny:
             _path = path
         else:
             raise TypeError(f'Unsupported type "{type(path)}" for `{var_name}`')
-        self.__check_path(_path, var_name)
+        check_path(_path, var_name)
         return _path
             
     @output_dir.setter

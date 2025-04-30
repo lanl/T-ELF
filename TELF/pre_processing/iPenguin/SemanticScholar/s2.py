@@ -13,7 +13,7 @@ from joblib import Parallel, delayed
 
 # import interal libraries
 from .s2API import SemanticScholarAPI
-from ..utils import gen_chunks
+from ....helpers.data_structures import gen_chunks
 
 
 def get_df_helper(files):

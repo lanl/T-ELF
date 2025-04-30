@@ -2,9 +2,9 @@ from tqdm import tqdm
 from joblib import Parallel, delayed
 
 from .graph import Graph
-from .utils import values_have_duplicates, keys_are_sequential, verify_matrix, verify_n_jobs, verify_stats
-
-
+from .utils import verify_matrix, verify_stats
+from ...helpers.host import verify_n_jobs
+from ...helpers.data_structures import keys_are_sequential, values_have_duplicates
 
 class Wolf:
 

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.post_processing.ArcticFox.arcticfox &#8212; TELF 0.0.39 documentation</title>
+    <title>TELF.post_processing.ArcticFox.arcticfox &#8212; TELF 0.0.40 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../../_static/documentation_options.js?v=37718da2"></script>
+    <script src="../../../../_static/documentation_options.js?v=a27ffb50"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.39 documentation</p>
+    <p class="title logo__title">TELF 0.0.40 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -317,7 +317,6 @@
   <h1>Source code for TELF.post_processing.ArcticFox.arcticfox</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">.helpers.local_labels</span> <span class="kn">import</span> <span class="n">ClusterLabeler</span>  
 <span class="kn">from</span> <span class="nn">.helpers.intial_post_process</span> <span class="kn">import</span> <span class="n">HNMFkPostProcessor</span>
-<span class="kn">from</span> <span class="nn">.helpers.data_collector</span> <span class="kn">import</span> <span class="n">DataCollector</span>
 <span class="kn">from</span> <span class="nn">.helpers.post_statistics</span> <span class="kn">import</span> <span class="n">HNMFkStatsGenerator</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -334,8 +333,6 @@
         <span class="n">text_cols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">top_n_words</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
         <span class="n">clean_cols_name</span><span class="o">=</span><span class="s2">&quot;clean_title_abstract&quot;</span><span class="p">,</span>
-        <span class="n">attribute_collection_functions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">exception_data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;cutoff&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;skip_exceptions&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
 
         <span class="c1"># Postprocessor column config</span>
         <span class="n">col_year</span><span class="o">=</span><span class="s1">&#39;year&#39;</span><span class="p">,</span>
@@ -366,13 +363,6 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">stats_generator</span> <span class="o">=</span> <span class="n">HNMFkStatsGenerator</span><span class="p">(</span><span class="n">clean_cols_name</span><span class="o">=</span><span class="n">clean_cols_name</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">collector</span> <span class="o">=</span> <span class="n">DataCollector</span><span class="p">(</span>
-            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-            <span class="n">process_parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">attribute_collection_functions</span><span class="o">=</span><span class="n">attribute_collection_functions</span><span class="p">,</span>
-            <span class="n">EXCEPTION_DATA</span><span class="o">=</span><span class="n">exception_data</span>
-        <span class="p">)</span>
-
         <span class="c1"># Allow reuse of these columns in other methods</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">col_cluster</span> <span class="o">=</span> <span class="n">col_cluster</span>
 
@@ -387,7 +377,6 @@
         <span class="n">label_clusters</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">generate_stats</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">generate_visuals</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">collect_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">process_parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">skip_completed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">label_criteria</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -425,13 +414,8 @@
                 <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
                 <span class="n">process_parents</span><span class="o">=</span><span class="n">process_parents</span><span class="p">,</span>
                 <span class="n">skip_completed</span><span class="o">=</span><span class="n">skip_completed</span>
-            <span class="p">)</span>
+            <span class="p">)</span></div>
 
-        <span class="k">if</span> <span class="n">collect_data</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Step 4: Collecting structured cluster data...&quot;</span><span class="p">)</span>
-            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collector</span><span class="o">.</span><span class="n">collect_streamlit_data</span><span class="p">()</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data collected to ./outpath.csv&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">df</span></div>
 
 
     <span class="k">def</span> <span class="nf">_label_all_clusters</span><span class="p">(</span>
@@ -470,9 +454,9 @@
                         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">annotations</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                     <span class="p">])</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">node_dir</span> <span class="o">/</span> <span class="s2">&quot;cluster_summaries.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ArcticFox.run_labeling_only">
-<a class="viewcode-back" href="../../../../ArcticFox.html#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_labeling_only">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_labeling_only</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">top_words_df</span><span class="p">,</span> <span class="n">ollama_model_name</span><span class="p">,</span> <span class="n">label_criteria</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">additional_info</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">number_of_labels</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<div class="viewcode-block" id="ArcticFox.run_labeling">
+<a class="viewcode-back" href="../../../../ArcticFox.html#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_labeling">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_labeling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">top_words_df</span><span class="p">,</span> <span class="n">ollama_model_name</span><span class="p">,</span> <span class="n">label_criteria</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">additional_info</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">number_of_labels</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">labeler</span><span class="o">.</span><span class="n">label_clusters_ollama</span><span class="p">(</span>
             <span class="n">top_words_df</span><span class="o">=</span><span class="n">top_words_df</span><span class="p">,</span>
             <span class="n">ollama_model_name</span><span class="o">=</span><span class="n">ollama_model_name</span><span class="p">,</span>
@@ -484,9 +468,9 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ArcticFox.run_postprocessing_only">
-<a class="viewcode-back" href="../../../../ArcticFox.html#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_postprocessing_only">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_postprocessing_only</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">col_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ArcticFox.run_postprocessing">
+<a class="viewcode-back" href="../../../../ArcticFox.html#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_postprocessing">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_postprocessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">col_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">postprocessor</span><span class="o">.</span><span class="n">post_process_hnmfk</span><span class="p">(</span>
             <span class="n">hnmfk_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
             <span class="n">V</span><span class="o">=</span><span class="n">V</span><span class="p">,</span>
@@ -496,20 +480,14 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ArcticFox.run_stats_only">
-<a class="viewcode-back" href="../../../../ArcticFox.html#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_stats_only">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_stats_only</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process_parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">skip_completed</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ArcticFox.run_stats">
+<a class="viewcode-back" href="../../../../ArcticFox.html#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_stats">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process_parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">skip_completed</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats_generator</span><span class="o">.</span><span class="n">generate_cluster_stats</span><span class="p">(</span>
             <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
             <span class="n">process_parents</span><span class="o">=</span><span class="n">process_parents</span><span class="p">,</span>
             <span class="n">skip_completed</span><span class="o">=</span><span class="n">skip_completed</span>
         <span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="ArcticFox.run_data_collection_only">
-<a class="viewcode-back" href="../../../../ArcticFox.html#TELF.post_processing.ArcticFox.arcticfox.ArcticFox.run_data_collection_only">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_data_collection_only</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">collector</span><span class="o">.</span><span class="n">collect_streamlit_data</span><span class="p">()</span></div>
 </div>
 
 </pre></div>

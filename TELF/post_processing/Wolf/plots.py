@@ -3,8 +3,6 @@ import numpy as np
 import networkx as nx
 from tqdm import tqdm
 import plotly.graph_objs as go
-
-
 from .wolf import Wolf
 
 

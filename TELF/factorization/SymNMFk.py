@@ -36,7 +36,7 @@ from .decompositions.sym_nmf import sym_nmf_newt
 from .decompositions.utilities.math_utils import get_pac
 from .decompositions.utilities.concensus_matrix import reorder_con_mat
 from .decompositions.utilities.similarity_matrix import get_connectivity_matrix, dist2, scale_dist3
-
+from ..helpers.data_structures import chunk_Ks
 
 try:
     import cupy as cp
@@ -381,7 +381,7 @@ class SymNMFk:
         if self.n_nodes > 1:
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
-            Ks = self.__chunk_Ks(Ks, n_chunks=self.n_nodes)[rank]
+            Ks = chunk_Ks(Ks, n_chunks=self.n_nodes)[rank]
             note_name = f'{rank}_experiment'
             if self.verbose:
                 print("Rank=", rank, "Host=", socket.gethostname(), "Ks=", Ks)
@@ -599,17 +599,4 @@ class SymNMFk:
             return results
 
         
-    def __chunk_Ks(self, Ks: list, n_chunks=2) -> list:
-        # correct n_chunks if needed
-        if len(Ks) < n_chunks:
-            n_chunks = len(Ks)
-
-        chunks = list()
-        for _ in range(n_chunks):
-            chunks.append([])
-
-        for idx, ii in enumerate(Ks):
-            chunk_idx = idx % n_chunks
-            chunks[chunk_idx].append(ii)
-
-        return chunks
+    

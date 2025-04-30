@@ -4,37 +4,7 @@ from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from itertools import combinations
 import os
-
-def levenshtein_distance(s1, s2):
-    """
-    Calculates the Levenshtein distance between two strings.
-
-    Parameters
-    ----------
-    s1 : str
-        The first string.
-    s2 : str
-        The second string.
-
-    Returns
-    -------
-    int
-        The Levenshtein distance between s1 and s2.
-    """
-    if len(s1) < len(s2):
-        return levenshtein_distance(s2, s1)
-    if len(s2) == 0:
-        return len(s1)
-    previous_row = range(len(s2) + 1)
-    for i, c1 in enumerate(s1):
-        current_row = [i + 1]
-        for j, c2 in enumerate(s2):
-            insertions = previous_row[j + 1] + 1
-            deletions = current_row[j] + 1
-            substitutions = previous_row[j] + (c1 != c2)
-            current_row.append(min(insertions, deletions, substitutions))
-        previous_row = current_row
-    return previous_row[-1]
+from rapidfuzz.distance import Levenshtein
 
 def compare_keys(key1, key2, threshold=0.95, use_indel=False):
     """
@@ -61,7 +31,7 @@ def compare_keys(key1, key2, threshold=0.95, use_indel=False):
         raise ValueError("use_indel is not implemented yet -- pending dependency approval")
     else:
         max_len = max(len(key1), len(key2))
-        dist = levenshtein_distance(key1, key2)
+        dist = Levenshtein.distance(key1, key2)
         similarity = (max_len - dist) / max_len
         return similarity > threshold, similarity
 

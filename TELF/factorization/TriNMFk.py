@@ -13,6 +13,7 @@ from .NMFk import NMFk
 from .decompositions.utilities.math_utils import relative_trinmf_error, prune, unprune
 from .decompositions.tri_nmf_fro_mu import trinmf as trinmf_fro_mu
 from .utilities.organize_n_jobs import organize_n_jobs
+from ..helpers.inits import organize_required_params
 
 import concurrent.futures
 from tqdm import tqdm
@@ -143,7 +144,14 @@ class TriNMFk():
         
         # object parameters
         self.experiment_name = experiment_name
-        self.nmfk_params = self._organize_nmfk_params(nmfk_params)
+        self.required_params_setting = {
+            "collect_output":False,
+            "save_output":True,
+            "predict_k":True,
+            "consensus_mat":True,
+            "calculate_pac":True
+        }
+        self.nmfk_params = organize_required_params(nmfk_params, self.required_params_setting)
         self.nmf_verbose = nmf_verbose
         self.use_gpu = use_gpu
         self.mask = mask
@@ -327,11 +335,3 @@ class TriNMFk():
                     **results)
 
         return results
-
-    def _organize_nmfk_params(self, params):
-        params["save_output"] = True
-        params["collect_output"] = False
-        params["consensus_mat"] = True
-        params["calculate_pac"] = True
-
-        return params

@@ -7,14 +7,7 @@ import multiprocessing
 from collections import Counter
 from itertools import permutations
 from joblib import Parallel, delayed
-
-
-def chunks(l, n):
-    """Yield n number of sequential chunks from l."""
-    d, r = divmod(len(l), n)
-    for i in range(n):
-        si = (d+1)*(i if i < r else r) + d*(0 if i < r else i - r)
-        yield l[si:si+(d+1 if i < r else d)]
+from ....helpers.data_structures import gen_chunks
         
         
 def text_compare(S2_pidToAids, S2_aidToName, authIdToS2pid, authName, authId, sub_table=None, depth=None, threshold=0.8):
@@ -337,7 +330,7 @@ class AuthorMatcher:
         # perform matching in parallel
         aid_list = list(aID_to_s2.keys())
         random.Random(42).shuffle(aid_list)  # add seed to random before shuffle
-        kchunks = chunks(aid_list, self.n_jobs)
+        kchunks = gen_chunks(aid_list, self.n_jobs)
         jobs = Parallel(n_jobs=self.n_jobs, verbose=self.verbose)(
             delayed(match_authors)(kc, b_papers_b_authID, b_authID_name, aID_to_s2, aID_to_name, sub_table=self.CHAR_NORMALIZATION_DICT) for kc in kchunks)
 
@@ -351,7 +344,7 @@ class AuthorMatcher:
         if self.verbose:
             print(f'[Orca]: Found {len(auth_map)} author matches. . .')
         
-        kchunks = chunks(errors, self.n_jobs)
+        kchunks = gen_chunks(errors, self.n_jobs)
         jobs = Parallel(n_jobs=self.n_jobs, verbose=self.verbose)(
             delayed(error_match)(kc, auth_map, b_papers_b_authID, b_authID_name, aID_to_s2, aID_to_name, sub_table=self.CHAR_NORMALIZATION_DICT) for kc in kchunks)
         

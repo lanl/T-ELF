@@ -16,7 +16,7 @@ from joblib import Parallel, delayed
 from .scopusAPI import ScopusAPI
 from .parser import ScopusQueryParser
 from .process_scopus_json import form_df
-from ..utils import gen_chunks
+from ....helpers.data_structures import gen_chunks
 
 class Scopus:
     

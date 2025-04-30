@@ -4,9 +4,9 @@ import sparse
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from collections import Counter, defaultdict
+from collections import Counter
 from ...pre_processing import Beaver
-from ..Wolf.utils import load_file_as_dict
+from ...helpers.file_system import load_file_as_dict
 
 ###
 ### 1. Statistics for Files
@@ -106,72 +106,6 @@ def get_cluster_stat_file(df, top_words_df, summaries_df, n=5):
         data['affiliation_counts'].append(affiliations)
 
     return pd.DataFrame.from_dict(data)
-
-
-
-
-###
-### plot functions
-###
-def sum_dicts(dict_list, n):
-    """
-    Sums up the values of a list of dictionaries for each key and returns the top-n key-value pairs.
-
-    Parameters:
-    -----------
-    dict_list: list
-        A list of dictionaries. All dictionaries should have integer values.
-    n: int 
-        Number of top key-value pairs to return based on the summed values.
-
-    Returns:
-    --------
-    dict: 
-        A dictionary containing the top-n key-value pairs sorted by their summed values in descending order.
-
-    Example:
-    --------
-    >>> dicts = [{"a": 5, "b": 3}, {"a": 3, "b": 4}, {"a": 1}]
-    >>> sum_dicts(dicts, 2)
-    {'a': 9, 'b': 7}
-    """
-    result = defaultdict(int)
-    for d in dict_list:
-        for key, value in d.items():
-            result[key] += value
-    results = dict(result)
-    return dict(sorted(result.items(), key=lambda item: item[1], reverse=True)[:n])
-
-
-########### WOLF Start
-def get_id_to_name(df, name_col, id_col):
-    """
-    Creates a map of id to name. 
-    The fist occurence of an id, name pair is recorded.
-    
-    Parameters:
-    -----------
-    df: pd.DataFrame
-        The input DataFrame.
-    name_col: str
-        The column that contains names
-    id_col: str
-        The column contains the ids
-        
-    Returns:
-    --------
-    dict:
-        The id to name map
-    """
-    id_to_name = {} 
-    name_list = [x.split(';') for x in df[name_col].to_list()]
-    id_list = [x.split(';') for x in df[id_col].to_list()]
-    for id_sublist, name_sublist in zip(id_list, name_list):
-        for id_, name_ in zip(id_sublist, name_sublist):
-            if id_ not in id_to_name:
-                id_to_name[id_] = name_
-    return id_to_name
-
 
 def create_tensor(df, col, output_dir='/tmp', joblib_backend='loky', n_jobs=-1, verbose=False):
     """

@@ -36,7 +36,7 @@ from .vectorize import tfidf
 from .cooccurrence import co_occurrence
 from .sppmi import sppmi
 from typing import Union
-
+from ...helpers.file_system import check_path
 
 
 class Beaver():
@@ -116,7 +116,7 @@ class Beaver():
         vocabulary = vectorizer.get_feature_names_out()
 
         if save_path:
-            self.__check_path(save_path)
+            check_path(save_path)
             self.__save_text(vocabulary, save_path, "Vocabulary.txt")
         return vocabulary
 
@@ -249,7 +249,7 @@ class Beaver():
 
         X = self.output_funcs[output_mode](X)
         if save_path:
-            self.__check_path(save_path)
+            check_path(save_path)
             self.__save_text(list(authors_idx_map.keys()), save_path, "Authors.txt")
             self.__save_text(list(time_idx_map.keys()), save_path, "Time.txt")
             self.save_funcs[output_mode](X, os.path.join(save_path, "coauthor.npz"))
@@ -408,7 +408,7 @@ class Beaver():
         
         X = self.output_funcs[output_mode](X)
         if save_path:
-            self.__check_path(save_path)
+            check_path(save_path)
             self.__save_text(list(authors_idx_map.keys()), save_path, "Authors.txt")
             self.__save_text(list(time_idx_map.keys()), save_path, "Time.txt")
             self.save_funcs[output_mode](X, os.path.join(save_path, "cocitation.npz"))
@@ -549,7 +549,7 @@ class Beaver():
 
         X = self.output_funcs[output_mode](X)
         if save_path:
-            self.__check_path(save_path)
+            check_path(save_path)
             self.__save_text(list(authors_idx_map.keys()), save_path, "Authors.txt")
             self.__save_text(list(papers_idx_map.keys()), save_path, "Paper.txt")
             self.__save_text(list(time_idx_map.keys()), save_path, "Time.txt")
@@ -703,7 +703,7 @@ class Beaver():
 
         X = self.output_funcs[output_mode](X)
         if save_path:
-            self.__check_path(save_path)
+            check_path(save_path)
             self.__save_text(list(authors_idx_map.keys()), save_path, "Authors.txt")
             self.__save_text(list(papers_idx_map.keys()), save_path, "Paper.txt")
             self.__save_text(list(time_idx_map.keys()), save_path, "Time.txt")
@@ -778,7 +778,7 @@ class Beaver():
         M = self.output_funcs[output_mode](M)
         SPPMI = self.output_funcs[output_mode](SPPMI)
         if save_path:
-            self.__check_path(save_path)
+            check_path(save_path)
             self.save_funcs[output_mode](M, os.path.join(save_path, "cooccurrence.npz"))
             self.save_funcs[output_mode](SPPMI, os.path.join(save_path, "SPPMI.npz"))
         if return_object:
@@ -911,7 +911,7 @@ class Beaver():
                     
         X = self.output_funcs[output_mode](X)
         if save_path:
-            self.__check_path(save_path)
+            check_path(save_path)
             self.__save_text(vocabulary, save_path, "Vocabulary.txt")
             self.save_funcs[output_mode](X, os.path.join(save_path, "documents_words.npz"))
         if return_object:
@@ -1012,7 +1012,7 @@ class Beaver():
                                             )
         
         if save_path:
-            self.__check_path(save_path)
+            check_path(save_path)
             self.__save_text(somethings, save_path, f'{target_columns[0]}.txt')
             self.__save_text(vocabulary, save_path, "Vocabulary.txt")  
             self.save_funcs[output_mode](X, os.path.join(save_path, f'{target_columns[0]}_words.npz'))
@@ -1164,7 +1164,7 @@ class Beaver():
 
         X = self.output_funcs[output_mode](X)
         if save_path:
-            self.__check_path(save_path)
+            check_path(save_path)
             self.__save_text(list(something_idx_map.keys()), save_path, f'{target_columns[0]}.txt')
             self.__save_text(list(word_idx_map.keys()), save_path, "Words.txt")
             self.__save_text(list(time_idx_map.keys()), save_path, "Time.txt")
@@ -1521,26 +1521,6 @@ class Beaver():
 
         return dict(tensor_dict)
 
-    def _chunk_list(self, l: list, n: int) -> list:
-        """
-        Yield n number of striped chunks from l.
-
-        Parameters
-        ----------
-        l : list
-            list to be chunked.
-        n : int
-            number of chunks.
-
-        Yields
-        ------
-        list
-            chunks.
-
-        """
-        for i in range(0, n):
-            yield l[i::n]
-
     def _output_pydata(self, x):
         """
         Return tensor as a sparse.coo object. This is a reflective function
@@ -1668,14 +1648,10 @@ class Beaver():
         filepath = os.path.join(save_path, filename)
         with open(filepath, "w", encoding="utf-8", newline='') as f:
             for i, line in enumerate(text):
+                line = str(line)
                 f.write(line.rstrip())
                 if i < len(text) - 1:
                     f.write('\n')
-
-    def __check_path(self, save_path):
-        if not Path(save_path).is_dir():
-            Path(save_path).mkdir(parents=True)
-
 
     def get_ngrams( self,  dataset: pd.DataFrame, target_column: str=None, n: int=1, 
                     limit: int=None,  save_path: str=None) -> list:
@@ -1717,7 +1693,7 @@ class Beaver():
         top_ngrams = counter.most_common(limit)
  
         if save_path:
-            self.__check_path(save_path)
+            check_path(save_path)
             counter_df = pd.DataFrame(list(counter.items()), columns=['Ngram', 'Count'])
             counter_df.to_csv(os.path.join(save_path, "top_ngrams.txt"), index=False)
 
