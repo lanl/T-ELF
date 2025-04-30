@@ -8,13 +8,13 @@ from collections import Counter
 from tqdm import tqdm
 
 from .post_process_stats import (
-    get_cluster_stat_file, sum_dicts, get_id_to_name,
-    create_tensor, process_affiliations_coaffiliations
-)
-from ..Peacock.Plot.plot import plot_heatmap, plot_bar, plot_scatter, plot_pie
+    get_cluster_stat_file, create_tensor, process_affiliations_coaffiliations)
+from ..Peacock.Plot.plot import plot_heatmap, plot_pie
 from ..Peacock.Utility.aggregate_papers import aggregate_ostats, count_affiliations, count_countries
 from ..Peacock.Utility.util import filter_by
 from ..Wolf.plots import plot_matrix_graph
+from ...helpers.data_structures import sum_dicts
+from ...helpers.maps import get_id_to_name
 
 class VisualizationManager:
     def __init__(self, verbose=False):

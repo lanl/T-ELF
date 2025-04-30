@@ -1,13 +1,12 @@
-import string
 import numpy as np
 import pandas as pd
-import torch
 from tqdm import tqdm
-from transformers import AutoTokenizer, AutoModel
 from sklearn.metrics import pairwise_distances
 from langchain_ollama import OllamaLLM
-from openai import OpenAI
 
+from ....helpers.embeddings import (compute_doc_embedding, produce_label,
+                                    compute_embeddings, closest_embedding_to_centroid,
+                                    compute_centroids)
 
 class ClusterLabeler:
 
@@ -30,56 +29,6 @@ class ClusterLabeler:
         self.num_trials = num_trials
         self.text_cols = text_cols if text_cols else ["title", "abstract"]
 
-    # ------------------------------------------------
-    # Embedding / Centroid
-    # ------------------------------------------------
-    def initialize_model_and_device(self, embedding_model: str, embedds_use_gpu: bool = False):
-        device = 'cuda:0' if embedds_use_gpu and torch.cuda.is_available() else 'cpu'
-        tokenizer = AutoTokenizer.from_pretrained(self.MODELS[embedding_model])
-        model = AutoModel.from_pretrained(self.MODELS[embedding_model]).to(device)
-        return tokenizer, model, device
-
-    def compute_embeddings_helper(self, text, *, model, tokenizer, device, max_length=512):
-        inputs = tokenizer(text, padding=True, truncation=True, return_tensors="pt", max_length=max_length).to(device)
-        out = model(**inputs)
-        emb = torch.mean(out.last_hidden_state[0], dim=0)
-        return emb.detach().cpu().numpy()
-
-    def compute_embeddings(self, df, *, model, tokenizer, device, cols=None, sep_token='[SEP]'):
-        if cols is None:
-            cols = self.text_cols
-        papers = df[cols].fillna('').apply(lambda row: sep_token.join(row), axis=1).reset_index()
-        papers.columns = ['id', 'text']
-
-        embeddings = {}
-        for _, row in tqdm(papers.iterrows(), total=len(papers)):
-            embeddings[row['id']] = self.compute_embeddings_helper(
-                row['text'], model=model, tokenizer=tokenizer, device=device
-            )
-        return embeddings
-
-    def compute_centroids(self, embeddings_dict, df):
-        """
-        Just like the snippet: compute mean embedding per cluster.
-        """
-        centroids = {}
-        for cluster_id in df['cluster'].unique():
-            idxs = df[df['cluster'] == cluster_id].index
-            embs = [embeddings_dict[i] for i in idxs if i in embeddings_dict]
-            if embs:
-                centroids[cluster_id] = np.mean(embs, axis=0)
-            else:
-                centroids[cluster_id] = None
-        return centroids
-
-    def closest_embedding_to_centroid(self, embeddings_dict, centroid_vec, metric='cosine'):
-        """
-        Return (min_index, centroid_vec), exactly as your snippet.
-        """
-        arr = np.array(list(embeddings_dict.values()))
-        dist = pairwise_distances(arr, [centroid_vec], metric=metric)
-        min_index = np.argmin(dist)
-        return (min_index, centroid_vec)
 
     # ------------------------------------------------
     # Prompting, LLM, Labeling
@@ -140,20 +89,6 @@ class ClusterLabeler:
         prompt = self.criteria_and_info_to_prompt(prompt, additional_information, criteria)
         return self.generate_valid_labels(llm, prompt, criteria, number_of_labels)
 
-    def produce_label(self, client: OpenAI, words: str):
-        prompt = (
-            f"Use the following words to establish a theme or a topic: {', '.join(words)!r}. "
-            "The output should be a label that has at most 3 tokens and is characterized by the provided words. "
-            "The output should not be in quotes."
-        )
-        response = client.completions.create(
-            model="gpt-3.5-turbo-instruct",
-            prompt=prompt,
-            max_tokens=2048
-        )
-        label = response.choices[0].text.strip()
-        return label.strip().translate(str.maketrans('', '', string.punctuation + '\n'))
-
     def labels_from_models(
         self,
         input_words,
@@ -186,9 +121,8 @@ class ClusterLabeler:
         # 2) openai
         if models.get('openai'):
             openai_api_key = api_keys.get('openai')
-            client = OpenAI(api_key=openai_api_key)
             for _ in range(number_of_labels):
-                candidate = self.produce_label(client, input_words)
+                candidate = produce_label(openai_api_key, input_words)
                 if self.validate_llm_output(candidate, criteria):
                     all_labels.append(candidate)
 
@@ -206,15 +140,14 @@ class ClusterLabeler:
         number_of_labels: int = 10,
         embedds_use_gpu: bool = False
     ):
-        tokenizer, model_obj, device = self.initialize_model_and_device(embedding_model, embedds_use_gpu)
-        doc_embeddings = self.compute_embeddings(df, model=model_obj, tokenizer=tokenizer, device=device)
-        centroids = self.compute_centroids(doc_embeddings, df)
+        doc_embeddings = compute_embeddings(df, model_name=self.embedding_model )
+        centroids = compute_centroids(doc_embeddings, df)
 
         # e.g. centers[0] = (min_idx, centroid_vec)
         centers = {}
         for cid, centroid_vec in centroids.items():
             if centroid_vec is not None:
-                centers[cid] = self.closest_embedding_to_centroid(doc_embeddings, centroid_vec, metric=self.distance_metric)
+                centers[cid] = closest_embedding_to_centroid(doc_embeddings, centroid_vec, metric=self.distance_metric)
 
         # Step 2: For each column -> generate candidate labels
         cluster_labels = {}
@@ -239,8 +172,10 @@ class ClusterLabeler:
 
             _, centroid_vec = centers[cluster_id]  # (closest_idx, centroid)
             label_embs = []
+            device = 'cuda' if embedds_use_gpu else 'cpu'
             for lbl in candidate_labels:
-                emb = self.compute_embeddings_helper(lbl, model=model_obj, tokenizer=tokenizer, device=device)
+
+                emb = compute_doc_embedding(lbl, model_name=self.embedding_model, device=device)
                 label_embs.append(emb)
             label_embs = np.array(label_embs)
 

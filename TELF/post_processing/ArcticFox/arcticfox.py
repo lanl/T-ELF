@@ -132,7 +132,7 @@ class ArcticFox:
                         for k, v in annotations.items()
                     ]).to_csv(node_dir / "cluster_summaries.csv", index=False)
 
-    def run_labeling_only(self, df, top_words_df, ollama_model_name, label_criteria=None, additional_info=None, number_of_labels=5):
+    def run_labeling(self, df, top_words_df, ollama_model_name, label_criteria=None, additional_info=None, number_of_labels=5):
         return self.labeler.label_clusters_ollama(
             top_words_df=top_words_df,
             ollama_model_name=ollama_model_name,
@@ -143,7 +143,7 @@ class ArcticFox:
             number_of_labels=number_of_labels
         )
 
-    def run_postprocessing_only(self, V, D, col_name=None, **kwargs):
+    def run_postprocessing(self, V, D, col_name=None, **kwargs):
         return self.postprocessor.post_process_hnmfk(
             hnmfk_model=self.model,
             V=V,
@@ -152,7 +152,7 @@ class ArcticFox:
             **kwargs
         )
 
-    def run_stats_only(self, process_parents=True, skip_completed=True):
+    def run_stats(self, process_parents=True, skip_completed=True):
         return self.stats_generator.generate_cluster_stats(
             model=self.model,
             process_parents=process_parents,

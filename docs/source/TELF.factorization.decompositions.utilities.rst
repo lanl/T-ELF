@@ -4,22 +4,6 @@ TELF.factorization.decompositions.utilities package
 Submodules
 ----------
 
-TELF.factorization.decompositions.utilities.bool\_clustering module
--------------------------------------------------------------------
-
-.. automodule:: TELF.factorization.decompositions.utilities.bool_clustering
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-TELF.factorization.decompositions.utilities.bool\_noise module
---------------------------------------------------------------
-
-.. automodule:: TELF.factorization.decompositions.utilities.bool_noise
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 TELF.factorization.decompositions.utilities.clustering module
 -------------------------------------------------------------
 
@@ -32,14 +16,6 @@ TELF.factorization.decompositions.utilities.concensus\_matrix module
 --------------------------------------------------------------------
 
 .. automodule:: TELF.factorization.decompositions.utilities.concensus_matrix
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-TELF.factorization.decompositions.utilities.data\_reshaping module
-------------------------------------------------------------------
-
-.. automodule:: TELF.factorization.decompositions.utilities.data_reshaping
    :members:
    :undoc-members:
    :show-inheritance:

@@ -285,7 +285,7 @@ def nmf_with_ADMM(X, W, H, lowerthres=1, upperthres=None, opts=None, use_gpu=Tru
     return (W, H, X)
 
 
-def old_nmf(X, W, H, lowerthres=1, upperthres=None, opts=None):
+def old_nmf(X, W, H, lowerthres=1, upperthres=None, opts=None, use_gpu=False):
     """
     Multiplicative update algorithm for NMF with Frobenius norm loss function. ||X-WH||_F^2
 
@@ -383,7 +383,7 @@ def old_nmf(X, W, H, lowerthres=1, upperthres=None, opts=None):
     return (W, H, X)
 
 
-def nmf(X, W, H, lowerthres=1, upperthres=None, opts=None, Mask=None):
+def nmf(X, W, H, lowerthres=1, upperthres=None, opts=None, Mask=None, use_gpu=False):
     """
     penalized nmf with adaptive alpha
     """
@@ -553,114 +553,6 @@ def old_find_thres_WH(X, Wn, Hn, method="grid_search", output="best", npoint=100
             err[0, i] = np.sum(X.astype(bool) ^ Xhat)
         I = np.argmin(err)
         return err[0, I], Lthres[I]
-
-
-def find_thres_WH(X, Wn, Hn, output="best", npoint=None):
-    # Wn, Hn are normalized using thres_norm function
-    np = get_np(X)
-    if npoint is None:
-        Lw = np.unique(np.concatenate(Wn.reshape(-1, 1)))
-        Lh = np.unique(np.concatenate(Hn.reshape(-1, 1)))
-    else:
-        Lw = np.linspace(np.min(Wn), np.max(Wn), npoint)
-        Lh = np.linspace(np.min(Hn), np.max(Hn), npoint)
-
-    Wpoint = len(Lw)
-    Hpoint = len(Lh)
-    err = np.zeros((len(Lw), len(Lh)))
-
-    for i in range(Wpoint):
-        lambdaW = Lw[i]
-        for j in range(Hpoint):
-            lambdaH = Lh[j]
-            Xhat = np.dot(Wn >= lambdaW, Hn >= lambdaH)
-            err[i, j] = np.mean(X.astype(bool) ^ Xhat)
-
-    if output == "best":
-        [iw, ih] = np.unravel_index(err.argmin(), err.shape)
-        return {"error":err[iw, ih], "Lw":Lw[iw], "Lh":Lh[ih]}
-    elif output == "grid":
-        return {"error":err, "Lw":Lw, "Lh":Lh}
-
-
-def coord_desc_thresh(X, W, H, wt=None, ht=None, max_iter=100):
-    np = get_np(X)
-    k = W.shape[1]
-    if wt == None:
-        wt = np.array([0.5 for _ in range(k)])
-    if ht == None:
-        ht = np.array([0.5 for _ in range(k)])
-    Wrange = [np.unique(W[:, i]) for i in range(k)]
-    Hrange = [np.unique(H[i, :]) for i in range(k)]
-    err = 1
-
-    for j in range(max_iter):
-        old_err = err
-        for i in range(k):
-            np.random.shuffle(Wrange[i])
-            wrange = Wrange[i]
-            Wt = W >= wt[None, :]
-            Ht = H >= ht[:, None]
-            cache = (
-                Wt[:, [j for j in range(k) if j != i]]
-                @ Ht[[j for j in range(k) if j != i], :]
-            )
-            this_component = (W[None, :, i] >= wrange[:, None])[:, :, None] @ Ht[[i], :]
-            Ys = np.logical_or(cache, this_component)
-            errors = np.sum(np.logical_xor(X, Ys), axis=(1, 2)) / X.size
-            wt[i] = wrange[np.argmin(errors)]
-
-            # * update H
-            np.random.shuffle(Hrange[i])
-            hrange = Hrange[i]
-            Ht = H >= ht[:, None]
-            Wt = W >= wt[None, :]
-            cache = (
-                Wt[:, [j for j in range(k) if j != i]]
-                @ Ht[[j for j in range(k) if j != i], :]
-            )
-            this_component = Wt[:, [i]] @ (H[None, i, :] >= hrange[:, None])[:, None, :]
-            Ys = np.logical_or(cache, this_component)
-            errors = np.sum(np.logical_xor(X, Ys), axis=(1, 2)) / X.size
-            ht[i] = hrange[np.argmin(errors)]
-
-        # * error after one sweep
-        err = np.min(errors)
-        # * stopping criteria
-        if err == old_err:
-            # print('converged in num iter = {}, err = {}'.format(j, np.min(errors)))
-            pass
-    return err, wt, ht
-
-
-def coord_desc_thresh_onefactor(X, W, H, max_iter=100):
-    # * only threshold W given H. Use transpose to threshold H
-    np = get_np(X)
-    k = W.shape[1]
-    wt = np.array([0.5 for _ in range(k)])
-    Wrange = [np.unique(W[:, i]) for i in range(k)]
-    err = 1
-
-    for _ in range(max_iter):
-        old_err = err
-        for i in range(k):
-            np.random.shuffle(Wrange[i])
-            wrange = Wrange[i]
-            Wt = W >= wt[None, :]
-            Ht = H.astype(bool)
-            cache = (
-                Wt[:, [j for j in range(k) if j != i]]
-                @ Ht[[j for j in range(k) if j != i], :]
-            )
-            this_component = (W[None, :, i] >= wrange[:, None])[:, :, None] @ Ht[[i], :]
-            Ys = np.logical_or(cache, this_component)
-            errors = np.sum(np.logical_xor(X, Ys), axis=(1, 2)) / X.size
-            wt[i] = wrange[np.argmin(errors)]
-
-        # * error after one sweep
-        err = np.min(errors)
-    return err, wt
-
 
 def roc_W_H(X, W, H):
     Lthres = np.unique(np.concatenate((W.reshape(-1, 1), H.reshape(-1, 1))))

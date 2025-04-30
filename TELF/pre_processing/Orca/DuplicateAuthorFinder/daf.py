@@ -1,18 +1,17 @@
 import os
 import sys
 import ast
-import copy
 import sparse
-import pickle
 import networkx
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from collections import Counter
 from joblib import Parallel, delayed
 from networkx.algorithms.components.connected import connected_components
 
-from ..utils import verify_n_jobs, match_name
+from ..utils import match_name
+from ....helpers.host import verify_n_jobs
+from ....helpers.data_structures import gen_chunks
 
 # define DAF globals for shared-mem access
 uid_matrix = None
@@ -20,37 +19,6 @@ email_matrix = None
 affiliation_matrix = None
 collaboration_matrix = None
 eid_to_name = None
-
-
-def chunks(l, n):
-    """
-    Split a list into roughly equal-sized chunks.
-
-    The function divides the list `l` into `n` chunks. If the list does not 
-    divide evenly, the first few chunks will have an extra item.
-
-    Parameters:
-    -----------
-    l: list
-        The list to be divided into chunks.
-    n: int
-        The number of chunks the list should be divided into.
-
-    Returns:
-    --------
-    list: 
-        Chunks of the original list.
-
-    Examples:
-    ---------
-    >>> list(chunks([1, 2, 3, 4, 5, 6, 7], 3))
-    [[1, 2, 3], [4, 5], [6, 7]]
-    """
-    d, r = divmod(len(l), n)
-    for i in range(n):
-        si = (d+1)*(i if i < r else r) + d*(0 if i < r else i - r)
-        yield l[si:si+(d+1 if i < r else d)]
-
 
 def to_graph(l):
     """
@@ -520,7 +488,7 @@ class DuplicateAuthorFinder:
                 uid_matrix = None
             
         # parallellize the search 
-        kchunks = chunks(list(eid_to_id.keys()), self.n_jobs)
+        kchunks = gen_chunks(list(eid_to_id.keys()), self.n_jobs)
         func = self._search
         
         if 1 < self.n_jobs:

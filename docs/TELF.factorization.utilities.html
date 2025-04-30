@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF.factorization.utilities package &#8212; TELF 0.0.39 documentation</title>
+    <title>TELF.factorization.utilities package &#8212; TELF 0.0.40 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=37718da2"></script>
+    <script src="_static/documentation_options.js?v=a27ffb50"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.39 documentation</p>
+    <p class="title logo__title">TELF 0.0.40 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -362,15 +362,6 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.clustering">TELF.factorization.utilities.clustering module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.clustering.H_clustering"><code class="docutils literal notranslate"><span class="pre">H_clustering()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.clustering.plot_H_clustering"><code class="docutils literal notranslate"><span class="pre">plot_H_clustering()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.co_occurance_matrix">TELF.factorization.utilities.co_occurance_matrix module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.co_occurance_matrix.co_occurrence"><code class="docutils literal notranslate"><span class="pre">co_occurrence()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.organize_n_jobs">TELF.factorization.utilities.organize_n_jobs module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.organize_n_jobs.organize_devices"><code class="docutils literal notranslate"><span class="pre">organize_devices()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.organize_n_jobs.organize_n_jobs"><code class="docutils literal notranslate"><span class="pre">organize_n_jobs()</span></code></a></li>
@@ -389,20 +380,11 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.pvalue_analysis.pvalue_analysis"><code class="docutils literal notranslate"><span class="pre">pvalue_analysis()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.sppmi_matrix">TELF.factorization.utilities.sppmi_matrix module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.sppmi_matrix.sppmi"><code class="docutils literal notranslate"><span class="pre">sppmi()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.take_note">TELF.factorization.utilities.take_note module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.take_note.append_to_note"><code class="docutils literal notranslate"><span class="pre">append_to_note()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.take_note.format_note"><code class="docutils literal notranslate"><span class="pre">format_note()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.take_note.take_note"><code class="docutils literal notranslate"><span class="pre">take_note()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.take_note.take_note_fmat"><code class="docutils literal notranslate"><span class="pre">take_note_fmat()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.vectorize">TELF.factorization.utilities.vectorize module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.vectorize.count"><code class="docutils literal notranslate"><span class="pre">count()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.vectorize.tfidf"><code class="docutils literal notranslate"><span class="pre">tfidf()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities">Module contents</a></li>
@@ -421,84 +403,6 @@
 <h1>TELF.factorization.utilities package<a class="headerlink" href="#telf-factorization-utilities-package" title="Link to this heading">#</a></h1>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
-</section>
-<section id="module-TELF.factorization.utilities.clustering">
-<span id="telf-factorization-utilities-clustering-module"></span><h2>TELF.factorization.utilities.clustering module<a class="headerlink" href="#module-TELF.factorization.utilities.clustering" title="Link to this heading">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="TELF.factorization.utilities.clustering.H_clustering">
-<span class="sig-prename descclassname"><span class="pre">TELF.factorization.utilities.clustering.</span></span><span class="sig-name descname"><span class="pre">H_clustering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose=False)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'dict'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'dict'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/utilities/clustering.html#H_clustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.utilities.clustering.H_clustering" title="Link to this definition">#</a></dt>
-<dd><p>Performs H-clustering, and gathers cluster information.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>H</strong> (<em>np.ndarray</em><em> or </em><em>scipy.sparse.csr_matrix</em>) – H matrix from NMF</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>default is False</em>) – If True, shows the progress.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>(clusters_information, centroid_similarities)</strong> (<em>tuple of dict and list</em>)</p></li>
-<li><p><em>Dictionary carrying information for each cluster,</em></p></li>
-<li><p><em>and dictionary carrying information for each document.</em></p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="TELF.factorization.utilities.clustering.plot_H_clustering">
-<span class="sig-prename descclassname"><span class="pre">TELF.factorization.utilities.clustering.</span></span><span class="sig-name descname"><span class="pre">plot_H_clustering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'filename'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/utilities/clustering.html#plot_H_clustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.utilities.clustering.plot_H_clustering" title="Link to this definition">#</a></dt>
-<dd><p>Plots the centroids of the H-clusters</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>H</strong> (<em>np.ndarray</em><em> or </em><em>scipy.sparse.csr_matrix</em>) – H matrix from NMF</p></li>
-<li><p><strong>name</strong> (<em>File name to save</em>)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Matplotlib plots</p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-<section id="module-TELF.factorization.utilities.co_occurance_matrix">
-<span id="telf-factorization-utilities-co-occurance-matrix-module"></span><h2>TELF.factorization.utilities.co_occurance_matrix module<a class="headerlink" href="#module-TELF.factorization.utilities.co_occurance_matrix" title="Link to this heading">#</a></h2>
-<p>Created on Mon Nov 22 18:38:26 2021</p>
-<p>&#64;author: maksimekineren</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="TELF.factorization.utilities.co_occurance_matrix.co_occurrence">
-<span class="sig-prename descclassname"><span class="pre">TELF.factorization.utilities.co_occurance_matrix.</span></span><span class="sig-name descname"><span class="pre">co_occurrence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vocabulary</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dense</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sentences</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/utilities/co_occurance_matrix.html#co_occurrence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.utilities.co_occurance_matrix.co_occurrence" title="Link to this definition">#</a></dt>
-<dd><p>Forms co-occurance matrix.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>documents</strong> (<em>list</em>) – List of documents. Each entry in the list contains text.
-if sentences=True, then documents is a list of lists, where
-each entry in documents is a list of sentences.</p></li>
-<li><p><strong>window_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of consecutive words to perform counting.
-If sentences based analysis used, window size indicate the number of sentences.</p></li>
-<li><p><strong>vocabulary</strong> (<em>list</em>) – List of unqiue words present in the all documents as vocabulary.</p></li>
-<li><p><strong>dense</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, dense Numpy array is build.
-If False, Sparse CSR matrix is build.</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Print progress or not.</p></li>
-<li><p><strong>sentences</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, documents are list of lists, where each entry in documents
-is a list of sentences from that document.
-In this case, window size is used as number of sentences, and the matrix is build based
-on the sentences. When False, window size is used, and documents is a list of documents.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>M</strong> – Co-occurance matrix.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.ndarray or sparse CSR matrix</p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 <section id="module-TELF.factorization.utilities.organize_n_jobs">
 <span id="telf-factorization-utilities-organize-n-jobs-module"></span><h2>TELF.factorization.utilities.organize_n_jobs module<a class="headerlink" href="#module-TELF.factorization.utilities.organize_n_jobs" title="Link to this heading">#</a></h2>
@@ -568,25 +472,6 @@ on the sentences. When False, window size is used, and documents is a list of do
 </p>
 </dd>
 </dl>
-</dd></dl>
-
-</section>
-<section id="module-TELF.factorization.utilities.sppmi_matrix">
-<span id="telf-factorization-utilities-sppmi-matrix-module"></span><h2>TELF.factorization.utilities.sppmi_matrix module<a class="headerlink" href="#module-TELF.factorization.utilities.sppmi_matrix" title="Link to this heading">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="TELF.factorization.utilities.sppmi_matrix.sppmi">
-<span class="sig-prename descclassname"><span class="pre">TELF.factorization.utilities.sppmi_matrix.</span></span><span class="sig-name descname"><span class="pre">sppmi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cooc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/utilities/sppmi_matrix.html#sppmi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.utilities.sppmi_matrix.sppmi" title="Link to this definition">#</a></dt>
-<dd><p>computes the shifted positive pointwise mutual information from the cooccurrence matrix
-input:</p>
-<blockquote>
-<div><p>cooc: sparse cooccurence matrix
-shift: the shift</p>
-</div></blockquote>
-<dl class="simple">
-<dt>output:</dt><dd><p>sppmi_matrix: sparse shifted positive cooccurrence matrix</p>
-</dd>
-</dl>
-<p>author: Erik Skau</p>
 </dd></dl>
 
 </section>
@@ -703,51 +588,6 @@ do not write to the file simultaneously.</p>
 </dd></dl>
 
 </section>
-<section id="module-TELF.factorization.utilities.vectorize">
-<span id="telf-factorization-utilities-vectorize-module"></span><h2>TELF.factorization.utilities.vectorize module<a class="headerlink" href="#module-TELF.factorization.utilities.vectorize" title="Link to this heading">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="TELF.factorization.utilities.vectorize.count">
-<span class="sig-prename descclassname"><span class="pre">TELF.factorization.utilities.vectorize.</span></span><span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/utilities/vectorize.html#count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.utilities.vectorize.count" title="Link to this definition">#</a></dt>
-<dd><p>Count vectorizer.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>documents</strong> (<em>list</em>) – List of documents. Each entry in the list contains text.</p></li>
-<li><p><strong>options</strong> (<em>dict</em>) – Parameters for sklearn library.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>X</strong> (<em>list</em>) – sparse bag of words.</p></li>
-<li><p><strong>vocabulary</strong> (<em>list</em>) – List of unqiue words present in the all documents as vocabulary.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="TELF.factorization.utilities.vectorize.tfidf">
-<span class="sig-prename descclassname"><span class="pre">TELF.factorization.utilities.vectorize.</span></span><span class="sig-name descname"><span class="pre">tfidf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/factorization/utilities/vectorize.html#tfidf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.factorization.utilities.vectorize.tfidf" title="Link to this definition">#</a></dt>
-<dd><p>TF-IDF</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>documents</strong> (<em>list</em>) – List of documents. Each entry in the list contains text.</p></li>
-<li><p><strong>options</strong> (<em>dict</em>) – Parameters for sklearn library.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>X</strong> (<em>list</em>) – sparse tf-idf matrix.</p></li>
-<li><p><strong>vocabulary</strong> (<em>list</em>) – List of unqiue words present in the all documents as vocabulary.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
 <section id="module-TELF.factorization.utilities">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-TELF.factorization.utilities" title="Link to this heading">#</a></h2>
 </section>
@@ -800,15 +640,6 @@ do not write to the file simultaneously.</p>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.clustering">TELF.factorization.utilities.clustering module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.clustering.H_clustering"><code class="docutils literal notranslate"><span class="pre">H_clustering()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.clustering.plot_H_clustering"><code class="docutils literal notranslate"><span class="pre">plot_H_clustering()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.co_occurance_matrix">TELF.factorization.utilities.co_occurance_matrix module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.co_occurance_matrix.co_occurrence"><code class="docutils literal notranslate"><span class="pre">co_occurrence()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.organize_n_jobs">TELF.factorization.utilities.organize_n_jobs module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.organize_n_jobs.organize_devices"><code class="docutils literal notranslate"><span class="pre">organize_devices()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.organize_n_jobs.organize_n_jobs"><code class="docutils literal notranslate"><span class="pre">organize_n_jobs()</span></code></a></li>
@@ -827,20 +658,11 @@ do not write to the file simultaneously.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.pvalue_analysis.pvalue_analysis"><code class="docutils literal notranslate"><span class="pre">pvalue_analysis()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.sppmi_matrix">TELF.factorization.utilities.sppmi_matrix module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.sppmi_matrix.sppmi"><code class="docutils literal notranslate"><span class="pre">sppmi()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.take_note">TELF.factorization.utilities.take_note module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.take_note.append_to_note"><code class="docutils literal notranslate"><span class="pre">append_to_note()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.take_note.format_note"><code class="docutils literal notranslate"><span class="pre">format_note()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.take_note.take_note"><code class="docutils literal notranslate"><span class="pre">take_note()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.take_note.take_note_fmat"><code class="docutils literal notranslate"><span class="pre">take_note_fmat()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities.vectorize">TELF.factorization.utilities.vectorize module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.vectorize.count"><code class="docutils literal notranslate"><span class="pre">count()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.factorization.utilities.vectorize.tfidf"><code class="docutils literal notranslate"><span class="pre">tfidf()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.factorization.utilities">Module contents</a></li>

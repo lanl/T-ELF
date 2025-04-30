@@ -3,7 +3,8 @@ import pandas as pd
 from tqdm import tqdm
 
 from joblib import Parallel, delayed
-from ..utils import verify_n_jobs, get_from_dict
+from ....helpers.host import verify_n_jobs
+from ....helpers.data_structures import get_from_dict
 
 class ScopusAuthorsFrame:
     """ 
@@ -31,7 +32,7 @@ class ScopusAuthorsFrame:
     
     
     def __call__(self, data):
-        return create(data)
+        return self.create(data)
     
     
     def create(self, data):
@@ -42,7 +43,7 @@ class ScopusAuthorsFrame:
         else:
             jobs = []
             for d in tqdm(data, total=len(data), disable=not self.verbose):
-                jobs.append(j)
+                jobs.append(d)
 
         df, collab, papers = self._merge_processed_docs(jobs)
         names, emails, orcids, affiliations = self._process_author_info(df, collab, papers)

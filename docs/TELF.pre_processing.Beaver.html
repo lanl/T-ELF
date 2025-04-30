@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF.pre_processing.Beaver package &#8212; TELF 0.0.39 documentation</title>
+    <title>TELF.pre_processing.Beaver package &#8212; TELF 0.0.40 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=37718da2"></script>
+    <script src="_static/documentation_options.js?v=a27ffb50"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.39 documentation</p>
+    <p class="title logo__title">TELF 0.0.40 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -391,6 +391,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Beaver.tenmat">TELF.pre_processing.Beaver.tenmat module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.tenmat.fold"><code class="docutils literal notranslate"><span class="pre">fold()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.tenmat.move_axis"><code class="docutils literal notranslate"><span class="pre">move_axis()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.tenmat.unfold"><code class="docutils literal notranslate"><span class="pre">unfold()</span></code></a></li>
 </ul>
 </li>
@@ -849,6 +850,16 @@ shift: the shift</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="TELF.pre_processing.Beaver.tenmat.move_axis">
+<span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Beaver.tenmat.</span></span><span class="sig-name descname"><span class="pre">move_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Beaver/tenmat.html#move_axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Beaver.tenmat.move_axis" title="Link to this definition">#</a></dt>
+<dd><p>Create a matricized tensor.
+:param X: A tensor as a Numpy/Sparse Array
+:type X: ndarray/sparse array
+:param axis: Dimension number to unfold on.
+:type axis: int</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="TELF.pre_processing.Beaver.tenmat.unfold">
 <span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.Beaver.tenmat.</span></span><span class="sig-name descname"><span class="pre">unfold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/Beaver/tenmat.html#unfold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.Beaver.tenmat.unfold" title="Link to this definition">#</a></dt>
 <dd><p>Create a matricized tensor. i.e. Tensor unfolding along a mode.
@@ -993,6 +1004,7 @@ shift: the shift</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.Beaver.tenmat">TELF.pre_processing.Beaver.tenmat module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.tenmat.fold"><code class="docutils literal notranslate"><span class="pre">fold()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.tenmat.move_axis"><code class="docutils literal notranslate"><span class="pre">move_axis()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.Beaver.tenmat.unfold"><code class="docutils literal notranslate"><span class="pre">unfold()</span></code></a></li>
 </ul>
 </li>

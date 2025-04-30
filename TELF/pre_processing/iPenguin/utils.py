@@ -7,10 +7,7 @@ desc:    iPenguin utility functions
 '''
 import re
 import urllib
-import operator
 import datetime
-from functools import reduce
-
 
 def multi_urljoin(*parts):
     """
@@ -122,61 +119,3 @@ def format_pubyear(s):
 
             return year, fmat
     return None, None
-
-def chunk_dict(d, n):
-    """ 
-    Generator function for chunking dict d into n chunks
-    
-    Parameters
-    ----------
-    d: dict
-        dict to chunk
-    n: int
-        number of chunks to chunk to
-    Returns
-    -------
-    Generator of dicts
-    """
-    size = len(d)
-    keys = list(d.keys())
-    for i in range(n):
-        yield {keys[j]: d[keys[j]] for j in range(i, size, n)}  # yield chunk as a new dict
-
-def get_from_dict(d, args):
-    """ 
-    Try to reduce a dictionary using a list of arguments. For example, given the following dictionary
-    d = {0: {1: {2: 'foo'}}}, get_from_dict(d, [0,1,2]) would return 'foo'. 
-    
-    Parameters
-    ----------
-    d: dict
-        nested dictionary
-    args: list
-        list of keys by which to access the nested dict
-    Returns
-    -------
-    Value if found, None if error 
-    """
-    try:
-        val = reduce(operator.getitem, args, d)
-    except KeyError:
-        return None
-    except TypeError: 
-        return None
-    return val
-
-def gen_chunks(l, n):
-    """Yield n number of sequential chunks from l."""
-    d, r = divmod(len(l), n)
-    for i in range(n):
-        si = (d+1)*(i if i < r else r) + d*(0 if i < r else i - r)
-        yield l[si:si+(d+1 if i < r else d)]
-
-        
-def try_int(s):
-    try:
-        return int(s)
-    except ValueError:
-        return s
-    except TypeError:
-        return s

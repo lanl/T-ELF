@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.applications.Bunny.auto_bunny &#8212; TELF 0.0.39 documentation</title>
+    <title>TELF.applications.Bunny.auto_bunny &#8212; TELF 0.0.40 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../../_static/documentation_options.js?v=37718da2"></script>
+    <script src="../../../../_static/documentation_options.js?v=a27ffb50"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.39 documentation</p>
+    <p class="title logo__title">TELF 0.0.40 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -327,6 +327,7 @@
 <span class="kn">from</span> <span class="nn">...pre_processing.iPenguin.Scopus</span> <span class="kn">import</span> <span class="n">Scopus</span>
 <span class="kn">from</span> <span class="nn">...pre_processing.iPenguin.SemanticScholar</span> <span class="kn">import</span> <span class="n">SemanticScholar</span>
 <span class="kn">from</span> <span class="nn">...pre_processing.Vulture</span> <span class="kn">import</span> <span class="n">Vulture</span>
+<span class="kn">from</span> <span class="nn">...helpers.file_system</span> <span class="kn">import</span> <span class="n">check_path_var</span> <span class="k">as</span> <span class="n">check_path</span>
 
 <div class="viewcode-block" id="AutoBunnyStep">
 <a class="viewcode-back" href="../../../../Bunny.html#TELF.applications.Bunny.auto_bunny.AutoBunnyStep">[docs]</a>
@@ -613,7 +614,7 @@
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">ip</span> <span class="o">=</span> <span class="n">Scopus</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
                 <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The key &quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&quot; was rejected by the Scopus API&#39;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The key &quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&quot; was rejected by the Scopus API&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_scopus_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">scopus_keys</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unsupported type &quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot; for Scopus key&#39;</span><span class="p">)</span>
@@ -631,41 +632,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_cheetah_index</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">CHEETAH_INDEX</span><span class="p">,</span> <span class="o">**</span><span class="n">cheetah_index</span><span class="p">}</span> 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unsupported type &quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">cheetah_index</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot; for `cheetah_index`&#39;</span><span class="p">)</span>
-            
-    <span class="k">def</span> <span class="nf">__check_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">var_name</span><span class="p">):</span>      
-        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>  <span class="c1"># handle the path already existing as file</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The path `</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">` points to a file instead of a directory&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># parents=True ensures all missing parent directories are also created</span>
-
-    <span class="k">def</span> <span class="nf">__check_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">var_name</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Checks and ensures the given path exists as a directory. If path does not exist, a new directory</span>
-<span class="sd">        will be created. If the path exists but is a file, a ValueError will be raised. A TypeError is</span>
-<span class="sd">        raised if the provided path is neither a string nor a `pathlib.Path` object.</span>
-<span class="sd">    </span>
-<span class="sd">        Parameters:</span>
-<span class="sd">        -----------</span>
-<span class="sd">        path: str, pathlib.Path</span>
-<span class="sd">            The path to be checked and ensured as a directory.</span>
-<span class="sd">        </span>
-<span class="sd">        Raises:</span>
-<span class="sd">        -------</span>
-<span class="sd">        TypeError:</span>
-<span class="sd">            If the provided path is neither a string nor a `pathlib.Path` object.</span>
-<span class="sd">        ValueError: </span>
-<span class="sd">            If the path points to an existing file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unsupported type &quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot; for `path`&#39;</span><span class="p">)</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;`</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">` points to a file instead of a directory&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__process_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">var_name</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -676,7 +642,7 @@
             <span class="n">_path</span> <span class="o">=</span> <span class="n">path</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unsupported type &quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot; for `</span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s1">`&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__check_path</span><span class="p">(</span><span class="n">_path</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
+        <span class="n">check_path</span><span class="p">(</span><span class="n">_path</span><span class="p">,</span> <span class="n">var_name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">_path</span>
             
     <span class="nd">@output_dir</span><span class="o">.</span><span class="n">setter</span>

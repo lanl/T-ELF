@@ -10,8 +10,8 @@ from ...Peacock.Utility.aggregate_papers import (aggregate_ostats, count_countri
 from ...Peacock.Plot.plot import (plot_heatmap, plot_bar, 
                                   plot_scatter, plot_pie)
 
-from ...Fox.post_process_stats import (get_cluster_stat_file, sum_dicts)
-
+from ...Fox.post_process_stats import (get_cluster_stat_file)
+from ....helpers.data_structures import sum_dicts
 class HNMFkStatsGenerator:
     def __init__(self, clean_cols_name="clean_title_abstract"):
         self.clean_cols_name = clean_cols_name

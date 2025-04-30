@@ -6,7 +6,8 @@ import asyncio
 import requests
 import warnings
 
-from ..utils import get_from_dict, multi_urljoin, get_human_readable_timestamp
+from ....helpers.data_structures import get_from_dict
+from ..utils import multi_urljoin, get_human_readable_timestamp
 
 
 class ScopusAPI:

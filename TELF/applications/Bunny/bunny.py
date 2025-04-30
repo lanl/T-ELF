@@ -10,7 +10,8 @@ from collections import Counter
 from dataclasses import dataclass
 pd.set_option('future.no_silent_downcasting', True)
 
-from ...applications.Penguin import Penguin, form_df
+from ..Penguin import Penguin
+from ..Penguin.crocodile import form_df
 from ...pre_processing.iPenguin.Scopus import Scopus
 from ...pre_processing.iPenguin.SemanticScholar import SemanticScholar
 from ...pre_processing.iPenguin.utils import format_pubyear
@@ -133,14 +134,6 @@ def find_doi(f):
     pattern = '<prism:doi>(.*?)</prism:doi>'
     match = re.search(pattern, data, re.DOTALL)
     return match.group(1) if match else None
-
-
-def gen_chunks(l, n):
-    """Yield n number of sequential chunks from l."""
-    d, r = divmod(len(l), n)
-    for i in range(n):
-        si = (d+1)*(i if i < r else r) + d*(0 if i < r else i - r)
-        yield l[si:si+(d+1 if i < r else d)]
 
 
 class Bunny():
@@ -335,7 +328,7 @@ class Bunny():
         
         scopus_df.doi = scopus_df.doi.str.lower()
         scopus_df = scopus_df.loc[scopus_df.doi.isin(s2_dois)].copy()
-        return s2_join_scopus(s2_df, scopus_df)
+        return form_df(s2_df, scopus_df)
 
     
     def form_core(self, data, data_type, s2_dir='s2'):
@@ -752,20 +745,6 @@ class Bunny():
                 return set.intersection(*results)
             elif query.operator == 'OR':
                 return set.union(*results)
-
-
-    def __form_query_str(self, query):
-        if isinstance(query, BunnyFilter):
-            ffunc = self.filter_funcs[query.filter_type]
-            result = ffunc(df, query.filter_value, auth_map)
-            return result
-        elif isinstance(query, BunnyOperation):
-            results = [self.__evaluate_query(operand, df, auth_map) for operand in query.operands]
-            if query.operator == 'AND':
-                return set.intersection(*results)
-            elif query.operator == 'OR':
-                return set.union(*results)
-
     
     def apply_filter(self, df, filters, filter_in_core=True, do_author_match=True):
         if 'eid' not in df and do_author_match:
