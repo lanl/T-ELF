@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.decompositions.nmf_mc_fro_mu &#8212; TELF 0.0.39 documentation</title>
+    <title>TELF.factorization.decompositions.nmf_mc_fro_mu &#8212; TELF 0.0.40 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../../_static/documentation_options.js?v=37718da2"></script>
+    <script src="../../../../_static/documentation_options.js?v=a27ffb50"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.39 documentation</p>
+    <p class="title logo__title">TELF 0.0.40 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -619,7 +619,7 @@
 
 <div class="viewcode-block" id="old_nmf">
 <a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.old_nmf">[docs]</a>
-<span class="k">def</span> <span class="nf">old_nmf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">lowerthres</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upperthres</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">old_nmf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">lowerthres</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upperthres</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Multiplicative update algorithm for NMF with Frobenius norm loss function. ||X-WH||_F^2</span>
 
@@ -720,7 +720,7 @@
 
 <div class="viewcode-block" id="nmf">
 <a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.nmf">[docs]</a>
-<span class="k">def</span> <span class="nf">nmf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">lowerthres</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upperthres</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">nmf</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">lowerthres</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upperthres</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">opts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    penalized nmf with adaptive alpha</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -898,125 +898,8 @@
         <span class="k">return</span> <span class="n">err</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">I</span><span class="p">],</span> <span class="n">Lthres</span><span class="p">[</span><span class="n">I</span><span class="p">]</span></div>
 
 
-
-<div class="viewcode-block" id="find_thres_WH">
-<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.find_thres_WH">[docs]</a>
-<span class="k">def</span> <span class="nf">find_thres_WH</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Wn</span><span class="p">,</span> <span class="n">Hn</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">npoint</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="c1"># Wn, Hn are normalized using thres_norm function</span>
-    <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">npoint</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">Lw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">Wn</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
-        <span class="n">Lh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">Hn</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">Lw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Wn</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Wn</span><span class="p">),</span> <span class="n">npoint</span><span class="p">)</span>
-        <span class="n">Lh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">Hn</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">Hn</span><span class="p">),</span> <span class="n">npoint</span><span class="p">)</span>
-
-    <span class="n">Wpoint</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lw</span><span class="p">)</span>
-    <span class="n">Hpoint</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lh</span><span class="p">)</span>
-    <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">Lw</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">Lh</span><span class="p">)))</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Wpoint</span><span class="p">):</span>
-        <span class="n">lambdaW</span> <span class="o">=</span> <span class="n">Lw</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Hpoint</span><span class="p">):</span>
-            <span class="n">lambdaH</span> <span class="o">=</span> <span class="n">Lh</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-            <span class="n">Xhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Wn</span> <span class="o">&gt;=</span> <span class="n">lambdaW</span><span class="p">,</span> <span class="n">Hn</span> <span class="o">&gt;=</span> <span class="n">lambdaH</span><span class="p">)</span>
-            <span class="n">err</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span> <span class="o">^</span> <span class="n">Xhat</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;best&quot;</span><span class="p">:</span>
-        <span class="p">[</span><span class="n">iw</span><span class="p">,</span> <span class="n">ih</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">err</span><span class="o">.</span><span class="n">argmin</span><span class="p">(),</span> <span class="n">err</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span><span class="n">err</span><span class="p">[</span><span class="n">iw</span><span class="p">,</span> <span class="n">ih</span><span class="p">],</span> <span class="s2">&quot;Lw&quot;</span><span class="p">:</span><span class="n">Lw</span><span class="p">[</span><span class="n">iw</span><span class="p">],</span> <span class="s2">&quot;Lh&quot;</span><span class="p">:</span><span class="n">Lh</span><span class="p">[</span><span class="n">ih</span><span class="p">]}</span>
-    <span class="k">elif</span> <span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;grid&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span><span class="n">err</span><span class="p">,</span> <span class="s2">&quot;Lw&quot;</span><span class="p">:</span><span class="n">Lw</span><span class="p">,</span> <span class="s2">&quot;Lh&quot;</span><span class="p">:</span><span class="n">Lh</span><span class="p">}</span></div>
-
-
-
-<div class="viewcode-block" id="coord_desc_thresh">
-<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh">[docs]</a>
-<span class="k">def</span> <span class="nf">coord_desc_thresh</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">wt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ht</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
-    <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-    <span class="n">k</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">wt</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">wt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)])</span>
-    <span class="k">if</span> <span class="n">ht</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">ht</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)])</span>
-    <span class="n">Wrange</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">W</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span>
-    <span class="n">Hrange</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">H</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span>
-    <span class="n">err</span> <span class="o">=</span> <span class="mi">1</span>
-
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
-        <span class="n">old_err</span> <span class="o">=</span> <span class="n">err</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">Wrange</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">wrange</span> <span class="o">=</span> <span class="n">Wrange</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">Wt</span> <span class="o">=</span> <span class="n">W</span> <span class="o">&gt;=</span> <span class="n">wt</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
-            <span class="n">Ht</span> <span class="o">=</span> <span class="n">H</span> <span class="o">&gt;=</span> <span class="n">ht</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
-            <span class="n">cache</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">Wt</span><span class="p">[:,</span> <span class="p">[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">]]</span>
-<div class="viewcode-block" id="coord_desc_thresh_onefactor">
-<a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.coord_desc_thresh_onefactor">[docs]</a>
-                <span class="o">@</span> <span class="n">Ht</span><span class="p">[[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">],</span> <span class="p">:]</span>
-            <span class="p">)</span>
-            <span class="n">this_component</span> <span class="o">=</span> <span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">wrange</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">@</span> <span class="n">Ht</span><span class="p">[[</span><span class="n">i</span><span class="p">],</span> <span class="p">:]</span>
-            <span class="n">Ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">this_component</span><span class="p">)</span>
-            <span class="n">errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_xor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Ys</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">X</span><span class="o">.</span><span class="n">size</span>
-            <span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">wrange</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">errors</span><span class="p">)]</span>
-
-            <span class="c1"># * update H</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">Hrange</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">hrange</span> <span class="o">=</span> <span class="n">Hrange</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">Ht</span> <span class="o">=</span> <span class="n">H</span> <span class="o">&gt;=</span> <span class="n">ht</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
-            <span class="n">Wt</span> <span class="o">=</span> <span class="n">W</span> <span class="o">&gt;=</span> <span class="n">wt</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
-            <span class="n">cache</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">Wt</span><span class="p">[:,</span> <span class="p">[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">]]</span>
-                <span class="o">@</span> <span class="n">Ht</span><span class="p">[[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">],</span> <span class="p">:]</span>
-            <span class="p">)</span>
-            <span class="n">this_component</span> <span class="o">=</span> <span class="n">Wt</span><span class="p">[:,</span> <span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">@</span> <span class="p">(</span><span class="n">H</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&gt;=</span> <span class="n">hrange</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
-            <span class="n">Ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">this_component</span><span class="p">)</span>
-            <span class="n">errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_xor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Ys</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">X</span><span class="o">.</span><span class="n">size</span>
-            <span class="n">ht</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">hrange</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">errors</span><span class="p">)]</span>
-
-        <span class="c1"># * error after one sweep</span>
-        <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
-        <span class="c1"># * stopping criteria</span>
-        <span class="k">if</span> <span class="n">err</span> <span class="o">==</span> <span class="n">old_err</span><span class="p">:</span>
-            <span class="c1"># print(&#39;converged in num iter = {}, err = {}&#39;.format(j, np.min(errors)))</span>
-            <span class="k">pass</span>
-    <span class="k">return</span> <span class="n">err</span><span class="p">,</span> <span class="n">wt</span><span class="p">,</span> <span class="n">ht</span></div>
-
-
-
-<span class="k">def</span> <span class="nf">coord_desc_thresh_onefactor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
-    <span class="c1"># * only threshold W given H. Use transpose to threshold H</span>
-    <span class="n">np</span> <span class="o">=</span> <span class="n">get_np</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-    <span class="n">k</span> <span class="o">=</span> <span class="n">W</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">wt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)])</span>
-    <span class="n">Wrange</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">W</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span>
-    <span class="n">err</span> <span class="o">=</span> <span class="mi">1</span>
-
-    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
-        <span class="n">old_err</span> <span class="o">=</span> <span class="n">err</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">Wrange</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">wrange</span> <span class="o">=</span> <span class="n">Wrange</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">Wt</span> <span class="o">=</span> <span class="n">W</span> <span class="o">&gt;=</span> <span class="n">wt</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
-            <span class="n">Ht</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
-            <span class="n">cache</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">Wt</span><span class="p">[:,</span> <span class="p">[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">]]</span>
 <div class="viewcode-block" id="roc_W_H">
 <a class="viewcode-back" href="../../../../TELF.factorization.decompositions.html#TELF.factorization.decompositions.nmf_mc_fro_mu.roc_W_H">[docs]</a>
-                <span class="o">@</span> <span class="n">Ht</span><span class="p">[[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">i</span><span class="p">],</span> <span class="p">:]</span>
-            <span class="p">)</span>
-            <span class="n">this_component</span> <span class="o">=</span> <span class="p">(</span><span class="n">W</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">wrange</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">@</span> <span class="n">Ht</span><span class="p">[[</span><span class="n">i</span><span class="p">],</span> <span class="p">:]</span>
-            <span class="n">Ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">this_component</span><span class="p">)</span>
-            <span class="n">errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_xor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Ys</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">X</span><span class="o">.</span><span class="n">size</span>
-            <span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">wrange</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">errors</span><span class="p">)]</span>
-
-        <span class="c1"># * error after one sweep</span>
-        <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">err</span><span class="p">,</span> <span class="n">wt</span></div>
-
-
-
 <span class="k">def</span> <span class="nf">roc_W_H</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">):</span>
     <span class="n">Lthres</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">W</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">H</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
     <span class="n">Lthres</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>

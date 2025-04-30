@@ -3,7 +3,7 @@ import pathlib
 import warnings
 import pandas as pd
 
-from ..utils import try_int, get_from_dict
+from ....helpers.data_structures import try_int, get_from_dict
 
 IDK = 'Unknown'
 COUNTRY_CODES = {
@@ -111,14 +111,6 @@ COUNTRY_CODES = {
     '934292': 'Mauritius',
     '1282988': 'Nepal',
 }
-
-def gen_chunks(l, n):
-    """Yield n number of sequential chunks from l."""
-    d, r = divmod(len(l), n)
-    for i in range(n):
-        si = (d+1)*(i if i < r else r) + d*(0 if i < r else i - r)
-        yield l[si:si+(d+1 if i < r else d)]
-        
         
 def parse_funding(funding_info):
 
@@ -144,19 +136,6 @@ def parse_funding(funding_info):
         if not funding:
             funding = None
     return funding
-
-
-def match_lists(list_a, list_b, key_a='@afid', key_b='$'):
-    result = {}
-    len_a = len(list_a)
-    len_b = len(list_b)
-    
-    for i in range(max(len_a, len_b)):
-        value_a = list_a[i][key_a] if i < len_a and isinstance(list_a[i], dict) and key_a in list_a[i] else None
-        value_b = list_b[i][key_b] if i < len_b and isinstance(list_b[i], dict) and key_b in list_b[i] else None
-        result[value_a] = value_b        
-    return result
-
 
 def parse_affiliation(affiliations, authors):
     affiliation_map = {}

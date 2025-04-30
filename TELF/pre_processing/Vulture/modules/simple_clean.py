@@ -98,6 +98,17 @@ class SimpleCleaner(VultureModuleBase):
         
         # keep tokens that have at least this many characters
         'min_characters': None,
+        
+        # "numbers": standalone numbers using word boundaries
+        "remove_numbers": (r'\b\d+\b', ''),
+        
+        # "alphanumeric": strings that contain both letters and numbers.
+        # This regex uses lookahead assertions to ensure that the token
+        # contains at least one letter [A-Za-z] and one digit \d.
+        "remove_alphanumeric": (r'\b(?=\w*[A-Za-z])(?=\w*\d)\w+\b', ''),
+
+        "remove_roman_numerals": (r'(?i)\bM{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})\b', '')
+
     }
     
 

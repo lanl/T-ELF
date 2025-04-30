@@ -3,12 +3,13 @@ import os
 import numpy as np
 import pandas as pd
 
-from ...Fox.H_clustering import H_clustering, plot_H_clustering
-from ...Fox.W_wordcloud import create_wordcloud  
+from ....helpers.figures import plot_H_clustering
+from ....helpers.stats import H_clustering
+from ....helpers.figures import create_wordcloud 
 from ....pre_processing.Vulture.tokens_analysis.top_words import get_top_words
-from ...Fox.post_process_functions import (H_cluster_argmax, top_words, 
-                                           get_core_map, best_n_papers, check_path)
-
+from ...Fox.post_process_functions import (H_cluster_argmax, get_core_map, best_n_papers)
+from ....helpers.file_system import check_path
+from ....helpers.stats import top_words
 
 class HNMFkPostProcessor:
     def __init__(
@@ -77,38 +78,42 @@ class HNMFkPostProcessor:
         if labels.ndim == 0:
             labels = labels.reshape(1)
 
-        # 2. Save cluster info
+        # 2. Save overall cluster info
         table_df_path = os.path.join(out_dir, self.table_filename)
         table_df.to_csv(table_df_path, index=False)
         np.savetxt(os.path.join(archive_dir, self.cluster_doc_map_filename), np.rint(labels), fmt='%d')
 
-        # 3. Top words
+        # 3. Top words for whole matrix
         vocab = np.array(vocab)
-        print('form inital_post_process.py, in modded_post_process len(W)',len(W),", len(vocab):",len(vocab))
+        print('from modded_post_process, len(W):', len(W), ", len(vocab):", len(vocab))
         words, probabilities = top_words(W, vocab, self.top_n_words)
         pd.DataFrame(words).to_csv(os.path.join(out_dir, self.top_words_filename), index=False)
         pd.DataFrame(probabilities).to_csv(os.path.join(out_dir, self.probs_filename), index=False)
 
+        # 4. Create general wordcloud and H clustering plot
         create_wordcloud(
-            W, 
-            vocab, 
-            top_n=self.top_n_words, 
+            W=W,
+            vocab=vocab,
+            top_n=self.top_n_words,
             path=out_dir,
-            verbose=False, 
-            max_words=self.top_n_words,           # optional parameter
-            mask=np.zeros(self.wordcloud_size),   # e.g. (800, 800)
-            max_font_size=self.max_font_size,     # from your class
-            contour_width=self.contour_width      # from your class
+            verbose=False,
+            max_words=self.top_n_words,
+            mask=np.zeros(self.wordcloud_size),
+            background_color="black",
+            max_font_size=self.max_font_size,
+            contour_width=self.contour_width,
+            grid_dimension=4  
         )
 
-
         clusters_info, docs_info = H_clustering(H, verbose=True)
-        plot_H_clustering(H, name=os.path.join(out_dir,"centroids_H_clustering") )
+        # plot_H_clustering(H, name=os.path.join(out_dir, "centroids_H_clustering"))
 
+        # 5. Save general documents and cluster info
         pd.DataFrame(clusters_info).T.to_csv(os.path.join(archive_dir, self.clusters_info_filename), index=False)
         documents_information_df = pd.DataFrame(docs_info).T
         documents_information_df.to_csv(os.path.join(archive_dir, self.documents_info_filename), index=False)
 
+        # 6. Update df_post with clustering results
         if self.col_year in df_post:
             df_post[self.col_year] = df_post[self.col_year].fillna(-1).astype(int).replace(-1, np.nan)
 
@@ -120,6 +125,7 @@ class HNMFkPostProcessor:
 
         df_post[self.col_similarity] = documents_information_df['similarity_to_cluster_centroid']
 
+        # 7. If type column exists, calculate core stats
         if self.col_type in df_post:
             core_map = get_core_map(df_post)
             num_total_core = len(df_post.loc[df_post[self.col_type] == 0])
@@ -130,19 +136,48 @@ class HNMFkPostProcessor:
                 )
                 table_df.to_csv(table_df_path, index=False)
 
+        # 8. Save final post-processed dataframe
         post_processed_df_path = os.path.join(out_dir, f'cluster_for_k={W.shape[1]}.csv')
         df_post.to_csv(post_processed_df_path, index=False)
 
+        # 9. Save best_n_papers output
         best_n_papers(df_post, out_dir, self.top_n_words)
 
+        # 10. 🔥 For each cluster, save its own outputs
         for cluster_id in sorted(df_post[self.col_cluster].unique()):
-            save_dir = check_path(os.path.join(out_dir, f'{int(cluster_id)}'))
+            cluster_id = int(cluster_id)
+            save_dir = check_path(os.path.join(out_dir, f'{cluster_id}'))
             cluster_df = df_post.loc[df_post[self.col_cluster] == cluster_id].copy()
             clean_documents = cluster_df[clean_cols_name].to_dict()
 
+            # (a) save BOW for each cluster
             for n in [1, 2]:
                 bow_df = get_top_words(clean_documents, top_n=100, n_gram=n, verbose=True)
                 bow_df.to_csv(os.path.join(save_dir, f'{cluster_id}_bow_{["unigrams", "bigrams"][n-1]}.csv'), index=False)
+
+            # (b) save wordcloud per cluster
+            W_cluster = W[:, cluster_id].reshape(-1, 1)  # W[:, i] (as 2D matrix)
+            create_wordcloud(
+                W=W_cluster,
+                vocab=vocab,
+                top_n=self.top_n_words,
+                path=save_dir,
+                verbose=False,
+                max_words=self.top_n_words,
+                mask=np.zeros(self.wordcloud_size),
+                background_color="black",
+                max_font_size=self.max_font_size,
+                contour_width=self.contour_width,
+                filename_base=cluster_id
+            )
+            # Your create_wordcloud will automatically save 0.pdf into that cluster dir
+
+            # (c) save H clustering centroids per cluster (optional)
+            H_cluster = H[cluster_id, :].reshape(1, -1)
+            plot_H_clustering(
+                H_cluster,
+                name=os.path.join(save_dir, f"centroids_H_clustering_{cluster_id}.png")
+            )
 
         return post_processed_df_path
 

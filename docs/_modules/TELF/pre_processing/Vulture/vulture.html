@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.pre_processing.Vulture.vulture &#8212; TELF 0.0.39 documentation</title>
+    <title>TELF.pre_processing.Vulture.vulture &#8212; TELF 0.0.40 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../../_static/documentation_options.js?v=37718da2"></script>
+    <script src="../../../../_static/documentation_options.js?v=a27ffb50"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.39 documentation</p>
+    <p class="title logo__title">TELF 0.0.40 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -347,6 +347,7 @@
 <span class="kn">from</span> <span class="nn">.modules.ner</span> <span class="kn">import</span> <span class="n">NEDetector</span>
 <span class="kn">from</span> <span class="nn">.default_stop_words</span> <span class="kn">import</span> <span class="n">STOP_WORDS</span>
 <span class="kn">from</span> <span class="nn">.default_stop_phrases</span> <span class="kn">import</span> <span class="n">STOP_PHRASES</span>
+<span class="kn">from</span> <span class="nn">...helpers.file_system</span> <span class="kn">import</span> <span class="n">check_path</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
@@ -423,6 +424,9 @@
                           <span class="s1">&#39;remove_standalone_numbers&#39;</span><span class="p">,</span>
                           <span class="s1">&#39;remove_extra_whitespace&#39;</span><span class="p">,</span>
                           <span class="s1">&#39;min_characters&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_numbers&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_alphanumeric&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;remove_roman_numerals&#39;</span>
                       <span class="p">]</span>
                      <span class="p">),</span>
     <span class="p">]</span>
@@ -484,10 +488,10 @@
         <span class="n">all_results</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">save_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;_</span><span class="si">{</span><span class="n">step</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">.p&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">step</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">.p&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">=</span> <span class="n">save_path</span>
-
+            
             <span class="n">curr_operated_documents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clean_helper</span><span class="p">(</span><span class="n">operate_documents</span><span class="p">,</span> <span class="p">[</span><span class="n">step</span><span class="p">])</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_mpi</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_mpi_save_chunk_to_disk</span><span class="p">(</span><span class="n">curr_operated_documents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">,</span> <span class="n">is_clean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">custom_fn</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">step</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -591,7 +595,7 @@
         <span class="c1"># add the clean data back to the DataFrame</span>
         <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">clean_docs</span> <span class="ow">in</span> <span class="n">clean_documents</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">clean_docs</span><span class="p">)</span>
-            <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># set null entries to None</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span> <span class="c1"># set null entries to None</span>
         <span class="k">return</span> <span class="n">df</span></div>
 
     
@@ -798,6 +802,7 @@
         <span class="k">if</span> <span class="n">save_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The file &quot;</span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s1">&quot; already exists and will be overwritten!&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_save_path</span> <span class="o">=</span> <span class="n">save_path</span>
+
         
     <span class="nd">@verbose</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">verbose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>

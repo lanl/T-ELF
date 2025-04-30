@@ -16,26 +16,7 @@ import sparse
 from joblib import Parallel, delayed
 import multiprocessing
 import sys
-
-def _chunk_list(l, n):
-    """
-    Yield n number of striped chunks from l.
-
-    Parameters
-    ----------
-    l : list
-        list to be chunked.
-    n : int
-        number of chunks.
-
-    Yields
-    ------
-    list
-        chunks.
-
-    """
-    for i in range(0, n):
-        yield l[i::n]
+from ...helpers.data_structures import chunk_list
 
 def _co_occurance_parallel_helper(documents, verbose, window_size, sentences, V_map):
     """
@@ -177,7 +158,7 @@ def co_occurrence(documents, vocabulary, window_size=20, verbose=True, sentences
         n_chunks = n_jobs
     
     # chunk the documents to get list of jobs
-    document_chunks = list(_chunk_list(documents, n_chunks))
+    document_chunks = list(chunk_list(documents, n_chunks))
     
     # run counting in parallel
     list_results = Parallel(n_jobs=n_jobs, 

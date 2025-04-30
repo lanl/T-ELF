@@ -6,7 +6,7 @@ import pandas as pd
 from pathlib import Path
 from .clustering_analyzer import ClusteringAnalyzer
 from .visualizer import VisualizationManager
-from .utils import check_path
+from ...helpers.file_system import check_path
 from .openAI_summaries import label_clusters_openAI
 
 class Fox:

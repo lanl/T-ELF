@@ -33,6 +33,7 @@ from .decompositions.utilities.clustering import custom_k_means, custom_bool_clu
 from .decompositions.utilities.silhouettes import silhouettes, silhouettes_with_distance
 from .decompositions.utilities.math_utils import prune, unprune, relative_error, get_pac
 from .decompositions.utilities.concensus_matrix import compute_consensus_matrix, reorder_con_mat
+from ..helpers.data_structures import chunk_Ks
 
 from datetime import datetime, timedelta
 from collections import defaultdict
@@ -1096,7 +1097,7 @@ class NMFk:
         if self.n_nodes > 1:
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
-            Ks = self.__chunk_Ks(Ks, n_chunks=self.n_nodes)[rank]
+            Ks = chunk_Ks(Ks, n_chunks=self.n_nodes)[rank]
             note_name = f'{rank}_experiment'
             if self.verbose:
                 print("Rank=", rank, "Host=", socket.gethostname(), "Ks=", Ks)
@@ -1445,18 +1446,3 @@ class NMFk:
                 results["plot_data"] = combined_result
                 
             return results
-
-    def __chunk_Ks(self, Ks: list, n_chunks=2) -> list:
-        # correct n_chunks if needed
-        if len(Ks) < n_chunks:
-            n_chunks = len(Ks)
-
-        chunks = list()
-        for _ in range(n_chunks):
-            chunks.append([])
-
-        for idx, ii in enumerate(Ks):
-            chunk_idx = idx % n_chunks
-            chunks[chunk_idx].append(ii)
-
-        return chunks

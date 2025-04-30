@@ -1,6 +1,8 @@
 from .NMFk import NMFk
 from .decompositions.nmf_fro_mu import H_update as H_update_fro_mu
 from .decompositions.nmf_kl_mu import H_update as H_update_kl_mu
+from ..helpers.inits import organize_required_params
+from .utilities.math import MitH
 from sklearn.svm import SVR
 import numpy as np
 from scipy.sparse import issparse
@@ -43,9 +45,13 @@ class SPLITTransfer():
         self.Ks_split_min = Ks_split_min
         self.H_regress_gpu = H_regress_gpu
         self.H_learn_method = H_learn_method
-        self.nmfk_params_known = self._organize_nmfk_params(nmfk_params_known)
-        self.nmfk_params_target = self._organize_nmfk_params(nmfk_params_target)
-        self.nmfk_params_split = self._organize_nmfk_params(nmfk_params_split)
+        self.required_params_setting = {
+            "collect_output":True,
+            "predict_k":True,
+        }
+        self.nmfk_params_known = organize_required_params(nmfk_params_known, self.required_params_setting)
+        self.nmfk_params_target = organize_required_params(nmfk_params_target, self.required_params_setting)
+        self.nmfk_params_split = organize_required_params(nmfk_params_split, self.required_params_setting)
         self.H_regress_iters = H_regress_iters
         self.H_regress_method = H_regress_method
         self.H_regress_init = H_regress_init
@@ -295,11 +301,11 @@ class SPLITTransfer():
         elif self.H_learn_method == "MitH":
             if self.verbose:
                 print("Learning known H with MitH...")
-            self.known["H_learned"] = self._MitH(self.split["M_known"], self.known["H"])
+            self.known["H_learned"] = MitH(self.split["M_known"], self.known["H"])
 
             if self.verbose:
                 print("Learning target H with MitH...")
-            self.target["H_learned"] = self._MitH(self.split["M_target"], self.target["H"])
+            self.target["H_learned"] = MitH(self.split["M_target"], self.target["H"])
 
         else:
             raise Exception("Unknown H learn method!")
@@ -326,13 +332,10 @@ class SPLITTransfer():
             return np.random.rand(k, X.shape[1])
 
         elif self.H_regress_init == "MitH":
-            return self._MitH(M, H)
+            return MitH(M, H)
 
         else:
             raise Exception("Unknown H regression initilization!")
-
-    def _MitH(self, M, H):
-        return M @ H
 
     def _H_regression(self, X, W, H):
 
@@ -361,15 +364,6 @@ class SPLITTransfer():
             return sp_hstack(Ws)
         else:
             return np.hstack(Ws)
-
-    def _organize_nmfk_params(self, params):
-        #
-        # Required
-        #
-        params["collect_output"] = True
-        params["predict_k"] = True
-
-        return params
 
     def _plot_feature_importances(self, feature_importances, rotate_xticks=False):
 

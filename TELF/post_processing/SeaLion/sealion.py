@@ -13,7 +13,7 @@ from .tools.get_recommendations import recommendations
 from .tools.get_recommendations import recommendations_masked
 from .tools.get_recommendations import recommendation_graph
 from .tools.get_wordclouds import words_probabilities
-from .tools.get_wordclouds import word_cloud
+from ...helpers.figures import word_cloud
 from .tools.get_W_plot import W_plot
 from .tools.get_W_plot import get_W_sub
 from .tools.get_W_plot import W_UMAP

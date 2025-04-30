@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.pre_processing.Beaver.tenmat &#8212; TELF 0.0.39 documentation</title>
+    <title>TELF.pre_processing.Beaver.tenmat &#8212; TELF 0.0.40 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../../_static/documentation_options.js?v=37718da2"></script>
+    <script src="../../../../_static/documentation_options.js?v=a27ffb50"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.39 documentation</p>
+    <p class="title logo__title">TELF 0.0.40 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -333,37 +333,6 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.sparse</span>
 
-<span class="k">def</span> <span class="nf">unfold</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a matricized tensor. i.e. Tensor unfolding along a mode.</span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    X : array</span>
-<span class="sd">        N-dim array to be unfoled.</span>
-<span class="sd">    mode : int</span>
-<span class="sd">        Dimension number to unfold on.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    X : np.ndarray</span>
-<span class="sd">        Matriced version of the sparse tensor in as dense matrix.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">rdims</span> <span class="o">=</span> <span class="p">[</span><span class="n">mode</span><span class="p">]</span>
-    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">tmp</span><span class="p">[</span><span class="n">rdims</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">cdims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tmp</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">order</span> <span class="o">=</span> <span class="n">rdims</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">cdims</span><span class="p">)</span>
-    <span class="n">X_t</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rdims</span><span class="p">])</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cdims</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">X_t</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
-    
-
-<span class="kn">import</span> <span class="nn">sparse</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.sparse</span>
-
 <div class="viewcode-block" id="unfold">
 <a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.tenmat.unfold">[docs]</a>
 <span class="k">def</span> <span class="nf">unfold</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
@@ -392,7 +361,6 @@
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">([</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cdims</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">X_t</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span></div>
 
-    
 
 <div class="viewcode-block" id="fold">
 <a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.tenmat.fold">[docs]</a>
@@ -415,6 +383,28 @@
         <span class="k">return</span> <span class="n">sparse</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">sparse</span><span class="o">.</span><span class="n">COO</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">full_shape</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">full_shape</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="move_axis">
+<a class="viewcode-back" href="../../../../TELF.pre_processing.Beaver.html#TELF.pre_processing.Beaver.tenmat.move_axis">[docs]</a>
+<span class="k">def</span> <span class="nf">move_axis</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a matricized tensor.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : ndarray/sparse array</span>
+<span class="sd">            A tensor as a Numpy/Sparse Array</span>
+<span class="sd">        axis : int</span>
+<span class="sd">            Dimension number to unfold on.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">sparse</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="k">if</span> <span class="n">source</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">X_t</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">source</span><span class="p">,</span><span class="n">target</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">X_t</span></div>
 
 </pre></div>
 

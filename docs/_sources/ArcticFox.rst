@@ -12,10 +12,9 @@ Available Functions
 .. autosummary::
    ArcticFox.__init__
    ArcticFox.run_full_pipeline
-   ArcticFox.run_labeling_only
-   ArcticFox.run_postprocessing_only
-   ArcticFox.run_stats_only
-   ArcticFox.run_data_collection_only
+   ArcticFox.run_labeling
+   ArcticFox.run_postprocessing
+   ArcticFox.run_stats
    
 
 Module Contents

@@ -4,10 +4,14 @@ import os
 import shutil
 import numpy as np
 import pandas as pd
-from pathlib import Path
-from .post_process_functions import (H_cluster_argmax, get_core_map, top_words, word_cloud, best_n_papers, sme_attribution)
-from .utils import check_path, process_terms
-from .H_clustering import H_clustering, plot_H_clustering
+
+from .post_process_functions import (H_cluster_argmax, get_core_map,
+                                     best_n_papers, sme_attribution)
+from ...helpers.stats import top_words
+from ...helpers.figures import word_cloud
+from ...helpers.file_system import process_terms, check_path
+from ...helpers.figures import plot_H_clustering
+from ...helpers.stats import H_clustering
 from ...pre_processing.Vulture.tokens_analysis.top_words import get_top_words
 
 class ClusteringAnalyzer:

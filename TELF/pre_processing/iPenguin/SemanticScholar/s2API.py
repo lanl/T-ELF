@@ -7,7 +7,6 @@ import urllib
 
 from ..utils import multi_urljoin, get_query_param
 
-
 class SemanticScholarAPI:
     """
     Asynchronous Semantic Scholar (S2) API Handler.

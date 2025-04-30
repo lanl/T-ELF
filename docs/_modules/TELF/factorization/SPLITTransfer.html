@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.SPLITTransfer &#8212; TELF 0.0.39 documentation</title>
+    <title>TELF.factorization.SPLITTransfer &#8212; TELF 0.0.40 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=37718da2"></script>
+    <script src="../../../_static/documentation_options.js?v=a27ffb50"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.39 documentation</p>
+    <p class="title logo__title">TELF 0.0.40 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -318,6 +318,8 @@
 <span></span><span class="kn">from</span> <span class="nn">.NMFk</span> <span class="kn">import</span> <span class="n">NMFk</span>
 <span class="kn">from</span> <span class="nn">.decompositions.nmf_fro_mu</span> <span class="kn">import</span> <span class="n">H_update</span> <span class="k">as</span> <span class="n">H_update_fro_mu</span>
 <span class="kn">from</span> <span class="nn">.decompositions.nmf_kl_mu</span> <span class="kn">import</span> <span class="n">H_update</span> <span class="k">as</span> <span class="n">H_update_kl_mu</span>
+<span class="kn">from</span> <span class="nn">..helpers.inits</span> <span class="kn">import</span> <span class="n">organize_required_params</span>
+<span class="kn">from</span> <span class="nn">.utilities.math</span> <span class="kn">import</span> <span class="n">MitH</span>
 <span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVR</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">issparse</span>
@@ -362,9 +364,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Ks_split_min</span> <span class="o">=</span> <span class="n">Ks_split_min</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">H_regress_gpu</span> <span class="o">=</span> <span class="n">H_regress_gpu</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">H_learn_method</span> <span class="o">=</span> <span class="n">H_learn_method</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params_known</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_organize_nmfk_params</span><span class="p">(</span><span class="n">nmfk_params_known</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_organize_nmfk_params</span><span class="p">(</span><span class="n">nmfk_params_target</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params_split</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_organize_nmfk_params</span><span class="p">(</span><span class="n">nmfk_params_split</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_params_setting</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;collect_output&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;predict_k&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params_known</span> <span class="o">=</span> <span class="n">organize_required_params</span><span class="p">(</span><span class="n">nmfk_params_known</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_params_setting</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params_target</span> <span class="o">=</span> <span class="n">organize_required_params</span><span class="p">(</span><span class="n">nmfk_params_target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_params_setting</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nmfk_params_split</span> <span class="o">=</span> <span class="n">organize_required_params</span><span class="p">(</span><span class="n">nmfk_params_split</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_params_setting</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">H_regress_iters</span> <span class="o">=</span> <span class="n">H_regress_iters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">H_regress_method</span> <span class="o">=</span> <span class="n">H_regress_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">H_regress_init</span> <span class="o">=</span> <span class="n">H_regress_init</span>
@@ -646,11 +652,11 @@
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">H_learn_method</span> <span class="o">==</span> <span class="s2">&quot;MitH&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Learning known H with MitH...&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">known</span><span class="p">[</span><span class="s2">&quot;H_learned&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_MitH</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="p">[</span><span class="s2">&quot;M_known&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">known</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">known</span><span class="p">[</span><span class="s2">&quot;H_learned&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MitH</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="p">[</span><span class="s2">&quot;M_known&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">known</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Learning target H with MitH...&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">[</span><span class="s2">&quot;H_learned&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_MitH</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="p">[</span><span class="s2">&quot;M_target&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">[</span><span class="s2">&quot;H_learned&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MitH</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">split</span><span class="p">[</span><span class="s2">&quot;M_target&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">])</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown H learn method!&quot;</span><span class="p">)</span>
@@ -684,13 +690,10 @@
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">H_regress_init</span> <span class="o">==</span> <span class="s2">&quot;MitH&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_MitH</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">MitH</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown H regression initilization!&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_MitH</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">H</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">M</span> <span class="o">@</span> <span class="n">H</span>
 
     <span class="k">def</span> <span class="nf">_H_regression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">):</span>
 
@@ -719,15 +722,6 @@
             <span class="k">return</span> <span class="n">sp_hstack</span><span class="p">(</span><span class="n">Ws</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">Ws</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_organize_nmfk_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
-        <span class="c1">#</span>
-        <span class="c1"># Required</span>
-        <span class="c1">#</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;collect_output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;predict_k&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-
-        <span class="k">return</span> <span class="n">params</span>
 
     <span class="k">def</span> <span class="nf">_plot_feature_importances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature_importances</span><span class="p">,</span> <span class="n">rotate_xticks</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 

@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from tqdm import tqdm
 from collections import Counter
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from itertools import combinations
 from rapidfuzz.distance import Levenshtein
 
@@ -19,42 +19,6 @@ class VocabularyConsolidator:
                          'ship', 'able', 'ible', 'al', 'ial', 'ed', 'ing', 'ly', 'es', 's', 
                          'er', 'tor']
         self.suffixes.sort(key=len, reverse=True)
-
-    @staticmethod
-    def levenshtein_distance(s1, s2, length_1, length_2):
-        """
-        Calculate the Levenshtein distance between two strings s1 and s2.
-
-        Parameters
-        ----------
-        s1 : str
-            The first string.
-        s2 : str
-            The second string.
-        length_1 : int
-            The length of the first string.
-        length_2 : int
-            The length of the second string.
-
-        Returns
-        -------
-        int
-            The Levenshtein distance between s1 and s2.
-        """
-        if length_1 < length_2:
-            return VocabularyConsolidator.levenshtein_distance(s2, s1, length_2, length_1)
-        if length_2 == 0:
-            return length_1
-        previous_row = range(length_2 + 1)
-        for i, c1 in enumerate(s1):
-            current_row = [i + 1]
-            for j, c2 in enumerate(s2):
-                insertions = previous_row[j + 1] + 1
-                deletions = current_row[j] + 1
-                substitutions = previous_row[j] + (c1 != c2)
-                current_row.append(min(insertions, deletions, substitutions))
-            previous_row = current_row
-        return previous_row[-1]
 
     def prefix_process_key(self, 
                        key):
@@ -104,7 +68,6 @@ class VocabularyConsolidator:
         """
         length_1, length_2 = len(key1), len(key2)
         max_len = max(length_1, length_2)
-        #dist = self.levenshtein_distance(key1, key2, length_1, length_2)
         dist = Levenshtein.distance(key1, key2)
         similarity = (max_len - dist) / max_len
 
@@ -333,8 +296,11 @@ class VocabularyConsolidator:
                 save_path = None
                 save_file = None
 
-            ignore_set = set(ignore_pairs)
-            ignore_set.update((b, a) for a, b in ignore_pairs)
+            if ignore_pairs is not None:
+                ignore_set = set(ignore_pairs)
+                ignore_set.update((b, a) for a, b in ignore_pairs)
+            else:
+                ignore_set = set()
 
             corpus_substitutions = {}
             for p, n in zip(df_changes['Previous Key'], df_changes['New Key']):

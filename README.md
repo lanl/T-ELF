@@ -130,6 +130,14 @@ python post_install.py # use the following, for example, for GPU system: <python
 |    Termite   | Knowladge graph building tool | :soon: |
 
 
+## Use Cases
+
+| **Example** |                            **Description**                           | **Link** |
+|:----------:|:--------------------------------------------------------------------:|:-----------:|
+|   NM Law Data           |                        Domain specific data for AI and RAG system written in our  [paper](https://arxiv.org/abs/2502.20364) about New Mexico Law that uses the TELF pipeline       |  [Link](examples/NM%20Law%20Data)|
+|    Full TELF Pipeline   | An end-to-end pipeline demonstration, from data collection to analysis | :soon:   |
+
+
 ## How to Cite T-ELF?
 If you use T-ELF please cite.
 
