@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TELF.pre_processing.iPenguin: Online information retrieval tool for Scopus, SemanticScholar, and OSTI &#8212; TELF 0.0.40 documentation</title>
+    <title>TELF.pre_processing.iPenguin: Online information retrieval tool for Scopus, SemanticScholar, and OSTI &#8212; TELF 0.0.41 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=a27ffb50"></script>
+    <script src="_static/documentation_options.js?v=1983794d"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.40 documentation</p>
+    <p class="title logo__title">TELF 0.0.41 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -203,6 +203,13 @@
 
 
 <li class="toctree-l1"><a class="reference internal" href="ArcticFox.html"><strong>TELF.post_processing.ArcticFox:</strong> Report generation tool for text data from HNMFk using local LLMs</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Squirrel.html"><strong>TELF.pre_processing.Squirrel:</strong>   Dataset pruning tool</a></li>
+
+
+
+
 
 
 <li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">TELF</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -363,8 +370,6 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Available Functions</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Available Functions</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.iPenguin.OSTI.osti">Module Contents</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.OSTI.osti.OSTI"><code class="docutils literal notranslate"><span class="pre">OSTI</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.OSTI.osti.OSTI.MODES"><code class="docutils literal notranslate"><span class="pre">OSTI.MODES</span></code></a></li>
@@ -378,7 +383,8 @@
 </li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Available Functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Module Contents</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar"><code class="docutils literal notranslate"><span class="pre">SemanticScholar</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.BULK_SEARCH_LIMIT"><code class="docutils literal notranslate"><span class="pre">SemanticScholar.BULK_SEARCH_LIMIT</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.MODES"><code class="docutils literal notranslate"><span class="pre">SemanticScholar.MODES</span></code></a></li>
@@ -395,6 +401,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.get_df_helper"><code class="docutils literal notranslate"><span class="pre">get_df_helper()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Available Functions</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Module Contents</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus"><code class="docutils literal notranslate"><span class="pre">Scopus</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.DEBUG_MODE"><code class="docutils literal notranslate"><span class="pre">Scopus.DEBUG_MODE</span></code></a></li>
@@ -441,43 +448,6 @@
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#TELF.pre_processing.iPenguin.OSTI.osti.OSTI.search" title="TELF.pre_processing.iPenguin.OSTI.osti.OSTI.search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OSTI.search</span></code></a>(data, mode, *[, n])</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="id1">
-<h1>Available Functions<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SemanticScholar.__init__</span></code>([key, mode, name, ...])</p></td>
-<td><p>Initializes the iPenguin.SemanticScholar instance with the specified key, mode, and optional settings.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.count" title="TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SemanticScholar.count</span></code></a>(data, mode[, verbose])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.search" title="TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SemanticScholar.search</span></code></a>(data, mode, *[, n])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.get_df" title="TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.get_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SemanticScholar.get_df</span></code></a>(path[, targets, ...])</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="id2">
-<h1>Available Functions<a class="headerlink" href="#id2" title="Link to this heading">#</a></h1>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scopus.__init__</span></code>(keys[, mode, name, n_jobs, ...])</p></td>
-<td><p>Initializes the iPenguin.Scopus instance with the specified keys, mode, and optional settings.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.count" title="TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scopus.count</span></code></a>(query[, verbose])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.search" title="TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scopus.search</span></code></a>(query, *[, n])</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -547,8 +517,28 @@ this function will return None</p>
 </dd></dl>
 
 </section>
-<section id="id3">
-<h1>Module Contents<a class="headerlink" href="#id3" title="Link to this heading">#</a></h1>
+<section id="id1">
+<h1>Available Functions<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SemanticScholar.__init__</span></code>([key, mode, name, ...])</p></td>
+<td><p>Initializes the iPenguin.SemanticScholar instance with the specified key, mode, and optional settings.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.count" title="TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SemanticScholar.count</span></code></a>(data, mode[, verbose])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.search" title="TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SemanticScholar.search</span></code></a>(data, mode, *[, n])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.get_df" title="TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.get_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SemanticScholar.get_df</span></code></a>(path[, targets, ...])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id2">
+<h1>Module Contents<a class="headerlink" href="#id2" title="Link to this heading">#</a></h1>
 <dl class="py class" id="module-TELF.pre_processing.iPenguin.SemanticScholar.s2">
 <dt class="sig sig-object py" id="TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.iPenguin.SemanticScholar.s2.</span></span><span class="sig-name descname"><span class="pre">SemanticScholar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'fs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'s2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/iPenguin/SemanticScholar/s2.html#SemanticScholar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar" title="Link to this definition">#</a></dt>
@@ -640,6 +630,23 @@ of verbosity. Default is True.</p>
 <span class="sig-prename descclassname"><span class="pre">TELF.pre_processing.iPenguin.SemanticScholar.s2.</span></span><span class="sig-name descname"><span class="pre">get_df_helper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TELF/pre_processing/iPenguin/SemanticScholar/s2.html#get_df_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.get_df_helper" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
+</section>
+<section id="id3">
+<h1>Available Functions<a class="headerlink" href="#id3" title="Link to this heading">#</a></h1>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scopus.__init__</span></code>(keys[, mode, name, n_jobs, ...])</p></td>
+<td><p>Initializes the iPenguin.Scopus instance with the specified keys, mode, and optional settings.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.count" title="TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scopus.count</span></code></a>(query[, verbose])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.search" title="TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.search"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scopus.search</span></code></a>(query, *[, n])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 <section id="id4">
 <h1>Module Contents<a class="headerlink" href="#id4" title="Link to this heading">#</a></h1>
@@ -818,8 +825,6 @@ this function will return None</p></li>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>TELF.pre_processing.iPenguin:</strong> Online information retrieval tool for Scopus, SemanticScholar, and OSTI</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#available-functions">Available Functions</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Available Functions</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Available Functions</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TELF.pre_processing.iPenguin.OSTI.osti">Module Contents</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.OSTI.osti.OSTI"><code class="docutils literal notranslate"><span class="pre">OSTI</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.OSTI.osti.OSTI.MODES"><code class="docutils literal notranslate"><span class="pre">OSTI.MODES</span></code></a></li>
@@ -833,7 +838,8 @@ this function will return None</p></li>
 </li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Module Contents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Available Functions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Module Contents</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar"><code class="docutils literal notranslate"><span class="pre">SemanticScholar</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.BULK_SEARCH_LIMIT"><code class="docutils literal notranslate"><span class="pre">SemanticScholar.BULK_SEARCH_LIMIT</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.SemanticScholar.MODES"><code class="docutils literal notranslate"><span class="pre">SemanticScholar.MODES</span></code></a></li>
@@ -850,6 +856,7 @@ this function will return None</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.SemanticScholar.s2.get_df_helper"><code class="docutils literal notranslate"><span class="pre">get_df_helper()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Available Functions</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Module Contents</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus"><code class="docutils literal notranslate"><span class="pre">Scopus</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TELF.pre_processing.iPenguin.Scopus.scopus.Scopus.DEBUG_MODE"><code class="docutils literal notranslate"><span class="pre">Scopus.DEBUG_MODE</span></code></a></li>

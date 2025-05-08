@@ -44,6 +44,17 @@ This directory is responsible for scraping and formatting legal data.
 
 ---
 
+##   01_hnmfk_operation
+
+This section contains code for topic modeling via Hierarchical Nonnegative Matrix Factorization (HNMFk).
+
+### Contents:
+
+- **`03-0_doc_word_matrix.ipynb`** – Generates document-word co-occurrence matrices.
+- **`03-1_run_hnmfk.py`** – Executes the HNMFk pipeline and saves outputs.
+
+---
+
 ##   02_benchmarking
 
 This folder contains tools for evaluating LLM outputs against the legal dataset.
@@ -53,17 +64,6 @@ This folder contains tools for evaluating LLM outputs against the legal dataset.
 - **`llm_output_eval.py`** – Evaluation logic for single-model outputs.
 - **`multi_model_qeval.py`** – Runs evaluation for multiple models side-by-side.
 - **`qa_eval.py`** – Question-answer-based model benchmarking.
-
----
-
-##   02_hnmfk_operation
-
-This section contains code for topic modeling via Hierarchical Nonnegative Matrix Factorization (HNMFk).
-
-### Contents:
-
-- **`03-0_doc_word_matrix.ipynb`** – Generates document-word co-occurrence matrices.
-- **`03-1_run_hnmfk.py`** – Executes the HNMFk pipeline and saves outputs.
 
 ---
 
@@ -81,20 +81,21 @@ Visualization modules for model performance, topic breakdowns, and document-leve
 
 ---
 
+
 # Evaluation Metadata
 
-The legal question sets, created and reviewed by a lawyer subject matter expert, used for the paper can be found in the data directory ([here](../../../data/NM_law_questions_and_dates)). These datasets used to evaluate the TELF pipeline and the concepts introduced in the paper.
+The legal question sets, created and reviewed by a lawyer subject matter expert, used for the paper can be found in the data directory ([here](https://github.com/lanl/T-ELF/tree/main/data/NM_law_questions_and_dates)). These datasets used to evaluate the TELF pipeline and the concepts introduced in the paper.
 
-### [25_system_domain_questions.txt](../../../data/NM_law_questions_and_dates/25_system_domain_questions.txt)
+### [25_system_domain_questions.txt](https://github.com/lanl/T-ELF/tree/main/data/NM_law_questions_and_dates/25_system_domain_questions.txt)
 - A plain text file listing 25 system-generated legal questions.
 - These are used to evaluate how well models generalize across legal domains.
 
-### [58_sme.txt](../../../data/NM_law_questions_and_dates/58_sme.txt)
+### [58_sme.txt](https://github.com/lanl/T-ELF/tree/main/data/NM_law_questions_and_dates/58_sme.txt)
 - A manually curated set of 58 legal benchmark questions.
 - Crafted by subject-matter experts (SMEs) to cover a range of doctrines, statutes, and case law.
 - Useful for high-precision model evaluation in legal QA tasks.
 
-### [court_data.json](../../../data/NM_law_questions_and_dates/court_data.json)
+### [court_data.json](https://github.com/lanl/T-ELF/tree/main/data/NM_law_questions_and_dates/court_data.json)
 - Structured metadata mapping NM Supreme Court and Court of Appeals decision counts per year as well as expansion events.
 
 

@@ -9,11 +9,19 @@ from tqdm import tqdm
 from wordcloud import WordCloud
 import random
 import os
+from pathlib import Path
+from typing import Optional
+import matplotlib.pyplot as plt
+from matplotlib.cm import get_cmap
+from matplotlib.colors import to_hex
+from scipy.spatial import ConvexHull
+import logging
+log = logging.getLogger(__name__)
 from .file_system import check_path
 from .data_structures import sum_dicts
 from .maps import get_id_to_name
 from .graphs import create_authors_graph
-import math
+
 
 def plot_authors_graph(df, id_col='s2_author_ids', name_col='s2_authors', title='Co-Authors Graph',
                        width=900, height=900, max_node_size=50, min_node_size=3):
@@ -478,3 +486,60 @@ def plot_H_clustering(H, name="filename"):
         plt.close()
 
     return fig
+
+def plot_umap(
+    coords: np.ndarray,
+    labels: list,
+    output_path: Path,
+    label_column: str,
+    model_name: str,
+    accepted_mask: Optional[np.ndarray] = None
+) -> None:
+    """
+    Save a UMAP scatterplot with optional accepted-hull overlay.
+
+    Parameters
+    ----------
+    coords : np.ndarray
+        2D UMAP coordinates (n_samples, 2).
+    labels : list
+        Original labels corresponding to each coordinate.
+    output_path : Path
+        Filepath to save the resulting plot.
+    label_column : str
+        Name of the label column for legend entries.
+    model_name : str
+        Embedding model identifier for plot title.
+    accepted_mask : Optional[np.ndarray]
+        Boolean mask for accepted points; if provided, draws convex hull.
+    """
+    uniq = sorted(set(labels))
+    color_map = {v: to_hex(get_cmap("tab20")(i % 20)) for i, v in enumerate(uniq)}
+
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ax.scatter(coords[:, 0], coords[:, 1],
+               c=[color_map[v] for v in labels],
+               s=25, alpha=0.85)
+
+    if accepted_mask is not None:
+        accepted = coords[accepted_mask]
+        if accepted.shape[0] >= 3:
+            hull = ConvexHull(accepted)
+            verts = accepted[hull.vertices]
+            verts = np.vstack([verts, verts[0]])
+            ax.fill(verts[:, 0], verts[:, 1],
+                    facecolor="none", edgecolor="green", lw=2, alpha=0.8,
+                    label="accepted hull")
+
+    handles = [plt.Line2D([], [], marker="o", ls="", color=color_map[v]) for v in uniq]
+    labels_legend = [f"{label_column}={v}" for v in uniq]
+    if accepted_mask is not None:
+        handles.append(plt.Line2D([], [], color="green", lw=2))
+        labels_legend.append("accepted hull")
+
+    ax.legend(handles, labels_legend, fontsize=8, loc="upper right")
+    ax.set(xticks=[], yticks=[], title=f"UMAP – {model_name} embeddings")
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=300)
+    plt.close(fig)
+    log.info("Saved UMAP plot to %s", output_path)

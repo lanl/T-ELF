@@ -3,6 +3,7 @@ sys.path += ["Vulture"]
 sys.path += ["Beaver"]
 sys.path += ["Orca"]
 sys.path += ["iPenguin"]
+sys.path += ["Squirrel"]
 
 
 # Beaver
@@ -25,3 +26,6 @@ from .Orca.orca import Orca
 from .iPenguin.OSTI.osti import OSTI
 from .iPenguin.Scopus.scopus import Scopus
 from .iPenguin.SemanticScholar.s2 import SemanticScholar
+
+# Squirrel
+from .Squirrel.squirrel import Squirrel
