@@ -109,7 +109,7 @@ python post_install.py # use the following, for example, for GPU system: <python
 |   Beaver   | :heavy_check_mark:  | :heavy_check_mark:  |        Fast matrix and tensor building tool for text mining        |  [Link](examples/Beaver)  |
 |  iPenguin  | :heavy_check_mark:  |                     |         Online information retrieval tool for Scopus, SemanticScholar, and OSTI         | [Link](examples/iPenguin) |
 |    Orca    | :heavy_check_mark:  |                     | Duplicate author detector for text mining and information retrieval |   [Link](examples/Orca)          |
-|    Squirrel   | Dataset pruning tool for documents |  [Link](examples/Squirrel)  |
+|  Squirrel  |                     |                     | Dataset pruning tool for documents |  [Link](examples/Squirrel)  |
 
 ### TELF.post_processing
 
