@@ -15,6 +15,14 @@ Available Functions
    OSTI.search
 
 
+Module Contents
+-----------------
+.. automodule:: TELF.pre_processing.iPenguin.OSTI.osti
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 Available Functions
 ---------------------
 
@@ -27,6 +35,14 @@ Available Functions
    SemanticScholar.get_df
 
 
+Module Contents
+-----------------
+.. automodule:: TELF.pre_processing.iPenguin.SemanticScholar.s2
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 Available Functions
 ---------------------
 
@@ -37,20 +53,6 @@ Available Functions
    Scopus.count
    Scopus.search
 
-
-Module Contents
------------------
-.. automodule:: TELF.pre_processing.iPenguin.OSTI.osti
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module Contents
------------------
-.. automodule:: TELF.pre_processing.iPenguin.SemanticScholar.s2
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 Module Contents
 -----------------
