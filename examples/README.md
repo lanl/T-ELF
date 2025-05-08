@@ -25,7 +25,7 @@
 |   Beaver   | :heavy_check_mark:  | :heavy_check_mark:  |        Fast matrix and tensor building tool for text mining        |  [Link](Beaver)  |
 |  iPenguin  | :heavy_check_mark:  |                     |         Online information retrieval tool for Scopus, SemanticScholar, and OSTI         | [Link](iPenguin) |
 |    Orca    | :heavy_check_mark:  |                     | Duplicate author detector for text mining and information retrieval |   [Link](Orca)          |
-|    Squirrel   | Dataset pruning tool for documents |  [Link](Squirrel)  |
+|  Squirrel  |                     |                     | Dataset pruning tool for documents |  [Link](Squirrel)  |
 
 ### TELF.post_processing
 
