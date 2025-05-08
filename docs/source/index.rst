@@ -215,6 +215,7 @@ Tests can be ran from this folder using ``python -m pytest *``.
    SeaLion
    Fox
    ArcticFox
+   Squirrel
    modules
 
 
