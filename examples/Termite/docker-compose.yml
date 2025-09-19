@@ -1,0 +1,123 @@
+name: telf-stack
+
+services:
+  # -------------------------
+  # Neo4j (with APOC plugin)
+  # -------------------------
+  neo4j_termite:
+    image: neo4j:5.23
+    container_name: neo4j_termite
+    restart: unless-stopped
+    ports:
+      - "7999:7474"   # HTTP
+      - "7666:7687"   # Bolt
+    environment:
+      # --- Security / auth ---
+      NEO4J_AUTH: "neo4j/local_password"
+
+      # --- Networking (listen/advertised addresses) ---
+      NEO4J_server_default__listen__address: "0.0.0.0"
+      NEO4J_server_default__advertised__address: "localhost"
+
+      # --- APOC plugin & procedure permissions ---
+      NEO4J_PLUGINS: '["apoc"]'
+      NEO4J_dbms_security_procedures_unrestricted: "apoc.*"
+      NEO4J_dbms_security_procedures_allowlist: "apoc.*"
+
+      # Optional: stronger password policy
+      NEO4J_dbms_security_auth__minimum__password__length: "12"
+    volumes:
+      - ./01_termite_output/DOCKERDATA/neo4j/data:/data
+      - ./01_termite_output/DOCKERDATA/neo4j/logs:/logs
+      - ./01_termite_output/DOCKERDATA/neo4j/import:/var/lib/neo4j/import
+      - ./01_termite_output/DOCKERDATA/neo4j/plugins:/plugins
+    networks: [telf-net]
+
+  # -------------------------
+  # Milvus dependencies
+  # -------------------------
+  milvus-etcd:
+    image: quay.io/coreos/etcd:v3.5.5
+    container_name: milvus-etcd
+    restart: unless-stopped
+    environment:
+      ETCD_AUTO_COMPACTION_MODE: "revision"
+      ETCD_AUTO_COMPACTION_RETENTION: "1000"
+      ETCD_QUOTA_BACKEND_BYTES: "4294967296"
+      ETCD_SNAPSHOT_COUNT: "50000"
+    command: >
+      etcd -advertise-client-urls=http://0.0.0.0:2379
+           -listen-client-urls=http://0.0.0.0:2379
+           --data-dir=/etcd
+    volumes:
+      - ./01_termite_output/DOCKERDATA/milvus/etcd:/etcd
+    networks: [telf-net]
+    # port exposure optional; remove if you don't need host access
+    ports:
+      - "2379:2379"
+
+  milvus-minio:
+    image: minio/minio:RELEASE.2024-01-13T07-53-03Z
+    container_name: milvus-minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: "minioadmin"
+      MINIO_ROOT_PASSWORD: "minioadmin"
+    command: server /minio_data --console-address ":9001"
+    volumes:
+      - ./DOCKERDATA/milvus/minio:/minio_data
+    # MinIO image doesn't ship curl/wget; skip healthcheck to avoid false failures
+    networks: [telf-net]
+    ports:
+      - "9002:9000"  # S3 API (host↔container)
+      - "9003:9001"  # Console (host↔container)
+  # -------------------------
+  # Milvus Standalone (2.4.x)
+  # -------------------------
+  milvus-termite:
+    image: milvusdb/milvus:v2.4.23
+    container_name: milvus-termite
+    restart: unless-stopped
+    command: ["milvus", "run", "standalone"]
+    environment:
+      ETCD_ENDPOINTS: "milvus-etcd:2379"
+      MINIO_ADDRESS: "milvus-minio:9000"
+      # If you enable auth in milvus.yaml later:
+      # MINIO_ACCESS_KEY: "minioadmin"
+      # MINIO_SECRET_KEY: "minioadmin"
+    depends_on:
+      - milvus-etcd
+      - milvus-minio
+    volumes:
+      - ./01_termite_output/DOCKERDATA/milvus/data:/var/lib/milvus
+      # To customize Milvus config later, copy it out and mount it:
+      # - ./DOCKERDATA/milvus/milvus.yaml:/milvus/configs/milvus.yaml
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9091/healthz || exit 1"]
+      interval: 30s
+      start_period: 90s
+      timeout: 20s
+      retries: 3
+    ports:
+      - "19530:19530"  # Milvus gRPC (pymilvus connects here)
+      - "9091:9091"    # Milvus REST/gateway & web UI
+    networks: [telf-net]
+
+  # -------------------------
+  # (Optional) Attu – Milvus web UI
+  # -------------------------
+  attu:
+    image: zilliz/attu:v2.5.12
+    container_name: attu
+    restart: unless-stopped
+    environment:
+      MILVUS_URL: "milvus-termite:19530"
+    depends_on:
+      - milvus-termite
+    ports:
+      - "8000:3000"    # Visit http://localhost:8000
+    networks: [telf-net]
+
+networks:
+  telf-net:
+    driver: bridge

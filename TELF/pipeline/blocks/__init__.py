@@ -59,3 +59,4 @@ from .peacock_stats_block import PeacockStatsBlock
 from .ocelot_filter_block import OcelotFilterBlock
 from .auto_bunny_simple_block import AutoBunnySimpleBlock
 from .term_table_block  import TermTableBlock
+from .spacey_NER_block import SpacyNERBlock

@@ -609,21 +609,22 @@ class HNMFk:
         # check if leaf node status based on number of samples
         #
         if (current_node.num_samples == 1):
-            current_node.leaf = True
-            current_node.exception = True
-            pickle_path = os.path.join(str(node_save_path), f'node_{current_node.node_name}.p')
-            pickle.dump(current_node, open(pickle_path, "wb"))
-            return {"name":node_name, "target_jobs":[], "node_save_path":pickle_path}
-        
+            return self._finalize_leaf(
+                current_node, node_save_path,
+                reason="single-sample cluster",
+                details={"num_samples": current_node.num_samples},
+                mark_exception=True
+            )
         
         #
         # Sample threshold check for leaf node determination
         #
         if self.sample_thresh > 0 and (current_node.num_samples <= self.sample_thresh):
-            current_node.leaf = True 
-            pickle_path = os.path.join(f'{node_save_path}', f'node_{current_node.node_name}.p')
-            pickle.dump(current_node, open(pickle_path, "wb"))
-            return {"name":node_name, "target_jobs":[], "node_save_path":pickle_path}
+            return self._finalize_leaf(
+                current_node, node_save_path,
+                reason="below sample threshold",
+                details={"num_samples": current_node.num_samples, "sample_thresh": self.sample_thresh}
+            )
 
         #
         # obtain the current X
@@ -644,12 +645,13 @@ class HNMFk:
         # Based on number of features or samples, no seperation possible
         #
         if min(curr_X.shape) <= 1:
-            current_node.leaf = True
-            current_node.exception = True 
-            pickle_path = os.path.join(f'{node_save_path}', f'node_{current_node.node_name}.p')
-            pickle.dump(current_node, open(pickle_path, "wb"))
-            return {"name":node_name, "target_jobs":[], "node_save_path":pickle_path}
-
+            return self._finalize_leaf(
+                current_node, node_save_path,
+                reason="matrix too small to factorize",
+                details={"X_shape": tuple(curr_X.shape)},
+                mark_exception=True
+            )
+        
         #
         # prepare the current nmfk parameters
         #
@@ -665,11 +667,12 @@ class HNMFk:
         #
         Ks = self._adjust_curr_Ks(curr_X.shape, Ks)
         if len(Ks) == 0 or (len(Ks) == 1 and Ks[0] < 2):
-            current_node.leaf = True
-            current_node.exception = True 
-            pickle_path = os.path.join(str(node_save_path), f'node_{current_node.node_name}.p')
-            pickle.dump(current_node, open(pickle_path, "wb"))
-            return {"name":node_name, "target_jobs":[], "node_save_path":pickle_path}
+            return self._finalize_leaf(
+                current_node, node_save_path,
+                reason="no valid K values for further split",
+                details={"Ks": list(Ks), "X_shape": tuple(curr_X.shape)},
+                mark_exception=True
+            )
 
         #
         # apply nmfk
@@ -681,11 +684,12 @@ class HNMFk:
         # Check if decomposition was not possible
         #
         if results is None:
-            current_node.leaf = True
-            current_node.exception = True
-            pickle_path = os.path.join(str(node_save_path), f'node_{current_node.node_name}.p')
-            pickle.dump(current_node, open(pickle_path, "wb"))
-            return {"name":node_name, "target_jobs":[], "node_save_path":pickle_path}
+            return self._finalize_leaf(
+                current_node, node_save_path,
+                reason="NMFk failed to decompose",
+                details={"node_depth": current_node.depth, "num_samples": current_node.num_samples},
+                mark_exception=True
+            )
 
         #
         # latent factors
@@ -723,10 +727,24 @@ class HNMFk:
 
         # leaf node based on depth limit or single cluster or all samples in same cluster
         if ((current_node.depth >= self.depth) and self.depth > 0) or current_node.k == 1 or n_clusters == 1:
-            current_node.leaf = True 
-            pickle_path = os.path.join(f'{node_save_path}', f'node_{current_node.node_name}.p')
-            pickle.dump(current_node, open(pickle_path, "wb"))
-            return {"name":node_name, "target_jobs":[], "node_save_path":pickle_path}
+            stop_details = {
+                "depth": current_node.depth,
+                "depth_limit": self.depth,
+                "predicted_k": current_node.k,
+                "n_clusters_observed": n_clusters
+            }
+            # Pick a specific reason to make the text friendlier:
+            if (current_node.depth >= self.depth) and self.depth > 0:
+                reason = "depth limit reached"
+            elif current_node.k == 1:
+                reason = "predicted k == 1 (no further structure)"
+            elif n_clusters == 1:
+                reason = "all samples assigned to one cluster"
+            else:
+                reason = "stopping condition met"
+
+            return self._finalize_leaf(current_node, node_save_path, reason=reason, details=stop_details)
+
         
         #
         # go through each topic/cluster
@@ -1111,3 +1129,55 @@ class HNMFk:
         new_node_path = new_experiment_base / relative_path
 
         return new_node_path
+
+
+    """
+    DEBUG FUNCTIONS
+    ----------------
+    """
+    def _write_stop_reason(self, node_save_path: str, reason: str, details: dict | None = None):
+        """
+        Write a plain-text explanation for why decomposition did not proceed.
+        Creates <node_save_path>/stop_reason.txt next to the node pickle.
+        """
+        try:
+            reason_path = os.path.join(node_save_path, "stop_reason.txt")
+            with open(reason_path, "w") as f:
+                f.write(f"reason: {reason}\n")
+                if details:
+                    for k, v in details.items():
+                        f.write(f"{k}: {v}\n")
+        except Exception as e:
+            # Don't break the run just because we couldn't write the note
+            warnings.warn(f"Could not write stop_reason.txt at {node_save_path}: {e}")
+
+    def _finalize_leaf(self, current_node, node_save_path: str, reason: str, details: dict | None = None, *, 
+                    mark_exception: bool = False):
+        """
+        Common exit path for any condition that stops further decomposition.
+        - marks leaf/exception on the node
+        - persists the node
+        - writes stop_reason.txt with a friendly explanation
+        - returns the scheduler payload
+        """
+        current_node.leaf = True
+        current_node.exception = bool(mark_exception)
+        pickle_path = os.path.join(str(node_save_path), f'node_{current_node.node_name}.p')
+
+        # persist the node
+        pickle.dump(current_node, open(pickle_path, "wb"))
+
+        # write a human-readable reason file
+        # self._write_stop_reason(node_save_path, reason, details)
+
+
+        details = details or {}
+        details.update({
+            "cluster_on": self.cluster_on,
+            "num_samples": current_node.num_samples,
+            "len_original_indices": len(current_node.original_indices),
+        })
+        details.update(getattr(current_node, "user_node_data", {}) or {})
+        self._write_stop_reason(node_save_path, reason, details)
+
+        return {"name": current_node.node_name, "target_jobs": [], "node_save_path": pickle_path}

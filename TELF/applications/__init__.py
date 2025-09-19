@@ -2,6 +2,7 @@ import sys
 sys.path += ["Cheetah"]
 sys.path += ["Bunny"]
 sys.path += ["Penguin"]
+sys.path += ["Termite"]
 
 
 # Cheetah
@@ -16,3 +17,8 @@ from .Bunny.auto_bunny import AutoBunny, AutoBunnyStep
 
 # Penguin
 from .Penguin.penguin import Penguin
+
+# Termite
+from .Termite.termite import Termite
+from .Termite.neo4j_termite.constants import *
+

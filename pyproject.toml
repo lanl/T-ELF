@@ -13,7 +13,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "3.11.10"
-numpy = "<=2.0.0"
+numpy = "1.26.4"
 scipy = "^1.14.1"
 matplotlib = "^3.9.2"
 pathos = "^0.3.3"
@@ -41,8 +41,8 @@ rbloom = "^1.5.2"
 pymongo = "^4.11.2"
 seaborn = "^0.13.2"
 umap-learn = "^0.5.7"
-torch = "^2.6.0"
-transformers = "^4.39.3"
+torch = ">=2.2,<2.3"
+transformers = ">=4.39,<5"
 langchain-ollama = "^0.3.0"
 openai = "^1.69.0"
 pyvis = "^0.3.2"
@@ -54,6 +54,12 @@ watchdog = "^6.0.0"
 pillow = "^11.1.0"
 pykeen = "^1.11.0"
 pycountry = "^24.6.1"
+neo4j = "^5.26.0"
+pymilvus = "2.4.0"
+jupyterlab = "^4.2.5"
+notebook = "^7.2.2"          
+ipywidgets = "^8.1.5"
+opensearch-py = "^3.0.0"
 
 [build-system]
 requires = ["poetry-core"]

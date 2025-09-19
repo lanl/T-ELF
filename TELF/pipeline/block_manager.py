@@ -359,7 +359,7 @@ class BlockManager:
 
         for idx, blk in enumerate(self.blocks):
             fn = saved_dir / f"{idx}_{blk.__class__.__name__}.json"
-            fn.write_text(jsonpickle.encode(blk), encoding="utf-8")
+            fn.write_text(jsonpickle.encode(blk, keys=True), encoding="utf-8")
 
     def load_saved_settings(self) -> None:
         """
