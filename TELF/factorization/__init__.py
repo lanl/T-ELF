@@ -12,3 +12,6 @@ from .TriNMFk import TriNMFk
 from .SPLIT import SPLIT
 from .SPLITTransfer import SPLITTransfer
 from .decompositions.nmf_recommender import RNMFk_predict
+
+
+from .DopplerShiftNMFk import ShiftNMFkTFGM
