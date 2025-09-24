@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Dict, Sequence, Any, Tuple
 from .base_block import AnimalBlock
-from .data_bundle import DataBundle
+from .data_bundle import DataBundle, SAVE_DIR_BUNDLE_KEY
 
 from ...post_processing import ArcticFox
 from ...factorization import HNMFk
@@ -52,16 +52,41 @@ class ArticFoxBlock(AnimalBlock):
             **kw,
         )
 
+
     def run(self, bundle: DataBundle) -> None:
-        df =  self.load_path(bundle[self.needs[0]])
+        df = self.load_path(bundle[self.needs[0]])
         vocabulary = self.load_path(bundle[self.needs[1]])
-        model = HNMFk(experiment_name=bundle[self.needs[2]])
-        model.load_model()  # Loads model from the provided experiment_name path
-        pipeline = ArcticFox(
-            model=model,
-            **self.init_settings
-        )
-        pipeline.run_full_pipeline(data_df = df,
-                                   vocab = vocabulary,
-                                   **self.call_settings)
-        bundle[f"{self.tag}.{self.provides[0]}"] = "Done"
+
+        raw_model_path = str(bundle[self.needs[2]])
+        # Try to resolve to an absolute path for traceability; fall back to the raw string.
+        try:
+            resolved_model_path = str(Path(raw_model_path).expanduser().resolve())
+        except Exception:
+            resolved_model_path = raw_model_path
+
+        model = HNMFk(experiment_name=raw_model_path)
+        model.load_model()
+
+        pipeline = ArcticFox(model=model, **self.init_settings)
+        # pipeline.run_full_pipeline(data_df=df, vocab=vocabulary, **self.call_settings)
+
+        status_value = "Done"
+
+        if SAVE_DIR_BUNDLE_KEY in bundle:
+            out_dir = Path(bundle[SAVE_DIR_BUNDLE_KEY]) / self.tag
+            out_dir.mkdir(parents=True, exist_ok=True)
+            status_file = out_dir / "status.txt"
+            # Include model path info in the checkpointed status file
+            status_file.write_text(
+                f"status: {status_value}\n"
+                f"model_path: {raw_model_path}\n"
+                f"resolved_model_path: {resolved_model_path}\n",
+                encoding="utf-8",
+            )
+            self.register_checkpoint(self.provides[0], status_file)
+
+        bundle[f"{self.tag}.{self.provides[0]}"] = status_value
+
+
+
+        

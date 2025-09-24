@@ -60,3 +60,6 @@ from .ocelot_filter_block import OcelotFilterBlock
 from .auto_bunny_simple_block import AutoBunnySimpleBlock
 from .term_table_block  import TermTableBlock
 from .spacey_NER_block import SpacyNERBlock
+from .collect_hnmfk_leaf_block import CollectHNMFkLeafBlock 
+from .termite_neo4j_block import TermiteNeo4jBlock
+from .termite_vector_block import TermiteVectorBlock

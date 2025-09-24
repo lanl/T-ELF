@@ -67,7 +67,9 @@ class PeacockStatsBlock(AnimalBlock):
     def run(self, bundle: DataBundle) -> None:
         # 1) Inputs & cleanup
         df: pd.DataFrame = bundle["df"]
-        out_dir = Path(bundle[SAVE_DIR_BUNDLE_KEY])
+        # Save everything under the block's tag directory (like other blocks)
+        root_dir = Path(bundle[SAVE_DIR_BUNDLE_KEY])
+        out_dir = root_dir / self.tag
         out_dir.mkdir(parents=True, exist_ok=True)
 
         # ensure affiliation column is string
@@ -230,9 +232,7 @@ class PeacockStatsBlock(AnimalBlock):
 
         # 7) Dummy checkpoint under your single `provides` key
         if SAVE_DIR_BUNDLE_KEY in bundle:
-            ckpt_dir = out_dir / self.tag
-            ckpt_dir.mkdir(parents=True, exist_ok=True)
-            final_csv = ckpt_dir / "none.csv"
+            final_csv = out_dir / "none.csv"
             final_csv.write_text("")  # empty placeholder
             self.register_checkpoint(self.provides[0], final_csv)
             bundle[f"{self.tag}.{self.provides[0]}"] = final_csv

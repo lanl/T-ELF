@@ -96,6 +96,9 @@ class WolfBlock(AnimalBlock):
     def run(self, bundle: DataBundle) -> None:
         # ─── 1) Load the DataFrame & map ──────────────────────────────────────
         df  = self.load_path(bundle[self.needs[0]])  
+        print("Number of rows in df:", len(df))
+        print("Unique IDs:", df[self.category_map[self.category]['col']].nunique())
+
         orca_map = bundle[self.needs[1]]
 
         OUTPUT_DIR = Path(bundle[SAVE_DIR_BUNDLE_KEY]) / self.tag

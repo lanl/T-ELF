@@ -67,3 +67,7 @@ from .blocks.auto_bunny_simple_block import AutoBunnySimpleBlock
 from .blocks.term_table_block  import TermTableBlock
 from .blocks.spacey_NER_block import SpacyNERBlock
 
+
+from .blocks.collect_hnmfk_leaf_block import CollectHNMFkLeafBlock 
+from .blocks.termite_neo4j_block import TermiteNeo4jBlock
+from .blocks.termite_vector_block import TermiteVectorBlock
