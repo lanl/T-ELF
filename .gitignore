@@ -1,3 +1,4 @@
+projects
 example_out
 example_results
 hidden_keys.py
@@ -15,7 +16,8 @@ EXAMPLE_OUT
 result_example/
 search_terms.md
 scopus_cache/
-
+examples/Termite/01_termite_output
+examples/Termite/DOCKERDATA/
 # mac
 results/
 poetry.lock
