@@ -1,239 +1,119 @@
 # pipeline/blocks/peacock_stats_block.py
 from __future__ import annotations
 from pathlib import Path
-from typing import Any, Dict, Sequence, Optional, Tuple
-
+from typing import Any, Dict, Optional, Sequence, Tuple, Literal
 import pandas as pd
 
 from .base_block import AnimalBlock
-from .data_bundle import DataBundle, SAVE_DIR_BUNDLE_KEY
+from .data_bundle import DataBundle, SAVE_DIR_BUNDLE_KEY, RESULTS_DEFAULT
 
-# Peacock aggregation function
-from ...post_processing.Peacock.Utility import aggregate_ostats
+from .block_helpers.peacock_renderer import PeacockRenderer
+from .block_helpers.hnmfk_paths import NodeSource, HNMFkNodeSource, GlobNodeSource
 
-# Peacock plotting functions (the ones you pasted from Plot/plot.py)
-from ...post_processing.Peacock.Plot import (
-    plot_heatmap,
-    plot_bar,
-    plot_scatter,
-)
 
-# Convenience aliases
-plot_hist      = plot_bar
-plot_scatter3D = plot_scatter
+Mode = Literal["single", "hnmfk", "glob"]
 
 
 class PeacockStatsBlock(AnimalBlock):
-    CANONICAL_NEEDS: Tuple[str, ...] = ("df", SAVE_DIR_BUNDLE_KEY)
+    CANONICAL_NEEDS: Tuple[str, ...] = ("df", )
 
     def __init__(
         self,
         *,
         needs: Sequence[str] = CANONICAL_NEEDS,
         provides: Sequence[str] = ("outpath",),
+        mode: Mode = "single",
+        # renderer args
         hist_stats: Sequence[str] = ("paper_count", "num_citations"),
         hist_ylabels: Optional[Dict[str, str]] = None,
         col_names: Optional[Dict[str, str]] = None,
         affiliation_palette: Optional[Dict[str, str]] = None,
         country: Optional[str] = None,
+        # discovery args
+        experiment_path: Optional[str] = None,   # for mode="hnmfk"
+        glob_root: Optional[str] = None,         # for mode="glob"
+        skip_completed: bool = True,
         **kw: Any,
     ) -> None:
+        self.mode = mode
+        self.experiment_path = Path(experiment_path).expanduser().resolve() if experiment_path else None
+        self.glob_root = Path(glob_root).expanduser().resolve() if glob_root else None
+        self.skip_completed = skip_completed
+
+        self.renderer = PeacockRenderer(
+            hist_stats=hist_stats,
+            hist_ylabels=hist_ylabels,
+            col_names=col_names,
+            affiliation_palette=affiliation_palette,
+            country=country,
+        )
+
+        # require model_path if mode==hnmfk (via conditional_needs), but keep simple API
+        conds = list(kw.pop("conditional_needs", ()))
+        if self.mode == "hnmfk" and not self.experiment_path:
+            conds.append(("model_path", lambda _b, _s: True))
+
         super().__init__(
             needs=needs,
             provides=provides,
             tag="PeacockStats",
             init_settings={},
             call_settings={},
+            conditional_needs=tuple(conds),
             **kw,
         )
-        self.hist_stats = tuple(hist_stats)
-        self.hist_ylabels = hist_ylabels or {
-            "paper_count": "Number of Papers",
-            "num_citations": "Number of Citations",
-            "attribution_percentage": "Attribution Percentage",
-        }
-        self.col_names = col_names or {
-            "id":           "eid",
-            "authors":      "slic_authors",
-            "author_ids":   "slic_author_ids",
-            "affiliations": "slic_affiliations",
-            "funding":      "funding",
-            "citations":    "num_citations",
-            "references":   "references",
-        }
-        self.affiliation_palette = affiliation_palette or {}
-        self.country = country
 
+    # ——————————————————————————————————————————
+    def _source(self, bundle: DataBundle) -> Optional[NodeSource]:
+        if self.mode == "hnmfk":
+            exp = self.experiment_path or Path(str(bundle["model_path"]))
+            return HNMFkNodeSource(exp)
+        if self.mode == "glob":
+            root = self.glob_root or Path(bundle.get(SAVE_DIR_BUNDLE_KEY, RESULTS_DEFAULT))
+            return GlobNodeSource(root)
+        return None  # single mode
+
+    def _parent_out_dir(self, bundle: DataBundle) -> Path:
+        # where the block-level checkpoint lands if needed
+        base = Path(bundle.get(SAVE_DIR_BUNDLE_KEY, RESULTS_DEFAULT))
+        return base / self.tag
+
+    # ——————————————————————————————————————————
     def run(self, bundle: DataBundle) -> None:
-        # 1) Inputs & cleanup
-        df: pd.DataFrame = bundle["df"]
-        # Save everything under the block's tag directory (like other blocks)
-        root_dir = Path(bundle[SAVE_DIR_BUNDLE_KEY])
-        out_dir = root_dir / self.tag
-        out_dir.mkdir(parents=True, exist_ok=True)
+        # mode: single (unchanged behavior)
+        if self.mode == "single":
+            df: pd.DataFrame = bundle["df"]
+            out_dir = Path(bundle.get(SAVE_DIR_BUNDLE_KEY, RESULTS_DEFAULT))
+            self.renderer.render(df, out_dir)
+            ckpt_dir = self._parent_out_dir(bundle); ckpt_dir.mkdir(parents=True, exist_ok=True)
+            marker = ckpt_dir / "none.csv"; marker.write_text("status\nok\n")
+            self.register_checkpoint(self.provides[0], marker)
+            bundle[f"{self.tag}.{self.provides[0]}"] = marker
+            return
 
-        # ensure affiliation column is string
-        aff_col = self.col_names["affiliations"]
-        df[aff_col] = df[aff_col].apply(lambda x: x if isinstance(x, str) else str(x))
+        # mode: per-node (hnmfk or glob)
+        source = self._source(bundle)
+        assert source is not None, "Invalid configuration: per-node mode requires a NodeSource."
 
-        df = (
-            df
-            .dropna(subset=[
-                self.col_names["id"],
-                self.col_names["authors"],
-                self.col_names["author_ids"],
-                aff_col,
-            ])
-            .assign(year=lambda d: d.year.astype(int))
-        )
+        produced = []
+        for node in source.iter_nodes():
+            out_dir = node.dir / "peacock"
+            if self.skip_completed and (out_dir / "PeacockStats.done").exists():
+                produced.append(out_dir)
+                continue
 
-        filters = {"country": self.country} if self.country else None
+            if not node.csv.exists():
+                # skip nodes that haven't been post-processed yet
+                continue
 
-        # 2) Write top‐100 CSVs
-        author_stats      = aggregate_ostats(df, key="author_id",       top_n=100, col_names=self.col_names, filters=filters, by_year=False)
-        affiliation_stats = aggregate_ostats(df, key="affiliation_id", top_n=100, col_names=self.col_names, filters=filters, by_year=False)
-        author_stats.to_csv(out_dir / "top_authors.csv",      index=False)
-        affiliation_stats.to_csv(out_dir / "top_affiliations.csv", index=False)
+            df_local = pd.read_csv(node.csv)
+            self.renderer.render(df_local, out_dir)
+            (out_dir / "PeacockStats.done").write_text("ok")
+            produced.append(out_dir)
 
-        # 3) Shared “top‐10 by citations” args
-        auth_args = dict(
-            key="author_id",
-            top_n=10,
-            sort_by="num_citations",
-            col_names=self.col_names,
-            by_year=True,
-            filters=filters,
-        )
-        aff_args = dict(
-            key="affiliation_id",
-            top_n=10,
-            sort_by="num_citations",
-            col_names=self.col_names,
-            by_year=True,
-            filters=filters,
-        )
-
-        # 4) Heatmaps — pivot then call plot_heatmap
-        # ─ Authors, citations
-        auth_heat = aggregate_ostats(df, **auth_args)
-        pivot_c   = auth_heat.pivot(index="year", columns="author", values="num_citations").fillna(0)
-        plot_heatmap(
-            pivot_c,
-            cmap="jet",
-            interpolation="gaussian",
-            fname=str(out_dir / "author_heatmap_citations.png"),
-            interactive=False,
-            title="Author Citations by Year",
-            xlabel="Author",
-            ylabel="Year",
-        )
-        # ─ Authors, papers
-        pivot_p = auth_heat.pivot(index="year", columns="author", values="paper_count").fillna(0)
-        plot_heatmap(
-            pivot_p,
-            cmap="jet",
-            interpolation="gaussian",
-            fname=str(out_dir / "author_heatmap_papers.png"),
-            interactive=False,
-            title="Author Papers by Year",
-            xlabel="Author",
-            ylabel="Year",
-        )
-
-        # ─ Affiliations, citations
-        aff_heat = aggregate_ostats(df, **aff_args)
-        pivot_c2 = aff_heat.pivot(index="year", columns="affiliation", values="num_citations").fillna(0)
-        plot_heatmap(
-            pivot_c2,
-            cmap="jet",
-            interpolation="gaussian",
-            fname=str(out_dir / "affiliation_heatmap_citations.png"),
-            interactive=False,
-            title="Affiliation Citations by Year",
-            xlabel="Affiliation",
-            ylabel="Year",
-        )
-        # ─ Affiliations, papers
-        pivot_p2 = aff_heat.pivot(index="year", columns="affiliation", values="paper_count").fillna(0)
-        plot_heatmap(
-            pivot_p2,
-            cmap="jet",
-            interpolation="gaussian",
-            fname=str(out_dir / "affiliation_heatmap_papers.png"),
-            interactive=False,
-            title="Affiliation Papers by Year",
-            xlabel="Affiliation",
-            ylabel="Year",
-        )
-
-        # 5) Histograms (bar‐plots)
-        auth_hist = aggregate_ostats(df, **{**auth_args, "by_year": False})
-        plot_hist(
-            auth_hist,
-            x="author",
-            ys=list(self.hist_stats),
-            fname=str(out_dir / "author_hist.png"),
-            interactive=False,
-            # cmap="husl",                     # ← remove this line...
-            title="Author Statistics Histogram",
-            xlabel="Author",
-            ylabel=self.hist_ylabels[self.hist_stats[0]],
-        )
-        aff_hist = aggregate_ostats(df, **{**aff_args, "by_year": False})
-        plot_hist(
-            aff_hist,
-            x="affiliation",
-            ys=list(self.hist_stats),
-            fname=str(out_dir / "affiliation_hist.png"),
-            interactive=False,
-            # cmap="husl",
-            title="Affiliation Statistics Histogram",
-            xlabel="Affiliation",
-            ylabel=self.hist_ylabels[self.hist_stats[0]],
-        )
-
-        # 6) 3-D scatter
-        plot_scatter3D(
-            df,
-            x="paper_count",
-            y="attribution_percentage",
-            z="num_citations",
-            agg_func=aggregate_ostats,
-            agg_kwargs=auth_args,
-            fname=str(out_dir / "author_scatter.png"),
-            interactive=False,
-            log_z=True,
-            hue="affiliation",
-            labels="author",
-            title="Author Stats Scatter3D",
-            xlabel="Paper Count",
-            ylabel="Attribution Percentage",
-            zlabel="Num. Citations",
-            base_palette=self.affiliation_palette,
-        )
-        plot_scatter3D(
-            df,
-            x="paper_count",
-            y="attribution_percentage",
-            z="num_citations",
-            agg_func=aggregate_ostats,
-            agg_kwargs=aff_args,
-            fname=str(out_dir / "affiliation_scatter.png"),
-            interactive=False,
-            log_z=True,
-            hue="country",
-            labels="affiliation",
-            title="Affiliation Stats Scatter3D",
-            xlabel="Paper Count",
-            ylabel="Attribution Percentage",
-            zlabel="Num. Citations",
-            base_palette=self.affiliation_palette,
-        )
-
-        # 7) Dummy checkpoint under your single `provides` key
-        if SAVE_DIR_BUNDLE_KEY in bundle:
-            final_csv = out_dir / "none.csv"
-            final_csv.write_text("")  # empty placeholder
-            self.register_checkpoint(self.provides[0], final_csv)
-            bundle[f"{self.tag}.{self.provides[0]}"] = final_csv
-        # (no return: AnimalBlock.__call__ returns the bundle)
+        # block-level checkpoint
+        ckpt_dir = self._parent_out_dir(bundle); ckpt_dir.mkdir(parents=True, exist_ok=True)
+        registry = ckpt_dir / "per_node_registry.txt"
+        registry.write_text("\n".join(map(str, produced)))
+        self.register_checkpoint(self.provides[0], registry)
+        bundle[f"{self.tag}.{self.provides[0]}"] = registry

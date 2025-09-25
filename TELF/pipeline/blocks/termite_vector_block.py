@@ -37,7 +37,7 @@ class TermiteVectorBlock(AnimalBlock):
       - '{tag}.search_hits' (if test_query_text provided)
     """
 
-    CANONICAL_NEEDS: Tuple[str, ...] = ("leaf_data_csv",)
+    CANONICAL_NEEDS: Tuple[str, ...] = ("df",)
 
     def __init__(self, *, needs: Sequence[str] = CANONICAL_NEEDS,
                  provides: Sequence[str] = ("vector_index_name", "vector_stats"),

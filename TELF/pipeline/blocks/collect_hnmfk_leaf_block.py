@@ -51,7 +51,7 @@ class CollectHNMFkLeafBlock(AnimalBlock):
         self,
         *,
         needs: Sequence[str] = CANONICAL_NEEDS,
-        provides: Sequence[str] = ("leaf_data_csv", "leaf_labels_csv"),
+        provides: Sequence[str] = ("df", "leaf_labels_csv"),
         tag: str = "LeafDataLabels",
         init_settings: Optional[Dict[str, Any]] = None,
         call_settings: Optional[Dict[str, Any]] = None,
@@ -427,9 +427,9 @@ class CollectHNMFkLeafBlock(AnimalBlock):
             self._log(log_fp, f"Failed to write summary.txt: {e}")
 
         # Checkpoint + bundle exposure
-        self.register_checkpoint("leaf_data_csv", leaf_data_csv)
+        self.register_checkpoint("df", leaf_data_csv)
         self.register_checkpoint("leaf_labels_csv", leaf_labels_csv)
-        bundle[f"{self.tag}.leaf_data_csv"] = leaf_data_csv
+        bundle[f"{self.tag}.df"] = leaf_data_csv
         bundle[f"{self.tag}.leaf_labels_csv"] = leaf_labels_csv
         # Optional: also expose summary path in the bundle (no need to register)
         bundle[f"{self.tag}.summary_txt"] = summary_txt  # NEW

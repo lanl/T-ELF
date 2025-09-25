@@ -10,36 +10,37 @@ class SpacyNERBlock(AnimalBlock):
     """
     spaCy NER over one or more text columns (default: ['title', 'abstract']).
 
-    For each specified text column `col`, adds:
-      - f"{col}_ents": JSON list of dicts {text, label, start, end}
-      - f"{col}_ents_by_label": JSON dict of {label: [unique entity strings]}
+    Adds ONE new column to the DataFrame:
+      - `output_column` (default: 'ner_by_label'): a STRING of a dictionary that
+        can be round-tripped with `ast.literal_eval`. The dict maps:
+            { <NER_LABEL>: [unique entity strings for the row] }
 
     Artifacts:
-      - <SAVE_DIR>/spaceyNER/spaceyNER.csv             (enriched DataFrame)
-      - <SAVE_DIR>/spaceyNER/entities.csv              (optional, exploded entity rows)
+      - <SAVE_DIR>/<tag>/<tag>.csv    (enriched DataFrame)
 
     Requirements:
-      - spaCy with a model installed (default: 'en_core_web_sm').
+      - spaCy with a model installed (default: 'en_core_web_lg').
 
     Parameters
     ----------
     needs : tuple
         Bundle keys to read. Default: ("df",).
     provides : tuple
-        Bundle keys to write. Default: ("df", "ents_table").
-        If you pass only ("df",), the exploded entities table is skipped.
+        Bundle keys to write. Default: ("df",).
     text_columns : Optional[List[str]]
         Which DF columns to run NER on. Default: ["title", "abstract"].
     id_field : str
-        Row identifier, used in the exploded entities table. Default: "eid".
+        (Unused for output but kept for compatibility.) Default: "eid".
     spacy_model : str
-        spaCy model name to load. Default: "en_core_web_sm".
+        spaCy model name to load. Default: "en_core_web_lg".
     batch_size : int
         spaCy pipe batch size. Default: 256.
     n_process : int
         Number of processes for spaCy pipe. Default: 1.
     drop_existing : bool
-        If True, drop and rebuild any existing NER output columns. Default: True.
+        If True, drop an existing output column before writing. Default: True.
+    output_column : str
+        Name of the new column to write. Default: "ner_by_label".
     tag : str
         Block tag and artifact folder name. Default: "spaceyNER".
     init_settings : Optional[Dict[str, Any]]
@@ -52,13 +53,14 @@ class SpacyNERBlock(AnimalBlock):
         self,
         *,
         needs=CANONICAL_NEEDS,
-        provides=("df", "ents_table"),
+        provides=("df",),
         text_columns: Optional[List[str]] = None,
         id_field: str = "eid",
         spacy_model: str = "en_core_web_lg",
         batch_size: int = 256,
         n_process: int = 1,
         drop_existing: bool = True,
+        output_column: str = "ner_by_label",
         tag: str = "spaceyNER",
         init_settings: Optional[Dict[str, Any]] = None,
         **kw,
@@ -71,6 +73,7 @@ class SpacyNERBlock(AnimalBlock):
             "batch_size": int(batch_size),
             "n_process": int(n_process),
             "drop_existing": bool(drop_existing),
+            "output_column": output_column,
             "verbose": True,
         }
 
@@ -131,83 +134,46 @@ class SpacyNERBlock(AnimalBlock):
         batch_size = int(self.init_settings.get("batch_size", 256))
         n_process = int(self.init_settings.get("n_process", 1))
         drop_existing = bool(self.init_settings.get("drop_existing", True))
+        out_col = str(self.init_settings.get("output_column", "ner_by_label"))
 
-        # 4) Prepare destination columns; optionally drop existing
-        dest_cols = []
-        for col in present:
-            dest_cols += [f"{col}_ents", f"{col}_ents_by_label"]
-        if drop_existing:
-            to_drop = [c for c in dest_cols if c in df.columns]
-            if to_drop:
-                df = df.drop(columns=to_drop)
-                print(f"[{self.tag}] dropped existing NER columns: {to_drop}")
-
+        # 4) Prepare DF; optionally drop existing output column
         df_proc = df.copy()
-        exploded_rows: List[Dict[str, Any]] = []
+        if drop_existing and out_col in df_proc.columns:
+            df_proc = df_proc.drop(columns=[out_col])
+            print(f"[{self.tag}] dropped existing column: {out_col}")
 
-        # 5) Run NER column-by-column
+        # We'll aggregate per-row across ALL present text columns.
+        # For each row, maintain a dict[label] -> list[str] (unique, preserve insertion order)
+        num_rows = len(df_proc)
+        agg_by_row: List[Dict[str, List[str]]] = [dict() for _ in range(num_rows)]
+
+        # 5) Run NER column-by-column and merge results per row
         for col in present:
             print(f"[{self.tag}] NER on column     = {col}")
             texts = df_proc[col].fillna("").astype(str).tolist()
-            ents_json_col: List[str] = []
-            bylabel_json_col: List[str] = []
-
-            i_to_row_id = (
-                df_proc[self.id_field].tolist() if self.id_field in df_proc.columns else list(range(len(df_proc)))
-            )
 
             for i, doc in enumerate(nlp.pipe(texts, batch_size=batch_size, n_process=n_process)):
-                ents = [
-                    {
-                        "text": ent.text,
-                        "label": ent.label_,
-                        "start": int(ent.start_char),
-                        "end": int(ent.end_char),
-                    }
-                    for ent in doc.ents
-                ]
-
-                by_label: Dict[str, List[str]] = {}
+                if not doc.ents:
+                    continue
+                row_dict = agg_by_row[i]
                 for ent in doc.ents:
-                    lst = by_label.setdefault(ent.label_, [])
-                    if ent.text not in lst:
-                        lst.append(ent.text)
+                    label = ent.label_
+                    text = ent.text
+                    lst = row_dict.setdefault(label, [])
+                    # preserve insertion order & uniqueness
+                    if text not in lst:
+                        lst.append(text)
 
-                ents_json_col.append(json.dumps(ents, ensure_ascii=False))
-                bylabel_json_col.append(json.dumps(by_label, ensure_ascii=False))
+        # 6) Serialize each row's dict to a string compatible with ast.literal_eval
+        # Using JSON ensures safe, unambiguous formatting; ast.literal_eval accepts JSON literals.
+        serialized = [json.dumps(d, ensure_ascii=False) for d in agg_by_row]
 
-                # Collect exploded rows
-                rid = i_to_row_id[i]
-                for ent in doc.ents:
-                    exploded_rows.append(
-                        {
-                            self.id_field: rid,
-                            "source_column": col,
-                            "text": ent.text,
-                            "label": ent.label_,
-                            "start": int(ent.start_char),
-                            "end": int(ent.end_char),
-                        }
-                    )
+        df_proc[out_col] = serialized
 
-            df_proc[f"{col}_ents"] = ents_json_col
-            df_proc[f"{col}_ents_by_label"] = bylabel_json_col
-
-        # 6) Save artifacts + register
+        # 7) Save artifacts + register
         df_path = out / f"{self.tag}.csv"
         df_proc.to_csv(df_path, index=False, encoding="utf-8-sig")
         self.register_checkpoint(self.provides[0], df_path)
         bundle[f"{self.tag}.{self.provides[0]}"] = df_proc
         print(f"[{self.tag}] saved df          → {df_path}")
-
-        # optional exploded entities table
-        if len(self.provides) > 1:
-            ents_df = pd.DataFrame(
-                exploded_rows,
-                columns=[self.id_field, "source_column", "text", "label", "start", "end"],
-            )
-            table_path = out / "entities.csv"
-            ents_df.to_csv(table_path, index=False, encoding="utf-8-sig")
-            self.register_checkpoint(self.provides[1], table_path)
-            bundle[f"{self.tag}.{self.provides[1]}"] = ents_df
-            print(f"[{self.tag}] saved entities    → {table_path}")
+        print(f"[{self.tag}] added column      = {out_col}")

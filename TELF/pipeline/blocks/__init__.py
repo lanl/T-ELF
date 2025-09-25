@@ -63,3 +63,4 @@ from .spacey_NER_block import SpacyNERBlock
 from .collect_hnmfk_leaf_block import CollectHNMFkLeafBlock 
 from .termite_neo4j_block import TermiteNeo4jBlock
 from .termite_vector_block import TermiteVectorBlock
+from .author_affiliation_tables import AffiliationsAndAuthorsBlock

@@ -68,7 +68,7 @@ class ArticFoxBlock(AnimalBlock):
         model.load_model()
 
         pipeline = ArcticFox(model=model, **self.init_settings)
-        # pipeline.run_full_pipeline(data_df=df, vocab=vocabulary, **self.call_settings)
+        pipeline.run_full_pipeline(data_df=df, vocab=vocabulary, **self.call_settings)
 
         status_value = "Done"
 
