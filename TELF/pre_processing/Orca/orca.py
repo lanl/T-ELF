@@ -800,6 +800,8 @@ class Orca:
         affiliations_map: dict,
             The created map
         """
+        if 'affiliations' not in df.columns or 'year' not in df.columns:
+            return {}
         affiliations_map = {}
         for eid, year, affiliations in zip(df.eid.to_list(), df.year.to_list(), df.affiliations.to_list()):
             
