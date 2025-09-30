@@ -1,179 +1,256 @@
+# TELF/pipeline/blocks/block_helpers/affiliation_partition.py
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 import ast
 import json
-from pathlib import Path
+import numpy as np
 import pandas as pd
 
-UNKNOWN_COUNTRY = "unknown"
+UNKNOWN_COUNTRY = "Unknown"
 
-def _parse_affiliations_with_country(raw) -> list[tuple[str, str]]:
-    """
-    Parse a JSON/Python-literal dict into [(name, country), …].
-    Always returns a country (missing ⇒ 'unknown'). Returns [] if unparseable.
-    Expected shape (examples):
-      '{"0": {"name": "MIT", "country": "United States"}}'
-      '{0: {"name": "LANL"}}'
-    """
-    if raw is None:
-        return []
-    try:
-        if pd.isna(raw):  # safe even if raw isn't a pandas scalar
-            return []
-    except Exception:
-        pass
 
-    if isinstance(raw, dict):
-        parsed = raw
+def _parse_affiliations_field(val: Any) -> Dict[str, Dict[str, Any]]:
+    """
+    Normalize an affiliations field into a dict-of-dicts keyed by affiliation id.
+
+    Accepts:
+      - dict (already keyed by id) with nested dicts
+      - list[dict] (each item is an affiliation)
+      - string (Python-literal or JSON) representing either of the above
+      - else -> empty dict
+
+    Ensures each nested dict has keys:
+      - 'name' (str)
+      - 'country' (str, default 'Unknown')
+    """
+    # 1) Convert to Python object
+    obj = None
+    if isinstance(val, (dict, list)):
+        obj = val
+    elif isinstance(val, str):
+        s = val.strip()
+        if s:
+            # Try Python literal first (TELF often saves repr strings)
+            for parser in (ast.literal_eval, json.loads):
+                try:
+                    parsed = parser(s)
+                    if isinstance(parsed, (dict, list)):
+                        obj = parsed
+                        break
+                except Exception:
+                    pass
+        if obj is None:
+            obj = {}
     else:
-        s = str(raw).strip()
-        if s in ("", "{}", "[]"):
-            return []
-        try:
-            parsed = json.loads(s)
-        except Exception:
-            try:
-                parsed = ast.literal_eval(s)
-            except Exception:
-                return []
+        obj = {}
 
-    if not isinstance(parsed, dict):
-        return []
+    # 2) Canonicalize to dict-of-dicts keyed by id (string keys)
+    out: Dict[str, Dict[str, Any]] = {}
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if not isinstance(v, dict):
+                continue
+            name = v.get("name")
+            country = v.get("country", UNKNOWN_COUNTRY)
+            if name is None or (isinstance(name, str) and name.strip() == ""):
+                # try fallbacks (some loaders store name under different keys)
+                name = v.get("affiliation_name") or v.get("org") or v.get("institution") or None
+            if not isinstance(country, str) or not country.strip():
+                country = UNKNOWN_COUNTRY
+            out[str(k)] = {**v, "name": name, "country": country}
+        return out
 
-    out: list[tuple[str, str]] = []
-    for info in parsed.values():
-        if not isinstance(info, dict):
-            continue
-        name = info.get("name")
-        if not isinstance(name, str) or not name.strip():
-            continue
-        country = info.get("country")
-        if isinstance(country, str):
-            country = country.strip() or UNKNOWN_COUNTRY
-        elif country is None:
+    if isinstance(obj, list):
+        for i, item in enumerate(obj):
+            if not isinstance(item, dict):
+                continue
+            key = str(item.get("id", item.get("affiliation_id", i)))
+            name = item.get("name") or item.get("affiliation_name") or item.get("org") or item.get("institution")
+            country = item.get("country", UNKNOWN_COUNTRY)
+            if not isinstance(country, str) or not country.strip():
+                country = UNKNOWN_COUNTRY
+            out[key] = {**item, "name": name, "country": country}
+        return out
+
+    return {}
+
+
+def _pairs_from_affiliations(val: Any) -> List[Tuple[Optional[str], str]]:
+    """
+    Produce a list of (affiliation_name, country) pairs from a raw affiliations field.
+    Ensures each pair has exactly two elements; missing pieces are filled with defaults.
+    """
+    norm = _parse_affiliations_field(val)
+    pairs: List[Tuple[Optional[str], str]] = []
+    for _, rec in norm.items():
+        name = rec.get("name")
+        if isinstance(name, str):
+            name = name.strip() or None
+        country = rec.get("country", UNKNOWN_COUNTRY)
+        if not isinstance(country, str) or not country.strip():
             country = UNKNOWN_COUNTRY
-        else:
-            country = str(country).strip() or UNKNOWN_COUNTRY
-        out.append((name.strip(), country))
-    return out
+        pairs.append((name, country))
+    return pairs
+
+
+def _resolve_paper_id_column(df: pd.DataFrame) -> str:
+    """
+    Choose a robust paper-id column for grouping:
+    priority: 'eid' -> 's2id' -> 'doi' -> synthetic 'paper_id'
+    Returns the *name* of the column (and creates synthetic if needed).
+    """
+    for cand in ("eid", "s2id", "doi"):
+        if cand in df.columns:
+            return cand
+    df = df.reset_index(drop=True)
+    df["paper_id"] = df.index.astype(str)
+    return "paper_id"
+
 
 def generate_top_affiliations_with_country(
-    df_path: str | Path,
-    affils_output_path: str | Path,
-    min_total_papers: int = 20,
-    country_filter: str | None = None,           # ← filter to exactly this country (or 'unknown')
-    partition_by_year: bool = False,             # ← also emit one CSV per year
-    per_year_output_dir: str | Path | None = None,
-):
+    df_path: Union[str, Path],
+    affils_output_path: Union[str, Path],
+    min_total_papers: int = 1,
+    country_filter: Optional[str] = None,
+    partition_by_year: bool = False,
+    per_year_output_dir: Optional[Union[str, Path]] = None,
+) -> None:
     """
-    Reads df_path (must have 'year' and 'affiliations'), computes per-(affiliation, country, year)
-    paper counts for affiliations whose total_papers (within the current filter) ≥ min_total_papers.
-    Always includes a 'country' value; if missing in the source, uses 'unknown'.
+    Read the (already processed) pipeline CSV and emit a table of top affiliations
+    with countries, optionally partitioned by year.
 
-    If country_filter is provided, restricts to that single country (exact string match, including 'unknown').
+    Output schema (affils_output_path):
+        ['affiliation_name', 'country', 'year', 'paper_count']
+
+    Parameters
+    ----------
+    df_path : path to the dataframe (CSV) produced upstream
+    affils_output_path : where to write the aggregated CSV
+    min_total_papers : keep only affiliations with >= this many papers overall
+    country_filter : if given, keep only rows matching this country (case-sensitive)
+    partition_by_year : if True, also write per-year CSVs under per_year_output_dir
+    per_year_output_dir : base directory for per-year outputs; if None and
+                          partition_by_year is True, defaults to affils_output_path.parent / 'by_year'
     """
+    df_path = Path(df_path)
+    out_path = Path(affils_output_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    if not df_path.is_file():
+        # nothing to do; write an empty file with the expected header
+        empty = pd.DataFrame(columns=["affiliation_name", "country", "year", "paper_count"])
+        empty.to_csv(out_path, index=False)
+        return
+
     df = pd.read_csv(df_path)
 
-    if 'year' not in df.columns:
-        raise KeyError("Expected a 'year' column.")
-    df['year'] = pd.to_numeric(df['year'], errors='coerce')
-    df = df[df['year'].notna()].copy()
-    df['year'] = df['year'].astype(int)
-
-    if 'affiliations' not in df.columns:
-        raise KeyError("Expected an 'affiliations' column.")
-
-    # 1) Parse affiliations → list of (name, country or 'unknown')
-    df_aff = df.copy()
-    df_aff['affil_tuples'] = df_aff['affiliations'].apply(_parse_affiliations_with_country)
-
-    # 2) Explode into one row per (paper, affiliation_name, country)
-    exploded_aff = df_aff.explode('affil_tuples')
-    exploded_aff = exploded_aff[exploded_aff['affil_tuples'].notna()].copy()
-    exploded_aff[['affiliation_name', 'country']] = pd.DataFrame(
-        exploded_aff['affil_tuples'].tolist(), index=exploded_aff.index
+    # pick affiliations column (prefer SLIC)
+    aff_col = "slic_affiliations" if "slic_affiliations" in df.columns else (
+        "affiliations" if "affiliations" in df.columns else None
     )
-    # Defensive fill (should already be set by parser)
-    exploded_aff['country'] = exploded_aff['country'].fillna(UNKNOWN_COUNTRY)
+    if aff_col is None:
+        # no affiliations at all -> write empty
+        empty = pd.DataFrame(columns=["affiliation_name", "country", "year", "paper_count"])
+        empty.to_csv(out_path, index=False)
+        return
 
-    # 3) Optional: restrict to one specific country
-    if country_filter is not None:
-        exploded_aff = exploded_aff[exploded_aff['country'] == country_filter].copy()
-
-    # 4) Totals per affiliation (within current filter scope)
-    total_per_aff = (
-        exploded_aff
-        .groupby(['affiliation_name', 'country'])
-        .size()
-        .reset_index(name='total_papers')
-        .sort_values('total_papers', ascending=False)
-    )
-
-    print("=== Affiliations",
-          f"in [{country_filter}]" if country_filter is not None else "(all countries)",
-          "with their total paper counts ===")
-    print(total_per_aff.head(20).to_string(index=False))
-    print("───────────────────────────────────────────────────────────────────────────\n")
-
-    # 5) Keep affiliations with ≥ min_total_papers
-    top_affils = total_per_aff[total_per_aff['total_papers'] >= min_total_papers][
-        ['affiliation_name', 'country']
-    ]
-
-    if top_affils.empty:
-        print(f"No affiliation{' in ' + country_filter if country_filter else ''} "
-              f"meets ≥ {min_total_papers} total papers.")
-        aff_year_counts = pd.DataFrame(columns=['affiliation_name','country','year','paper_count'])
+    # ensure year column
+    if "year" not in df.columns:
+        df["year"] = 0
     else:
-        # 6) Per-year counts for top affiliations
-        exploded_aff_top = exploded_aff.merge(top_affils, on=['affiliation_name','country'], how='inner')
-        aff_year_counts = (
-            exploded_aff_top
-            .groupby(['affiliation_name','country','year'])
-            .size()
-            .reset_index(name='paper_count')
-            .sort_values(['affiliation_name','country','year'])
-            .reset_index(drop=True)
-        )
+        df["year"] = pd.to_numeric(df["year"], errors="coerce").fillna(0).astype(int)
 
-    # 7) Write consolidated CSV
-    affils_output_path = Path(affils_output_path)
-    affils_output_path.parent.mkdir(parents=True, exist_ok=True)
-    if affils_output_path.suffix == "":
-        affils_output_path = affils_output_path.with_suffix(".csv")
-    aff_year_counts.to_csv(affils_output_path, index=False, encoding="utf-8-sig")
+    # robust paper id
+    pid_col = _resolve_paper_id_column(df)
+    if pid_col not in df.columns:
+        # _resolve_paper_id_column may have added a synthetic col; ensure present
+        df = df.reset_index(drop=True)
+        df["paper_id"] = df.index.astype(str)
+        pid_col = "paper_id"
 
-    print(f"Wrote {len(aff_year_counts)} rows to {affils_output_path} "
-          f"(≥ {min_total_papers} papers"
-          f"{', country=' + country_filter if country_filter is not None else ', all countries'})")
+    # Build normalized pairs per row and explode
+    df = df[[pid_col, "year", aff_col]].copy()
+    df["affil_pairs"] = df[aff_col].apply(_pairs_from_affiliations)
 
-    # 8) Optional: one file per year (same columns)
-    if partition_by_year and not aff_year_counts.empty:
-        out_dir = Path(per_year_output_dir) if per_year_output_dir else affils_output_path.parent
-        out_dir.mkdir(parents=True, exist_ok=True)
-        stem = affils_output_path.stem
-        suffix = affils_output_path.suffix or ".csv"
-        for yr in sorted(aff_year_counts['year'].unique()):
-            yr_df = aff_year_counts[aff_year_counts['year'] == yr]
-            yr_path = out_dir / f"{stem}.year={yr}{suffix}"
-            yr_df.to_csv(yr_path, index=False, encoding="utf-8-sig")
-            print(f"→ Wrote {len(yr_df)} rows for year {yr} to {yr_path}")
+    # explode to one row per (paper, affiliation)
+    exploded = df.explode("affil_pairs")
 
-# # All countries in output (missing → 'unknown'), consolidated CSV only
-# generate_top_affiliations_with_country(
-#     "papers.csv", "out/affiliations_top.csv", min_total_papers=20
-# )
+    # Normalize pairs so every row is a *2-tuple* (name, country)
+    def _safe_pair(x: Any) -> Tuple[Optional[str], str]:
+        if isinstance(x, (list, tuple)):
+            if len(x) >= 2:
+                name, country = x[0], x[1]
+            elif len(x) == 1:
+                name, country = x[0], UNKNOWN_COUNTRY
+            else:
+                name, country = None, UNKNOWN_COUNTRY
+        elif isinstance(x, dict):
+            name = x.get("name")
+            country = x.get("country", UNKNOWN_COUNTRY)
+        else:
+            name, country = None, UNKNOWN_COUNTRY
 
-# # Only the United States (others excluded), plus per-year files
-# generate_top_affiliations_with_country(
-#     "papers.csv", "out/affiliations_top.csv",
-#     min_total_papers=10,
-#     country_filter="United States",
-#     partition_by_year=True,
-#     per_year_output_dir="out/by_year"
-# )
+        if isinstance(name, str):
+            name = name.strip() or None
+        if not isinstance(country, str) or not country.strip():
+            country = UNKNOWN_COUNTRY
+        return (name, country)
 
-# # Only entries whose country was missing in the source (now labeled 'unknown')
-# generate_top_affiliations_with_country(
-#     "papers.csv", "out/affiliations_unknown.csv",
-#     min_total_papers=5,
-#     country_filter="unknown"
-# )
+    exploded["affil_pairs"] = exploded["affil_pairs"].apply(_safe_pair)
+    # Now guaranteed to be 2 columns
+    exploded[["affiliation_name", "country"]] = pd.DataFrame(
+        exploded["affil_pairs"].tolist(), index=exploded.index
+    )
+
+    # Drop rows where affiliation name is missing after normalization
+    exploded = exploded.dropna(subset=["affiliation_name"]).copy()
+
+    # Optional country filter
+    if country_filter:
+        exploded = exploded.loc[exploded["country"] == str(country_filter)].copy()
+
+    if exploded.empty:
+        out = pd.DataFrame(columns=["affiliation_name", "country", "year", "paper_count"])
+        out.to_csv(out_path, index=False)
+        return
+
+    # Unique by (paper, affiliation) to avoid double-counting the same affiliation within a paper
+    exploded = exploded[[pid_col, "year", "affiliation_name", "country"]].drop_duplicates()
+
+    # Compute total papers per affiliation across all years (for thresholding)
+    totals = (
+        exploded.groupby(["affiliation_name", "country"])[pid_col]
+        .nunique()
+        .reset_index(name="paper_count_total")
+    )
+
+    # Keep only affiliations that meet the threshold
+    keep = totals.loc[totals["paper_count_total"] >= int(min_total_papers), ["affiliation_name", "country"]]
+    if keep.empty:
+        out = pd.DataFrame(columns=["affiliation_name", "country", "year", "paper_count"])
+        out.to_csv(out_path, index=False)
+        return
+
+    # Join to filter
+    exploded = exploded.merge(keep, on=["affiliation_name", "country"], how="inner")
+
+    # Aggregate by year
+    by_year = (
+        exploded.groupby(["affiliation_name", "country", "year"])[pid_col]
+        .nunique()
+        .reset_index(name="paper_count")
+        .sort_values(["paper_count", "year"], ascending=[False, True])
+        .reset_index(drop=True)
+    )
+
+    by_year.to_csv(out_path, index=False)
+
+    # Optionally write per-year partitions
+    if partition_by_year:
+        base = Path(per_year_output_dir) if per_year_output_dir else out_path.parent / "by_year"
+        base.mkdir(parents=True, exist_ok=True)
+        for yr, sub in by_year.groupby("year"):
+            sub_path = base / f"affiliations_{yr}.csv"
+            sub.sort_values("paper_count", ascending=False).to_csv(sub_path, index=False)

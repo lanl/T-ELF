@@ -1,276 +1,302 @@
+# TELF/pipeline/blocks/block_helpers/author_partition.py
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 import ast
 import json
-import re
+import numpy as np
 import pandas as pd
 
+UNKNOWN_COUNTRY = "Unknown"
+
+
+# ----------------------------- Parsers ---------------------------------
+
+def _parse_literal_or_json(text: str):
+    """Try ast.literal_eval then JSON; return Python object or None."""
+    if not isinstance(text, str) or not text.strip():
+        return None
+    s = text.strip()
+    for parser in (ast.literal_eval, json.loads):
+        try:
+            return parser(s)
+        except Exception:
+            pass
+    return None
+
+
+def _to_list_any(x: Any) -> List[Any]:
+    """Normalize a value to a Python list (best‑effort)."""
+    if x is None or (isinstance(x, float) and pd.isna(x)):
+        return []
+    if isinstance(x, (list, tuple)):
+        return list(x)
+    if isinstance(x, str):
+        parsed = _parse_literal_or_json(x)
+        if isinstance(parsed, (list, tuple)):
+            return list(parsed)
+        # fall back to delimiter split
+        sep = ";" if ";" in x else ","
+        return [t.strip() for t in x.split(sep) if t.strip()]
+    return [x]
+
+
+def _parse_authors_field(row: pd.Series) -> List[str]:
+    """
+    Return a list of author IDs as strings.
+    Tries SLIC → generic → S2 IDs; falls back to empty.
+    """
+    for cand in ("slic_author_ids", "author_ids", "s2_author_ids"):
+        if cand in row and pd.notna(row[cand]):
+            vals = _to_list_any(row[cand])
+            return [str(v).strip() for v in vals if str(v).strip() != ""]
+    return []
+
+
+def _author_id_to_name_map(row: pd.Series) -> Dict[str, str]:
+    """
+    If both author IDs and names exist with the same length, return an id→name map.
+    Otherwise return {}.
+    """
+    id_cols = [c for c in ("slic_author_ids", "author_ids", "s2_author_ids") if c in row.index]
+    name_cols = [c for c in ("slic_authors", "authors") if c in row.index]
+    for ic in id_cols:
+        for nc in name_cols:
+            ids = _to_list_any(row.get(ic))
+            names = _to_list_any(row.get(nc))
+            if len(ids) == len(names) and len(ids) > 0:
+                out = {}
+                for i, n in zip(ids, names):
+                    sid = str(i).strip()
+                    name = str(n).strip()
+                    if sid:
+                        out[sid] = name
+                if out:
+                    return out
+    return {}
+
+
+def _parse_affiliations_field(val: Any) -> Dict[str, Dict[str, Any]]:
+    """
+    Normalize an affiliations field into a dict-of-dicts keyed by affiliation id (string).
+
+    Accepts dict, list[dict], or str (Python‑literal or JSON). Returns a dict where each
+    value has at least:
+        { "name": str|None, "country": str, "authors": List[str] }
+    """
+    # 1) Convert to Python object
+    if isinstance(val, (dict, list)):
+        obj = val
+    elif isinstance(val, str):
+        obj = _parse_literal_or_json(val) or {}
+    else:
+        obj = {}
+
+    out: Dict[str, Dict[str, Any]] = {}
+
+    if isinstance(obj, dict):
+        items = obj.items()
+    elif isinstance(obj, list):
+        # fabricate keys if missing
+        items = [(str(i.get("id", i.get("affiliation_id", idx))), i)
+                 for idx, i in enumerate(obj) if isinstance(i, dict)]
+    else:
+        items = []
+
+    for k, v in items:
+        if not isinstance(v, dict):
+            continue
+        name = v.get("name") or v.get("affiliation_name") or v.get("org") or v.get("institution")
+        if isinstance(name, str) and not name.strip():
+            name = None
+        country = v.get("country", UNKNOWN_COUNTRY)
+        if not isinstance(country, str) or not country.strip():
+            country = UNKNOWN_COUNTRY
+
+        # authors may be under various keys
+        auths = v.get("authors", v.get("author_ids", []))
+        auth_list = [str(a).strip() for a in _to_list_any(auths) if str(a).strip() != ""]
+        out[str(k)] = {"name": name, "country": country, "authors": auth_list, **v}
+
+    return out
+
+
+def _choose_paper_id_column(df: pd.DataFrame) -> str:
+    """Pick a stable paper-id column for de-duplication and counting."""
+    for cand in ("eid", "s2id", "doi"):
+        if cand in df.columns:
+            return cand
+    # synthesize one
+    if "paper_id" not in df.columns:
+        df["paper_id"] = np.arange(len(df)).astype(str)
+    return "paper_id"
+
+
+def _most_common_non_null(series: pd.Series) -> Any:
+    """Return the most frequent non-null value in a Series, or np.nan."""
+    s = series.dropna()
+    if s.empty:
+        return np.nan
+    return s.value_counts().idxmax()
+
+
+# ------------------------- Public API ----------------------------------
+
 def write_top_authors_by_cluster(
-    df_path: str,
-    output_path: str,
-    COUNTY_NAMES=None,   # keep name to preserve identical print message
+    df_path: Union[str, Path],
+    output_path: Union[str, Path],
+    COUNTY_NAMES: Optional[Iterable[str]] = None,
     top_n: int = 10,
-    debug: bool = False  # optional: prints row counts at key steps
-):
+    debug: bool = False,
+) -> pd.DataFrame:
     """
-    Runs the same pipeline but with robust parsing, flexible author extraction,
-    normalized country filtering, and sensible fallbacks.
-    Keeps columns, encoding, and print message identical to your original.
+    Build a 'top authors by cluster' table.
+
+    Output CSV schema:
+        ['cluster', 'author_id', 'author', 'affiliation_name', 'country',
+         'paper_count', 'num_citations']
+
+    Notes
+    -----
+    * COUNTY_NAMES is preserved for backward compatibility in the caller. If given,
+      rows are filtered to only those countries.
+    * Per-paper credit: each author gets 1 paper for that row (unique paper_id),
+      and the row's num_citations are summed across their papers.
     """
-    def _debug(msg):
-        if debug:
-            print(msg)
+    df_path = Path(df_path)
+    out_path = Path(output_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # ---------- helpers ----------
-    _split_re = re.compile(r"[;,|]\s*")
+    # If no input, write empty CSV with expected header.
+    if not df_path.is_file():
+        empty = pd.DataFrame(
+            columns=["cluster", "author_id", "author", "affiliation_name", "country",
+                     "paper_count", "num_citations"]
+        )
+        empty.to_csv(out_path, index=False)
+        return empty
 
-    def _safe_eval_aff(s):
-        """Parse affiliations cell to dict-like; return {} on any issue."""
-        if isinstance(s, dict):
-            return s
-        if isinstance(s, list):
-            return s
-        if pd.isna(s):
-            return {}
-        txt = str(s).strip()
-        if not txt:
-            return {}
-        # Try JSON first (handles true/false/null)
-        try:
-            return json.loads(txt)
-        except Exception:
-            pass
-        # Fallback to Python literal
-        try:
-            return ast.literal_eval(txt)
-        except Exception:
-            return {}
-
-    def _listify_author_ids(value):
-        """Return a list[str] of author IDs from various shapes (list/json/csv)."""
-        if value is None or (isinstance(value, float) and pd.isna(value)):
-            return []
-        # Already list-like?
-        if isinstance(value, (list, tuple, set)):
-            return [str(x) for x in value if str(x).strip()]
-        s = str(value).strip()
-        if not s:
-            return []
-        # Try JSON array
-        try:
-            arr = json.loads(s)
-            if isinstance(arr, (list, tuple, set)):
-                return [str(x) for x in arr if str(x).strip()]
-        except Exception:
-            pass
-        # Delimited fallback
-        parts = _split_re.split(s)
-        return [p for p in parts if p]
-
-    def _authors_from_affinfo(x, row_level_authors):
-        """
-        Extract authors from an affiliation 'info' dict, falling back to row-level authors
-        if none are present for that affiliation.
-        """
-        if not isinstance(x, dict):
-            return row_level_authors
-        for k in ("authors", "author_ids", "authorId", "author_id", "authorIds"):
-            if k in x and x[k] is not None:
-                ids_ = _listify_author_ids(x[k])
-                if ids_:
-                    return ids_
-        # fallback: use the paper's row-level authors (prevents empty explode)
-        return row_level_authors
-
-    def _normalize_aff_dict(aff):
-        """
-        Accept dict-of-dicts OR list-of-dicts and return dict[str_id] -> dict(info).
-        """
-        if isinstance(aff, dict):
-            return aff
-        if isinstance(aff, list):
-            out = {}
-            for item in aff:
-                if isinstance(item, dict):
-                    aff_id = (item.get("id") or item.get("affiliation_id") or item.get("affiliationId") or
-                              item.get("grid") or item.get("ror") or item.get("name") or "unknown")
-                    out[str(aff_id)] = item
-            return out
-        return {}
-
-    # ---------- load & standardize ----------
     df = pd.read_csv(df_path)
 
-    if 'cluster' not in df.columns:
-        if 'Graph_Name' in df.columns:
-            df = df.copy()
-            df['cluster'] = df['Graph_Name']
-        else:
-            raise KeyError("Expected a 'cluster' column; neither 'cluster' nor 'Graph_Name' found.")
+    # Ensure basic columns
+    if "cluster" not in df.columns:
+        df["cluster"] = 0
+    if "num_citations" not in df.columns:
+        df["num_citations"] = 0
 
-    # Build author_name_map (author_id ↔ author_name) from row-level columns
-    if not {'author_ids', 'authors'}.issubset(df.columns):
-        # Create empty map to avoid KeyError; we'll still count by ID
-        author_name_map = pd.DataFrame(columns=['author_id', 'author_name'])
-    else:
-        author_name_map = (
-            df[['author_ids', 'authors']]
-            .assign(
-                author_ids=lambda d: d['author_ids'].astype(str).apply(_listify_author_ids),
-                authors=lambda d: d['authors'].astype(str).apply(_listify_author_ids),
-            )
-            .explode(['author_ids', 'authors'])
-            .rename(columns={'author_ids': 'author_id', 'authors': 'author_name'})
-            .assign(author_id=lambda d: d['author_id'].astype(str))
-            .drop_duplicates(['author_id', 'author_name'])
-        )
+    # Choose paper id column robustly
+    pid_col = _choose_paper_id_column(df)
 
-    # ---------- explode affiliations -> (cluster, affiliation, country, author_id) ----------
-    # Carry row-level author_ids to allow fallback when an affiliation lacks per-affiliation authors
-    base_cols = ['cluster', 'affiliations']
-    if 'author_ids' in df.columns:
-        base_cols.append('author_ids')
-    if 'authors' in df.columns:
-        base_cols.append('authors')
-
-    tmp = (
-        df[base_cols]
-        .assign(
-            row_authors=lambda d: d.get('author_ids', pd.Series([None]*len(d))).apply(_listify_author_ids)
-        )
-        .assign(aff_raw=lambda d: d['affiliations'].map(_safe_eval_aff))
-        .assign(aff_dict=lambda d: d['aff_raw'].map(_normalize_aff_dict))
-        .assign(aff_items=lambda d: d['aff_dict'].map(lambda x: list(x.items())))
-        .explode('aff_items', ignore_index=True)
+    # Prefer SLIC affiliations, fall back
+    aff_col = "slic_affiliations" if "slic_affiliations" in df.columns else (
+        "affiliations" if "affiliations" in df.columns else None
     )
 
-    # If nothing at all parsed, make a single "Unknown" slot per row so we can still count
-    if tmp['aff_items'].isna().all():
-        tmp = (
-            df[['cluster']].copy()
-            .assign(
-                row_authors=lambda d: df.get('author_ids', pd.Series([None]*len(df))).apply(_listify_author_ids),
-                aff_items=[('unknown', {'name': 'Unknown', 'country': 'unknown'})] * len(df)
+    # Build records
+    records: List[Dict[str, Any]] = []
+
+    for _, row in df.iterrows():
+        cluster = int(row.get("cluster", 0)) if pd.notna(row.get("cluster", np.nan)) else 0
+        paper_id = str(row.get(pid_col, ""))
+        citations = row.get("num_citations", 0)
+        try:
+            citations = float(citations)
+        except Exception:
+            citations = 0.0
+
+        author_ids = _parse_authors_field(row)
+        id2name = _author_id_to_name_map(row)
+
+        # Parse affiliations + create author→(name,country) lookup
+        aff_map: Dict[str, Dict[str, Any]] = {}
+        if aff_col is not None and aff_col in row and pd.notna(row[aff_col]):
+            aff_map = _parse_affiliations_field(row[aff_col])
+
+        # Build reverse index: author_id -> list of (aff_name, country)
+        author_to_aff: Dict[str, List[Tuple[Optional[str], str]]] = {}
+        for _, info in aff_map.items():
+            aff_name = info.get("name")
+            country = info.get("country", UNKNOWN_COUNTRY)
+            if not isinstance(country, str) or not country.strip():
+                country = UNKNOWN_COUNTRY
+            for aid in info.get("authors", []):
+                author_to_aff.setdefault(str(aid), []).append((aff_name, country))
+
+        # Create a record per author
+        for aid in author_ids:
+            aff_pairs = author_to_aff.get(aid, [])
+            if aff_pairs:
+                # pick most common (name,country) for this paper row
+                names = pd.Series([a for a, _ in aff_pairs], dtype="object")
+                cntrs = pd.Series([c for _, c in aff_pairs], dtype="object")
+                aff_name = _most_common_non_null(names)
+                country = _most_common_non_null(cntrs)
+            else:
+                aff_name = np.nan
+                country = UNKNOWN_COUNTRY
+
+            records.append(
+                dict(
+                    cluster=cluster,
+                    paper_id=paper_id,
+                    author_id=str(aid),
+                    author=id2name.get(str(aid), np.nan),
+                    affiliation_name=aff_name if (isinstance(aff_name, str) and aff_name.strip()) else np.nan,
+                    country=country if (isinstance(country, str) and country.strip()) else UNKNOWN_COUNTRY,
+                    num_citations=citations,
+                )
             )
-            .explode('aff_items', ignore_index=True)
+
+    if not records:
+        empty = pd.DataFrame(
+            columns=["cluster", "author_id", "author", "affiliation_name", "country",
+                     "paper_count", "num_citations"]
         )
+        empty.to_csv(out_path, index=False)
+        return empty
 
-    auth_aff = (
-        tmp
-        .dropna(subset=['aff_items'])
-        .assign(
-            affiliation_id=lambda d: d['aff_items'].map(lambda p: p[0]),
-            aff_info=lambda d: d['aff_items'].map(lambda p: p[1]),
-        )
-        .assign(
-            affiliation_name=lambda d: d['aff_info'].map(lambda x: x.get('name') if isinstance(x, dict) else None),
-            country_raw=lambda d: d['aff_info'].map(lambda x: x.get('country') if isinstance(x, dict) else None),
-        )
-    )
+    rec_df = pd.DataFrame.from_records(records)
 
-    # Author IDs from affiliation info, with fallback to row-level authors
-    if 'row_authors' not in auth_aff.columns:
-        auth_aff['row_authors'] = [[]] * len(auth_aff)
-    auth_aff = auth_aff.assign(
-        author_ids_list=lambda d: d.apply(
-            lambda r: _authors_from_affinfo(r['aff_info'], r['row_authors']), axis=1
-        )
-    ).explode('author_ids_list', ignore_index=True)
-
-    # If *still* empty, bail out with a zero-row CSV but keep the same columns
-    if auth_aff.empty:
-        out = pd.DataFrame(columns=[
-            'cluster', 'rank', 'author_name', 'author_id', 'affiliation_name', 'country'
-        ])
-        out.to_csv(output_path, index=False, encoding="utf-8-sig")
-        print(f"Wrote {len(out)} rows (authors in {COUNTY_NAMES}) to {output_path}")
-        return out
-
-    auth_aff = auth_aff.assign(
-        author_id=lambda d: d['author_ids_list'].astype(str),
-        country=lambda d: d['country_raw'].astype(str).str.strip().replace({'': 'unknown', 'None': 'unknown', 'nan': 'unknown'})
-    ).merge(author_name_map, on='author_id', how='left')
-
-    _debug(f"rows after aff explode: {len(auth_aff)}")
-
-    # ---------- optional country filter (normalized) ----------
+    # Optionally filter by country list (param name preserved as in caller)
     if COUNTY_NAMES:
-        # Normalize both sides (casefold + strip) and handle common US aliases
-        aliases = {
-            'us': {'us', 'usa', 'u.s.', 'u.s.a.', 'united states', 'united states of america', 'u.s.a'},
-        }
-        def _norm_country(s):
-            s = (s or "").strip().casefold()
-            if s in aliases['us']:
-                return 'united states'
-            return s
+        counties = {str(c).strip() for c in COUNTY_NAMES if str(c).strip()}
+        if counties:
+            rec_df = rec_df[rec_df["country"].isin(counties)].copy()
 
-        want = { _norm_country(x) for x in COUNTY_NAMES }
-        auth_aff = auth_aff.assign(_country_norm=auth_aff['country'].map(_norm_country))
-        before = len(auth_aff)
-        auth_aff = auth_aff[auth_aff['_country_norm'].isin(want)].copy()
-        auth_aff.drop(columns=['_country_norm'], inplace=True)
-        _debug(f"country filter kept {len(auth_aff)} / {before} rows")
-
-    # ---------- counts ----------
-    counts = (
-        auth_aff
-        .groupby(['cluster', 'author_id', 'author_name', 'affiliation_name', 'country'], dropna=False)
-        .size()
-        .reset_index(name='paper_count')
-    )
-
-    if counts.empty:
-        # Write an empty CSV with the right columns
-        out = pd.DataFrame(columns=[
-            'cluster', 'rank', 'author_name', 'author_id', 'affiliation_name', 'country'
-        ])
-        out.to_csv(output_path, index=False, encoding="utf-8-sig")
-        print(f"Wrote {len(out)} rows (authors in {COUNTY_NAMES}) to {output_path}")
-        return out
-
-    # ---------- top N per cluster ----------
-    top_authors = (
-        counts
-        .groupby('cluster', group_keys=False)
-        .apply(lambda g: g.nlargest(top_n, 'paper_count'))
-        .reset_index(drop=True)
-    )
-    top_authors['rank'] = (
-        top_authors
-        .groupby('cluster')['paper_count']
-        .rank(method='first', ascending=False)
-        .astype(int)
-    )
-
-    # ---------- pivot cross-cluster ----------
-    pivot = (
-        counts
-        .pivot_table(
-            index=['author_id', 'author_name', 'affiliation_name', 'country'],
-            columns='cluster',
-            values='paper_count',
-            aggfunc='sum',
-            fill_value=0,
+    if rec_df.empty:
+        empty = pd.DataFrame(
+            columns=["cluster", "author_id", "author", "affiliation_name", "country",
+                     "paper_count", "num_citations"]
         )
-        .reindex(sorted(counts['cluster'].unique()), axis=1)
-        .astype(int)
+        empty.to_csv(out_path, index=False)
+        return empty
+
+    # Aggregate: unique paper count per (cluster, author_id) and sum citations
+    agg = (
+        rec_df.groupby(["cluster", "author_id"], dropna=False)
+        .agg(
+            paper_count=("paper_id", "nunique"),
+            num_citations=("num_citations", "sum"),
+            # pick most common non-null strings
+            author=("author", _most_common_non_null),
+            affiliation_name=("affiliation_name", _most_common_non_null),
+            country=("country", _most_common_non_null),
+        )
         .reset_index()
     )
 
-    # ---------- merge & write ----------
-    result = top_authors.merge(
-        pivot,
-        on=['author_id', 'author_name', 'affiliation_name', 'country'],
-        how='left'
-    )
+    # Rank within each cluster
+    agg["num_citations"] = pd.to_numeric(agg["num_citations"], errors="coerce").fillna(0.0)
+    agg["paper_count"] = pd.to_numeric(agg["paper_count"], errors="coerce").fillna(0).astype(int)
 
-    cluster_cols = [c for c in pivot.columns if c not in ['author_id', 'author_name', 'affiliation_name', 'country']]
-    cols = [
-        'cluster', 'rank',
-        'author_name', 'author_id',
-        'affiliation_name', 'country',
-    ] + cluster_cols
+    agg = agg.sort_values(["cluster", "num_citations", "paper_count"], ascending=[True, False, False])
 
-    out = result[cols]
-    out.to_csv(output_path, index=False, encoding="utf-8-sig")
-    print(f"Wrote {len(result)} rows (authors in {COUNTY_NAMES}) to {output_path}")
-    return out
+    # Keep top_n per cluster
+    top = agg.groupby("cluster", group_keys=False).head(int(top_n)).reset_index(drop=True)
+
+    # Write and return
+    top.to_csv(out_path, index=False)
+    if debug:
+        print(f"[author_partition] Wrote top authors by cluster → {out_path} (rows={len(top)})")
+    return top

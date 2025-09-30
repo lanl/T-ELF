@@ -1,10 +1,10 @@
-# wolf_block.py
-
+# TELF/pipeline/blocks/wolf_block.py
 from __future__ import annotations
 from typing import Dict, Sequence, Any, Tuple
 import os
 from pathlib import Path
 
+import pandas as pd
 import numpy as np
 import networkx as nx
 from tqdm import tqdm
@@ -27,47 +27,47 @@ from .beaver_codependency_matrix_block import CodependencyMatrixBlock
 class WolfBlock(AnimalBlock):
     """
     needs:    ['df', 'map']
-    provides: ['graph']
+    provides: ['graph_<category>']
     Automatically checkpoints 'graph' to disk as 'graph.gpickle'.
     """
 
-    CANONICAL_NEEDS = ('df', 'map')
-    WOLF_STATS = ['page_rank', 'hubs_authorities', 'betweenness_centrality']
+    CANONICAL_NEEDS = ("df", "map")
+    WOLF_STATS = ["page_rank", "hubs_authorities", "betweenness_centrality"]
 
     category_map = {
         "co-author": {
-            "col":      "slic_author_ids",
+            "col": "slic_author_ids",
             "name_col": "slic_authors",
-            "png":      "all_co-authors.png",
-            "ranks":    "co-author_rankings.csv",
-            "html":     "co-authors.html",
+            "png": "all_co-authors.png",
+            "ranks": "co-author_rankings.csv",
+            "html": "co-authors.html",
         },
         "co-affiliation": {
-            "col":      "affiliation_ids",
+            "col": "affiliation_ids",
             "name_col": "affiliation_names",
-            "png":      "all_co-affiliations.png",
-            "ranks":    "co-affiliation_rankings.csv",
-            "html":     "co-affiliations.html",
+            "png": "all_co-affiliations.png",
+            "ranks": "co-affiliation_rankings.csv",
+            "html": "co-affiliations.html",
         },
         "co-country": {
-            "col":      "countries",
+            "col": "countries",
             "name_col": "countries",
-            "png":      "all_co-countries.png",
-            "ranks":    "co-country_rankings.csv",
-            "html":     "co-countries.html",
+            "png": "all_co-countries.png",
+            "ranks": "co-country_rankings.csv",
+            "html": "co-countries.html",
         },
     }
 
     def __init__(
         self,
         *,
-        category: str = 'co-author',
+        category: str = "co-author",
         needs: Sequence[str] = CANONICAL_NEEDS,
-        provides: Sequence[str] = ('graph',),
+        provides: Sequence[str] = ("graph",),
         tag: str = "Wolf",
         conditional_needs: Sequence[Tuple[str, Any]] = (),
-        init_settings: Dict[str, Any] = None,
-        call_settings: Dict[str, Any] = None,
+        init_settings: Dict[str, Any] | None = None,
+        call_settings: Dict[str, Any] | None = None,
         verbose: bool = True,
     ) -> None:
         if category not in self.category_map:
@@ -75,14 +75,12 @@ class WolfBlock(AnimalBlock):
 
         self.category = category
 
-        # allow multiple WolfBlock instances without key collision
-        if provides == ('graph',):
+        if provides == ("graph",):
             provides = (f"graph_{self.category}",)
 
         default_init = {"verbose": True}
-        default_call = {}
+        default_call: Dict[str, Any] = {}
 
-        # By default, checkpoint_keys is None → AnimalBlock will use self.provides
         super().__init__(
             needs=needs,
             provides=provides,
@@ -94,103 +92,139 @@ class WolfBlock(AnimalBlock):
         )
 
     def run(self, bundle: DataBundle) -> None:
-        # ─── 1) Load the DataFrame & map ──────────────────────────────────────
-        df  = self.load_path(bundle[self.needs[0]])  
-        print("Number of rows in df:", len(df))
-        print("Unique IDs:", df[self.category_map[self.category]['col']].nunique())
-
+        # 1) Load inputs
+        df = self.load_path(bundle[self.needs[0]])
         orca_map = bundle[self.needs[1]]
 
-        OUTPUT_DIR = Path(bundle[SAVE_DIR_BUNDLE_KEY]) / self.tag
-        output_dir = Path(check_path(os.path.join(OUTPUT_DIR, self.category)))
+        print("Number of rows in df:", len(df))
+        ids_col = self.category_map[self.category]["col"]
+        if isinstance(df, pd.DataFrame) and ids_col in df.columns:
+            try:
+                print("Unique IDs:", df[ids_col].nunique())
+            except Exception:
+                print("Unique IDs: (undetermined)")
+        else:
+            print(f"Unique IDs: 0 (column '{ids_col}' missing)")
 
-        # ─── 2) Build the codependency matrix ────────────────────────────────
+        OUTPUT_ROOT = Path(bundle[SAVE_DIR_BUNDLE_KEY]) / self.tag
+        output_dir = Path(check_path(os.path.join(OUTPUT_ROOT, self.category)))
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        # Guards: 'year' & minimum nodes
+        if "year" not in df.columns or df["year"].isna().all():
+            df = df.copy()
+            df["year"] = 0
+
+        # Use a SAFE Series default if the column is missing
+        series = df[ids_col] if ids_col in df.columns else pd.Series([], dtype=object)
+
+        nodes_count = (
+            series.dropna()
+            .astype(str)
+            .str.split(";")
+            .explode()
+            .str.strip()
+            .replace("", pd.NA)
+            .dropna()
+            .nunique()
+        )
+
+        if nodes_count < 2:
+            # produce empty artifacts & exit gracefully
+            stats_path = output_dir / self.category_map[self.category]["ranks"]
+            pd.DataFrame(columns=["node", *self.WOLF_STATS]).to_csv(
+                stats_path, index=False, encoding="utf-8-sig"
+            )
+
+            g = nx.Graph()
+            graph_path = output_dir / "graph.gpickle"
+            self.save_path(g, graph_path)
+            self.register_checkpoint(self.provides[0], graph_path)
+            bundle[f"{self.tag}.{self.provides[0]}"] = g
+            print(f"[Wolf/{self.category}] Skipped: only {nodes_count} unique node(s) or column missing.")
+            return
+
+        # 2) Co-dependency matrix
         codep = CodependencyMatrixBlock(
-            col=self.category_map[self.category]['col']
+            col=ids_col,
+            call_settings={
+                "split_authors_with": ";",  # SLIC-separated ids
+                "n_jobs": 1,                # robust chunking
+            },
         )
-        sub_bundle = DataBundle({
-            'df': df,
-            SAVE_DIR_BUNDLE_KEY: OUTPUT_DIR
-        })
+        sub_bundle = DataBundle({"df": df, SAVE_DIR_BUNDLE_KEY: OUTPUT_ROOT})
         codep(sub_bundle)
-        X, node_ids = (
-            sub_bundle[codep.provides[0]],
-            sub_bundle[codep.provides[1]]
-        )
+        X, node_ids = (sub_bundle[codep.provides[0]], sub_bundle[codep.provides[1]])
 
-        # ─── 3) Prepare node attributes ──────────────────────────────────────
+        # 3) Node attributes
         wolf = Wolf(**self.init_settings)
-        wolf.node_ids  = node_ids
+        wolf.node_ids = node_ids
 
         if self.category == "co-author":
             wolf.attributes = create_attributes(orca_map, attribute_names=[])
- 
-
         elif self.category == "co-affiliation":
-            name_col = self.category_map[self.category]['name_col']
-            id_col   = self.category_map[self.category]['col']
-            mapping  = get_id_to_name(df, name_col, id_col)
-            wolf.attributes = {k: {'name': v} for k, v in mapping.items()}
- 
-        # ─── 4) Create & annotate the graph ───────────────────────────────────
+            name_col = self.category_map[self.category]["name_col"]
+            id_col = self.category_map[self.category]["col"]
+            if name_col in df.columns and id_col in df.columns:
+                mapping = get_id_to_name(df, name_col, id_col)
+                wolf.attributes = {k: {"name": v} for k, v in mapping.items()}
+            else:
+                wolf.attributes = {}
+        else:
+            wolf.attributes = {}
+
+        # 4) Create graph & stats
         graph = wolf.create_graph(X, use_weighted_value=True)
         for stat in tqdm(self.WOLF_STATS):
             graph.get_stat(stat)
 
-        # ─── 5) Output rankings CSV ──────────────────────────────────────────
         stats_df = graph.output_stats()
         numeric = stats_df.select_dtypes(include=[np.number]).columns
         stats_df[numeric] = stats_df[numeric].map(apply_alpha)
-        stats_df = stats_df \
-            .sort_values(by=next(iter(self.WOLF_STATS)), ascending=False) \
-            .reset_index(drop=True)
+        stats_df = stats_df.sort_values(by=self.WOLF_STATS[0], ascending=False).reset_index(drop=True)
 
         stats_df.to_csv(
-            output_dir / self.category_map[self.category]['ranks'],
+            output_dir / self.category_map[self.category]["ranks"],
             index=False,
-            encoding="utf-8-sig"
+            encoding="utf-8-sig",
         )
 
-        # ─── 6) Save full-network plot & HTML ────────────────────────────────
+        # 5) Plots
         graph.visualize(
-            font_color      = 'black',
-            node_color      = '#edede9',
-            node_size       = 100,
-            highlight_nodes = [],
-            font_size       = 4,
-            edge_width      = 0.08,
-            figsize         = (8, 8),
-            save_path       = str(output_dir / self.category_map[self.category]['png'])
+            font_color="black",
+            node_color="#edede9",
+            node_size=100,
+            highlight_nodes=[],
+            font_size=4,
+            edge_width=0.08,
+            figsize=(8, 8),
+            save_path=str(output_dir / self.category_map[self.category]["png"]),
         )
 
         fig = plot_authors_graph(
-            df     = df,
-            id_col = self.category_map[self.category]['col'],
-            name_col = self.category_map[self.category]['name_col'],
+            df=df,
+            id_col=self.category_map[self.category]["col"],
+            name_col=self.category_map[self.category]["name_col"],
         )
-        fig.write_html(str(output_dir / self.category_map[self.category]['html']))
+        fig.write_html(str(output_dir / self.category_map[self.category]["html"]))
 
-        # ─── 7) Component subplots & word-clouds ─────────────────────────────
+        # 6) Components & word-clouds
         save_components(
-            df          = df,
-            ranking_df  = stats_df,
-            g           = graph,
-            col         = self.category_map[self.category]['col'],
-            results_dir = str(output_dir),
+            df=df,
+            ranking_df=stats_df,
+            g=graph,
+            col=self.category_map[self.category]["col"],
+            results_dir=str(output_dir),
         )
         component_wordclouds(
-            df          = df,
-            g           = graph,
-            col         = self.category_map[self.category]['col'],
-            results_dir = str(output_dir),
+            df=df,
+            g=graph,
+            col=self.category_map[self.category]["col"],
+            results_dir=str(output_dir),
         )
 
-        # ─── 8) Checkpoint the graph ─────────────────────────────────────────
+        # 7) Checkpoint
         graph_path = output_dir / "graph.gpickle"
-        graph_path.parent.mkdir(parents=True, exist_ok=True)
         self.save_path(graph, graph_path)
-
-        # Tell AnimalBlock to record this file under the key "graph"
         self.register_checkpoint(self.provides[0], graph_path)
-        # Finally, put the graph into the bundle under your namespaced key
         bundle[f"{self.tag}.{self.provides[0]}"] = graph
