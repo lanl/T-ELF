@@ -1,0 +1,135 @@
+mode: only   # options: 1|only, 2|merge (default), 3|ignore
+
+neo4j:
+  uri: "neo4j://localhost:7666"
+  user: "neo4j"
+  pass: "local_password"
+  prune_empty_constraints: true   # <— turn it on
+  prune_when: after               # before | after | both
+
+data:
+  entities:
+    - type: Topic
+      unique: true
+      from: Graph_Name
+
+    - type: Document
+      unique: true
+      from: doi
+      attrs:
+        - from: title
+          as: Title
+        - from: eid
+          as: EID
+        - from: s2id
+          as: S2ID
+        - from: doi
+          as: DOI
+
+    - type: Year
+      unique: true
+      from: year
+
+    - type: AuthorId
+      unique: true
+      from: author_ids
+      attrs:
+        - from: authors
+          as: Author_Name
+          function:
+            function: split
+            args: { sep: ";" }
+
+    - type: AffiliationIdentifier
+      unique: true
+
+    - type: Country
+      unique: true
+
+    - type: Category
+      unique: true
+
+    - type: Acronym
+      unique: true
+
+    - type: Publisher
+      unique: true
+      from: publication_name
+
+  relations:
+    - head: Document
+      relation: part_of_topic
+      tail: Topic
+
+    - head: Document
+      relation: DOCUMENT_YEAR
+      tail: Year
+
+    - head: AuthorId
+      relation: AUTHORED
+      tail: Document
+      head_extract:
+        function: get_authors_ID
+        args: { ids_col: author_ids, names_col: authors }
+
+    - head: Document
+      relation: DOC_AFFILIATION
+      tail: AffiliationIdentifier
+      tail_extract:
+        function: get_affiliations
+        args: { aff_col: affiliations }
+
+    - head: AffiliationIdentifier
+      relation: AFFILIATION_COUNTRY
+      tail: Country
+      head_extract:
+        function: get_affiliations
+        args: { aff_col: affiliations }
+      tail_extract:
+        function: get_countries
+        args: { aff_col: affiliations }
+      pairing: INDEX_PAIRING
+
+    - head: Document
+      relation: DOC_CATEGORY
+      tail: Category
+      tail_extract: get_categories
+      pairing: HEAD_TO_MANY
+
+    - head: Document
+      relation: DOC_ACRONYM
+      tail: Acronym
+      tail_extract: get_acronyms
+
+    - head: Document
+      relation: DOC_PUBLISHER
+      tail: Publisher
+
+topics:
+  entities:
+    - type: Topic
+      unique: true
+      from: Graph_Name
+      attrs:
+        - from: label
+          as: label
+        - from: Graph_Name
+          as: Graph_Name
+    - type: Keyword
+      unique: true
+
+  relations:
+    - head: Topic
+      relation: child_of
+      tail: Topic
+      tail_extract: get_parent_topic
+
+    - head: Topic
+      relation: mentions
+      tail: Keyword
+      tail_extract: get_topic_keywords
+
+ner:
+  relation_name: mentions
+  labels: ["ORG", "PERSON", "GPE"]
+  # document_id_col and ner_col are optional — auto-detected if omitted

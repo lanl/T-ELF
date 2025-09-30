@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Dict, Sequence, Any, Tuple
 import os
 from pathlib import Path
+from itertools import combinations
 
 import pandas as pd
 import numpy as np
@@ -91,6 +92,116 @@ class WolfBlock(AnimalBlock):
             verbose=verbose,
         )
 
+    # -----------------------
+    # Helpers
+    # -----------------------
+    def _normalize_ids_series(self, s: pd.Series) -> pd.Series:
+        """
+        Normalize an ID column to semicolon-delimited strings.
+
+        - Accept lists/tuples/sets and join with ';'
+        - Convert common delimiters (',', '|', tab) to ';'
+        - Trim spaces, drop empties
+        """
+        def _norm(v):
+            if pd.isna(v):
+                return ""
+            if isinstance(v, (list, tuple, set)):
+                v = ";".join(map(str, v))
+            else:
+                v = str(v)
+            for sep in [",", "|", "\t"]:
+                v = v.replace(sep, ";")
+            parts = [p.strip() for p in v.split(";") if p and p.strip()]
+            return ";".join(parts)
+
+        return s.map(_norm)
+
+    def _write_empty_artifacts(self, output_dir: Path) -> nx.Graph:
+        """Create empty outputs (CSV + graph) and return empty graph."""
+        stats_path = output_dir / self.category_map[self.category]["ranks"]
+        pd.DataFrame(columns=["node", *self.WOLF_STATS]).to_csv(
+            stats_path, index=False, encoding="utf-8-sig"
+        )
+        g = nx.Graph()
+        graph_path = output_dir / "graph.gpickle"
+        self.save_path(g, graph_path)
+        self.register_checkpoint(self.provides[0], graph_path)
+        return g
+
+    def _build_codep_matrix_fallback(self, s: pd.Series) -> tuple[np.ndarray, list[str]]:
+        """
+        Build a simple symmetric co-occurrence matrix from a normalized
+        semicolon-delimited ID series.
+        """
+        ids_per_row = [
+            [tok for tok in str(v).split(";") if tok]
+            for v in s.fillna("")
+        ]
+        # collect nodes
+        nodes = []
+        seen = set()
+        for row in ids_per_row:
+            for tok in row:
+                if tok not in seen:
+                    seen.add(tok)
+                    nodes.append(tok)
+
+        n = len(nodes)
+        if n < 2:
+            return np.zeros((0, 0), dtype=float), []
+
+        idx = {node: i for i, node in enumerate(nodes)}
+        X = np.zeros((n, n), dtype=float)
+
+        # count co-occurrences
+        for row in ids_per_row:
+            unique_row = sorted(set(row))
+            for a, b in combinations(unique_row, 2):
+                i, j = idx[a], idx[b]
+                X[i, j] += 1.0
+                X[j, i] += 1.0
+
+        return X, nodes
+
+    def _coerce_node_ids_for_wolf(self, node_ids_any) -> dict | list | tuple | None:
+        """
+        Coerce various node_ids shapes into what Wolf expects:
+        - dict with sequential-int keys -> OK
+        - list/tuple of two dicts       -> OK (bipartite)
+        - list/array of labels          -> convert to {i: label}
+        - pandas Index/Series           -> convert to {i: label}
+        - None                          -> OK
+        """
+        if node_ids_any is None:
+            return None
+
+        # Already a dict (unipartite)
+        if isinstance(node_ids_any, dict):
+            return node_ids_any
+
+        # 2-part structure from some codep implementations
+        if isinstance(node_ids_any, (list, tuple)) and len(node_ids_any) == 2 \
+           and all(isinstance(d, dict) for d in node_ids_any):
+            return node_ids_any
+
+        # List/array/index/series of labels -> make {i: label}
+        if isinstance(node_ids_any, (list, tuple, np.ndarray, pd.Index, pd.Series)):
+            labels = list(node_ids_any)
+            labels = [str(x) for x in labels]
+            return {i: lab for i, lab in enumerate(labels)}
+
+        # Fallback: single value?
+        try:
+            return {0: str(node_ids_any)}
+        except Exception:
+            raise TypeError(
+                "Unsupported node_ids type; expected dict, (dict, dict), or a sequence of labels."
+            )
+
+    # -----------------------
+    # Main
+    # -----------------------
     def run(self, bundle: DataBundle) -> None:
         # 1) Load inputs
         df = self.load_path(bundle[self.needs[0]])
@@ -100,9 +211,9 @@ class WolfBlock(AnimalBlock):
         ids_col = self.category_map[self.category]["col"]
         if isinstance(df, pd.DataFrame) and ids_col in df.columns:
             try:
-                print("Unique IDs:", df[ids_col].nunique())
+                print("Unique raw values in ID column:", df[ids_col].nunique())
             except Exception:
-                print("Unique IDs: (undetermined)")
+                print("Unique raw values in ID column: (undetermined)")
         else:
             print(f"Unique IDs: 0 (column '{ids_col}' missing)")
 
@@ -115,9 +226,16 @@ class WolfBlock(AnimalBlock):
             df = df.copy()
             df["year"] = 0
 
-        # Use a SAFE Series default if the column is missing
-        series = df[ids_col] if ids_col in df.columns else pd.Series([], dtype=object)
+        # Normalize ID column if present
+        if ids_col in df.columns:
+            df = df.copy()
+            df[ids_col] = self._normalize_ids_series(df[ids_col])
+            series = df[ids_col]
+        else:
+            # Use a SAFE Series default if the column is missing
+            series = pd.Series([], dtype=object)
 
+        # Count distinct nodes after normalization
         nodes_count = (
             series.dropna()
             .astype(str)
@@ -128,37 +246,53 @@ class WolfBlock(AnimalBlock):
             .dropna()
             .nunique()
         )
+        print(f"Usable unique node count after normalization: {nodes_count}")
 
         if nodes_count < 2:
             # produce empty artifacts & exit gracefully
-            stats_path = output_dir / self.category_map[self.category]["ranks"]
-            pd.DataFrame(columns=["node", *self.WOLF_STATS]).to_csv(
-                stats_path, index=False, encoding="utf-8-sig"
-            )
-
-            g = nx.Graph()
-            graph_path = output_dir / "graph.gpickle"
-            self.save_path(g, graph_path)
-            self.register_checkpoint(self.provides[0], graph_path)
+            g = self._write_empty_artifacts(output_dir)
             bundle[f"{self.tag}.{self.provides[0]}"] = g
             print(f"[Wolf/{self.category}] Skipped: only {nodes_count} unique node(s) or column missing.")
             return
 
         # 2) Co-dependency matrix
-        codep = CodependencyMatrixBlock(
-            col=ids_col,
-            call_settings={
-                "split_authors_with": ";",  # SLIC-separated ids
-                "n_jobs": 1,                # robust chunking
-            },
-        )
-        sub_bundle = DataBundle({"df": df, SAVE_DIR_BUNDLE_KEY: OUTPUT_ROOT})
-        codep(sub_bundle)
-        X, node_ids = (sub_bundle[codep.provides[0]], sub_bundle[codep.provides[1]])
+        X, node_ids = None, None
+        try:
+            codep = CodependencyMatrixBlock(
+                col=ids_col,
+                call_settings={
+                    "split_authors_with": ";",  # normalized to ';'
+                    "n_jobs": 1,                # robust chunking
+                },
+            )
+            sub_bundle = DataBundle({"df": df, SAVE_DIR_BUNDLE_KEY: OUTPUT_ROOT})
+            codep(sub_bundle)
+
+            expected = getattr(codep, "provides", ("X", "node_ids"))
+            if all(k in sub_bundle for k in expected):
+                X, node_ids = (sub_bundle[expected[0]], sub_bundle[expected[1]])
+            else:
+                print(f"[Wolf/{self.category}] BeaverCodependencyMatrix missing outputs {list(expected)}; using fallback.")
+        except Exception as e:
+            print(f"[Wolf/{self.category}] BeaverCodependencyMatrix failed with {type(e).__name__}: {e}")
+            # fall back below
+
+        # Fallback path if Beaver failed or didn't provide outputs
+        if X is None or node_ids is None:
+            X, nodes = self._build_codep_matrix_fallback(series)
+            if len(nodes) < 2:
+                g = self._write_empty_artifacts(output_dir)
+                bundle[f"{self.tag}.{self.provides[0]}"] = g
+                print(f"[Wolf/{self.category}] Skipped: fallback produced <2 nodes.")
+                return
+            node_ids = nodes  # list -> will be coerced below
+
+        # ---- COERCE node_ids into the shape Wolf expects ----
+        node_ids = self._coerce_node_ids_for_wolf(node_ids)
 
         # 3) Node attributes
         wolf = Wolf(**self.init_settings)
-        wolf.node_ids = node_ids
+        wolf.node_ids = node_ids  # now valid types only
 
         if self.category == "co-author":
             wolf.attributes = create_attributes(orca_map, attribute_names=[])
@@ -179,8 +313,9 @@ class WolfBlock(AnimalBlock):
             graph.get_stat(stat)
 
         stats_df = graph.output_stats()
-        numeric = stats_df.select_dtypes(include=[np.number]).columns
-        stats_df[numeric] = stats_df[numeric].map(apply_alpha)
+        numeric_cols = stats_df.select_dtypes(include=[np.number]).columns
+        if len(numeric_cols) > 0:
+            stats_df[numeric_cols] = stats_df[numeric_cols].applymap(apply_alpha)
         stats_df = stats_df.sort_values(by=self.WOLF_STATS[0], ascending=False).reset_index(drop=True)
 
         stats_df.to_csv(
