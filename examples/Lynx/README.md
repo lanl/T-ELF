@@ -16,3 +16,8 @@
     ```ssh USER@HOST -L 8501:localhost:8501```
 6. Have fun!
 
+
+
+## OPTIONAL STARTUP
+
+zsh ./start_lynx.sh  -p  ../Full\ TELF\ Pipeline/single_block_examples/example_results/semantic_HNMFk_collection_slurm_option/07_SemanticHNMFk

@@ -1,0 +1,8 @@
+{
+	"VIEW_TYPE":"Document Analysis",
+	"DOCUMENT_FILE_START_WITH":"best_50_docs_in_",
+	"ROOT_NAME":"Root",
+	"TEXT_COLUMN":"clean_title_abstract",
+	"ATTRIBUTE_COLUMN":"slic_authors",
+	"ATTRIBUTE_COLUMN_SPLIT_BY":";"
+}
