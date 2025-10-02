@@ -64,3 +64,5 @@ from .collect_hnmfk_leaf_block import CollectHNMFkLeafBlock
 from .termite_neo4j_block import TermiteNeo4jBlock
 from .termite_vector_block import TermiteVectorBlock
 from .author_affiliation_tables import AffiliationsAndAuthorsBlock
+
+from .block_helpers.KernelServer import KernelTiedServer

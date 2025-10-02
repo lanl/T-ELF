@@ -29,6 +29,7 @@ class PeacockStatsBlock(AnimalBlock):
         col_names: Optional[Dict[str, str]] = None,
         affiliation_palette: Optional[Dict[str, str]] = None,
         country: Optional[str] = None,
+        cluster_col: Optional[str] = "cluster",   # NEW
         # discovery args
         experiment_path: Optional[str] = None,   # for mode="hnmfk"
         glob_root: Optional[str] = None,         # for mode="glob"
@@ -46,9 +47,9 @@ class PeacockStatsBlock(AnimalBlock):
             col_names=col_names,
             affiliation_palette=affiliation_palette,
             country=country,
+            cluster_col=cluster_col,
         )
 
-        # require model_path if mode==hnmfk (via conditional_needs), but keep simple API
         conds = list(kw.pop("conditional_needs", ()))
         if self.mode == "hnmfk" and not self.experiment_path:
             conds.append(("model_path", lambda _b, _s: True))
@@ -63,7 +64,6 @@ class PeacockStatsBlock(AnimalBlock):
             **kw,
         )
 
-    # ——————————————————————————————————————————
     def _source(self, bundle: DataBundle) -> Optional[NodeSource]:
         if self.mode == "hnmfk":
             exp = self.experiment_path or Path(str(bundle["model_path"]))
@@ -71,16 +71,14 @@ class PeacockStatsBlock(AnimalBlock):
         if self.mode == "glob":
             root = self.glob_root or Path(bundle.get(SAVE_DIR_BUNDLE_KEY, RESULTS_DEFAULT))
             return GlobNodeSource(root)
-        return None  # single mode
+        return None
 
     def _parent_out_dir(self, bundle: DataBundle) -> Path:
-        # where the block-level checkpoint lands if needed
         base = Path(bundle.get(SAVE_DIR_BUNDLE_KEY, RESULTS_DEFAULT))
         return base / self.tag
 
-    # ——————————————————————————————————————————
     def run(self, bundle: DataBundle) -> None:
-        # mode: single (unchanged behavior)
+        # single mode: unchanged
         if self.mode == "single":
             df: pd.DataFrame = bundle["df"]
             out_dir = Path(bundle.get(SAVE_DIR_BUNDLE_KEY, RESULTS_DEFAULT))
@@ -91,25 +89,34 @@ class PeacockStatsBlock(AnimalBlock):
             bundle[f"{self.tag}.{self.provides[0]}"] = marker
             return
 
-        # mode: per-node (hnmfk or glob)
+        # per-node modes (hnmfk or glob)
         source = self._source(bundle)
         assert source is not None, "Invalid configuration: per-node mode requires a NodeSource."
 
         produced = []
         for node in source.iter_nodes():
-            out_dir = node.dir / "peacock"
-            if self.skip_completed and (out_dir / "PeacockStats.done").exists():
-                produced.append(out_dir)
+            if self.skip_completed and (node.dir / "peacock" / "PeacockStats.done").exists():
+                produced.append(node.dir / "peacock")
                 continue
 
             if not node.csv.exists():
-                # skip nodes that haven't been post-processed yet
                 continue
 
             df_local = pd.read_csv(node.csv)
-            self.renderer.render(df_local, out_dir)
-            (out_dir / "PeacockStats.done").write_text("ok")
-            produced.append(out_dir)
+
+            # If the dataframe has clusters, split them into subfolders
+            if "cluster" in df_local.columns:
+                for cid, df_c in df_local.groupby("cluster", dropna=False):
+                    safe = "nan" if pd.isna(cid) else str(cid).replace("/", "_")
+                    out_dir = node.dir / str(safe) / "peacock"
+                    self.renderer.render(df_c, out_dir)
+                    (out_dir / "PeacockStats.done").write_text("ok")
+                    produced.append(out_dir)
+            else:
+                out_dir = node.dir / "peacock"
+                self.renderer.render(df_local, out_dir)
+                (out_dir / "PeacockStats.done").write_text("ok")
+                produced.append(out_dir)
 
         # block-level checkpoint
         ckpt_dir = self._parent_out_dir(bundle); ckpt_dir.mkdir(parents=True, exist_ok=True)

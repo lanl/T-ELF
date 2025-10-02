@@ -73,3 +73,4 @@ from .blocks.termite_neo4j_block import TermiteNeo4jBlock
 from .blocks.termite_vector_block import TermiteVectorBlock
 
 from .blocks.author_affiliation_tables import AffiliationsAndAuthorsBlock
+from .blocks.block_helpers.KernelServer import KernelTiedServer

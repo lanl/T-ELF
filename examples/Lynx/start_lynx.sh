@@ -175,6 +175,6 @@ fi
 # CD to the repo root so the *relative* Streamlit path works
 cd "$REPO_ROOT"
 echo "Working directory: $(pwd -P)"
-echo "Ensured: $(pwd -P)/TELF/projects"
+echo "Ensured: $(pwd -P)/projects"
 echo "Launching: streamlit run $APP_REL --server.port $PORT"
 exec streamlit run "$APP_REL" --server.port "$PORT"
