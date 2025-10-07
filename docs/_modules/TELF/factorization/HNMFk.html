@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.43 documentation</title>
+    <title>TELF.factorization.HNMFk &#8212; TELF 0.0.44 documentation</title>
   
   
   
@@ -15,31 +15,28 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=b50b7b36"></script>
+    <script src="../../../_static/documentation_options.js?v=201ef9e7"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -48,7 +45,6 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -64,8 +60,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -73,6 +80,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -80,8 +88,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -99,8 +107,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -125,16 +132,20 @@
   
   
   
-    <p class="title logo__title">TELF 0.0.43 documentation</p>
+    <p class="title logo__title">TELF 0.0.44 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -286,16 +297,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 
 </div></div>
       
@@ -947,21 +966,22 @@
         <span class="c1"># check if leaf node status based on number of samples</span>
         <span class="c1">#</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">current_node</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="n">current_node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">current_node</span><span class="o">.</span><span class="n">exception</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">pickle_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">node_save_path</span><span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;node_</span><span class="si">{</span><span class="n">current_node</span><span class="o">.</span><span class="n">node_name</span><span class="si">}</span><span class="s1">.p&#39;</span><span class="p">)</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
-            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="n">node_name</span><span class="p">,</span> <span class="s2">&quot;target_jobs&quot;</span><span class="p">:[],</span> <span class="s2">&quot;node_save_path&quot;</span><span class="p">:</span><span class="n">pickle_path</span><span class="p">}</span>
-        
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finalize_leaf</span><span class="p">(</span>
+                <span class="n">current_node</span><span class="p">,</span> <span class="n">node_save_path</span><span class="p">,</span>
+                <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;single-sample cluster&quot;</span><span class="p">,</span>
+                <span class="n">details</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;num_samples&quot;</span><span class="p">:</span> <span class="n">current_node</span><span class="o">.</span><span class="n">num_samples</span><span class="p">},</span>
+                <span class="n">mark_exception</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
         
         <span class="c1">#</span>
         <span class="c1"># Sample threshold check for leaf node determination</span>
         <span class="c1">#</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_thresh</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">current_node</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_thresh</span><span class="p">):</span>
-            <span class="n">current_node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span> 
-            <span class="n">pickle_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">node_save_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;node_</span><span class="si">{</span><span class="n">current_node</span><span class="o">.</span><span class="n">node_name</span><span class="si">}</span><span class="s1">.p&#39;</span><span class="p">)</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
-            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="n">node_name</span><span class="p">,</span> <span class="s2">&quot;target_jobs&quot;</span><span class="p">:[],</span> <span class="s2">&quot;node_save_path&quot;</span><span class="p">:</span><span class="n">pickle_path</span><span class="p">}</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finalize_leaf</span><span class="p">(</span>
+                <span class="n">current_node</span><span class="p">,</span> <span class="n">node_save_path</span><span class="p">,</span>
+                <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;below sample threshold&quot;</span><span class="p">,</span>
+                <span class="n">details</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;num_samples&quot;</span><span class="p">:</span> <span class="n">current_node</span><span class="o">.</span><span class="n">num_samples</span><span class="p">,</span> <span class="s2">&quot;sample_thresh&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_thresh</span><span class="p">}</span>
+            <span class="p">)</span>
 
         <span class="c1">#</span>
         <span class="c1"># obtain the current X</span>
@@ -982,12 +1002,13 @@
         <span class="c1"># Based on number of features or samples, no seperation possible</span>
         <span class="c1">#</span>
         <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">curr_X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">current_node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">current_node</span><span class="o">.</span><span class="n">exception</span> <span class="o">=</span> <span class="kc">True</span> 
-            <span class="n">pickle_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">node_save_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;node_</span><span class="si">{</span><span class="n">current_node</span><span class="o">.</span><span class="n">node_name</span><span class="si">}</span><span class="s1">.p&#39;</span><span class="p">)</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
-            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="n">node_name</span><span class="p">,</span> <span class="s2">&quot;target_jobs&quot;</span><span class="p">:[],</span> <span class="s2">&quot;node_save_path&quot;</span><span class="p">:</span><span class="n">pickle_path</span><span class="p">}</span>
-
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finalize_leaf</span><span class="p">(</span>
+                <span class="n">current_node</span><span class="p">,</span> <span class="n">node_save_path</span><span class="p">,</span>
+                <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;matrix too small to factorize&quot;</span><span class="p">,</span>
+                <span class="n">details</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;X_shape&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">curr_X</span><span class="o">.</span><span class="n">shape</span><span class="p">)},</span>
+                <span class="n">mark_exception</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        
         <span class="c1">#</span>
         <span class="c1"># prepare the current nmfk parameters</span>
         <span class="c1">#</span>
@@ -1003,11 +1024,12 @@
         <span class="c1">#</span>
         <span class="n">Ks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adjust_curr_Ks</span><span class="p">(</span><span class="n">curr_X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">Ks</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Ks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">Ks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">):</span>
-            <span class="n">current_node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">current_node</span><span class="o">.</span><span class="n">exception</span> <span class="o">=</span> <span class="kc">True</span> 
-            <span class="n">pickle_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">node_save_path</span><span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;node_</span><span class="si">{</span><span class="n">current_node</span><span class="o">.</span><span class="n">node_name</span><span class="si">}</span><span class="s1">.p&#39;</span><span class="p">)</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
-            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="n">node_name</span><span class="p">,</span> <span class="s2">&quot;target_jobs&quot;</span><span class="p">:[],</span> <span class="s2">&quot;node_save_path&quot;</span><span class="p">:</span><span class="n">pickle_path</span><span class="p">}</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finalize_leaf</span><span class="p">(</span>
+                <span class="n">current_node</span><span class="p">,</span> <span class="n">node_save_path</span><span class="p">,</span>
+                <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;no valid K values for further split&quot;</span><span class="p">,</span>
+                <span class="n">details</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Ks&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">Ks</span><span class="p">),</span> <span class="s2">&quot;X_shape&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">curr_X</span><span class="o">.</span><span class="n">shape</span><span class="p">)},</span>
+                <span class="n">mark_exception</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
 
         <span class="c1">#</span>
         <span class="c1"># apply nmfk</span>
@@ -1019,11 +1041,12 @@
         <span class="c1"># Check if decomposition was not possible</span>
         <span class="c1">#</span>
         <span class="k">if</span> <span class="n">results</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">current_node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">current_node</span><span class="o">.</span><span class="n">exception</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">pickle_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">node_save_path</span><span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;node_</span><span class="si">{</span><span class="n">current_node</span><span class="o">.</span><span class="n">node_name</span><span class="si">}</span><span class="s1">.p&#39;</span><span class="p">)</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
-            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="n">node_name</span><span class="p">,</span> <span class="s2">&quot;target_jobs&quot;</span><span class="p">:[],</span> <span class="s2">&quot;node_save_path&quot;</span><span class="p">:</span><span class="n">pickle_path</span><span class="p">}</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finalize_leaf</span><span class="p">(</span>
+                <span class="n">current_node</span><span class="p">,</span> <span class="n">node_save_path</span><span class="p">,</span>
+                <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;NMFk failed to decompose&quot;</span><span class="p">,</span>
+                <span class="n">details</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;node_depth&quot;</span><span class="p">:</span> <span class="n">current_node</span><span class="o">.</span><span class="n">depth</span><span class="p">,</span> <span class="s2">&quot;num_samples&quot;</span><span class="p">:</span> <span class="n">current_node</span><span class="o">.</span><span class="n">num_samples</span><span class="p">},</span>
+                <span class="n">mark_exception</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
 
         <span class="c1">#</span>
         <span class="c1"># latent factors</span>
@@ -1061,10 +1084,24 @@
 
         <span class="c1"># leaf node based on depth limit or single cluster or all samples in same cluster</span>
         <span class="k">if</span> <span class="p">((</span><span class="n">current_node</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">current_node</span><span class="o">.</span><span class="n">k</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">n_clusters</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">current_node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span> 
-            <span class="n">pickle_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">node_save_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;node_</span><span class="si">{</span><span class="n">current_node</span><span class="o">.</span><span class="n">node_name</span><span class="si">}</span><span class="s1">.p&#39;</span><span class="p">)</span>
-            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
-            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span><span class="n">node_name</span><span class="p">,</span> <span class="s2">&quot;target_jobs&quot;</span><span class="p">:[],</span> <span class="s2">&quot;node_save_path&quot;</span><span class="p">:</span><span class="n">pickle_path</span><span class="p">}</span>
+            <span class="n">stop_details</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;depth&quot;</span><span class="p">:</span> <span class="n">current_node</span><span class="o">.</span><span class="n">depth</span><span class="p">,</span>
+                <span class="s2">&quot;depth_limit&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">,</span>
+                <span class="s2">&quot;predicted_k&quot;</span><span class="p">:</span> <span class="n">current_node</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+                <span class="s2">&quot;n_clusters_observed&quot;</span><span class="p">:</span> <span class="n">n_clusters</span>
+            <span class="p">}</span>
+            <span class="c1"># Pick a specific reason to make the text friendlier:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">current_node</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">reason</span> <span class="o">=</span> <span class="s2">&quot;depth limit reached&quot;</span>
+            <span class="k">elif</span> <span class="n">current_node</span><span class="o">.</span><span class="n">k</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">reason</span> <span class="o">=</span> <span class="s2">&quot;predicted k == 1 (no further structure)&quot;</span>
+            <span class="k">elif</span> <span class="n">n_clusters</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">reason</span> <span class="o">=</span> <span class="s2">&quot;all samples assigned to one cluster&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">reason</span> <span class="o">=</span> <span class="s2">&quot;stopping condition met&quot;</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finalize_leaf</span><span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="n">node_save_path</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="n">reason</span><span class="p">,</span> <span class="n">details</span><span class="o">=</span><span class="n">stop_details</span><span class="p">)</span>
+
         
         <span class="c1">#</span>
         <span class="c1"># go through each topic/cluster</span>
@@ -1475,7 +1512,59 @@
         <span class="c1"># 2. Combine it with the new experiment base</span>
         <span class="n">new_node_path</span> <span class="o">=</span> <span class="n">new_experiment_base</span> <span class="o">/</span> <span class="n">relative_path</span>
 
-        <span class="k">return</span> <span class="n">new_node_path</span></div>
+        <span class="k">return</span> <span class="n">new_node_path</span>
+
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DEBUG FUNCTIONS</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_write_stop_reason</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_save_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write a plain-text explanation for why decomposition did not proceed.</span>
+<span class="sd">        Creates &lt;node_save_path&gt;/stop_reason.txt next to the node pickle.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">reason_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">node_save_path</span><span class="p">,</span> <span class="s2">&quot;stop_reason.txt&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">reason_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;reason: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">details</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">details</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Don&#39;t break the run just because we couldn&#39;t write the note</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not write stop_reason.txt at </span><span class="si">{</span><span class="n">node_save_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_finalize_leaf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_node</span><span class="p">,</span> <span class="n">node_save_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">details</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> 
+                    <span class="n">mark_exception</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Common exit path for any condition that stops further decomposition.</span>
+<span class="sd">        - marks leaf/exception on the node</span>
+<span class="sd">        - persists the node</span>
+<span class="sd">        - writes stop_reason.txt with a friendly explanation</span>
+<span class="sd">        - returns the scheduler payload</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current_node</span><span class="o">.</span><span class="n">leaf</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">current_node</span><span class="o">.</span><span class="n">exception</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">mark_exception</span><span class="p">)</span>
+        <span class="n">pickle_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">node_save_path</span><span class="p">),</span> <span class="sa">f</span><span class="s1">&#39;node_</span><span class="si">{</span><span class="n">current_node</span><span class="o">.</span><span class="n">node_name</span><span class="si">}</span><span class="s1">.p&#39;</span><span class="p">)</span>
+
+        <span class="c1"># persist the node</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">))</span>
+
+        <span class="c1"># write a human-readable reason file</span>
+        <span class="c1"># self._write_stop_reason(node_save_path, reason, details)</span>
+
+
+        <span class="n">details</span> <span class="o">=</span> <span class="n">details</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s2">&quot;cluster_on&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_on</span><span class="p">,</span>
+            <span class="s2">&quot;num_samples&quot;</span><span class="p">:</span> <span class="n">current_node</span><span class="o">.</span><span class="n">num_samples</span><span class="p">,</span>
+            <span class="s2">&quot;len_original_indices&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_node</span><span class="o">.</span><span class="n">original_indices</span><span class="p">),</span>
+        <span class="p">})</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">current_node</span><span class="p">,</span> <span class="s2">&quot;user_node_data&quot;</span><span class="p">,</span> <span class="p">{})</span> <span class="ow">or</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_stop_reason</span><span class="p">(</span><span class="n">node_save_path</span><span class="p">,</span> <span class="n">reason</span><span class="p">,</span> <span class="n">details</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">current_node</span><span class="o">.</span><span class="n">node_name</span><span class="p">,</span> <span class="s2">&quot;target_jobs&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;node_save_path&quot;</span><span class="p">:</span> <span class="n">pickle_path</span><span class="p">}</span></div>
 
 </pre></div>
 
@@ -1539,8 +1628,8 @@ By Maksim E. Eren, Nicholas Solovyev, Ryan Barron, Manish Bhattarai, Ismael Bour
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
