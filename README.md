@@ -129,7 +129,7 @@ telf-post-install # use the following, for example, for GPU system: < telf-post-
 |    Bunny   | Dataset generation tool for documents and their citations/references |  [Link](examples/Bunny)  |
 |  Penguin   |         Text storage tool                                    | [Link](examples/Penguin) |
 |  Lynx   |         Streamlit UI                                    | [Link](examples/Lynx) |
-|    Termite   | Knowladge graph building tool | :soon: |
+|    Termite   | Knowladge graph building tool | [Link](examples/Termite) |
 
 
 ## Use Cases
