@@ -7,6 +7,8 @@ from typing import Any, Dict, Sequence, Tuple, Optional
 import numpy as np
 import pandas as pd
 import scipy.sparse as ss
+import traceback
+import warnings
 
 from ...factorization import HNMFk
 from ...pre_processing import Beaver
@@ -55,11 +57,23 @@ class CustomSemanticCallback:
                 save_path=None,
             )
             return X.T.tocsr(), {"vocab": vocab}
-        except Exception:
-            return ss.csr_matrix([[1]]), {
-                "stop_reason": "documents_words could not build matrix",
-            }
+        # except Exception:
+        #     return ss.csr_matrix([[1]]), {
+        #         "stop_reason": "documents_words could not build matrix",
+        #     }
+        except Exception as e:
+            tb = traceback.format_exc()
+            warnings.warn(f"documents_words failed on {len(original_idx)} docs: {e}\n{tb}")
 
+            # Preserve the docs dimension so you can see it's not 1
+            n_docs = int(len(original_idx))
+            placeholder = ss.csr_matrix((1, n_docs))  # 1 feature × N docs for H-mode
+            return placeholder, {
+                "stop_reason": "documents_words failed",
+                "exception": repr(e),
+                "traceback": tb,
+                "n_docs": n_docs,
+            }
 
 # ------------------------------------------------------------------ #
 # Main block                                                        #

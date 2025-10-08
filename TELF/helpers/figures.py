@@ -27,6 +27,27 @@ from .graphs import create_authors_graph
 def plot_authors_graph(df, id_col='s2_author_ids', name_col='s2_authors', title='Co-Authors Graph',
                        width=900, height=900, max_node_size=50, min_node_size=3):
     G = create_authors_graph(df, id_col)
+
+    # -------------------------- bail out gracefully on empty graphs --------------------------
+    if G.number_of_nodes() == 0 or G.number_of_edges() == 0:
+        fig = go.Figure()
+        fig.update_layout(
+            title=f"{title} — no data to display",
+            width=width,
+            height=height,
+            xaxis=dict(visible=False),
+            yaxis=dict(visible=False),
+            showlegend=False,
+            margin=dict(l=20, r=20, t=60, b=20),
+        )
+        # Optional: a centered annotation so the HTML isn't just a blank box
+        fig.add_annotation(
+            text="No relationships found for the given data/columns.",
+            x=0.5, y=0.5, xref="paper", yref="paper",
+            showarrow=False
+        )
+        return fig
+
     pos = nx.spring_layout(G)  # position nodes using networkx's spring layout
     name_map = get_id_to_name(df, name_col, id_col)
 

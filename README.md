@@ -58,11 +58,11 @@ conda develop .
 Next, we need to install the optional and additional dependencies. These include optional dependencies for GPU and HPC capabilities, as well as required dependencies like the SpaCy language models.
 To view all available options, please run:
 ```shell
-python post_install.py --help
+telf-post-install --help
 ```
 Install the additional dependencies:
 ```shell
-python post_install.py # use the following, for example, for GPU system: <python post_install.py --gpu>
+telf-post-install # use the following, for example, for GPU system: < telf-post-install --gpu>
 ```
 
 #### Jupyter Setup Tutorial for using the examples ([Link](https://www.maksimeren.com/post/conda-and-jupyter-setup-for-research/))
@@ -129,7 +129,7 @@ python post_install.py # use the following, for example, for GPU system: <python
 |    Bunny   | Dataset generation tool for documents and their citations/references |  [Link](examples/Bunny)  |
 |  Penguin   |         Text storage tool                                    | [Link](examples/Penguin) |
 |  Lynx   |         Streamlit UI                                    | [Link](examples/Lynx) |
-|    Termite   | Knowladge graph building tool | :soon: |
+|    Termite   | Knowladge graph building tool | [Link](examples/Termite) |
 
 
 ## Use Cases
@@ -228,7 +228,7 @@ Developer test suites are located under [```tests/```](tests/) directory. Tests 
 conda create --prefix=<path to your conda environments under projects> python=3.11.10
 source activate <path to your conda environments under projects> # or use conda activate <...>
 pip install .
-python post_install.py --gpu --hpc-conda
+telf-post-install --gpu --hpc-conda
 ```
 
 ### Darwin
@@ -239,5 +239,5 @@ module load miniconda3
 conda create --name TELF python=3.11.10
 conda activate TELF # or <source activate TELF>
 pip install .
-python post_install.py --gpu --hpc
+telf-post-install --gpu --hpc
 ```

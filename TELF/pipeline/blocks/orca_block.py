@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Tuple, Optional, Sequence
+import pandas as pd
 
 from .base_block import AnimalBlock
 from .data_bundle import DataBundle, SAVE_DIR_BUNDLE_KEY
@@ -49,12 +50,24 @@ class OrcaBlock(AnimalBlock):
         df = drop_columns_if_exist(df, cols = ['slic_affiliations', 'slic_author_ids', 'slic_authors'])
 
         orca = Orca(**self.init_settings)
-        df = clean_affiliations(df)
 
+        
+        for col in ["affiliations", "year"]:
+            if col not in df.columns:
+                df[col] = pd.NA   
+                
+        df = clean_affiliations(df)
         orca_map_df = orca.run(df)
         df = clean_affiliations(df)
+        if df.get('affiliations', pd.Series(dtype=object)).notna().any():
+            df = clean_affiliations(df)
+        orca_map_df = orca.run(df)
 
-        orca_map_df = orca_map_df.dropna(subset=['scopus_ids']).reset_index(drop=True)
+        # orca_map_df = orca_map_df.dropna(subset=['scopus_ids']).reset_index(drop=True)
+        if orca_map_df.get('scopus_ids', pd.Series(dtype=object)).notna().any():
+            orca_map_df = orca_map_df.dropna(subset=['scopus_ids']).reset_index(drop=True)
+        elif orca_map_df.get('s2_ids', pd.Series(dtype=object)).notna().any():
+            orca_map_df = orca_map_df.dropna(subset=['s2_ids']).reset_index(drop=True)
         orca_map_df = add_num_known_col(orca_map_df)
 
         orca_dir = Path(bundle[SAVE_DIR_BUNDLE_KEY]) / self.tag
@@ -62,9 +75,12 @@ class OrcaBlock(AnimalBlock):
 
 
         df = orca.apply(df)
-        df = clean_affiliations(df)
-
-        df = prep_affiliations(df)
+        # df = clean_affiliations(df)
+        # df = prep_affiliations(df)
+        if df.get('slic_affiliations', pd.Series(dtype=object)).notna().any():
+            df = clean_affiliations(df)
+            df = prep_affiliations(df)
+        
 
         if 'type' in df.columns:
             orca_summary_path = save_path=orca_dir / 'type_summary.csv'

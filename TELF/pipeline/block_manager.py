@@ -57,6 +57,48 @@ class BlockManager:
             self.describe_io()
 
     def __call__(self) -> DataBundle:
+        base = Path(self.bundle[SAVE_DIR_BUNDLE_KEY])
+
+        # 1) Preflight: rename block directories and update checkpoint paths on disk
+        #    MUST return:
+        #      - base_to_display: {"SemanticHNMFk": "06_SemanticHNMFk", ...}
+        #      - prefix_map: {"/.../07_SemanticHNMFk": "/.../06_SemanticHNMFk", ...}
+        base_to_display, prefix_map = _renumber_dirs_and_update_ckpts(base, self.blocks)
+
+        # 2) Update in-memory objects to new prefixes BEFORE any block runs
+        # 2a) Rewrite any stored paths inside the bundle values
+        try:
+            for base_key, bucket in list(self.bundle._store.items()):
+                for tag, val in list(bucket.items()):
+                    if tag == "_latest":
+                        continue
+                    # Apply all variants
+                    new_val = val
+                    for old_pref, new_pref in prefix_map.items():
+                        new_val = _deep_replace_in_obj(new_val, {old_pref: new_pref})
+                    bucket[tag] = new_val
+        except Exception:
+            pass
+
+        # Set display tags and rewrite block settings (init/call) in memory
+        for block in self.blocks:
+            bt = _base_tag(getattr(block, "_original_tag", block.tag))
+            if not hasattr(block, "_original_tag"):
+                block._original_tag = bt
+            block.tag = base_to_display.get(bt, bt)
+
+            if isinstance(getattr(block, "init_settings", None), dict):
+                new_init = block.init_settings
+                for old_pref, new_pref in prefix_map.items():
+                    new_init = _deep_replace_in_obj(new_init, {old_pref: new_pref})
+                block.init_settings = new_init
+
+            if isinstance(getattr(block, "call_settings", None), dict):
+                new_call = block.call_settings
+                for old_pref, new_pref in prefix_map.items():
+                    new_call = _deep_replace_in_obj(new_call, {old_pref: new_pref})
+                block.call_settings = new_call
+
         total = len(self.blocks)
         log_dir: Path | None = None
         progress_fp = None
@@ -69,6 +111,7 @@ class BlockManager:
             progress_fp.write("# IO table\n" + "\n".join(table_lines) + "\n\n")
             progress_fp.flush()
 
+        # 3) Run blocks
         for idx, block in enumerate(self.blocks, 1):
             # Override the block’s load_checkpoint flag if requested
             if self.force_checkpoint is not None:
@@ -89,7 +132,6 @@ class BlockManager:
                     buf_err.write(f"⚠️ Exception in block {block.tag}:\n")
                     traceback.print_exc(file=buf_err)
                     captured = buf_out.getvalue() + buf_err.getvalue()
-                    # Write error log and re-raise
                     ts = _dt.datetime.now().strftime("%Y%m%d_%H%M%S")
                     (log_dir / f"{idx:02d}_{block.tag}_{ts}.log").write_text(captured, encoding="utf-8")
                     raise
@@ -108,6 +150,16 @@ class BlockManager:
                     traceback.print_exc()
                     raise
 
+            # 4) Alias outputs: also store under the base tag (no NN_ prefix)
+            disp_tag = block.tag                   # e.g., "06_SemanticHNMFk"
+            base_tag = _base_tag(disp_tag)         # e.g., "SemanticHNMFk"
+            for base_key in self.bundle.keys_by_tag(disp_tag):
+                try:
+                    val = self.bundle[f"{disp_tag}.{base_key}"]
+                    self.bundle[f"{base_tag}.{base_key}"] = val
+                except KeyError:
+                    pass
+
             elapsed = time.perf_counter() - t0
             if self.progress:
                 print(f"✓  [{idx}/{total}] {block.tag} finished in {elapsed:,.2f}s")
@@ -120,6 +172,7 @@ class BlockManager:
         if progress_fp:
             progress_fp.close()
         return self.bundle
+
 
     # ------------------------------------------------------------------ #
     # helper – produce describe-io lines without printing                 #
@@ -359,7 +412,7 @@ class BlockManager:
 
         for idx, blk in enumerate(self.blocks):
             fn = saved_dir / f"{idx}_{blk.__class__.__name__}.json"
-            fn.write_text(jsonpickle.encode(blk), encoding="utf-8")
+            fn.write_text(jsonpickle.encode(blk, keys=True), encoding="utf-8")
 
     def load_saved_settings(self) -> None:
         """
@@ -402,3 +455,259 @@ class BlockManager:
         """
         if "result_path" not in self.bundle:
             self.bundle["result_path"] = Path.cwd() / "results"
+
+
+
+import json, os, re, uuid, pickle
+from pathlib import Path
+from typing import Any
+
+INDEXED_DIR_RE = re.compile(r"^\d+_")
+TEXT_EXTS = {".json", ".txt", ".yaml", ".yml", ".ini", ".cfg", ".csv", ".tsv"}
+PICKLE_EXTS = {".p", ".pkl", ".pickle"}
+
+def _base_tag(name: str) -> str:
+    return INDEXED_DIR_RE.sub("", name)
+
+def _display_name(tag: str, idx: int, width: int) -> str:
+    return f"{idx:0{width}d}_{tag}"
+
+def _find_existing_dir(base: Path, tag: str) -> Path | None:
+    candidates = sorted(
+        base.glob(f"[0-9][0-9]*_{tag}"),
+        key=lambda p: p.stat().st_mtime if p.exists() else 0,
+        reverse=True,
+    )
+    if candidates:
+        return candidates[0]
+    plain = base / tag
+    return plain if plain.exists() else None
+
+def _collect_ckpt_files(base: Path) -> list[Path]:
+    return list(base.rglob("__checkpoints__.json"))
+
+def _rewrite_ckpt_paths(ckpt_file: Path, prefix_map: dict[str, str]) -> bool:
+    try:
+        data = json.loads(ckpt_file.read_text(encoding="utf-8"))
+    except Exception:
+        return False
+    changed = False
+    for k, v in list(data.items()):
+        if isinstance(v, str):
+            for old_prefix, new_prefix in prefix_map.items():
+                if v == old_prefix or v.startswith(old_prefix + os.sep):
+                    data[k] = new_prefix + v[len(old_prefix):]
+                    changed = True
+    if changed:
+        ckpt_file.write_text(json.dumps(data, indent=2), encoding="utf-8")
+    return changed
+
+def _deep_replace(obj: Any, old_prefix: str, new_prefix: str, seen: set[int] | None = None) -> tuple[bool, Any]:
+    if seen is None:
+        seen = set()
+    oid = id(obj)
+    if oid in seen:
+        return False, obj
+    seen.add(oid)
+
+    if isinstance(obj, str):
+        if old_prefix in obj:
+            return True, obj.replace(old_prefix, new_prefix)
+        return False, obj
+
+    if isinstance(obj, dict):
+        changed = False
+        out = {}
+        for k, v in obj.items():
+            ck, nk = _deep_replace(k, old_prefix, new_prefix, seen) if isinstance(k, str) else (False, k)
+            cv, nv = _deep_replace(v, old_prefix, new_prefix, seen)
+            changed = changed or ck or cv
+            out[nk] = nv
+        return changed, out
+
+    if isinstance(obj, list):
+        changed = False
+        out = []
+        for v in obj:
+            cv, nv = _deep_replace(v, old_prefix, new_prefix, seen)
+            changed = changed or cv
+            out.append(nv)
+        return changed, out
+
+    if isinstance(obj, tuple):
+        changed = False
+        out_list = []
+        for v in obj:
+            cv, nv = _deep_replace(v, old_prefix, new_prefix, seen)
+            changed = changed or cv
+            out_list.append(nv)
+        return changed, tuple(out_list)
+
+    try:
+        attrs = vars(obj)
+    except Exception:
+        return False, obj
+
+    changed = False
+    for k, v in list(attrs.items()):
+        cv, nv = _deep_replace(v, old_prefix, new_prefix, seen)
+        if cv:
+            try:
+                setattr(obj, k, nv)
+                changed = True
+            except Exception:
+                pass
+    return changed, obj
+
+def _rewrite_internal_paths_in_tree(root: Path, prefix_map: dict[str, str]) -> None:
+    """
+    Walk files under `root` and replace occurrences of *any* old→new prefix.
+    Handles text and pickle files; best-effort, silent on failures.
+    """
+    for p in root.rglob("*"):
+        if not p.is_file():
+            continue
+        ext = p.suffix.lower()
+
+        if ext in TEXT_EXTS:
+            try:
+                s = p.read_text(encoding="utf-8", errors="ignore")
+                changed = False
+                for old_prefix, new_prefix in prefix_map.items():
+                    if old_prefix in s:
+                        s = s.replace(old_prefix, new_prefix)
+                        changed = True
+                if changed:
+                    p.write_text(s, encoding="utf-8")
+            except Exception:
+                pass
+            continue
+
+        if ext in PICKLE_EXTS:
+            try:
+                with p.open("rb") as f:
+                    obj = pickle.load(f)
+                changed_any = False
+                for old_prefix, new_prefix in prefix_map.items():
+                    changed, obj = _deep_replace(obj, old_prefix, new_prefix)
+                    changed_any = changed_any or changed
+                if changed_any:
+                    with p.open("wb") as f:
+                        pickle.dump(obj, f)
+            except Exception:
+                pass
+            continue
+
+def _renumber_dirs_and_update_ckpts(base: Path, blocks: list) -> tuple[dict[str, str], dict[str, str]]:
+    """
+    Rename block directories to NN_<tag>, rewrite checkpoint JSONs,
+    and migrate internal absolute/relative paths inside files under renamed dirs.
+    RETURNS:
+      (base_to_display, prefix_map) where prefix_map includes abs+rel variants.
+    """
+    base.mkdir(parents=True, exist_ok=True)
+
+    width = max(2, len(str(len(blocks))))
+    desired: list[tuple[str, str]] = []
+    for i, block in enumerate(blocks, start=1):
+        bt = _base_tag(getattr(block, "_original_tag", block.tag))
+        desired.append((bt, _display_name(bt, i, width)))
+
+    # Plan renames
+    rename_plan: list[tuple[Path, Path]] = []
+    for (bt, new_disp) in desired:
+        src = _find_existing_dir(base, bt)
+        if src is None:
+            continue
+        dst = base / new_disp
+        if src.resolve() != dst.resolve():
+            rename_plan.append((src, dst))
+
+    # Two-phase rename to avoid collisions
+    temp_map: dict[Path, Path] = {}
+    for src, dst in rename_plan:
+        if not src.exists():
+            continue
+        tmp = base / (src.name + f".tmp-{uuid.uuid4().hex[:8]}")
+        src.rename(tmp)
+        temp_map[tmp] = dst
+
+    # Move temps to final
+    for tmp, dst in temp_map.items():
+        if dst.exists():
+            if dst.is_dir() and tmp.is_dir():
+                for item in tmp.iterdir():
+                    target = dst / item.name
+                    if not target.exists():
+                        item.rename(target)
+                tmp.rmdir()
+            else:
+                n = 1
+                alt = Path(str(dst) + f".old{n}")
+                while alt.exists():
+                    n += 1
+                    alt = Path(str(dst) + f".old{n}")
+                tmp.rename(alt)
+        else:
+            tmp.rename(dst)
+
+    # Build a rich prefix map (absolute + relative variants)
+    prefix_map = _build_prefix_map_variants(base, rename_plan)
+
+    # Rewrite checkpoint JSON files using all variants
+    for ckpt in _collect_ckpt_files(base):
+        _rewrite_ckpt_paths(ckpt, prefix_map)
+
+    # Rewrite internals inside each renamed directory tree (text+pickle) using all variants
+    for src, dst in rename_plan:
+        try:
+            _rewrite_internal_paths_in_tree(dst, prefix_map)
+        except Exception:
+            pass
+
+    base_to_display = {bt: new_disp for (bt, new_disp) in desired}
+    return base_to_display, prefix_map
+
+
+def _deep_replace_in_obj(obj, prefix_map: dict[str, str]):
+    from pathlib import Path as _Path
+    if isinstance(obj, (str, _Path)):
+        s = str(obj)
+        for old, new in prefix_map.items():
+            if s == old or s.startswith(old + os.sep):
+                s = new + s[len(old):]
+        return _Path(s) if isinstance(obj, _Path) else s
+    if isinstance(obj, dict):
+        return { _deep_replace_in_obj(k, prefix_map) if isinstance(k, (str, _Path)) else k:
+                 _deep_replace_in_obj(v, prefix_map) for k, v in obj.items() }
+    if isinstance(obj, list):
+        return [ _deep_replace_in_obj(v, prefix_map) for v in obj ]
+    if isinstance(obj, tuple):
+        return tuple(_deep_replace_in_obj(v, prefix_map) for v in obj)
+    return obj
+
+def _build_prefix_map_variants(base: Path, rename_plan: list[tuple[Path, Path]]) -> dict[str, str]:
+    """
+    For each (src,dst) directory rename, return a mapping that includes:
+      - absolute: /abs/.../07_Tag  -> /abs/.../06_Tag
+      - relative (from CWD):  src  ->  dst   (e.g., 'example_results/.../07_Tag' -> '.../06_Tag')
+    This catches both absolute and relative paths embedded in files or memory.
+    """
+    m: dict[str, str] = {}
+    for src, dst in rename_plan:
+        # absolute variants
+        abs_old = str(src.resolve())
+        abs_new = str(dst.resolve())
+        m[abs_old] = abs_new
+
+        # relative variants (as written on disk; your code uses Path(...) directly)
+        rel_old = str(src)  # typically 'example_results/.../07_Tag'
+        rel_new = str(dst)
+        m[rel_old] = rel_new
+
+        # Sometimes code stores a trailing slash; add those too
+        if not abs_old.endswith(os.sep):
+            m[abs_old + os.sep] = abs_new + os.sep
+        if not rel_old.endswith(os.sep):
+            m[rel_old + os.sep] = rel_new + os.sep
+    return m

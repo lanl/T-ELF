@@ -181,6 +181,7 @@ with tabs[2]:
     for ii in selected_nodes["checked"]:
         directory = st.session_state.data_map[ii]["path"]
         peacock_dir = os.path.join(directory, "peacock")
+        print( peacock_dir )
         files = find_files_by_extensions(peacock_dir, extensions=("html", "png"))
         with st.expander(st.session_state.data_map[ii]["label"]):
             open_explorer_button(peacock_dir, key=f"button_tab2_{ii}")

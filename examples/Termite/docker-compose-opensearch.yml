@@ -1,0 +1,86 @@
+name: telf-stack
+
+services:
+  # -------------------------
+  # Neo4j (with APOC plugin) — unchanged
+  # -------------------------
+  neo4j_termite:
+    image: neo4j:5.23
+    container_name: neo4j_termite
+    restart: unless-stopped
+    ports:
+      - "7999:7474"   # HTTP
+      - "7666:7687"   # Bolt
+    environment:
+      NEO4J_AUTH: "neo4j/local_password"
+      NEO4J_server_default__listen__address: "0.0.0.0"
+      NEO4J_server_default__advertised__address: "localhost"
+      NEO4J_PLUGINS: '["apoc"]'
+      NEO4J_dbms_security_procedures_unrestricted: "apoc.*"
+      NEO4J_dbms_security_procedures_allowlist: "apoc.*"
+      NEO4J_dbms_security_auth__minimum__password__length: "12"
+    volumes:
+      - ./01_termite_output/DOCKERDATA/neo4j/data:/data
+      - ./01_termite_output/DOCKERDATA/neo4j/logs:/logs
+      - ./01_termite_output/DOCKERDATA/neo4j/import:/var/lib/neo4j/import
+      - ./01_termite_output/DOCKERDATA/neo4j/plugins:/plugins
+    networks: [telf-net]
+
+  # -------------------------
+  # OpenSearch (single-node with k-NN)
+  # -------------------------
+  opensearch:
+    image: opensearchproject/opensearch:2.13.0
+    container_name: opensearch
+    restart: unless-stopped
+    environment:
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=ChangeMe_1Strong!   # <-- required
+      - discovery.type=single-node
+      - plugins.security.disabled=true             # dev only
+      - bootstrap.memory_lock=true
+      - OPENSEARCH_JAVA_OPTS=-Xms2g -Xmx2g         # tune for your host
+      - cluster.name=telf-opensearch
+      - node.name=os-node-1
+      - network.host=0.0.0.0
+      # Optional: speed up k-NN warmup for small hosts
+      - knn.memory.circuit_breaker.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - ./01_termite_output/DOCKERDATA/opensearch/data:/usr/share/opensearch/data
+      - ./01_termite_output/DOCKERDATA/opensearch/logs:/usr/share/opensearch/logs
+    ports:
+      - "9200:9200"   # REST API
+      - "9600:9600"   # Performance analyzer
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9200 >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks: [telf-net]
+
+  # -------------------------
+  # OpenSearch Dashboards (optional UI)
+  # -------------------------
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.13.0
+    container_name: opensearch-dashboards
+    restart: unless-stopped
+    environment:
+      OPENSEARCH_HOSTS: '["http://opensearch:9200"]'
+      OPENSEARCH_SECURITY_DISABLED: "true"   # dev only
+      SERVER_HOST: "0.0.0.0"
+    depends_on:
+      - opensearch
+    ports:
+      - "5601:5601"   # visit http://localhost:5601
+    networks: [telf-net]
+
+networks:
+  telf-net:
+    driver: bridge

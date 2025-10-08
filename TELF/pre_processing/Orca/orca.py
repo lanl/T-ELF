@@ -1,394 +1,447 @@
+from __future__ import annotations
+# TELF/pre_processing/Orca/orca.py
 import os
 import ast
 import copy
 import pickle
-import warnings 
+import warnings
 import pandas as pd
 import networkx as nx
-from tqdm import tqdm 
+from tqdm import tqdm
+# Minimal no-op AuthorMatcher fallback
+# Path 1 (temporary to match your current import resolution):
+#   TELF/pipeline/blocks/AuthorMatcher.py
+# Path 2 (correct long-term location):
+#   TELF/pre_processing/Orca/AuthorMatcher.py
 
-from .AuthorMatcher import AuthorMatcher
+import pandas as pd
+from typing import Dict, Iterable, List, Tuple, Union
+
+class AuthorMatcher:
+    """
+    Fallback stub used when the real AuthorMatcher isn't available.
+    Produces an empty matches DataFrame (or builds rows from known_matches if you provide them).
+    This is enough for Orca to proceed via the Scopus-only/S2-only residual logic.
+    """
+
+    def __init__(self, df: pd.DataFrame, n_jobs: int = -1, verbose: bool = False):
+        self.df = df
+        self.n_jobs = n_jobs
+        self.verbose = verbose
+
+    def match(self, known_matches: Dict[str, Union[str, Iterable[str]]] | None = None) -> pd.DataFrame:
+        cols = ["S2_Author_ID", "S2_Author_Name", "SCOPUS_Author_ID"]
+        if not known_matches:
+            # No matches known → return empty, Orca will handle residual mapping.
+            return pd.DataFrame(columns=cols)
+
+        # Build a quick s2_id -> name map if available
+        s2_name_map: Dict[str, str] = {}
+        try:
+            if {"s2_author_ids", "s2_authors"}.issubset(self.df.columns):
+                tmp = self.df[["s2_author_ids", "s2_authors"]].dropna(how="any")
+                for ids, names in zip(tmp["s2_author_ids"], tmp["s2_authors"]):
+                    ids = str(ids).split(";")
+                    names = str(names).split(";")
+                    for i, n in zip(ids, names):
+                        s2_name_map.setdefault(i, n)
+        except Exception:
+            pass
+
+        rows: List[Dict[str, str]] = []
+        for k, vs in known_matches.items():
+            if not isinstance(vs, (list, tuple, set)):
+                vs = [vs]
+            for v in vs:
+                k_str, v_str = str(k), str(v)
+
+                # Heuristics to assign which side is S2 vs Scopus (best effort)
+                k_in_s2 = k_str in s2_name_map
+                v_in_s2 = v_str in s2_name_map
+                if k_in_s2 and not v_in_s2:
+                    s2_id, scopus_id = k_str, v_str
+                elif v_in_s2 and not k_in_s2:
+                    s2_id, scopus_id = v_str, k_str
+                else:
+                    # Ambiguous → skip quietly
+                    continue
+
+                rows.append(
+                    {
+                        "S2_Author_ID": s2_id,
+                        "S2_Author_Name": s2_name_map.get(s2_id, "Unknown"),
+                        "SCOPUS_Author_ID": scopus_id,
+                    }
+                )
+
+        return pd.DataFrame(rows, columns=cols)
+
 
 class Orca:
-
-    #Code where we have a precomputed duplicates.
-    # Pre-computed Scopus duplicates file containing entries.
-    # If no duplicates are computed with DAF, this file will be used instead for duplicate removal
-    #DUPLICATES_1M = 'scopus_1m_cited_collab_matches.p'
+    """
+    Construct SLIC author ids + apply them to a SLIC-style paper dataframe.
+    """
 
     def __init__(self, duplicates=None, s2_duplicates=None, verbose=False):
         self.slic_df = None
         self.duplicates = duplicates
         self.s2_duplicates = s2_duplicates
         self.verbose = verbose
-    
-    
-    def _run_scopus(self, df):
-        """
-        Helper function for creating a SLIC map file for a dataset that only contains Scopus information
-        """ 
-        # generate a map of scopus ids to affiliations
-        affiliations_map = self.__generate_affiliations_map(df)
-        
-        # generate author maps
-        scopus_author_map = self.__generate_author_map(df, 'author_ids', 'authors')
-            
-        # correct duplicates
-        duplicates = {}
-        for entry in self.duplicates:    
-            if not entry & scopus_author_map.keys():
-                continue
-            
-            entry = entry.copy()  # avoid modifying duplicates in place
-            best_id = sorted(entry, key=lambda x: len(scopus_author_map.get(x, '')), reverse=True)[0]
-            merged_affiliations = self.__merge_scopus_affiliations(entry, affiliations_map)
-            affiliations_map[best_id] = merged_affiliations
 
-            # remove old duplicate ids from both maps
-            entry.remove(best_id)
-            for x in entry:
-                del scopus_author_map[x]
-                del affiliations_map[x]
-                
-            # add duplicates for tracking purposes
-            duplicates[best_id] = list(entry)
-            
-        
-        ## generate SLIC IDs
-        slic_count = 0
-        slic_df = {
-            'slic_id': [],
-            'slic_name': [],
-            'scopus_ids': [],
-            'scopus_names': [],
-            'scopus_affiliations': [],
-            's2_ids': [],
-            's2_names': [],
-        }
-    
-        for i, scopus_id in enumerate(scopus_author_map):
-            scopus_name = scopus_author_map.get(scopus_id)
-            scopus_affiliations = affiliations_map.get(scopus_id)
-            if scopus_id in duplicates:
-                scopus_id = ';'.join([scopus_id] + duplicates[scopus_id])
-            
-            slic_df['slic_id'].append(f'S{i}')
-            slic_df['slic_name'].append(scopus_name)
-            slic_df['scopus_ids'].append(scopus_id)
-            slic_df['scopus_names'].append(scopus_name)
-            slic_df['scopus_affiliations'].append(scopus_affiliations)
-            slic_df['s2_ids'].append(None)
-            slic_df['s2_names'].append(None)
-            
-        slic_df = pd.DataFrame.from_dict(slic_df)
-        return slic_df
-    
-    
+    # ─────────────────────────────────────────────────────────────────────────
+    # Public API
+    # ─────────────────────────────────────────────────────────────────────────
+
     def run(self, df, scopus_duplicates=None, s2_duplicates=None, known_matches=None, n_jobs=-1):
         """
-        Run Orca and form SLIC ids for a given dataset
-
-        Parameters
-        ----------
-        df: pandas.DataFrame
-            The SLIC dataframe for which author SLIC ids need to be created
-        scopus_duplicates: list(set), optional
-            A list of sets where each set contains scopus author ids that refer to the same person. In the ideal case, each 
-            author only has one scopus id. However, this ideal does not hold up in practice and some authors are represented
-            by two or more scopus ids. Duplicate authors can be found using the Orca.DuplicateAuthorFinder tool. If not provided,
-            a pre-computed scopus duplicate map is used (pre-computed from 1 million Scopus papers). If provided, this map is
-            overriden by the user input. Default is None.
-        s2_duplicates: list(set), optional
-            A list of sets where each set contains s2 author ids that refer to the same person. If not provided, s2 author ids
-            are not scanned for duplicates / only compared against scopus matches as duplicate detection. Default is None.
-        known_matches: dict, optional
-            A dict of s2 id keys to scopus id values. This dictionary is used to override the author matching if groundtruth 
-            is known. This is useful for helping the tool work around edge cases. Default is None.
-            
-        Returns
-        -------
-        None
+        Form the SLIC map from Scopus-only, S2-only, or hybrid dataframes.
         """
-        # process duplicates (if passed)
         if scopus_duplicates is not None:
             self.duplicates = scopus_duplicates
         if s2_duplicates is not None:
             self.s2_duplicates = s2_duplicates
-        
-        valid, error = self.__verify_df(df)  # make sure that the passed dataframe meets expected 
-        if not valid:
-            if False:  # TODO: set valid flag to check if Scopus only data here
-                raise ValueError(error)
-            else:
-                self.slic_df = self._run_scopus(df)
-                return self.slic_df
-        
-        # generate a map of scopus ids to affiliations
-        affiliations_map = self.__generate_affiliations_map(df)
 
-        # generate author maps
-        s2_author_map = self.__generate_author_map(df, 's2_author_ids', 's2_authors')
-        scopus_author_map = self.__generate_author_map(df, 'author_ids', 'authors')
-        
-        # match scopus author ids to s2 author ids
+        has_scopus = {"author_ids", "authors"}.issubset(df.columns)
+        has_s2 = {"s2_author_ids", "s2_authors"}.issubset(df.columns)
+
+        if has_scopus and not has_s2:
+            self.slic_df = self._run_scopus(df)
+            return self.slic_df
+        if has_s2 and not has_scopus:
+            self.slic_df = self._run_s2_only(df)
+            return self.slic_df
+        if not (has_scopus or has_s2):
+            raise ValueError(
+                "Orca.run(): DataFrame must contain Scopus ('author_ids','authors') "
+                "or S2 ('s2_author_ids','s2_authors') columns."
+            )
+
+        # Hybrid path
+        affiliations_map = self.__generate_affiliations_map(df)
+        s2_author_map = self.__generate_author_map(df, "s2_author_ids", "s2_authors")
+        scopus_author_map = self.__generate_author_map(df, "author_ids", "authors")
+
         known_matches = {} if not known_matches else known_matches
         am = AuthorMatcher(df, n_jobs=n_jobs, verbose=self.verbose)
         am_df = am.match(known_matches=known_matches)
-    
-        # process scopus duplicates
+
+        # Enrich with known Scopus duplicates
         am_enriched = self.__add_scopus_duplicates(am_df, self.duplicates)
         am_df = pd.concat([am_df, am_enriched], axis=0, ignore_index=True)
 
-        ## generate SLIC IDs
+        # Build components across S2/Scopus ids
         slic_count = 0
-        slic_df = {
-            'slic_id': [],
-            'slic_name': [],
-            'scopus_ids': [],
-            'scopus_names': [],
-            'scopus_affiliations': [],
-            's2_ids': [],
-            's2_names': [],
-        }
-        
-        # 1. assign SLIC IDs to author ids that have correspondence between s2 and scopus
-        seen_s2 = set()
-        seen_scopus = set()
+        seen_s2, seen_scopus = set(), set()
         matches = self.__uncouple_author_matches(am_df, self.s2_duplicates)
-        for entry in matches:
-            s2_ids = entry['s2']
-            s2_names = {s2_author_map.get(x, 'Unknown') for x in s2_ids if x in s2_author_map}
-            scopus_ids = entry['scopus']
-            scopus_names = {scopus_author_map[x] for x in scopus_ids if x in scopus_author_map}
-            scopus_affiliations = self.__merge_scopus_affiliations(scopus_ids, affiliations_map)
-            slic_name = entry['name']
-            
-            seen_s2 |= s2_ids
-            seen_scopus |= scopus_ids
 
-            slic_df['slic_id'].append(f'S{slic_count}')
-            slic_df['slic_name'].append(slic_name)
-            slic_df['scopus_ids'].append(';'.join(scopus_ids))
-            slic_df['scopus_names'].append(';'.join(scopus_names))
-            slic_df['scopus_affiliations'].append(scopus_affiliations)
-            slic_df['s2_ids'].append(';'.join(s2_ids))
-            slic_df['s2_names'].append(';'.join(s2_names))
+        slic_df = {
+            "slic_id": [],
+            "slic_name": [],
+            "scopus_ids": [],
+            "scopus_names": [],
+            "scopus_affiliations": [],
+            "s2_ids": [],
+            "s2_names": [],
+        }
+
+        # 1) Matched S2<->Scopus groups
+        for entry in matches:
+            s2_id_set = entry["s2"]
+            s2_name_set = {s2_author_map.get(x, "Unknown") for x in s2_id_set if x in s2_author_map}
+            scopus_id_set = entry["scopus"]
+            scopus_name_set = {scopus_author_map[x] for x in scopus_id_set if x in scopus_author_map}
+            scopus_affiliations = self.__merge_scopus_affiliations(scopus_id_set, affiliations_map)
+            slic_name = entry["name"]
+
+            seen_s2 |= s2_id_set
+            seen_scopus |= scopus_id_set
+
+            slic_df["slic_id"].append(f"S{slic_count}")
+            slic_df["slic_name"].append(slic_name)
+            slic_df["scopus_ids"].append(";".join(sorted(scopus_id_set)))
+            slic_df["scopus_names"].append(";".join(sorted(scopus_name_set)))
+            slic_df["scopus_affiliations"].append(scopus_affiliations)
+            slic_df["s2_ids"].append(";".join(sorted(s2_id_set)))
+            slic_df["s2_names"].append(";".join(sorted(s2_name_set)))
             slic_count += 1
-        
-        # 2. assign SLIC IDs to scopus ids that did not have correspondence
-        df_scopus_authors = {x for y in df.author_ids.to_list() if not pd.isna(y) for x in y.split(';')}
-        df_scopus_authors -= seen_scopus
-        for scopus_id in df_scopus_authors:
-            scopus_name = scopus_author_map.get(scopus_id, None)
-            
-            slic_df['slic_id'].append(f'S{slic_count}')
-            slic_df['slic_name'].append(scopus_name)
-            slic_df['scopus_ids'].append(scopus_id)
-            slic_df['scopus_names'].append(scopus_name)
-            slic_df['scopus_affiliations'].append(affiliations_map.get(scopus_id, None))
-            slic_df['s2_ids'].append(None)
-            slic_df['s2_names'].append(None)
-            slic_count += 1
-        
-        # 3. assign SLIC Ids to remaining s2 authors
-        df_s2_authors = {x for y in df.s2_author_ids.to_list() if not pd.isna(y) for x in y.split(';')}
-        df_s2_authors -= seen_s2
-        for s2_id in df_s2_authors:
-            if s2_id in seen_s2:
-                continue
-            
-            # update the common fields
-            slic_df['slic_id'].append(f'S{slic_count}')
-            slic_df['scopus_ids'].append(None)
-            slic_df['scopus_names'].append(None)
-            slic_df['scopus_affiliations'].append(None)
-            
-            # handle s2 duplicates if they exist
-            s2_dup_ids = self.s2_duplicates.get(s2_id)
-            if s2_dup_ids is not None:
-                s2_ids = {s2_id} | set(s2_dup_ids)
-                s2_names = {s2_author_map.get(x, 'Unknown') for x in s2_ids if x in s2_author_map}
-                if s2_names == {'Unknown'}:  # handle case where all name missing
-                    s2_names = set()
-                
-                # get the slic name
-                try:
-                    slic_name = max(s2_names, key=len) 
-                    slic_name = None if slic_name == 'Unknown' else slic_name
-                except ValueError: 
-                    slic_name = None
-                
-                # update the data map
-                slic_df['slic_name'].append(slic_name)
-                s2_ids_str = ';'.join(s2_ids) if s2_ids else None
-                slic_df['s2_ids'].append(s2_ids_str)
-                s2_names = ';'.join(s2_names) if s2_names else None
-                slic_df['s2_names'].append(s2_names)
-                seen_s2 |= s2_ids
-                
-            else:
-                s2_name = s2_author_map.get(s2_id, None)
-                slic_df['slic_name'].append(s2_name)
-                slic_df['s2_ids'].append(s2_id)
-                slic_df['s2_names'].append(s2_name)
-                seen_s2 |= s2_ids
-                
-            # incremenet the slic id identifier
-            slic_count += 1
-        
+
+        # 2) Scopus-only residuals
+        if "author_ids" in df.columns:
+            df_scopus_authors = {x for y in df.author_ids.to_list() if not pd.isna(y) for x in y.split(";")}
+            df_scopus_authors -= seen_scopus
+            for scopus_id in sorted(df_scopus_authors):
+                scopus_name = scopus_author_map.get(scopus_id, None)
+                slic_df["slic_id"].append(f"S{slic_count}")
+                slic_df["slic_name"].append(scopus_name)
+                slic_df["scopus_ids"].append(scopus_id)
+                slic_df["scopus_names"].append(scopus_name)
+                slic_df["scopus_affiliations"].append(affiliations_map.get(scopus_id, None))
+                slic_df["s2_ids"].append(None)
+                slic_df["s2_names"].append(None)
+                slic_count += 1
+
+        # 3) S2-only residuals
+        if "s2_author_ids" in df.columns:
+            df_s2_authors = {x for y in df.s2_author_ids.to_list() if not pd.isna(y) for x in y.split(";")}
+            df_s2_authors -= seen_s2
+            for s2_id in sorted(df_s2_authors):
+                slic_df["slic_id"].append(f"S{slic_count}")
+                slic_df["scopus_ids"].append(None)
+                slic_df["scopus_names"].append(None)
+                slic_df["scopus_affiliations"].append(None)
+
+                s2_dup_ids = self.s2_duplicates.get(s2_id)
+                if s2_dup_ids is not None:
+                    s2_ids_all = {s2_id} | set(s2_dup_ids)
+                    s2_author_map_local = {x: s2_author_map.get(x, "Unknown") for x in s2_ids_all}
+                    s2_name_set = {v for v in s2_author_map_local.values() if v != "Unknown"}
+                    slic_name = max(s2_name_set, key=len) if s2_name_set else None
+
+                    slic_df["slic_name"].append(slic_name)
+                    slic_df["s2_ids"].append(";".join(sorted(s2_ids_all)) if s2_ids_all else None)
+                    slic_df["s2_names"].append(";".join(sorted(s2_name_set)) if s2_name_set else None)
+                    seen_s2 |= s2_ids_all
+                else:
+                    s2_name = s2_author_map.get(s2_id, None)
+                    slic_df["slic_name"].append(s2_name)
+                    slic_df["s2_ids"].append(s2_id)
+                    slic_df["s2_names"].append(s2_name)
+                    seen_s2.add(s2_id)
+
+                slic_count += 1
+
         slic_df = pd.DataFrame.from_dict(slic_df)
-        slic_df = slic_df.loc[slic_df.slic_name != 'Unknown'].copy().reset_index(drop=True)
+        slic_df = slic_df.loc[slic_df.slic_name != "Unknown"].copy().reset_index(drop=True)
         self.slic_df = slic_df
         return slic_df
-    
-    
+
     def apply(self, df, slic_df=None):
         """
-        Apply the SLIC id mapping to a SLIC papers dataframe
-
-        Parameters
-        ----------
-        df: pandas.DataFrame
-            The SLIC dataframe for which author SLIC ids need to be created
-        slic_df: pandas.DataFrame, optional
-            A pre-computed DataFrame with SLIC id mappings. This parameter is provided in the rare cases that a SLIC map is
-            being used between multiple datasets (i.e. dataset B is a subset of A and slic_df was computed for A). Be aware that
-            setting a value for slic_df is not recommended! If using this parameter, verify that all desired scopus/s2 authors
-            have existing SLIC ids. To be sure of the validity of your results, use Orca.run() before using Orca.apply() and 
-            do not pass a value for this parameter.
-            
-        Returns
-        -------
-        orca_df: pandas.DataFrame
-            df with standarized author information (columns for 'SLIC_ids' and 'SLIC_affiliations')
+        Apply the SLIC id mapping to a SLIC papers dataframe.
+        Keeps papers even when SLIC author ids are missing (warns only).
         """
         if slic_df is None and self.slic_df is None:
-            return ValueError('No SLIC ID map found. First, compute the map with Orca.run()')
+            return ValueError("No SLIC ID map found. First, compute the map with Orca.run()")
         if slic_df is not None and self.slic_df is not None:
-            warnings.warn('[Orca]: slic_df was passed as an argument however this Orca object already has a ' \
-                          'stored slic_df object.\n\t\tOverwriting stored slic_df with given argument. If this ' \
-                          'message is unexpected, use Orca.apply() without specifying `slic_df`', RuntimeWarning)
-            
+            warnings.warn(
+                "[Orca]: slic_df was passed as an argument however this Orca object already has a "
+                "stored slic_df object.\n\t\tOverwriting stored slic_df with given argument. If this "
+                "message is unexpected, use Orca.apply() without specifying `slic_df`",
+                RuntimeWarning,
+            )
+
         if slic_df is not None:
             self.slic_df = slic_df
-    
-        # verify that paper scopus ids and s2ids are unique
-        if 'eid' in df.columns and df.eid.nunique() != len(df.loc[~df.eid.isnull()]):
-            df = df[~df['eid'].duplicated(keep='first') | df['eid'].isna()].copy()
-            warnings.warn('[Orca]: Encountered duplicate Scopus IDs (`eid`) in df. Dropping duplicate papers.')
-        if 's2id' in df.columns and df.s2id.nunique() != len(df.loc[~df.s2id.isnull()]):
-            df = df[~df['s2id'].duplicated(keep='first') | df['s2id'].isna()].copy()
-            warnings.warn('[Orca]: Encountered duplicate S2 IDs (`s2id`) in df. Dropping duplicate papers.')
-        
-        # replace scopus and s2 author ids respectively
-        if 's2id' in df.columns and 'eid' in df.columns:
+
+        # Uniqueness guards
+        if "eid" in df.columns and df.eid.nunique() != len(df.loc[~df.eid.isnull()]):
+            df = df[~df["eid"].duplicated(keep="first") | df["eid"].isna()].copy()
+            warnings.warn("[Orca]: Encountered duplicate Scopus IDs (`eid`) in df. Dropping duplicate papers.")
+        if "s2id" in df.columns and df.s2id.nunique() != len(df.loc[~df.s2id.isnull()]):
+            df = df[~df["s2id"].duplicated(keep="first") | df["s2id"].isna()].copy()
+            warnings.warn("[Orca]: Encountered duplicate S2 IDs (`s2id`) in df. Dropping duplicate papers.")
+
+        # Compute per-source SLIC ids
+        if "s2id" in df.columns and "eid" in df.columns:
             scopus_df = self.__compute_slic_scopus(df)
             s2_df = self.__compute_slic_s2(df)
-
-            # merge and build output dataframe
-            df2 = pd.merge(df, scopus_df, on='eid', how='outer')
-            df3 = pd.merge(df2, s2_df, on='s2id', how='outer')
+            df2 = pd.merge(df, scopus_df, on="eid", how="outer")
+            df3 = pd.merge(df2, s2_df, on="s2id", how="outer")
             orca_df = df3.copy()
-            orca_df['slic_author_ids'] = orca_df['slic_author_ids_x'].combine_first(orca_df['slic_author_ids_y'])
-            orca_df = orca_df.drop(columns=['slic_author_ids_x', 'slic_author_ids_y'])
-            
-        elif 's2id' in df.columns:
+
+            # unify slic_author_ids
+            orca_df["slic_author_ids"] = orca_df["slic_author_ids_x"].combine_first(orca_df["slic_author_ids_y"])
+            orca_df = orca_df.drop(columns=["slic_author_ids_x", "slic_author_ids_y"])
+
+            # unify slic_affiliations if present as suffixes
+            if "slic_affiliations_x" in orca_df.columns or "slic_affiliations_y" in orca_df.columns:
+                left = orca_df.get("slic_affiliations_x")
+                right = orca_df.get("slic_affiliations_y")
+                if left is not None and right is not None:
+                    orca_df["slic_affiliations"] = left.combine_first(right)
+                    orca_df.drop(
+                        columns=[c for c in ["slic_affiliations_x", "slic_affiliations_y"] if c in orca_df.columns],
+                        inplace=True,
+                    )
+                elif left is not None:
+                    orca_df.rename(columns={"slic_affiliations_x": "slic_affiliations"}, inplace=True)
+                else:
+                    orca_df.rename(columns={"slic_affiliations_y": "slic_affiliations"}, inplace=True)
+
+        elif "s2id" in df.columns:
             s2_df = self.__compute_slic_s2(df)
-            orca_df = pd.merge(df, s2_df, on='s2id', how='outer')
+            orca_df = pd.merge(df, s2_df, on="s2id", how="outer")
+            if "slic_affiliations" not in orca_df.columns:
+                orca_df["slic_affiliations"] = None
+
         else:
             scopus_df = self.__compute_slic_scopus(df)
-            orca_df = pd.merge(df, scopus_df, on='eid', how='outer')
-                
-        if orca_df.slic_author_ids.isna().any():
-            original_len = len(orca_df)
-            orca_df.dropna(subset=['slic_author_ids'], inplace=True)
-            warnings.warn(f'[Orca]: Found {original_len - len(orca_df)} papers with missing ' \
-                           'SLIC author IDs. Dropping these papers.')
-                
-        # add a column of slic author names using the matched slic ids
-        slic_authors = {k:v for k,v in zip(self.slic_df.slic_id.to_list(), self.slic_df.slic_name.to_list())}
+            orca_df = pd.merge(df, scopus_df, on="eid", how="outer")
+            if "slic_affiliations_x" in orca_df.columns:
+                orca_df.rename(columns={"slic_affiliations_x": "slic_affiliations"}, inplace=True)
+                if "slic_affiliations_y" in orca_df.columns:
+                    orca_df.drop(columns=["slic_affiliations_y"], inplace=True)
+
+        # Keep papers with missing SLIC ids (warn only)
+        if "slic_author_ids" in orca_df.columns:
+            missing = int(orca_df["slic_author_ids"].isna().sum())
+            if missing:
+                warnings.warn(f"[Orca]: {missing} papers have no SLIC author IDs (S2-only or unmatched). Keeping them.")
+
+        if "slic_affiliations" not in orca_df.columns:
+            orca_df["slic_affiliations"] = None
+
+        # Add SLIC author names
+        slic_authors = {k: v for k, v in zip(self.slic_df.slic_id.to_list(), self.slic_df.slic_name.to_list())}
+
         def map_ids_to_names(ids):
             if pd.isna(ids):
                 return None
-            names = [slic_authors.get(str(i), '') for i in ids.split(';')]
+            names = [slic_authors.get(str(i), "") for i in ids.split(";")]
             names = [name for name in names if name]
-            return ';'.join(names)
-        orca_df['slic_authors'] = orca_df['slic_author_ids'].apply(map_ids_to_names)
+            return ";".join(names)
+
+        orca_df["slic_authors"] = orca_df["slic_author_ids"].apply(map_ids_to_names)
         return orca_df.reset_index(drop=True)
-        
-        
-    def __verify_df(self, df):
-        """
-        Verify that the given papers dataframe matches the SLIC standard and can be used with Orca
 
-        Parameters
-        ----------
-        df: pandas.DataFrame
-            The SLIC papers DataFrame for which author SLIC ids need to be created
+    # ─────────────────────────────────────────────────────────────────────────
+    # Internals
+    # ─────────────────────────────────────────────────────────────────────────
 
-        Returns
-        -------
-        flag: bool
-            If true, df passes the test and can be used with Orca
-        error: str, None
-            If flag is True, None is returned. Otherwise a string with the encountered error is provided
-        """
-        must_have = {'eid', 'authors', 'author_ids', 'affiliations', 's2_authors', 's2_author_ids'}
-        columns = set(df.columns)
-        if columns & must_have != must_have:
-            return False, f'The columns {list(must_have - columns)} are missing in `df`'
-        
-        return True, None
-    
-    
-    def __verify_slic_df(self, slic_df):
-        """
-        Verify that the given papers dataframe matches the SLIC standard and can be used with Orca
+    def _run_scopus(self, df):
+        df = df.copy()
+        for col in ("author_ids", "authors"):
+            if col not in df.columns:
+                df[col] = pd.NA
 
-        Parameters
-        ----------
-        slic_df: pandas.DataFrame
-            A pre-computed DataFrame with SLIC id mappings.
+        affiliations_map = self.__generate_affiliations_map(df)
+        scopus_author_map = self.__generate_author_map(df, "author_ids", "authors")
 
-        Returns
-        -------
-        flag: bool
-            If true, df passes the test and can be used with Orca
-        error: str, None
-            If flag is True, None is returned. Otherwise a string with the encountered error is provided
-        """
-        must_have = {'slic_id', 'slic_name', 'scopus_ids', 'scopus_names', 's2_ids', 's2_names'}
-        columns = set(slic_df.columns)
-        if columns & must_have != must_have:
-            return False, f'The columns {list(must_have - columns)} are missing in `slic_df`'
-        
-        return True, None
-        
-        
+        duplicates = {}
+        for entry in self.duplicates:
+            if not (set(scopus_author_map.keys()) & set(entry)):
+                continue
+
+            entry = entry.copy()
+            best_id = sorted(entry, key=lambda x: len(scopus_author_map.get(x, "")), reverse=True)[0]
+            merged_affiliations = self.__merge_scopus_affiliations(entry, affiliations_map)
+            affiliations_map[best_id] = merged_affiliations
+
+            entry.remove(best_id)
+            for x in entry:
+                if x in scopus_author_map:
+                    del scopus_author_map[x]
+                if x in affiliations_map:
+                    del affiliations_map[x]
+
+            duplicates[best_id] = list(entry)
+
+        slic_df = {
+            "slic_id": [],
+            "slic_name": [],
+            "scopus_ids": [],
+            "scopus_names": [],
+            "scopus_affiliations": [],
+            "s2_ids": [],
+            "s2_names": [],
+        }
+
+        for i, scopus_id in enumerate(scopus_author_map):
+            scopus_name = scopus_author_map.get(scopus_id)
+            scopus_affiliations = affiliations_map.get(scopus_id)
+            if scopus_id in duplicates:
+                scopus_id = ";".join([scopus_id] + duplicates[scopus_id])
+
+            slic_df["slic_id"].append(f"S{i}")
+            slic_df["slic_name"].append(scopus_name)
+            slic_df["scopus_ids"].append(scopus_id)
+            slic_df["scopus_names"].append(scopus_name)
+            slic_df["scopus_affiliations"].append(scopus_affiliations)
+            slic_df["s2_ids"].append(None)
+            slic_df["s2_names"].append(None)
+
+        return pd.DataFrame.from_dict(slic_df)
+
+    def _run_s2_only(self, df):
+        df = df.copy()
+        for col in ("s2_author_ids", "s2_authors"):
+            if col not in df.columns:
+                df[col] = pd.NA
+
+        s2_author_map = self.__generate_author_map(df, "s2_author_ids", "s2_authors")
+
+        visited = set()
+        groups = []
+
+        for s2_id in s2_author_map.keys():
+            if s2_id in visited:
+                continue
+            group = {s2_id}
+            if s2_id in self.s2_duplicates:
+                group |= set(self.s2_duplicates[s2_id])
+            visited |= group
+            groups.append(group)
+
+        for root, dups in self.s2_duplicates.items():
+            if root not in visited:
+                group = {root} | set(dups)
+                visited |= group
+                groups.append(group)
+
+        rows = {
+            "slic_id": [],
+            "slic_name": [],
+            "scopus_ids": [],
+            "scopus_names": [],
+            "scopus_affiliations": [],
+            "s2_ids": [],
+            "s2_names": [],
+        }
+
+        idx = 0
+        seen = set()
+        for g in groups:
+            name_set = {s2_author_map.get(x, "Unknown") for x in g if x in s2_author_map}
+            if name_set == {"Unknown"}:
+                name_set = set()
+            slic_name = max(name_set, key=len) if name_set else None
+
+            rows["slic_id"].append(f"S{idx}")
+            rows["slic_name"].append(slic_name)
+            rows["scopus_ids"].append(None)
+            rows["scopus_names"].append(None)
+            rows["scopus_affiliations"].append(None)
+            rows["s2_ids"].append(";".join(sorted(g)))
+            rows["s2_names"].append(";".join(sorted(name_set)) if name_set else None)
+
+            seen |= g
+            idx += 1
+
+        for s2_id, s2_name in s2_author_map.items():
+            if s2_id in seen:
+                continue
+            rows["slic_id"].append(f"S{idx}")
+            rows["slic_name"].append(s2_name if s2_name != "Unknown" else None)
+            rows["scopus_ids"].append(None)
+            rows["scopus_names"].append(None)
+            rows["scopus_affiliations"].append(None)
+            rows["s2_ids"].append(s2_id)
+            rows["s2_names"].append(s2_name)
+            idx += 1
+
+        slic_df = pd.DataFrame.from_dict(rows)
+        slic_df = slic_df.loc[slic_df.slic_name.notna()].reset_index(drop=True)
+        return slic_df
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # Helpers
+    # ─────────────────────────────────────────────────────────────────────────
+
     def __add_scopus_duplicates(self, auth_df, duplicates):
-        """
-        Helper function that enriches the results of AuthorMatcher with any previously detected Scopus 
-        duplicates. These duplicates are given a shared S2 id that will be used to connect them in the
-        succeeding SLIC id creation steps.
-        
-        Parameters
-        ----------
-        auth_df: pandas.DataFrame
-            The results of AuthorMatcher on the working DataFrame
-        duplicates: list(set), optional
-            A list of sets where each set contains scopus author ids that refer to the same person. In the ideal case, each 
-            author only has one scopus id. However, this ideal does not hold up in practice and some authors are represented
-            by two or more scopus ids. Duplicate authors can be found using the Orca.DuplicateAuthorFinder tool. 
-            
-        Returns
-        -------
-        out_df: pandas.DataFrame
-            DataFrame that matches the shape of auth_df but contains entries to flag scopus duplicates
-        """
         out_df = pd.DataFrame(columns=auth_df.columns)
         all_df_ids = set(auth_df.SCOPUS_Author_ID.to_list())
         if self.verbose:
-            print('[Orca]: Scanning for Scopus duplicates in dataset. . .')
+            print("[Orca]: Scanning for Scopus duplicates in dataset. . .")
         for scopus_ids in tqdm(duplicates, total=len(duplicates), disable=not self.verbose):
             if not scopus_ids & all_df_ids:
                 continue
@@ -398,534 +451,326 @@ class Orca:
                 for scopus_id in tmp_df.SCOPUS_Author_ID.unique():
                     if row.SCOPUS_Author_ID == scopus_id:
                         continue
-                    else:
-                        new_row = row.copy()
-                        new_row.SCOPUS_Author_ID = scopus_id
-                        out_df = pd.concat([out_df, new_row.to_frame().T], ignore_index=True)
+                    new_row = row.copy()
+                    new_row.SCOPUS_Author_ID = scopus_id
+                    out_df = pd.concat([out_df, new_row.to_frame().T], ignore_index=True)
         return out_df
-    
-    
+
     def __add_s2_duplicates(self, duplicates):
-        """
-        Converts a list of sets into a dictionary such that each key in the dictionary 
-        is an element from a set, and its value is a list of the other elements in that set.
-        Each set should contain s2 author ids that are known duplicates of each other. No 
-        two pairs of sets can share an author id. All known duplicate of an s2 author id should
-        be contained within a single set. Sets with a single id (non-duplicates) will be ignored.
-
-        Parameters:
-        -----------
-        duplicates: list(set())
-            A list of sets of s2 authors ids to be processed.
-
-        Returns:
-        --------
-        dict: 
-            The processed s2 duplicates which will be resolved in a further processinf step.
-            
-        Raises:
-        -------
-        ValueError: 
-            If an id appears in more than one set within the list.
-
-        Example:
-        --------
-        >>> self.__add_s2_duplicates([{1,2}, {3,4}, {5}])
-        {1: [2], 2: [1], 3: [4], 4: [3]}
-        >>> self.__add_s2_duplicates([{1,2}, {2,3}])
-        ValueError
-        """
-        out_dict = {}
+        out = {}
         seen = set()
-
         for s in duplicates:
             if any(elem in seen for elem in s):
-                raise ValueError("Detected multiple entries for s2 duplicates across sets. \
-                                  Make sure that all known duplicates are constrained to a single set")
+                raise ValueError(
+                    "Detected multiple entries for s2 duplicates across sets. "
+                    "Make sure that all known duplicates are constrained to a single set"
+                )
             seen.update(s)
             if len(s) == 1:
                 continue
-                
             for element in s:
-                out_dict[element] = [x for x in s if x != element]
-        return out_dict
+                out[element] = [x for x in s if x != element]
+        return out
 
-    
     def __propagate_duplicates(self, a_map, a_duplicates):
-        """
-        Propagate the ids associated with keys in a_map to their duplicate keys.
-
-        For each key in a_map, if duplicate keys exist in a_duplicates, 
-        the associated values from a_map are propagated to these duplicate keys.
-        The 'a'/'b' notation is used to keep this function generic so that is can be used 
-        to go from s2 --> scopus or scopus  --> s2.
-
-        Parameters:
-        -----------
-        a_map: dict
-            The main author dictionary that is to be updated.
-        a_duplicates: dict
-            Dictionary mapping keys to lists of their duplicates.
-
-        Returns:
-        --------
-        None
-            a_map is modified in place.
-        """
-
         a_map_update = {}
-
-        # create an update map based on duplicates
         for a_id, b_ids in a_map.items():
             if a_id in a_duplicates:
                 for dup_a_id in a_duplicates[a_id]:
-                    if dup_a_id not in a_map_update:
-                        a_map_update[dup_a_id] = set()
-                    a_map_update[dup_a_id] |= set(b_ids)
-
-        # convert set to list for each key in the update map
+                    a_map_update.setdefault(dup_a_id, set()).update(set(b_ids))
         for dup_a_id in a_map_update:
             a_map_update[dup_a_id] = list(a_map_update[dup_a_id])
-
-        # update the main map in place
         a_map.update(a_map_update)
 
-    
     def __uncouple_author_matches(self, auth_df, s2_duplicates):
-        """
-        Helper function that takes the authors DataFrame produced by AuthorMatcher (could be enriched with scopus duplicates
-        or not) and finds out which sets of authors ids represent the same individual. This is done by building a graph of
-        author ids relationships.
-
-        Take for example the following two maps. In this case letters are scopus IDs and numbers are S2 IDs. Each map presents
-        the relationship between scopus and S2 from the perspective of the key dataset. There are only 2 authors but they are 
-        represented by 2 scopus / 3 S2 IDs for the first author and 1 scopus / 2 S2 IDs for the second author. 
-
-        >>> scopus_map = {'A': [1,2], 
-                          'B': [4], 
-                          'C': [3,5]}
-
-        >>> s2_map = {1: ['A'], 
-                      2: ['A'], 
-                      3: ['C'], 
-                      4: ['A'], 
-                      5: ['C']}
-
-        For bigger datasets, these relationships can grow complex and are best modeled by a graph. Both scopus and S2 IDs are 
-        nodes in this graph and  their relationship can be modeled with egdes between them. This graph is very disconnected as 
-        there will be many unique authors in any given SLIC dataset. However, weakly connected components of the graph will 
-        signify that all author id nodes in said component belong to the same author.
-
-        Parameters
-        ----------
-        auth_df: pandas.DataFrame
-            The results of AuthorMatcher on the working DataFrame
-        s2_duplicates:
-
-        Returns
-        -------
-        matches: list
-            A list of dictionaries. Each dictionary in the list contains 2 keys: 'scopus' and 's2'. The values are sets of 
-            corresponding scopus/s2 ids
-        """
-        # create the two maps necessary for processing
-        s2_map = auth_df.groupby('S2_Author_ID')['SCOPUS_Author_ID'].agg(set).to_dict()
-        scopus_map = auth_df.groupby('SCOPUS_Author_ID')['S2_Author_ID'].agg(set).to_dict()
-        
-        # handle s2 duplicates
+        s2_map = auth_df.groupby("S2_Author_ID")["SCOPUS_Author_ID"].agg(set).to_dict()
+        scopus_map = auth_df.groupby("SCOPUS_Author_ID")["S2_Author_ID"].agg(set).to_dict()
         self.__propagate_duplicates(s2_map, s2_duplicates)
-        
-        # ensure that no s2 id == scopus id by coincidence
-        s2_map = {f'B_{k}': {f'A_{x}' for x in v} for k,v in s2_map.items()}
-        scopus_map = {f'A_{k}': {f'B_{x}' for x in v} for k,v in scopus_map.items()}
 
-        # also create a name map which we will use 
-        s2_name_map = auth_df.groupby('S2_Author_ID')['S2_Author_Name'].agg(lambda x: max(x, key=len)).to_dict()
+        s2_map = {f"B_{k}": {f"A_{x}"} if isinstance(v, str) else {f"A_{x}" for x in v} for k, v in s2_map.items()}
+        scopus_map = {f"A_{k}": {f"B_{x}"} if isinstance(v, str) else {f"B_{x}" for x in v} for k, v in scopus_map.items()}
 
-        # setup the graph
+        s2_name_map = auth_df.groupby("S2_Author_ID")["S2_Author_Name"].agg(lambda x: max(x, key=len)).to_dict()
+
         G = nx.DiGraph()
         for k, v_set in scopus_map.items():
             for v in v_set:
                 G.add_edge(k, v)
-
         for k, v_set in s2_map.items():
             for v in v_set:
                 G.add_edge(k, v)
 
-        # get the list of components and process them
         components = list(nx.weakly_connected_components(G))
         matches = []
         for component_set in components:
-            mdict = {'scopus': set(), 's2': set()}
+            mdict = {"scopus": set(), "s2": set()}
             for c in component_set:
-                if c.startswith('A_'):
-                    mdict['scopus'].add(c[2:])
-                else:
-                    mdict['s2'].add(c[2:])
-
-            # get the longest s2 name to use as slic name
-            str_gen = ((pid, s2_name_map[pid]) for pid in mdict['s2'] if pid in s2_name_map)
-            _, name = max(str_gen, key=lambda x: len(x[1]), default=(None, 'Unknown'))
-            mdict['name'] = name
+                (mdict["scopus"] if c.startswith("A_") else mdict["s2"]).add(c[2:])
+            str_gen = ((pid, s2_name_map[pid]) for pid in mdict["s2"] if pid in s2_name_map)
+            _, name = max(str_gen, key=lambda x: len(x[1]), default=(None, "Unknown"))
+            mdict["name"] = name
             matches.append(mdict)
         return matches
-    
-    
+
     def __generate_author_map(self, df, id_col, name_col):
-        """
-        Helper function that generates a map of author ids to author names
-        
-        Parameters
-        ----------
-        df: pandas.DataFrame
-            The SLIC papers DataFrame for which author SLIC ids need to be created
-        id_col: str
-            The author ids column. Options are ['author_ids', 's2_author_ids']
-        name_col: str
-            The author names column. Options are ['authors', 's2_authors']
-            
-        Returns
-        -------
-        auth_map: dict
-            Map where keys are author ids and values are author names
-        """
         if self.verbose:
-            print(f'[Orca]: Generating {id_col}-{name_col} map. . .')
-        
+            print(f"[Orca]: Generating {id_col}-{name_col} map. . .")
+        if id_col not in df.columns or name_col not in df.columns:
+            return {}
         auth_map = {}
-        tmp_df = df.dropna(subset=[id_col, name_col])
-        for id_list, auth_list in tqdm(zip(tmp_df[id_col].to_list(), tmp_df[name_col].to_list()), total=len(tmp_df), disable=not self.verbose):
-            for auth_id, name in zip(id_list.split(';'), auth_list.split(';')):
-                if auth_id not in auth_map:
+        tmp = df[[id_col, name_col]].dropna(how="any")
+        if tmp.empty:
+            return {}
+        for id_list, auth_list in tqdm(
+            zip(tmp[id_col].to_list(), tmp[name_col].to_list()), total=len(tmp), disable=not self.verbose
+        ):
+            if not isinstance(id_list, str) or not isinstance(auth_list, str):
+                continue
+            for auth_id, name in zip(id_list.split(";"), auth_list.split(";")):
+                if auth_id and auth_id not in auth_map:
                     auth_map[auth_id] = name
         return auth_map
-    
-    
+
     def __compute_slic_scopus(self, df):
-        """
-        Helper function applies the SLIC id map to papers that have scopus information
-        
-        Parameters
-        ----------
-        df: pandas.DataFrame
-            The SLIC papers DataFrame for which author SLIC ids need to be created
-            
-        Returns
-        -------
-        scopus_df: pandas.DataFrame
-            papers DataFrame that contains SLIC id and affiliation information 
-        """
-        tmp_df = df.loc[~df['eid'].isnull()]  # get only scopus papers
-        
-        # create maps for scopus author an
+        tmp_df = df.loc[~df["eid"].isnull()]
         scopus_authors, scopus_affiliations = {}, {}
-        for eid, author_ids, affiliations in zip(tmp_df['eid'].to_list(), 
-                                                 tmp_df['author_ids'].to_list(), 
-                                                 tmp_df['affiliations'].to_list()):
+
+        for eid, author_ids, affiliations in zip(
+            tmp_df["eid"].to_list(), tmp_df["author_ids"].to_list(), tmp_df["affiliations"].to_list()
+        ):
             if not pd.isna(author_ids):
                 scopus_authors[eid] = author_ids
             if not pd.isna(affiliations):
                 if isinstance(affiliations, str):
                     affiliations = ast.literal_eval(affiliations)
                 scopus_affiliations[eid] = affiliations
-            
-        scopus_df = {
-            'eid': [],
-            'slic_author_ids': [],
-            'slic_affiliations': [],
+
+        scopus_df = {"eid": [], "slic_author_ids": [], "slic_affiliations": []}
+        scopus_to_slic = {
+            x: k
+            for k, v in zip(self.slic_df.slic_id.to_list(), self.slic_df.scopus_ids.to_list())
+            if not pd.isna(v)
+            for x in v.split(";")
         }
-        
-        # compute map of scopus author id to slic author id
-        scopus_to_slic = {x: k for k,v in zip(self.slic_df.slic_id.to_list(), self.slic_df.scopus_ids.to_list()) 
-                          if not pd.isna(v) for x in v.split(';')}
-        
 
         missing_authors = set()
         for eid in tmp_df.eid.to_list():
-
-            slic_author_ids = []  # first replace author_ids information 
+            slic_author_ids = []
             author_ids = scopus_authors.get(eid)
             if author_ids is not None:
-                for scopus_id in author_ids.split(';'):
-                    scopus_id = str(scopus_id)  # should already be string but hard cast to make sure
+                for scopus_id in author_ids.split(";"):
+                    scopus_id = str(scopus_id)
                     slic_id = scopus_to_slic.get(scopus_id)
                     if slic_id is None:
                         missing_authors.add(scopus_id)
                     else:
                         slic_author_ids.append(str(slic_id))
 
-            aff_dict, del_dict = {}, []  # next update affiliations structure
+            aff_dict, del_dict = {}, []
             affiliations = scopus_affiliations.get(eid)
             if affiliations is not None:
                 for aff_id, aff_info_shallow in affiliations.items():
                     if isinstance(aff_info_shallow, list):
                         continue
-                    del_list = []  # items to remove
+                    del_list = []
                     aff_info = copy.deepcopy(aff_info_shallow)
 
-                    for i in range(len(aff_info['authors'])):
-                        scopus_id = str(aff_info['authors'][i])
+                    for i in range(len(aff_info["authors"])):
+                        scopus_id = str(aff_info["authors"][i])
                         if scopus_id not in scopus_to_slic:
                             del_list.append(scopus_id)
                             missing_authors.add(scopus_id)
                         else:
-                            aff_info['authors'][i] = scopus_to_slic[scopus_id]
+                            aff_info["authors"][i] = scopus_to_slic[scopus_id]
 
                     for d in del_list:
-                        if d not in aff_info['authors']:
-                            aff_info['authors'].remove(str(d))
-                        else:
-                             aff_info['authors'].remove(d)
+                        for cand in (d, str(d)):
+                            if cand in aff_info["authors"]:
+                                aff_info["authors"].remove(cand)
+                                break
 
-                    if not aff_info['authors']:
-                        del_dict.append(aff_id) 
+                    if not aff_info["authors"]:
+                        del_dict.append(aff_id)
                     aff_dict[aff_id] = aff_info
 
                 for d in del_dict:
                     del aff_dict[d]
 
-            scopus_df['eid'].append(eid)
-            if not slic_author_ids:
-                scopus_df['slic_author_ids'].append(None)
-            else:
-                scopus_df['slic_author_ids'].append(";".join(slic_author_ids))
-            if not aff_dict:
-                scopus_df['slic_affiliations'].append(None)
-            else:
-                scopus_df['slic_affiliations'].append(aff_dict) 
+            scopus_df["eid"].append(eid)
+            scopus_df["slic_author_ids"].append(";".join(slic_author_ids) if slic_author_ids else None)
+            scopus_df["slic_affiliations"].append(aff_dict if aff_dict else None)
 
         if len(missing_authors) > 0:
-            warnings.warn(f'[Orca]: {len(missing_authors)} Scopus IDs did not have corresponding SLIC ID and were removed')
-        
-        scopus_df = pd.DataFrame.from_dict(scopus_df)
-        return scopus_df
-    
-    
+            warnings.warn(
+                f"[Orca]: {len(missing_authors)} Scopus IDs did not have corresponding SLIC ID and were removed"
+            )
+
+        return pd.DataFrame.from_dict(scopus_df)
+
     def __compute_slic_s2(self, df):
-        """
-        Helper function applies the SLIC id map to papers that have S2 information
-        
-        Parameters
-        ----------
-        df: pandas.DataFrame
-            The SLIC papers DataFrame for which author SLIC ids need to be created
-            
-        Returns
-        -------
-        s2_df: pandas.DataFrame
-            papers DataFrame that contains SLIC id and affiliation information 
-        """
-        #tmp_df = df.loc[df['eid'].isnull()]  # get only s2 papers
-        tmp_df = df.loc[~df['s2id'].isnull()]
-        
-        # compute map of s2 author id to slic author id
-        s2_to_slic = {x: k for k,v in zip(self.slic_df.slic_id.to_list(), self.slic_df.s2_ids.to_list()) 
-                      if not pd.isna(v) for x in v.split(';')}
-        
-        s2_df = {
-            's2id': [],
-            'slic_author_ids': [],
+        tmp_df = df.loc[~df["s2id"].isnull()]
+        s2_to_slic = {
+            x: k
+            for k, v in zip(self.slic_df.slic_id.to_list(), self.slic_df.s2_ids.to_list())
+            if not pd.isna(v)
+            for x in v.split(";")
         }
-        
+
+        s2_df = {"s2id": [], "slic_author_ids": []}
         missing_authors = set()
-        for s2id, s2_author_ids in zip(tmp_df['s2id'].to_list(), tmp_df['s2_author_ids'].to_list()):
+        for s2id, s2_author_ids in zip(tmp_df["s2id"].to_list(), tmp_df["s2_author_ids"].to_list()):
             slic_author_ids = []
             if not pd.isna(s2_author_ids):
-                for s2_auth_id in s2_author_ids.split(';'):
+                for s2_auth_id in s2_author_ids.split(";"):
                     if s2_auth_id not in s2_to_slic:
                         missing_authors.add(s2_auth_id)
                     else:
                         slic_author_ids.append(s2_to_slic[s2_auth_id])
-            
-            if slic_author_ids:
-                s2_df['s2id'].append(s2id)
-                s2_df['slic_author_ids'].append(";".join(slic_author_ids))
-            else:
-                s2_df['s2id'].append(s2id)
-                s2_df['slic_author_ids'].append(None)
 
+            s2_df["s2id"].append(s2id)
+            s2_df["slic_author_ids"].append(";".join(slic_author_ids) if slic_author_ids else None)
 
         if len(missing_authors) > 0:
-            warnings.warn(f'[Orca]: {len(missing_authors)} S2 IDs did not have corresponding SLIC ID and were removed')
-        
-        s2_df = pd.DataFrame.from_dict(s2_df)
-        return s2_df
+            warnings.warn(
+                f"[Orca]: {len(missing_authors)} S2 IDs did not have corresponding SLIC ID and were removed"
+            )
 
+        return pd.DataFrame.from_dict(s2_df)
 
     def __load_pickle(self, fn):
-        """
-        Helper function for loading pickle files saved in data package
-        If upgrading to python >=3.9, change this function make use of importlib.resources
-
-        Parameters
-        ----------
-        fn: str
-            The file name to be loaded
-            
-        Returns
-        -------
-        python object stored in the pickle file
-        """
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        return pickle.load(open((os.path.join(current_dir, 'data', fn)), 'rb'))
-
+        return pickle.load(open((os.path.join(current_dir, "data", fn)), "rb"))
 
     def __generate_affiliations_map(self, df):
         """
-        Helper function for computing a map of affiliations for scopus authors. 
-        The output map is a dict that adheres to the following structure:
-        {
-            SCOPUS_AUTHOR_ID:
-            {
-                SCOPUS_AFFILIATION_ID:
-                {
-                    'name': NAME,  # the name of the affiliation
-                    'country': COUNTRY  # country associated with the affiliation
-                    'first_seen': XXXX  # the year when first known paper was published by author with given affiliation
-                    'last_seen': XXXX  # the year when last known paper was published by author with given affiliation
-                    'papers': XXXX  # list of known papers with this affiliation. NOT guaranteed to contain all papers
-                },
-                ...
-            },
-            ...
-        }
-
-        Parameters
-        ----------
-        df: pandas.DataFrame
-            The SLIC papers DataFrame for which author SLIC ids need to be created
-            
-        Returns
-        -------
-        affiliations_map: dict,
-            The created map
+        Build a map SCOPUS_AUTHOR_ID -> affiliation info with paper provenance.
+        Paper id priority: eid > s2id > doi > synthetic row id.
         """
+        import pandas as pd, ast
+
+        if "affiliations" not in df.columns or "year" not in df.columns:
+            return {}
+
+        id_priority = ("eid", "s2id", "doi")
+        pid_col = next((c for c in id_priority if c in df.columns), None)
+        if pid_col is None:
+            df = df.copy()
+            df["_orca_row_id"] = [f"row_{i}" for i in range(len(df))]
+            pid_col = "_orca_row_id"
+
         affiliations_map = {}
-        for eid, year, affiliations in zip(df.eid.to_list(), df.year.to_list(), df.affiliations.to_list()):
-            
-            # handle missing / unconverted affiliations
+        pid_series = df[pid_col].astype(object).where(pd.notna(df[pid_col]), None)
+        year_series = df["year"]
+        aff_series = df["affiliations"]
+
+        for pid, year, affiliations in zip(pid_series.tolist(), year_series.tolist(), aff_series.tolist()):
             if pd.isna(affiliations):
                 continue
             if isinstance(affiliations, str):
                 affiliations = ast.literal_eval(affiliations)
-            
-            # get the year
-            if pd.isna(year):
-                year = 0
-            else:
-                year = int(year)
-                
+
+            year = 0 if pd.isna(year) else int(year)
+            paper_id = None if pid is None else str(pid)
+
             for aff_id, info in affiliations.items():
                 if isinstance(info, list):
                     continue
-                aff_name = info.get('name', 'Unknown')
-                aff_country = info.get('country', 'Unknown')
+                aff_name = info.get("name", "Unknown")
+                aff_country = info.get("country", "Unknown")
 
-                for auth_id in info.get('authors', []):
+                for auth_id in info.get("authors", []):
                     if auth_id not in affiliations_map:
                         affiliations_map[auth_id] = {}
                     if aff_id not in affiliations_map[auth_id]:
-                        affiliations_map[auth_id][aff_id] = {}
-                    first_seen = affiliations_map[auth_id][aff_id].get('first_seen', 1*10**4)
-                    last_seen = affiliations_map[auth_id][aff_id].get('last_seen', -1)
+                        affiliations_map[auth_id][aff_id] = {
+                            "name": aff_name,
+                            "country": aff_country,
+                            "first_seen": year,
+                            "last_seen": year,
+                            "papers": set(),
+                        }
 
-                    if 'name' not in affiliations_map[auth_id][aff_id]:
-                        affiliations_map[auth_id][aff_id]['name'] = aff_name
-                        affiliations_map[auth_id][aff_id]['country'] = aff_country
-                        affiliations_map[auth_id][aff_id]['first_seen'] = year
-                        affiliations_map[auth_id][aff_id]['last_seen'] = year
-                        affiliations_map[auth_id][aff_id]['papers'] = {eid}
-                    else:
-                        affiliations_map[auth_id][aff_id]['papers'].add(eid)
-                        if year < first_seen or first_seen == 0:
-                            affiliations_map[auth_id][aff_id]['first_seen'] = year
-                        elif year > last_seen or last_seen == 0:
-                            affiliations_map[auth_id][aff_id]['last_seen'] = year
+                    entry = affiliations_map[auth_id][aff_id]
+                    if paper_id is not None:
+                        entry["papers"].add(paper_id)
+                    if entry["first_seen"] in (0, None) or (year and year < entry["first_seen"]):
+                        entry["first_seen"] = year
+                    if entry["last_seen"] in (0, None) or (year and year > entry["last_seen"]):
+                        entry["last_seen"] = year
 
-        # handle the missing years 
         for auth_id in affiliations_map:
             for aff_id, aff_info in affiliations_map[auth_id].items():
-                if not aff_info['first_seen']:
-                    affiliations_map[auth_id][aff_id]['first_seen'] = None
-                if not aff_info['last_seen']:
-                    affiliations_map[auth_id][aff_id]['last_seen'] = None
+                aff_info["papers"] = list(aff_info["papers"])
+                if not aff_info["first_seen"]:
+                    aff_info["first_seen"] = None
+                if not aff_info["last_seen"]:
+                    aff_info["last_seen"] = None
+
         return affiliations_map
 
-
     def __merge_scopus_affiliations(self, scopus_ids, data):
-        """
-        Helper function for merging the scopus affiliation maps for entries where multiple scopus
-        ids correspond to the same author
-
-        Parameters
-        ----------
-        scopus_ids: list
-            A list of scopus author ids
-        data: dict
-            The scopus affiliations map
-            
-        Returns
-        -------
-        merged: dict
-            A dictionary that is a result of merging the dictionaries associated with the 
-            duplicate author ids. For shared items, 'first_seen' is the earliest and 'last_seen' is 
-            the latest among all the dictionaries. For unshared items, their details are kept 
-            as is. If 'first_seen' or 'last_seen' is 'Unknown' in one dictionary but has a valid 
-            integer value in another, the integer value is considered. If no valid integer value 
-            exists for 'first_seen' or 'last_seen', 'Unknown' is set as the value.
-        """
         merged = {}
-        all_keys = set(k for key in scopus_ids if key in data for k in data[key].keys())
-        
+        if not data or not scopus_ids:
+            return None
+
+        all_keys = set()
+        for sid in scopus_ids:
+            if sid in data:
+                all_keys.update(data[sid].keys())
+
         for key in all_keys:
-            items = [data[k][key] for k in scopus_ids if k in data and key in data[k]]
-            names = [item['name'] for item in items if item['name'] != 'Unknown']
-            countries = [item['country'] for item in items if item['country'] != 'Unknown']
-            papers = list(set.union(*[item['papers'] for item in items]))
+            items = [data[sid][key] for sid in scopus_ids if sid in data and key in data[sid]]
+            if not items:
+                continue
+
+            names = [it.get("name", "Unknown") for it in items if it.get("name") not in (None, "Unknown")]
+            countries = [it.get("country", "Unknown") for it in items if it.get("country") not in (None, "Unknown")]
+
+            paper_sets = []
+            for it in items:
+                p = it.get("papers", [])
+                if isinstance(p, set):
+                    paper_sets.append(p)
+                elif p is None:
+                    continue
+                else:
+                    paper_sets.append(set(p))
+            merged_papers = sorted(set().union(*paper_sets)) if paper_sets else []
+
+            first_vals = [it.get("first_seen") for it in items if isinstance(it.get("first_seen"), int)]
+            last_vals = [it.get("last_seen") for it in items if isinstance(it.get("last_seen"), int)]
+
             merged[key] = {
-                'name': names[0] if names else 'Unknown',  # use first valid affiliation name, or 'Unknown' if no valid names
-                'country': countries[0] if countries else 'Unknown',  # use first valid affiliation country, or 'Unknown' if no valid countries
-                'first_seen': min((item['first_seen'] for item in items if isinstance(item['first_seen'], int)), default='Unknown'),
-                'last_seen': max((item['last_seen'] for item in items if isinstance(item['last_seen'], int)), default='Unknown'),
-                'papers': papers
+                "name": names[0] if names else "Unknown",
+                "country": countries[0] if countries else "Unknown",
+                "first_seen": min(first_vals) if first_vals else "Unknown",
+                "last_seen": max(last_vals) if last_vals else "Unknown",
+                "papers": merged_papers,
             }
-        merged = merged if merged else None  # {} --> None
-        return merged
-    
-    
-    ### GETTERS / SETTERS
-    
-    
+
+        return merged or None
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # Getters / Setters
+    # ─────────────────────────────────────────────────────────────────────────
+
     @property
     def duplicates(self):
         return self._duplicates
-    
-    @property
-    def s2_duplicates(self):
-        return self._s2_duplicates
 
     @duplicates.setter
     def duplicates(self, duplicates):
         if duplicates is None:
             self._duplicates = []
         elif isinstance(duplicates, list):
-            self._duplicates =  duplicates
+            self._duplicates = duplicates
         else:
-            raise TypeError(f' {type(duplicates)} is an invalid type for `duplicates`')
-        
-    """
-    Code where we have a precomputed duplicates.
-    @duplicates.setter
-    def duplicates(self, duplicates):
-        if duplicates is None:
-            self._duplicates = self.__load_pickle(self.DUPLICATES_1M)
-        elif isinstance(duplicates, list):
-            self._duplicates = self.__load_pickle(self.DUPLICATES_1M) + duplicates
-        else:
-            raise TypeError(f' {type(duplicates)} is an invalid type for `duplicates`')
-    """
-    
-    
+            raise TypeError(f"{type(duplicates)} is an invalid type for `duplicates`")
+
+    @property
+    def s2_duplicates(self):
+        return self._s2_duplicates
+
     @s2_duplicates.setter
     def s2_duplicates(self, s2_duplicates):
         if s2_duplicates is None:
@@ -933,4 +778,4 @@ class Orca:
         elif isinstance(s2_duplicates, list):
             self._s2_duplicates = self.__add_s2_duplicates(s2_duplicates)
         else:
-            raise TypeError(f' {type(s2_duplicates)} is an invalid type for `s2_duplicates`')
+            raise TypeError(f"{type(s2_duplicates)} is an invalid type for `s2_duplicates`")

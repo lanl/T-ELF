@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "TELF"
-version = "0.0.43"
+version = "0.0.44"
 description = "T-ELF is one of the machine learning software packages developed as part of the R&D 100 winning SmartTensors AI project at Los Alamos National Laboratory (LANL). T-ELF presents an array of customizable software solutions crafted for analysis of datasets. Acting as a comprehensive toolbox, T-ELF specializes in data pre-processing, extraction of latent features, and structuring results to facilitate informed decision-making. Leveraging high-performance computing and cutting-edge GPU architectures, our toolbox is optimized for analyzing large datasets from diverse set of problems."
 authors = ["Maksim E. Eren"]
 license = "BST-3"
@@ -8,12 +8,13 @@ readme = "README.md"
 
 # Explicitly tell Poetry where to find the Python package
 packages = [
-    { include = "TELF" }
+    { include = "TELF" },
+    { include = "post_install" }   
 ]
 
 [tool.poetry.dependencies]
 python = "3.11.10"
-numpy = "<=2.0.0"
+numpy = "1.26.4"
 scipy = "^1.14.1"
 matplotlib = "^3.9.2"
 pathos = "^0.3.3"
@@ -33,7 +34,8 @@ spacy = "^3.8.2"
 mat73 = "^0.65"
 spacy-transformers = "^1.3.5"
 rapidfuzz = "^3.10.0"
-plotly = "^6.0.0"
+plotly = ">=6.1.1"
+kaleido = "^1.1.0"
 wordcloud = "^1.9.4"
 httpx = "^0.28.1"
 xmltodict = "^0.14.2"
@@ -41,8 +43,8 @@ rbloom = "^1.5.2"
 pymongo = "^4.11.2"
 seaborn = "^0.13.2"
 umap-learn = "^0.5.7"
-torch = "^2.6.0"
-transformers = "^4.39.3"
+torch = ">=2.2,<2.3"
+transformers = ">=4.39,<5"
 langchain-ollama = "^0.3.0"
 openai = "^1.69.0"
 pyvis = "^0.3.2"
@@ -54,7 +56,20 @@ watchdog = "^6.0.0"
 pillow = "^11.1.0"
 pykeen = "^1.11.0"
 pycountry = "^24.6.1"
+neo4j = "^5.26.0"
+pymilvus = "2.4.0"
+jupyterlab = "^4.2.5"
+notebook = "^7.2.2"          
+ipywidgets = "^8.1.5"
+opensearch-py = "^3.0.0"
+ 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+telf-post-install   = "post_install:main"
+telf-install-chrome = "post_install:install_chrome_cli"
+telf-archive        = "post_install.archiver:main"   
+telf-version        = "post_install.version_bump:main"   

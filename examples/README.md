@@ -45,7 +45,7 @@
 |    Bunny   | Dataset generation tool for documents and their citations/references |  [Link](Bunny)  |
 |  Penguin   |         Text storage tool                                    | [Link](Penguin) |
 |  Lynx   |         Streamlit UI                                    | [Link](Lynx) |
-|    Termite   | Knowladge graph building tool | :soon: |
+|    Termite   | Knowladge graph building tool | [Link](Termite) |
 
 
 ## Use Cases
