@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 from glob import glob
-__version__ = "0.0.44"
+__version__ = "0.0.45"
 
 setup(
     name='TELF',
